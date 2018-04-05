@@ -21,6 +21,18 @@
 		<input type="text" id="name" name="name" required value="<?php echo isset( $name ) ? esc_html( $name ) : ''; ?>" />
 	</div>
 
+	<div class="member-level-is-nonmember">
+		<label for="is-nonmember"><?php echo esc_html__( 'Non-member level?', 'minnpost-membership' ); ?>: </label>
+		<?php
+		if ( isset( $is_nonmember ) && 1 === $is_nonmember ) {
+			$checked = ' checked';
+		} else {
+			$checked = '';
+		}
+		?>
+		<input type="checkbox" id="is-nonmember" name="is_nonmember" value="1"<?php echo $checked; ?> />
+	</div>
+
 	<div class="member-level-minimum-amount">
 		<label for="minimum-amount"><?php echo esc_html__( 'Minimum monthly amount', 'minnpost-membership' ); ?>: </label>
 		<input type="tel" id="minimum-amount" name="minimum_monthly_amount" value="<?php echo isset( $minimum_monthly_amount ) ? esc_attr( $minimum_monthly_amount ) : ''; ?>" />
@@ -33,12 +45,12 @@
 
 	<div class="member-level-starting-value">
 		<label for="starting-value"><?php echo esc_html__( 'Starting value', 'minnpost-membership' ); ?>: </label>
-		<input type="tel" id="starting-value" name="starting_value" required value="<?php echo isset( $starting_value ) ? esc_attr( $starting_value ) : ''; ?>" />
+		<input type="tel" id="starting-value" name="starting_value" value="<?php echo isset( $starting_value ) ? esc_attr( $starting_value ) : ''; ?>" />
 	</div>
 
 	<div class="member-level-benefits">
 		<label for="benefits"><?php echo esc_html__( 'Benefits', 'minnpost-membership' ); ?>: </label>
-		<textarea id="benefits" name="benefits" required><?php echo isset( $benefits ) ? esc_html( $benefits ) : ''; ?></textarea>
+		<textarea id="benefits" name="benefits"><?php echo isset( $benefits ) ? esc_html( $benefits ) : ''; ?></textarea>
 	</div>
 	<?php
 		submit_button(

@@ -1,0 +1,61 @@
+// variables
+$box-shadow-less: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+$box-shadow-more: 0 1px 1px rgba(0, 0, 0, 0.04);
+$border-color-darker: #e1e1e1;
+$border-color-lighter: #e5e5e5;
+$horizontal-space: 10px;
+$success-color: #46b450;
+$vertical-space: 15px;
+
+.minnpost-membership-member-levels {
+	box-sizing: border-box;
+	margin: 2em 0 1em 0;
+	padding: 0;
+	border: 0;
+	min-width: 0;
+	.minnpost-membership-member-level {
+		margin-bottom: 2em;
+		header {
+			border: 1px solid $border-color-lighter;
+			padding: 0.5em;
+			margin-bottom: 2em;
+			text-align: center;
+			h4 {
+				margin: 0 0 0.5em 0;
+				padding: 0.5em 0;
+				display: block;
+				line-height: normal;
+				background: $border-color-darker;
+			}
+			.amount h5 {
+				font-size: 3em;
+				min-height: 75px;
+				display: block;
+				line-height: normal;
+				margin: 0;
+				padding: 0 0 0.25em 0;
+			}
+		}
+		&.minnpost-membership-member-level-non-member {
+			clear: both;
+			width: 100%;
+			margin-right: 0;
+			border: 1px solid $border-color-darker;
+			background: $border-color-lighter;
+		}
+	}
+}
+
+@media screen and (min-width: 700px) {
+	.minnpost-membership-member-level {
+		width: 46%;
+		margin-right: 2%;
+		float: left;
+	}
+}
+
+@media screen and (min-width: 890px) {
+	.minnpost-membership-member-level {
+		width: 23%;
+	}
+}

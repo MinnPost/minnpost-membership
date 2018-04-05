@@ -73,7 +73,10 @@ class MinnPost_Membership_Member_Level {
 		$member_levels   = get_option( $this->option_prefix . 'member_levels', array() );
 		$data            = $this->setup_member_level_data( $post_data );
 		$member_levels[] = $data;
-		$result          = update_option( $this->option_prefix . 'member_levels', $member_levels );
+		usort( $member_levels, function( $a, $b ) {
+			return intval( $b['minimum_monthly_amount'] ) - intval( $a['minimum_monthly_amount'] );
+		});
+		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
 			return true;
 		} else {
@@ -93,7 +96,31 @@ class MinnPost_Membership_Member_Level {
 		$member_levels        = get_option( $this->option_prefix . 'member_levels', array() );
 		$data                 = $this->setup_member_level_data( $post_data );
 		$member_levels[ $id ] = $data;
-		$result               = update_option( $this->option_prefix . 'member_levels', $member_levels );
+		usort( $member_levels, function( $a, $b ) {
+			return intval( $b['minimum_monthly_amount'] ) - intval( $a['minimum_monthly_amount'] );
+		});
+		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
+		if ( true === $result ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	* Delete a member level
+	*
+	* @param int   $id
+	* @return bool $result
+	*
+	*/
+	public function delete_member_level( $id ) {
+		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
+		unset( $member_levels[ $id ] );
+		usort( $member_levels, function( $a, $b ) {
+			return intval( $b['minimum_monthly_amount'] ) - intval( $a['minimum_monthly_amount'] );
+		});
+		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
 			return true;
 		} else {
@@ -109,33 +136,21 @@ class MinnPost_Membership_Member_Level {
 	*
 	*/
 	private function setup_member_level_data( $data ) {
+		if ( ! isset( $data['is_nonmember'] ) || 1 !== intval( $data['is_nonmember'] ) ) {
+			$prefix = 'member_';
+		} else {
+			$prefix = '';
+		}
 		$data = array(
-			'slug'                   => 'member_' . sanitize_title( $data['name'] ),
+			'slug'                   => $prefix . sanitize_title( $data['name'] ),
 			'name'                   => sanitize_text_field( $data['name'] ),
-			'minimum_monthly_amount' => isset( $data['minimum_monthly_amount'] ) ? intval( $data['minimum_monthly_amount'] ) : 1,
-			'maximum_monthly_amount' => isset( $data['maximum_monthly_amount'] ) ? intval( $data['maximum_monthly_amount'] ) : '',
-			'starting_value'         => intval( $data['starting_value'] ),
+			'is_nonmember'           => isset( $data['is_nonmember'] ) ? esc_attr( $data['is_nonmember'] ) : 0,
+			'minimum_monthly_amount' => ( isset( $data['minimum_monthly_amount'] ) && '' !== $data['minimum_monthly_amount'] ) ? intval( $data['minimum_monthly_amount'] ) : 1,
+			'maximum_monthly_amount' => ( isset( $data['maximum_monthly_amount'] ) && '' !== $data['maximum_monthly_amount'] ) ? intval( $data['maximum_monthly_amount'] ) : '',
+			'starting_value'         => ( isset( $data['starting_value'] ) && '' !== $data['starting_value'] ) ? intval( $data['starting_value'] ) : 0,
 			'benefits'               => sanitize_textarea_field( $data['benefits'] ),
 		);
 		return $data;
-	}
-
-	/**
-	* Delete a member level
-	*
-	* @param int   $id
-	* @return bool $result
-	*
-	*/
-	public function delete_member_level( $id ) {
-		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
-		unset( $member_levels[ $id ] );
-		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
-		if ( true === $result ) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }

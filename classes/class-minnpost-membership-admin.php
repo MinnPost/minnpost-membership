@@ -54,6 +54,7 @@ class MinnPost_Membership_Admin {
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
 			add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts_and_styles' ) );
 			add_action( 'admin_post_post_member_level', array( $this, 'prepare_member_level_data' ) );
 			add_action( 'admin_post_delete_member_level', array( $this, 'delete_member_level' ) );
 		}
@@ -84,28 +85,36 @@ class MinnPost_Membership_Admin {
 	private function get_admin_pages() {
 		$pages = array(
 			$this->slug . '-settings'           => array(
-				'title' => __( 'General Settings', 'minnpost-membership' ),
-				'tabs'  => array(),
+				'title'    => __( 'General Settings', 'minnpost-membership' ),
+				'sections' => array(
+					'member_levels' => __( 'Member levels', 'minnpost-membership' ),
+				),
+				'use_tabs' => false,
 			),
 			$this->slug . '-finances'           => array(
-				'title' => __( 'Member Finances', 'minnpost-membership' ),
-				'tabs'  => array(),
+				'title'    => __( 'Member Finances', 'minnpost-membership' ),
+				'sections' => array(),
+				'use_tabs' => false,
 			),
 			$this->slug . '-benefits'           => array(
-				'title' => __( 'Member Benefits', 'minnpost-membership' ),
-				'tabs'  => array(),
+				'title'    => __( 'Member Benefits', 'minnpost-membership' ),
+				'sections' => array(),
+				'use_tabs' => false,
 			),
 			$this->slug . '-member-drive'       => array(
-				'title' => __( 'Member Drive', 'minnpost-membership' ),
-				'tabs'  => array(),
+				'title'    => __( 'Member Drive', 'minnpost-membership' ),
+				'sections' => array(),
+				'use_tabs' => false,
 			),
 			$this->slug . '-premium-content'    => array(
-				'title' => __( 'Premium Content', 'minnpost-membership' ),
-				'tabs'  => array(),
+				'title'    => __( 'Premium Content', 'minnpost-membership' ),
+				'sections' => array(),
+				'use_tabs' => false,
 			),
 			$this->slug . '-site-notifications' => array(
-				'title' => __( 'Site Notifications', 'minnpost-membership' ),
-				'tabs'  => array(),
+				'title'    => __( 'Site Notifications', 'minnpost-membership' ),
+				'sections' => array(),
+				'use_tabs' => false,
 			),
 		); // this creates the pages for the admin
 		return $pages;
@@ -125,8 +134,8 @@ class MinnPost_Membership_Admin {
 			$page    = isset( $get_data['page'] ) ? sanitize_key( $get_data['page'] ) : $this->slug . '-settings';
 			$tab     = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
 			$section = $tab;
-			$tabs    = $this->pages[ $page ]['tabs'];
-			if ( ! empty( $tabs ) ) {
+			$tabs    = $this->pages[ $page ]['sections'];
+			if ( ! empty( $tabs ) && true === $this->pages[ $page ]['use_tabs'] ) {
 				$tab = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $this->slug . '-settings';
 				$this->render_tabs( $tabs, $tab );
 			}
@@ -151,6 +160,7 @@ class MinnPost_Membership_Admin {
 
 						if ( isset( $member_level ) && is_array( $member_level ) ) {
 							$name                   = $member_level['name'];
+							$is_nonmember           = intval( $member_level['is_nonmember'] );
 							$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
 							$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
 							$starting_value         = $member_level['starting_value'];
@@ -222,8 +232,11 @@ class MinnPost_Membership_Admin {
 
 		$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 		$page     = isset( $get_data['page'] ) ? sanitize_key( $get_data['page'] ) : $this->slug . '-settings';
-		$tab      = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
-		$section  = $tab;
+		if ( false === strpos( $page, $this->slug ) ) {
+			return;
+		}
+		$tab     = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
+		$section = $tab;
 
 		$input_callback_default   = array( $this, 'display_input_field' );
 		$input_checkboxes_default = array( $this, 'display_checkboxes' );
@@ -237,10 +250,147 @@ class MinnPost_Membership_Admin {
 			'link'       => $link_default,
 		);
 
+		$this->general_settings( $page, $all_field_callbacks );
 		//$this->allowed_resources( 'allowed_resources', 'allowed_resources', $all_field_callbacks );
 		//$this->resource_settings( 'resource_settings', 'resource_settings', $all_field_callbacks );
 		//$this->subresource_settings( 'subresource_settings', 'subresource_settings', $all_field_callbacks );
 
+	}
+
+	/**
+	* Admin styles. Load the CSS and/or JavaScript for the plugin's settings
+	*
+	* @return void
+	*/
+	public function admin_scripts_and_styles() {
+		//wp_enqueue_script( $this->slug . '-admin', plugins_url( '../assets/js/' . $this->slug . '-admin.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
+		wp_enqueue_style( $this->slug . '-admin', plugins_url( '../assets/css/' . $this->slug . '-admin.min.css', __FILE__ ), array(), $this->version, 'all' );
+	}
+
+	/**
+	* Fields for the General Settings tab
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function general_settings( $page, $callbacks ) {
+		$sections = $this->get_admin_pages()[ $page ]['sections'];
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $key => $value ) {
+				//if ( $key === $page ) {
+				//	$title = $value;
+				//}
+				//$section = $key;
+				//echo 'section is ' . $section;
+				$section = $key;
+				$title   = $value;
+				add_settings_section( $section, $title, null, $page );
+			}
+		} else {
+			$section = $page;
+			$title   = $this->get_admin_pages()[ $page ]['title'];
+			add_settings_section( $section, $title, null, $page );
+		}
+
+		$settings = array(
+			'use_member_levels' => array(
+				'title'    => __( 'Use member levels?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $page,
+				'section'  => 'member_levels',
+				'args'     => array(
+					'type'     => 'checkbox',
+					'desc'     => '',
+					'constant' => '',
+				),
+			),
+			'frequency_options' => array(
+				'title'    => __( 'Frequency options', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $page,
+				'section'  => 'member_levels',
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $this->get_frequency_options(),
+				),
+			),
+		);
+
+		$frequency_options = get_option( $this->option_prefix . 'frequency_options', array() );
+		if ( ! empty( $frequency_options ) ) {
+			$keys = array_intersect( $frequency_options, array_keys( $this->get_frequency_options() ) );
+			foreach ( $keys as $key ) {
+				$options[ $key ] = $this->get_frequency_options( $key );
+			}
+
+			$settings['default_frequency'] = array(
+				'title'    => __( 'Default frequency', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $page,
+				'section'  => 'member_levels',
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $options,
+				),
+			);
+		}
+
+		foreach ( $settings as $key => $attributes ) {
+			$id       = $this->option_prefix . $key;
+			$name     = $this->option_prefix . $key;
+			$title    = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$args     = array_merge(
+				$attributes['args'],
+				array(
+					'title'     => $title,
+					'id'        => $id,
+					'label_for' => $id,
+					'name'      => $name,
+				)
+			);
+
+			// if there is a constant and it is defined, don't run a validate function if there is one
+			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+				$validate = '';
+			}
+			add_settings_field( $id, $title, $callback, $page, 'member_levels', $args );
+			register_setting( 'member_levels', $id );
+		}
+	}
+
+	public function get_frequency_options( $key = '' ) {
+		$frequencies = array(
+			'monthly'  => array(
+				'id'      => 'monthly',
+				'text'    => __( 'per month', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			'yearly'   => array(
+				'id'      => 'yearly',
+				'text'    => __( 'per year', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			'one-time' => array(
+				'id'      => 'one-time',
+				'text'    => __( 'one-time', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+		);
+		if ( '' !== $key ) {
+			return $frequencies[ $key ];
+		}
+		return $frequencies;
 	}
 
 	/**
