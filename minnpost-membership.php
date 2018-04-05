@@ -32,6 +32,18 @@ class MinnPost_Membership {
 
 	/**
 	* @var object
+	* Load and initialize the MinnPost_Membership_Cache class
+	*/
+	public $cache;
+
+	/**
+	* @var object
+	* Load and initialize the MinnPost_Membership_Member_Level class
+	*/
+	public $member_levels;
+
+	/**
+	* @var object
 	* Load and initialize the MinnPost_Membership_Admin class
 	*/
 	public $admin;
@@ -66,11 +78,47 @@ class MinnPost_Membership {
 
 		$this->version       = '0.0.1';
 		$this->slug          = 'minnpost-membership';
-		$this->option_prefix = 'minnpost_membership';
+		$this->option_prefix = 'minnpost_membership_';
 
+		// wp cache settings
+		$this->cache = $this->cache();
+		// member levels
+		$this->member_levels = $this->member_levels();
 		// admin settings
 		$this->admin = $this->admin();
 
+		$this->add_actions();
+
+	}
+
+	/**
+	* Do actions
+	*
+	*/
+	private function add_actions() {
+		add_action( 'plugins_loaded', array( $this, 'textdomain' ) );
+	}
+
+	/**
+	 * Plugin cache
+	 *
+	 * @return object $cache
+	 */
+	public function cache() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-cache.php' );
+		$cache = new MinnPost_Membership_Cache( $this->option_prefix, $this->version, $this->slug );
+		return $cache;
+	}
+
+	/**
+	 * Member levels
+	 *
+	 * @return array $member_levels
+	 */
+	public function member_levels() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-member-level.php' );
+		$member_levels = new MinnPost_Membership_Member_Level( $this->option_prefix, $this->version, $this->slug, $this->cache );
+		return $member_levels;
 	}
 
 	/**
@@ -80,9 +128,18 @@ class MinnPost_Membership {
 	 */
 	public function admin() {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-admin.php' );
-		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug );
+		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
 		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
 		return $admin;
+	}
+
+	/**
+	 * Load textdomain
+	 *
+	 * @return void
+	 */
+	public function textdomain() {
+		load_plugin_textdomain( 'minnpost-membership', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**

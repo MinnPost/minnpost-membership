@@ -17,6 +17,8 @@ class MinnPost_Membership_Admin {
 	protected $option_prefix;
 	protected $version;
 	protected $slug;
+	protected $member_levels;
+	protected $cache;
 
 	/**
 	* Constructor which sets up admin pages
@@ -24,13 +26,21 @@ class MinnPost_Membership_Admin {
 	* @param string $option_prefix
 	* @param string $version
 	* @param string $slug
+	* @param array $member_levels
+	* @param object $cache
 	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug ) {
+	public function __construct( $option_prefix, $version, $slug, $member_levels, $cache ) {
 
 		$this->option_prefix = $option_prefix;
 		$this->version       = $version;
 		$this->slug          = $slug;
+		$this->member_levels = $member_levels;
+		$this->cache         = $cache;
+
+		$this->pages = $this->get_admin_pages();
+
+		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
 		$this->add_actions();
 
@@ -43,7 +53,9 @@ class MinnPost_Membership_Admin {
 	public function add_actions() {
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
-			add_action( 'plugins_loaded', array( $this, 'textdomain' ) );
+			add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
+			add_action( 'admin_post_post_member_level', array( $this, 'prepare_member_level_data' ) );
+			add_action( 'admin_post_delete_member_level', array( $this, 'delete_member_level' ) );
 		}
 
 	}
@@ -53,9 +65,50 @@ class MinnPost_Membership_Admin {
 	*
 	*/
 	public function create_admin_menu() {
-		$page_title = __( 'MinnPost Membership', 'minnpost-membership' );
-		$menu_title = __( 'Membership', 'minnpost-membership' );
-		add_menu_page( $page_title, $menu_title, 'manage_options', $this->slug, array( $this, 'show_admin_page' ) );
+		$capability = 'manage_options';
+		add_menu_page( __( 'MinnPost Membership', 'minnpost-membership' ), __( 'Membership', 'minnpost-membership' ), $capability, $this->slug, array( $this, 'show_admin_page' ), 'dashicons-groups' );
+		$pages = $this->get_admin_pages();
+		foreach ( $pages as $key => $value ) {
+			add_submenu_page( $this->slug, $value['title'], $value['title'], $capability, $key, array( $this, 'show_admin_page' ) );
+		}
+		// Remove the default page called Membership because that's annoying
+		remove_submenu_page( $this->slug, $this->slug );
+	}
+
+	/**
+	* Create WordPress admin options menu pages
+	*
+	* @return array $pages
+	*
+	*/
+	private function get_admin_pages() {
+		$pages = array(
+			$this->slug . '-settings'           => array(
+				'title' => __( 'General Settings', 'minnpost-membership' ),
+				'tabs'  => array(),
+			),
+			$this->slug . '-finances'           => array(
+				'title' => __( 'Member Finances', 'minnpost-membership' ),
+				'tabs'  => array(),
+			),
+			$this->slug . '-benefits'           => array(
+				'title' => __( 'Member Benefits', 'minnpost-membership' ),
+				'tabs'  => array(),
+			),
+			$this->slug . '-member-drive'       => array(
+				'title' => __( 'Member Drive', 'minnpost-membership' ),
+				'tabs'  => array(),
+			),
+			$this->slug . '-premium-content'    => array(
+				'title' => __( 'Premium Content', 'minnpost-membership' ),
+				'tabs'  => array(),
+			),
+			$this->slug . '-site-notifications' => array(
+				'title' => __( 'Site Notifications', 'minnpost-membership' ),
+				'tabs'  => array(),
+			),
+		); // this creates the pages for the admin
+		return $pages;
 	}
 
 	/**
@@ -67,9 +120,197 @@ class MinnPost_Membership_Admin {
 		$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 		?>
 		<div class="wrap">
-			<h1><?php _e( get_admin_page_title() , 'minnpost-membership' ); ?></h1>
+			<h1><?php _e( get_admin_page_title(), 'minnpost-membership' ); ?></h1>
+			<?php
+			$page    = isset( $get_data['page'] ) ? sanitize_key( $get_data['page'] ) : $this->slug . '-settings';
+			$tab     = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
+			$section = $tab;
+			$tabs    = $this->pages[ $page ]['tabs'];
+			if ( ! empty( $tabs ) ) {
+				$tab = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $this->slug . '-settings';
+				$this->render_tabs( $tabs, $tab );
+			}
+			switch ( $tab ) {
+				case $this->slug . '-settings':
+					if ( isset( $get_data['method'] ) ) {
+						$method      = sanitize_key( $get_data['method'] );
+						$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&method=' . $method );
+						$success_url = get_admin_url( null, 'admin.php?page=' . $page );
+
+						if ( isset( $get_data['transient'] ) ) {
+							$transient = sanitize_key( $get_data['transient'] );
+							$posted    = $this->mp_mem_transients->get( $transient );
+						}
+
+						if ( isset( $posted ) && is_array( $posted ) ) {
+							$member_level = $posted;
+						} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
+							$id           = $get_data['id'];
+							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '' );
+						}
+
+						if ( isset( $member_level ) && is_array( $member_level ) ) {
+							$name                   = $member_level['name'];
+							$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
+							$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
+							$starting_value         = $member_level['starting_value'];
+							$benefits               = $member_level['benefits'];
+						}
+
+						if ( 'add-member-level' === $method || 'edit-member-level' === $method ) {
+							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
+						} elseif ( 'delete-member-level' === $method ) {
+							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
+						}
+					} else {
+						$member_levels = $this->member_levels->get_member_levels();
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
+					}
+					break;
+				case 'allowed_resources':
+					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
+					break;
+				case 'resource_settings':
+					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
+					break;
+				case 'subresource_settings':
+					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
+					break;
+				default:
+					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
+					break;
+			} // End switch().*/
+			?>
+
 		</div>
 		<?php
+	}
+
+	/**
+	* Render tabs for settings pages in admin
+	* @param array $tabs
+	* @param string $tab
+	*/
+	private function render_tabs( $tabs, $tab = 'default' ) {
+
+		$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+
+		$current_tab = $tab;
+		echo '<h2 class="nav-tab-wrapper">';
+		foreach ( $tabs as $tab_key => $tab_caption ) {
+			$active = $current_tab === $tab_key ? ' nav-tab-active' : '';
+			echo sprintf( '<a class="nav-tab%1$s" href="%2$s">%3$s</a>',
+				esc_attr( $active ),
+				esc_url( '?page=' . $this->slug . '&tab=' . $tab_key ),
+				esc_html( $tab_caption )
+			);
+
+		}
+		echo '</h2>';
+
+		if ( isset( $get_data['tab'] ) ) {
+			$tab = sanitize_key( $get_data['tab'] );
+		}
+	}
+
+	/**
+	* Register items for the settings api
+	* @return void
+	*
+	*/
+	public function admin_settings_form() {
+
+		$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+		$page     = isset( $get_data['page'] ) ? sanitize_key( $get_data['page'] ) : $this->slug . '-settings';
+		$tab      = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
+		$section  = $tab;
+
+		$input_callback_default   = array( $this, 'display_input_field' );
+		$input_checkboxes_default = array( $this, 'display_checkboxes' );
+		$input_select_default     = array( $this, 'display_select' );
+		$link_default             = array( $this, 'display_link' );
+
+		$all_field_callbacks = array(
+			'text'       => $input_callback_default,
+			'checkboxes' => $input_checkboxes_default,
+			'select'     => $input_select_default,
+			'link'       => $link_default,
+		);
+
+		//$this->allowed_resources( 'allowed_resources', 'allowed_resources', $all_field_callbacks );
+		//$this->resource_settings( 'resource_settings', 'resource_settings', $all_field_callbacks );
+		//$this->subresource_settings( 'subresource_settings', 'subresource_settings', $all_field_callbacks );
+
+	}
+
+	/**
+	* Prepare member level data and redirect after processing
+	* This runs when the create or update forms are submitted
+	* It is public because it depends on an admin hook
+	* It then calls the MinnPost_Membership_Member_Level class and sends prepared data over to it, then redirects to the correct page
+	* This method does include error handling, by loading the submission in a transient if there is an error, and then deleting it upon success
+	*
+	*/
+	public function prepare_member_level_data() {
+		$error     = false;
+		$post_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+		$cachekey  = md5( wp_json_encode( $post_data ) );
+
+		if ( ! isset( $post_data['name'] ) || ! isset( $post_data['benefits'] ) ) {
+			$error = true;
+		}
+
+		if ( true === $error ) {
+			$this->mp_mem_transients->set( $cachekey, $post_data );
+			if ( '' !== $cachekey ) {
+				$url = esc_url_raw( $post_data['redirect_url_error'] ) . '&transient=' . $cachekey;
+			}
+		} else { // there are no errors
+			// send the row to the fieldmap class
+			// if it is add or clone, use the create method
+			$method = esc_attr( $post_data['method'] );
+			if ( 'add-member-level' === $method ) {
+				$result = $this->member_levels->create_member_level( $post_data );
+			} elseif ( 'edit-member-level' === $method ) { // if it is edit, use the update method
+				$id     = esc_attr( $post_data['id'] );
+				$result = $this->member_levels->update_member_level( $post_data, $id );
+			}
+			if ( false === $result ) { // if the database didn't save, it's still an error
+				$this->mp_mem_transients->set( $cachekey, $post_data );
+				if ( '' !== $cachekey ) {
+					$url = esc_url_raw( $post_data['redirect_url_error'] ) . '&transient=' . $cachekey;
+				}
+			} else {
+				if ( isset( $post_data['transient'] ) ) { // there was previously an error saved. can delete it now.
+					$this->mp_mem_transients->delete( esc_attr( $post_data['map_transient'] ) );
+				}
+				// then send the user to the list of fieldmaps
+				$url = esc_url_raw( $post_data['redirect_url_success'] );
+			}
+		}
+		wp_safe_redirect( $url );
+		exit();
+	}
+
+	/**
+	* Delete member level data and redirect after processing
+	* This runs when the delete link is clicked, after the user confirms
+	* It is public because it depends on an admin hook
+	* It then calls the MinnPost_Membership_Member_Level class and the delete method
+	*
+	*/
+	public function delete_member_level() {
+		$post_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+		if ( $post_data['id'] ) {
+			$result = $this->member_levels->delete_member_level( $post_data['id'] );
+			if ( true === $result ) {
+				$url = esc_url_raw( $post_data['redirect_url_success'] );
+			} else {
+				$url = esc_url_raw( $post_data['redirect_url_error'] . '&id=' . $post_data['id'] );
+			}
+			wp_safe_redirect( $url );
+			exit();
+		}
 	}
 
 
@@ -254,15 +495,6 @@ class MinnPost_Membership_Admin {
 			);
 		}
 
-	}
-
-	/**
-	 * Load textdomain
-	 *
-	 * @return void
-	 */
-	public function textdomain() {
-		load_plugin_textdomain( 'minnpost-membership', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 }
