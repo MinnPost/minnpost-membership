@@ -49,6 +49,12 @@ class MinnPost_Membership {
 	public $admin;
 
 	/**
+	* @var object
+	* Load and initialize the MinnPost_Membership_Front_End class
+	*/
+	public $front_end;
+
+	/**
 	 * @var object
 	 * Static property to hold an instance of the class; this seems to make it reusable
 	 *
@@ -86,6 +92,8 @@ class MinnPost_Membership {
 		$this->member_levels = $this->member_levels();
 		// admin settings
 		$this->admin = $this->admin();
+		// front end settings
+		$this->front_end = $this->front_end();
 
 		$this->add_actions();
 
@@ -131,6 +139,17 @@ class MinnPost_Membership {
 		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
 		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
 		return $admin;
+	}
+
+	/**
+	 * Plugin front end
+	 *
+	 * @return object $front_end
+	 */
+	public function front_end() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-front-end.php' );
+		$front_end = new MinnPost_Membership_Front_End( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
+		return $front_end;
 	}
 
 	/**
