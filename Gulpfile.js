@@ -61,7 +61,7 @@ function handleErrors () {
  * Delete minnpost-membership-admin.css and minnpost-membership-admin.min.css before we minify and optimize
  */
 gulp.task( 'clean:styles', () =>
-	del( [ 'assets/css/minnpost-membership-admin.css', 'assets/css/minnpost-membership-admin.min.css' ] )
+	del( [ 'assets/css/minnpost-membership-admin.css', 'assets/css/minnpost-membership-admin.min.css', 'assets/css/minnpost-membership-front-end.css', 'assets/css/minnpost-membership-front-end.min.css' ] )
 );
 
 /**
@@ -123,6 +123,22 @@ gulp.task( 'cssnano', [ 'postcss' ], () =>
 			'safe': true // Use safe optimizations.
 		} ) )
 		.pipe( rename( 'minnpost-membership-admin.min.css' ) )
+		.pipe( gulp.dest( 'assets/css' ) )
+		.pipe( browserSync.stream() )
+);
+
+/**
+ * Minify and optimize minnpost-membership-admin.css.
+ *
+ * https://www.npmjs.com/package/gulp-cssnano
+ */
+gulp.task( 'cssnano-frontend', [ 'postcss' ], () =>
+	gulp.src( 'assets/css/minnpost-membership-front-end.css' )
+		.pipe( plumber( {'errorHandler': handleErrors} ) )
+		.pipe( cssnano( {
+			'safe': true // Use safe optimizations.
+		} ) )
+		.pipe( rename( 'minnpost-membership-front-end.min.css' ) )
 		.pipe( gulp.dest( 'assets/css' ) )
 		.pipe( browserSync.stream() )
 );
@@ -369,6 +385,6 @@ gulp.task( 'markup', browserSync.reload );
 gulp.task( 'i18n', [ 'wp-pot' ] );
 gulp.task( 'icons', [ 'svg' ] );
 gulp.task( 'scripts', [ 'uglify' ] );
-gulp.task( 'styles', [ 'cssnano' ] );
+gulp.task( 'styles', [ 'cssnano', 'cssnano-frontend' ] );
 gulp.task( 'lint', [ 'sass:lint', 'js:lint' ] );
 gulp.task( 'default', [ 'i18n', 'icons', 'styles', 'scripts', 'imagemin'] );
