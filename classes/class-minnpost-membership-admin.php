@@ -88,6 +88,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'General Settings', 'minnpost-membership' ),
 				'sections' => array(
 					'member_levels' => __( 'Member levels', 'minnpost-membership' ),
+					'more_settings' => __( 'More settings', 'minnpost-membership' ),
 				),
 				'use_tabs' => false,
 			),
@@ -160,7 +161,7 @@ class MinnPost_Membership_Admin {
 
 						if ( isset( $member_level ) && is_array( $member_level ) ) {
 							$name                   = $member_level['name'];
-							$is_nonmember           = intval( $member_level['is_nonmember'] );
+							$is_nonmember           = isset( $member_level['is_nonmember'] ) ? intval( $member_level['is_nonmember'] ) : '';
 							$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
 							$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
 							$starting_value         = $member_level['starting_value'];
@@ -263,7 +264,8 @@ class MinnPost_Membership_Admin {
 	* @return void
 	*/
 	public function admin_scripts_and_styles() {
-		wp_enqueue_script( $this->slug . '-admin', plugins_url( '../assets/js/' . $this->slug . '-admin.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->slug . '-front-end', plugins_url( '../assets/js/' . $this->slug . '-front-end.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->slug . '-admin', plugins_url( '../assets/js/' . $this->slug . '-admin.min.js', __FILE__ ), array( 'jquery', $this->slug . '-front-end' ), $this->version, true );
 		wp_enqueue_style( $this->slug . '-admin', plugins_url( '../assets/css/' . $this->slug . '-admin.min.css', __FILE__ ), array(), $this->version, 'all' );
 	}
 
@@ -314,16 +316,39 @@ class MinnPost_Membership_Admin {
 					'type'     => 'select',
 					'desc'     => '',
 					'constant' => '',
-					'items'    => $this->get_frequency_options(),
+					'items'    => $this->member_levels->get_frequency_options(),
+				),
+			),
+			'disable_javascript' => array(
+				'title'    => __( 'Disable plugin JavaScript?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $page,
+				'section'  => 'more_settings',
+				'args'     => array(
+					'type'     => 'checkbox',
+					'desc'     => 'Checking this will keep the plugin from adding its JavaScript to the front end interface.',
+					'constant' => '',
+				),
+			),
+			'disable_css'        => array(
+				'title'    => __( 'Disable plugin CSS?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $page,
+				'section'  => 'more_settings',
+				'args'     => array(
+					'type'     => 'checkbox',
+					'desc'     => 'Checking this will keep the plugin from adding its stylesheet to the front end interface.',
+					'constant' => '',
 				),
 			),
 		);
 
 		$frequency_options = get_option( $this->option_prefix . 'frequency_options', array() );
 		if ( ! empty( $frequency_options ) ) {
-			$keys = array_intersect( $frequency_options, array_keys( $this->get_frequency_options() ) );
-			foreach ( $keys as $key ) {
-				$options[ $key ] = $this->get_frequency_options( $key );
+
+			$options = array();
+			foreach ( $frequency_options as $key ) {
+				$options[ $key ] = $this->member_levels->get_frequency_options( $key );
 			}
 
 			$settings['default_frequency'] = array(
@@ -332,7 +357,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $page,
 				'section'  => 'member_levels',
 				'args'     => array(
-					'type'     => 'select',
+					'type'     => 'radio',
 					'desc'     => '',
 					'constant' => '',
 					'items'    => $options,
@@ -354,6 +379,7 @@ class MinnPost_Membership_Admin {
 					'id'        => $id,
 					'label_for' => $id,
 					'name'      => $name,
+					'class'     => 'minnpost-member-field ' . $id,
 				)
 			);
 
@@ -361,36 +387,9 @@ class MinnPost_Membership_Admin {
 			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
 				$validate = '';
 			}
-			add_settings_field( $id, $title, $callback, $page, 'member_levels', $args );
-			register_setting( 'member_levels', $id );
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
 		}
-	}
-
-	public function get_frequency_options( $key = '' ) {
-		$frequencies = array(
-			'monthly'  => array(
-				'id'      => 'monthly',
-				'text'    => __( 'per month', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-			'yearly'   => array(
-				'id'      => 'yearly',
-				'text'    => __( 'per year', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-			'one-time' => array(
-				'id'      => 'one-time',
-				'text'    => __( 'one-time', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-		);
-		if ( '' !== $key ) {
-			return $frequencies[ $key ];
-		}
-		return $frequencies;
 	}
 
 	/**
@@ -522,6 +521,9 @@ class MinnPost_Membership_Admin {
 	*/
 	public function display_checkboxes( $args ) {
 		$type = 'checkbox';
+		if ( 'radio' === $args['type'] ) {
+			$type = 'radio';
+		}
 
 		$name       = $args['name'];
 		$group_desc = $args['desc'];
