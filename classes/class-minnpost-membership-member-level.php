@@ -50,16 +50,75 @@ class MinnPost_Membership_Member_Level {
 	/**
 	* Get all, or one, of the member levels
 	*
-	* @param  int   $id
+	* @param  int     $id
+	* @param  boool   $show_nonmember
 	* @return array $member_levels
 	*
 	*/
-	public function get_member_levels( $id = '' ) {
+	public function get_member_levels( $id = '', $show_nonmember = false ) {
 		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
+		if ( true !== $show_nonmember ) {
+			$key = array_search( 'non-member', array_column( $member_levels, 'slug' ) );
+			unset( $member_levels[ $key ] );
+		}
 		if ( '' !== $id ) {
 			return $member_levels[ $id ];
 		}
 		return $member_levels;
+	}
+
+	public function get_frequency_options( $key = '', $field = 'value' ) {
+		$frequencies = array(
+			array(
+				'id'      => 'monthly',
+				'value'   => 'per month - 12',
+				'text'    => __( 'per month', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			array(
+				'id'      => 'yearly',
+				'value'   => 'per year - 1',
+				'text'    => __( 'per year', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			array(
+				'id'      => 'one-time',
+				'value'   => 'one-time - 1',
+				'text'    => __( 'one-time', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+		);
+		if ( '' !== $key ) {
+			return $frequencies[ array_search( $key, array_column( $frequencies, $field ) ) ];
+			//return $frequencies[ $key ];
+		}
+		return $frequencies;
+	}
+
+	function get_frequency_values( $frequencies, $default ) {
+		$splitdefault  = explode( 'per ', $default );
+		$splitdefault  = end( $splitdefault );
+		$defaultvalues = explode( ' - ', $splitdefault );
+
+		$name   = $defaultvalues[0]; // returns 'month' 'year' or 'one-time'
+		$number = $defaultvalues[1]; // returns 12 or 1
+
+		$frequencyvalues = array(
+			'name'   => $name,
+			'number' => $number,
+		);
+		return $frequencyvalues;
+	}
+
+	public function calculate_ranges() {
+		return $this->get_frequency_values( $this->get_frequency_options(), get_option( $this->option_prefix . 'default_frequency', '' )[0] );
+	}
+
+	public function calculate_member_level_amount( $amount, $frequency ) {
+		return $amount;
 	}
 
 	/**
@@ -74,7 +133,9 @@ class MinnPost_Membership_Member_Level {
 		$data            = $this->setup_member_level_data( $post_data );
 		$member_levels[] = $data;
 		usort( $member_levels, function( $a, $b ) {
-			return intval( $b['minimum_monthly_amount'] ) - intval( $a['minimum_monthly_amount'] );
+			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+				return intval( $b['minimum_monthly_amount'] ) + intval( $a['minimum_monthly_amount'] );
+			}
 		});
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
@@ -97,7 +158,9 @@ class MinnPost_Membership_Member_Level {
 		$data                 = $this->setup_member_level_data( $post_data );
 		$member_levels[ $id ] = $data;
 		usort( $member_levels, function( $a, $b ) {
-			return intval( $b['minimum_monthly_amount'] ) - intval( $a['minimum_monthly_amount'] );
+			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+				return intval( $b['minimum_monthly_amount'] ) + intval( $a['minimum_monthly_amount'] );
+			}
 		});
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
@@ -118,7 +181,9 @@ class MinnPost_Membership_Member_Level {
 		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
 		unset( $member_levels[ $id ] );
 		usort( $member_levels, function( $a, $b ) {
-			return intval( $b['minimum_monthly_amount'] ) - intval( $a['minimum_monthly_amount'] );
+			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+				return intval( $b['minimum_monthly_amount'] ) + intval( $a['minimum_monthly_amount'] );
+			}
 		});
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
