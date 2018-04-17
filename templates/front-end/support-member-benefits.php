@@ -5,41 +5,63 @@
  */
 get_header(); ?>
 
-	<div id="primary" class="m-layout-membership o-support"> <!-- container here is flex; need to figure out how to make this div take up 100% bc no columns -->
+	<div id="primary" class="m-layout-membership o-support">
 		<main id="main" class="site-main" role="main">
-			<?php $use_member_levels = get_option( $this->option_prefix . 'use_member_levels', false ); ?>
-			<?php if ( 1 === intval( $use_member_levels ) ) : ?>
-				<section class="minnpost-membership-member-levels">
-					<h3><?php echo esc_html__( 'Current member levels', 'minnpost-membership' ); ?></h3>
-					<?php
-					$all_member_levels = $this->member_levels->get_member_levels( '' );
-					if ( ! empty( $all_member_levels ) ) :
-					?>
-						<?php foreach ( $all_member_levels as $key => $record ) : ?>
-							<?php $ranges = $this->member_levels->calculate_ranges(); ?>
-							<article class="minnpost-membership-member-level minnpost-membership-member-level-<?php echo $record['slug']; ?>">
-								<header class="member-level-brief">
-									<h4><?php echo esc_html( $record['name'] ); ?></h4>
-									<?php if ( 1 !== intval( $record['is_nonmember'] ) ) : ?>
-										<div class="amount">
-											<?php if ( 1 === $record['minimum_monthly_amount'] ) : ?>
-												<h5 data-one-time="" data-year="" data-month=""><?php echo html_entity_decode( '<' ) . html_entity_decode( '$' ) . ( $record['maximum_monthly_amount'] + 1 ); ?></h5>
-											<?php elseif ( '' === $record['maximum_monthly_amount'] ) : ?>
-												<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '+' ); ?></h5>
-											<?php else : ?>
-												<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '-' ) . $record['maximum_monthly_amount']; ?></h5>
-											<?php endif; ?>
-											<?php if ( '' !== get_option( $this->option_prefix . 'default_frequency', '' ) ) : ?>
-												<p><?php echo $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['text']; ?></p>
-											<?php endif; ?>
-										</div>
-									<?php endif; ?>
-								</header>
-							</article>
-						<?php endforeach; ?>
-					<?php endif; ?>
-				</section>
-			<?php endif; ?>
+			<header class="m-membership-intro">
+				<h1 class="a-standalone-title"><?php echo esc_html__( 'MinnPost member benefits give you more good reasons to support great nonprofit journalism', 'minnpost-membership' ); ?></h1>
+			</header>
+			<div class="m-entry-content">
+				<?php $use_member_levels = get_option( $this->option_prefix . 'use_member_levels', false ); ?>
+				<?php if ( 1 === intval( $use_member_levels ) ) : ?>
+					<form class="m-form m-form-membership m-form-membership-member-levels">
+						<?php
+						$all_member_levels = $this->member_levels->get_member_levels( '' );
+						if ( ! empty( $all_member_levels ) ) :
+						?>
+							<fieldset>
+								<section class="o-membership-member-levels">
+									<?php foreach ( $all_member_levels as $key => $record ) : ?>
+										<?php $ranges = $this->member_levels->calculate_ranges( $record ); ?>
+										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?>">
+											<section class="m-member-level-brief">
+												<h2><?php echo esc_html( $record['name'] ); ?></h2>
+												<div class="flipper">
+													<div class="amount">
+														<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>">
+															<?php echo $ranges[ $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['id'] ]; ?>
+														</h3>
+														<?php $frequency_options = $this->member_levels->get_frequency_options(); ?>
+														<?php if ( ! empty( $frequency_options ) ) : ?>
+															<div class="m-form-item">
+																<select>
+																	<?php foreach ( $frequency_options as $option ) : ?>
+																		<?php
+																		if ( $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['value'] === $option['value'] ) {
+																			$selected = ' selected';
+																		} else {
+																			$selected = '';
+																		}
+																		?>
+																		<option value="<?php echo $option['value']; ?>"<?php echo $selected; ?>><?php echo $option['text']; ?></option>
+																	<?php endforeach; ?>
+																</select>
+															</div>
+														<?php endif; ?>
+														<a href="#" class="a-button a-button-choose">Set Amount</a>
+													</div>
+													<div class="enter">
+														what
+													</div>
+												</div>
+											</section>
+										</article>
+									<?php endforeach; ?>
+								</section>
+							</fieldset>
+						<?php endif; ?>
+					</form>
+				<?php endif; ?>
+			</div>
 		</main><!-- #main -->
 
 	</div><!-- #primary -->

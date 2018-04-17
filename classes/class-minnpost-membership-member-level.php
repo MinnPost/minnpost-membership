@@ -126,14 +126,48 @@ class MinnPost_Membership_Member_Level {
 		$number = $defaultvalues[1]; // returns 12 or 1
 
 		$frequencyvalues = array(
-			'name'   => $name,
-			'number' => $number,
+			'frequency_name' => $name,
+			'times_per_year' => $number,
 		);
 		return $frequencyvalues;
 	}
 
-	public function calculate_ranges() {
-		return $this->get_frequency_values( $this->get_frequency_options(), get_option( $this->option_prefix . 'default_frequency', '' )[0] );
+	public function calculate_ranges( $record = '' ) {
+		$default_frequency = $this->get_frequency_values( $this->get_frequency_options(), get_option( $this->option_prefix . 'default_frequency', '' )[0] );
+
+		if ( 1 === $record['minimum_monthly_amount'] ) {
+			$record['maximum_monthly_amount'] = $record['maximum_monthly_amount'] + 1;
+		}
+
+		if ( 'month' === $default_frequency['frequency_name'] ) {
+			$minimum_monthly = is_numeric( $record['minimum_monthly_amount'] ) ? $record['minimum_monthly_amount'] : '';
+			$maximum_monthly = is_numeric( $record['maximum_monthly_amount'] ) ? $record['maximum_monthly_amount'] : '';
+			$minimum_annual  = is_numeric( $record['minimum_monthly_amount'] ) ? $record['minimum_monthly_amount'] * $default_frequency['times_per_year'] : '';
+			$maximum_annual  = is_numeric( $record['maximum_monthly_amount'] ) ? $record['maximum_monthly_amount'] * $default_frequency['times_per_year'] : '';
+		} else {
+			$minimum_monthly = $record['minimum_monthly_amount'] / $default_frequency['times_per_year'];
+			$maximum_monthly = $record['maximum_monthly_amount'] / $default_frequency['times_per_year'];
+			$minimum_annual  = $record['minimum_monthly_amount'];
+			$maximum_annual  = $record['maximum_monthly_amount'];
+		}
+		$range = array();
+		if ( 1 !== $minimum_monthly && '' !== $maximum_monthly ) {
+			$range = array(
+				'yearly'  => esc_html( '$' ) . $minimum_annual . esc_html( '-' ) . esc_html( '$' ) . $maximum_annual,
+				'monthly' => esc_html( '$' ) . $minimum_monthly . esc_html( '-' ) . esc_html( '$' ) . $maximum_monthly,
+			);
+		} elseif ( '' !== $maximum_monthly ) {
+			$range = array(
+				'yearly'  => esc_html( '<$' ) . $maximum_annual,
+				'monthly' => esc_html( '<$' ) . $maximum_monthly,
+			);
+		} elseif ( 1 !== $minimum_monthly ) {
+			$range = array(
+				'yearly'  => esc_html( '$' ) . $minimum_annual . esc_html( '+' ),
+				'monthly' => esc_html( '$' ) . $minimum_monthly . esc_html( '+' ),
+			);
+		}
+		return $range;
 	}
 
 	public function calculate_member_level_amount( $amount, $frequency ) {
