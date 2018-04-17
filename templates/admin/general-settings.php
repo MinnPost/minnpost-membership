@@ -14,7 +14,7 @@
 		if ( ! empty( $all_member_levels ) ) :
 		?>
 			<?php foreach ( $all_member_levels as $key => $record ) : ?>
-				<?php $ranges = $this->member_levels->calculate_ranges(); ?>
+				<?php $ranges = $this->member_levels->calculate_ranges( $record ); ?>
 				<article class="minnpost-membership-member-level minnpost-membership-member-level-<?php echo $record['slug']; ?>">
 					<header class="member-level-brief">
 						<h4><?php echo esc_html( $record['name'] ); ?></h4>
@@ -25,7 +25,7 @@
 								<?php elseif ( '' === $record['maximum_monthly_amount'] ) : ?>
 									<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '+' ); ?></h5>
 								<?php else : ?>
-									<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '-' ) . html_entity_decode( '$' ) . $record['maximum_monthly_amount']; ?></h5>
+									<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '–' ) . html_entity_decode( '$' ) . $record['maximum_monthly_amount']; ?></h5>
 								<?php endif; ?>
 								<?php if ( '' !== get_option( $this->option_prefix . 'default_frequency', '' ) ) : ?>
 									<p><?php echo $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['text']; ?></p>
