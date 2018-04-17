@@ -61,6 +61,25 @@ class MinnPost_Membership_Member_Level {
 			$key = array_search( 'non-member', array_column( $member_levels, 'slug' ) );
 			unset( $member_levels[ $key ] );
 		}
+
+		/*
+		if we have to cache the member levels, this is how to do it
+		usort( $member_levels, function( $a, $b ) {
+			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+			}
+		});
+
+		$call = 'id=' . $id . 'show_nonmember=' . $show_nonmember;
+		$reset = true;
+
+		$cached = $this->cache->cache_get( $call, $reset );
+		if ( is_array( $cached ) ) {
+			$member_levels = $cached;
+		} else {
+			$cached = $this->cache->cache_set( $call, $member_levels );
+		}*/
+
 		if ( '' !== $id ) {
 			return $member_levels[ $id ];
 		}
@@ -134,7 +153,7 @@ class MinnPost_Membership_Member_Level {
 		$member_levels[] = $data;
 		usort( $member_levels, function( $a, $b ) {
 			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) + intval( $a['minimum_monthly_amount'] );
+				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
 			}
 		});
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
@@ -159,7 +178,7 @@ class MinnPost_Membership_Member_Level {
 		$member_levels[ $id ] = $data;
 		usort( $member_levels, function( $a, $b ) {
 			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) + intval( $a['minimum_monthly_amount'] );
+				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
 			}
 		});
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
@@ -182,7 +201,7 @@ class MinnPost_Membership_Member_Level {
 		unset( $member_levels[ $id ] );
 		usort( $member_levels, function( $a, $b ) {
 			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) + intval( $a['minimum_monthly_amount'] );
+				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
 			}
 		});
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
