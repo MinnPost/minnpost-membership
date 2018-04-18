@@ -50,7 +50,7 @@ get_header(); ?>
 												</div>
 												<div class="enter">
 													<h3><?php echo esc_html( '$' ); ?><div class="m-form-item">
-															<input type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>">
+															<input type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) {?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?><?php if ( '' !== $record['maximum_monthly_amount'] ) {?> max="<?php echo $record['maximum_monthly_amount']; ?>"<?php } ?>>
 														</div>
 													</h3>
 													<div class="m-form-item">
