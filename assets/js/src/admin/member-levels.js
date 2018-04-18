@@ -31,8 +31,9 @@
 			'frequency_selector_type' : 'radio',
 			'levels_container' : '.minnpost-membership-member-levels',
 			'single_level_container' : '.minnpost-membership-member-level',
-			'summary_selector' : '.member-level-brief',
-			'amount_selector' : '.amount h5'
+			'single_level_summary_selector' : '.member-level-brief',
+			'amount_selector' : '.amount h5',
+			'flipped_items' : 'div.amount, div.enter',
 		});
 
 		if ($('.minnpost_membership_default_frequency').length > 0 ) {

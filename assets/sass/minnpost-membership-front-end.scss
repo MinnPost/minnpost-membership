@@ -32,19 +32,6 @@ $vertical-space: 15px;
 				padding: 0.5em 0;
 				line-height: normal;
 			}
-			.flipper, .flipper .amount, .flipper .enter {
-				height: 190px;
-				width: 100%;
-			}
-			.flipper {
-				position: relative;
-			}
-			.flipper .amount, .flipper .enter {
-				position: absolute;
-				left: 0;
-				top: 0;
-				transition: 0.6s;
-			}
 			.amount {
 				h3 {
 					font-size: 3em;
@@ -62,6 +49,35 @@ $vertical-space: 15px;
 				text-align: center;
 				backface-visibility: hidden;
 				transform: perspective(800px) rotateY(180deg);
+			}
+			.flipper, .flipper .amount, .flipper .enter {
+				height: 190px;
+				width: 100%;
+			}
+			.flipper {
+				position: relative;
+				.amount, .enter {
+					position: absolute;
+					left: 0;
+					top: 0;
+					transition: 0.6s;
+				}
+				.enter {
+					backface-visibility: hidden;
+					transform: perspective(800px) rotateY(180deg);
+				}
+				.amount {
+					backface-visibility: hidden;
+					transform: perspective(800px) rotateY(0deg);
+				}
+			}
+			&.flipped {
+				.enter {
+					transform: perspective(800px) rotateY(0);
+			  	}
+			  	.amount {
+			  		transform: perspective(800px) rotateY(-179.9deg);
+				}
 			}
 		}
 		&.m-membership-member-level-non-member {
@@ -85,5 +101,21 @@ $vertical-space: 15px;
 @media screen and (min-width: 890px) {
 	.m-membership-member-level {
 		width: 23%;
+	}
+}
+
+// ie 10 and under and no javascript - dependent on modernizr
+.no-borderimage, .no-js {
+	.m-member-level-brief {
+		.flipper, .amount, .enter {
+			height: auto;
+			width: 100%;
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+		.enter select, .amount .a-button {
+			display: none;
+		}
 	}
 }

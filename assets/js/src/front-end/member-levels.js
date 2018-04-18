@@ -2,15 +2,17 @@
 ;(function ( $, window, document, undefined ) {
 
 	// Create the defaults once
-	var pluginName = 'minnpost-membership',
+	var pluginName = 'minnpost_membership',
 	defaults = {
 		'debug' : false, // this can be set to true on page level options
-		'frequency_selector' : 'input[name="minnpost_membership_default_frequency"]',
-		'frequency_selector_type' : 'radio',
-		'levels_container' : '.minnpost-membership-member-levels',
-		'single_level_container' : '.minnpost-membership-member-level',
-		'summary_selector' : '.member-level-brief',
-		'amount_selector' : '.amount h5'
+		'frequency_selector' : '.a-form-item-membership-frequency',
+		'frequency_selector_type' : 'select',
+		'levels_container' : '.o-membership-member-levels',
+		'single_level_container' : '.m-membership-member-level',
+		'single_level_summary_selector' : '.m-member-level-brief',
+		'flipped_items' : 'div.amount, div.enter',
+		'amount_selector' : '.enter input',
+		'level_frequency_text_selector' : '.show-frequency',
 	}; // end defaults
 
 	// The actual plugin constructor
@@ -32,16 +34,42 @@
 
 	Plugin.prototype = {
 
-		init: function(reset, amount) {
+		init: function( reset, amount ) {
 			// Place initialization logic here
 			// You already have access to the DOM element and
 			// the options via the instance, e.g. this.element
 			// and this.options
 			// you can add more functions like the one below and
 			// call them like so: this.yourOtherFunction(this.element, this.options).
+
+			this.frequencySwitcher( this.element, this.options );
+
 		},
 
-	};
+		frequencySwitcher: function( element, options ) {
+			if ( options.levels_container.length > 0 ) {
+				$( options.single_level_summary_selector, element ).each(function() {
+					$( options.flipped_items, $(this) ).wrapAll( '<div class="flipper"/>' );
+				});
+				$( options.frequency_selector, element ).change( function( event ) {
+					var level_number = $(this).data('member-level-number');
+					var frequencystring = $(this).val();
+				    var frequency = frequencystring.split(' - ')[1];
+				    var frequency_name = frequencystring.split(' - ')[0];
+				    if ( typeof level_number !== 'undefined' ) {
+						var amount = $( options.amount_selector + '[data-member-level-number="' + level_number + '"]').val();
+						$( options.single_level_summary_selector, element).removeClass( 'flipped' );
+						$( options.single_level_summary_selector, element).removeClass( 'active' );
+						$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
+					} else if ( options.level_frequency_text_selector.length > 0 ) {
+						$(options.level_frequency_text_selector, element).text(frequency_name);
+					}
+				});
+
+			}
+		}, // end frequencySwitcher
+
+	}; // end Plugin.prototype
 
 	// A really lightweight plugin wrapper around the constructor,
 	// preventing against multiple instantiations

@@ -22,7 +22,7 @@ get_header(); ?>
 								<section class="o-membership-member-levels">
 									<?php foreach ( $all_member_levels as $key => $record ) : ?>
 										<?php $ranges = $this->member_levels->calculate_ranges( $record ); ?>
-										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?>">
+										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?> m-membership-member-level-<?php echo $key + 1; ?>">
 											<section class="m-member-level-brief">
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
 												<div class="amount">
@@ -32,7 +32,7 @@ get_header(); ?>
 													<?php $frequency_options = $this->member_levels->get_frequency_options(); ?>
 													<?php if ( ! empty( $frequency_options ) ) : ?>
 														<div class="m-form-item">
-															<select id="membership-frequency-preview-<?php echo $key + 1; ?>" name="membership-frequency-preview-<?php echo $key + 1; ?>" class="a-form-item-membership-frequency">
+															<select id="membership-frequency-preview-<?php echo $key + 1; ?>" name="membership-frequency-preview-<?php echo $key + 1; ?>" class="a-form-item-membership-frequency" data-member-level-number="<?php echo $key + 1; ?>">
 																<?php foreach ( $frequency_options as $option ) : ?>
 																	<?php
 																	if ( $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['value'] === $option['value'] ) {
@@ -49,7 +49,13 @@ get_header(); ?>
 													<a href="#" class="a-button a-button-choose"><?php echo __( 'Set Amount', 'minnpost-membership' ); ?></a>
 												</div>
 												<div class="enter">
-													<input class="a-button a-button-choose" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo __( 'Give Now', 'minnpost-membership' ); ?>" type="submit">
+													<h3>
+														<?php echo esc_html( '$' ); ?>
+														<div class="m-form-item">
+															<input type="tel" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>">
+														</div>
+													</h3>
+													<input class="a-button" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo __( 'Give Now', 'minnpost-membership' ); ?>" type="submit">
 												</div>
 											</section>
 										</article>
