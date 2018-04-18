@@ -1,4 +1,4 @@
-<form method="post" action="options.php">
+<form method="post" action="options.php" class="minnpost-membership-general-settings">
 	<?php
 	settings_fields( 'member_levels' ) . settings_fields( 'more_settings' ) . do_settings_sections( $this->slug . '-settings' );
 	?>
@@ -20,13 +20,9 @@
 						<h4><?php echo esc_html( $record['name'] ); ?></h4>
 						<?php if ( 1 !== intval( $record['is_nonmember'] ) ) : ?>
 							<div class="amount">
-								<?php if ( 1 === $record['minimum_monthly_amount'] ) : ?>
-									<h5 data-one-time="" data-year="" data-month=""><?php echo html_entity_decode( '<' ) . html_entity_decode( '$' ) . ( $record['maximum_monthly_amount'] + 1 ); ?></h5>
-								<?php elseif ( '' === $record['maximum_monthly_amount'] ) : ?>
-									<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '+' ); ?></h5>
-								<?php else : ?>
-									<h5><?php echo html_entity_decode( '$' ) . $record['minimum_monthly_amount'] . html_entity_decode( '–' ) . html_entity_decode( '$' ) . $record['maximum_monthly_amount']; ?></h5>
-								<?php endif; ?>
+								<h5 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>">
+									<?php echo $ranges[ $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['id'] ]; ?>
+								</h5>
 								<?php if ( '' !== get_option( $this->option_prefix . 'default_frequency', '' ) ) : ?>
 									<p><?php echo $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['text']; ?></p>
 								<?php endif; ?>
