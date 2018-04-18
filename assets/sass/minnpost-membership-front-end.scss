@@ -32,15 +32,19 @@ $vertical-space: 15px;
 				padding: 0.5em 0;
 				line-height: normal;
 			}
+			h3 {
+				font-size: 3em;
+				min-height: 75px;
+				display: block;
+				line-height: normal;
+				margin: 0;
+				padding: 0 0 0.25em 0;
+			}
+			.a-button {
+				line-height: normal;
+				margin-right: 0;
+			}
 			.amount {
-				h3 {
-					font-size: 3em;
-					min-height: 75px;
-					display: block;
-					line-height: normal;
-					margin: 0;
-					padding: 0 0 0.25em 0;
-				}
 				.a-button-choose {
 					margin: 0;
 				}
@@ -49,6 +53,25 @@ $vertical-space: 15px;
 				text-align: center;
 				backface-visibility: hidden;
 				transform: perspective(800px) rotateY(180deg);
+				h3 {
+					.m-form-item {
+						display: inline-block;
+						margin: 0;
+						input {
+							width: 3em;
+							text-align: center;
+							height: auto;
+							line-height: normal;
+							margin: 0;
+							padding: 0;
+							border: 1px solid #999;
+						}
+					}
+				}
+				.a-button {
+					display: block;
+					margin: 0 auto 0.75em auto;
+				}
 			}
 			.flipper, .flipper .amount, .flipper .enter {
 				height: 190px;
