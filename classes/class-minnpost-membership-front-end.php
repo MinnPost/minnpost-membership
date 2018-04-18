@@ -107,6 +107,12 @@ class MinnPost_Membership_Front_End {
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( '1' !== $disable_javascript ) {
 			wp_enqueue_script( $this->slug . '-front-end', plugins_url( '../assets/js/' . $this->slug . '-front-end.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
+			wp_add_inline_script( $this->slug . '-front-end', "
+				jQuery(document).ready(function ($) {
+					$('.m-form-membership-member-levels').minnpost_membership({
+						'debug' : false
+					});
+				});" );
 		}
 		if ( '1' !== $disable_css ) {
 			wp_enqueue_style( $this->slug . '-front-end', plugins_url( '../assets/css/' . $this->slug . '-front-end.min.css', __FILE__ ), array(), $this->version, 'all' );
