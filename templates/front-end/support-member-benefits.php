@@ -49,12 +49,24 @@ get_header(); ?>
 													<a href="#" class="a-button a-button-choose"><?php echo __( 'Set Amount', 'minnpost-membership' ); ?></a>
 												</div>
 												<div class="enter">
-													<h3>
-														<?php echo esc_html( '$' ); ?>
-														<div class="m-form-item">
-															<input type="tel" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>">
+													<h3><?php echo esc_html( '$' ); ?><div class="m-form-item">
+															<input type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>">
 														</div>
 													</h3>
+													<div class="m-form-item">
+														<select id="membership-frequency-<?php echo $key + 1; ?>" name="membership-frequency-<?php echo $key + 1; ?>" class="a-form-item-membership-frequency" data-member-level-number="<?php echo $key + 1; ?>">
+															<?php foreach ( $frequency_options as $option ) : ?>
+																<?php
+																if ( $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['value'] === $option['value'] ) {
+																	$selected = ' selected';
+																} else {
+																	$selected = '';
+																}
+																?>
+																<option value="<?php echo $option['value']; ?>"<?php echo $selected; ?>><?php echo $option['text']; ?></option>
+															<?php endforeach; ?>
+														</select>
+													</div>
 													<input class="a-button" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo __( 'Give Now', 'minnpost-membership' ); ?>" type="submit">
 												</div>
 											</section>
