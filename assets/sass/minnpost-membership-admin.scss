@@ -13,6 +13,9 @@ $vertical-space: 15px;
 	padding: 0;
 	border: 0;
 	min-width: 0;
+	font-size: 1.23em;
+
+line-height: 1.5em;
 	.minnpost-membership-member-level {
 		margin-bottom: 2em;
 		header {
@@ -27,13 +30,22 @@ $vertical-space: 15px;
 				line-height: normal;
 				background: $border-color-darker;
 			}
-			.amount h5 {
-				font-size: 3em;
-				min-height: 75px;
-				display: block;
-				line-height: normal;
-				margin: 0;
-				padding: 0 0 0.25em 0;
+			.amount {
+				h5 {
+					font-size: 3em;
+					min-height: 75px;
+					display: block;
+					line-height: normal;
+					margin: 0;
+					padding: 0 0 0.25em 0;
+					box-sizing: border-box;
+				}
+				p {
+					display: block;
+					margin: 0 auto 0.75em auto;
+					text-align: center;
+					font-size: 1.23em;
+				}
 			}
 		}
 		&.minnpost-membership-member-level-non-member {
