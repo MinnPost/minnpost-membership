@@ -94,8 +94,11 @@ class MinnPost_Membership_Admin {
 			),
 			$this->slug . '-finances'           => array(
 				'title'    => __( 'Member Finances', 'minnpost-membership' ),
-				'sections' => array(),
-				'use_tabs' => false,
+				'sections' => array(
+					'taking_payments'   => __( 'Taking payments', 'minnpost-membership' ),
+					'managing_payments' => __( 'Managing payments', 'minnpost-membership' ),
+				),
+				'use_tabs' => true,
 			),
 			$this->slug . '-benefits'           => array(
 				'title'    => __( 'Member Benefits', 'minnpost-membership' ),
@@ -137,8 +140,14 @@ class MinnPost_Membership_Admin {
 			$section = $tab;
 			$tabs    = $this->pages[ $page ]['sections'];
 			if ( ! empty( $tabs ) && true === $this->pages[ $page ]['use_tabs'] ) {
-				$tab = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $this->slug . '-settings';
-				$this->render_tabs( $tabs, $tab );
+
+				if ( isset( $get_data['tab'] ) ) {
+					$tab = sanitize_key( $get_data['tab'] );
+				} else {
+					reset( $tabs );
+					$tab = key( $tabs );
+				}
+				$this->render_tabs( $page, $tabs, $tab );
 			}
 			switch ( $tab ) {
 				case $this->slug . '-settings':
@@ -199,11 +208,11 @@ class MinnPost_Membership_Admin {
 
 	/**
 	* Render tabs for settings pages in admin
+	* @param string $page
 	* @param array $tabs
 	* @param string $tab
 	*/
-	private function render_tabs( $tabs, $tab = 'default' ) {
-
+	private function render_tabs( $page, $tabs, $tab = 'default' ) {
 		$get_data = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 
 		$current_tab = $tab;
@@ -212,7 +221,7 @@ class MinnPost_Membership_Admin {
 			$active = $current_tab === $tab_key ? ' nav-tab-active' : '';
 			echo sprintf( '<a class="nav-tab%1$s" href="%2$s">%3$s</a>',
 				esc_attr( $active ),
-				esc_url( '?page=' . $this->slug . '&tab=' . $tab_key ),
+				esc_url( '?page=' . $page . '&tab=' . $tab_key ),
 				esc_html( $tab_caption )
 			);
 
@@ -252,6 +261,7 @@ class MinnPost_Membership_Admin {
 		);
 
 		$this->general_settings( $page, $all_field_callbacks );
+		$this->member_finances( $page, $all_field_callbacks );
 		//$this->allowed_resources( 'allowed_resources', 'allowed_resources', $all_field_callbacks );
 		//$this->resource_settings( 'resource_settings', 'resource_settings', $all_field_callbacks );
 		//$this->subresource_settings( 'subresource_settings', 'subresource_settings', $all_field_callbacks );
@@ -270,7 +280,7 @@ class MinnPost_Membership_Admin {
 	}
 
 	/**
-	* Fields for the General Settings tab
+	* Fields for the General Settings page
 	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
 	*
 	* @param string $page
@@ -296,7 +306,7 @@ class MinnPost_Membership_Admin {
 		}
 
 		$settings = array(
-			'use_member_levels' => array(
+			'use_member_levels'  => array(
 				'title'    => __( 'Use member levels?', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $page,
@@ -307,7 +317,7 @@ class MinnPost_Membership_Admin {
 					'constant' => '',
 				),
 			),
-			'frequency_options' => array(
+			'frequency_options'  => array(
 				'title'    => __( 'Frequency options', 'minnpost-membership' ),
 				'callback' => $callbacks['checkboxes'],
 				'page'     => $page,
@@ -364,6 +374,91 @@ class MinnPost_Membership_Admin {
 				),
 			);
 		}
+
+		foreach ( $settings as $key => $attributes ) {
+			$id       = $this->option_prefix . $key;
+			$name     = $this->option_prefix . $key;
+			$title    = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$args     = array_merge(
+				$attributes['args'],
+				array(
+					'title'     => $title,
+					'id'        => $id,
+					'label_for' => $id,
+					'name'      => $name,
+					'class'     => 'minnpost-member-field ' . $id,
+				)
+			);
+
+			// if there is a constant and it is defined, don't run a validate function if there is one
+			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+				$validate = '';
+			}
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
+		}
+	}
+
+	/**
+	* Fields for the Member Finances page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function member_finances( $page, $callbacks ) {
+		$sections = $this->get_admin_pages()[ $page ]['sections'];
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+			}
+		} else {
+			$section = $page;
+			$title   = $this->get_admin_pages()[ $page ]['title'];
+			add_settings_section( $section, $title, null, $page );
+		}
+
+		$settings = array(
+			'default_payment_url' => array(
+				'title'    => __( 'Default URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => 'taking_payments',
+				'section'  => 'taking_payments',
+				'args'     => array(
+					'type'     => 'text',
+					'desc'     => '',
+					'constant' => '',
+				),
+			),
+			'benefit_picker_url'  => array(
+				'title'    => __( 'Benefit picker URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => 'taking_payments',
+				'section'  => 'taking_payments',
+				'args'     => array(
+					'type'     => 'text',
+					'desc'     => '',
+					'constant' => '',
+				),
+			),
+			'list_url'  => array(
+				'title'    => __( 'List URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => 'managing_payments',
+				'section'  => 'managing_payments',
+				'args'     => array(
+					'type'     => 'text',
+					'desc'     => '',
+					'constant' => '',
+				),
+			),
+		);
 
 		foreach ( $settings as $key => $attributes ) {
 			$id       = $this->option_prefix . $key;
