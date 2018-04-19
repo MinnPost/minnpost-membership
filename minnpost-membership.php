@@ -105,6 +105,8 @@ class MinnPost_Membership {
 	*/
 	private function add_actions() {
 		add_action( 'plugins_loaded', array( $this, 'textdomain' ) );
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 	}
 
 	/**
@@ -159,6 +161,24 @@ class MinnPost_Membership {
 	 */
 	public function textdomain() {
 		load_plugin_textdomain( 'minnpost-membership', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+
+	/**
+	 * Activate plugin
+	 *
+	 * @return void
+	 */
+	public function activate() {
+		flush_rewrite_rules();
+	}
+
+	/**
+	 * Deactivate plugin
+	 *
+	 * @return void
+	 */
+	public function deactivate() {
+		flush_rewrite_rules();
 	}
 
 	/**
