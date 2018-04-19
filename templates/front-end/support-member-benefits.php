@@ -26,7 +26,7 @@ get_header(); ?>
 											<section class="m-member-level-brief">
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
 												<div class="amount">
-													<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>">
+													<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>" data-default-monthly="<?php echo $ranges['default_monthly']; ?>" data-default-yearly="<?php echo $ranges['default_yearly']; ?>">
 														<?php echo $ranges[ $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['id'] ]; ?>
 													</h3>
 													<?php $frequency_options = $this->member_levels->get_frequency_options(); ?>
@@ -50,7 +50,7 @@ get_header(); ?>
 												</div>
 												<div class="enter">
 													<h3><?php echo esc_html( '$' ); ?><div class="m-form-item">
-															<input type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) {?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?><?php if ( '' !== $record['maximum_monthly_amount'] ) {?> max="<?php echo $record['maximum_monthly_amount']; ?>"<?php } ?>>
+															<input class="amount-entry" type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) {?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
 														</div>
 													</h3>
 													<div class="m-form-item">

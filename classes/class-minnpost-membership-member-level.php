@@ -142,13 +142,17 @@ class MinnPost_Membership_Member_Level {
 		if ( 'month' === $default_frequency['frequency_name'] ) {
 			$minimum_monthly = is_numeric( $record['minimum_monthly_amount'] ) ? $record['minimum_monthly_amount'] : '';
 			$maximum_monthly = is_numeric( $record['maximum_monthly_amount'] ) ? $record['maximum_monthly_amount'] : '';
+			$default_monthly = is_numeric( $record['starting_value'] ) ? $record['starting_value'] : '';
 			$minimum_annual  = is_numeric( $record['minimum_monthly_amount'] ) ? $record['minimum_monthly_amount'] * $default_frequency['times_per_year'] : '';
 			$maximum_annual  = is_numeric( $record['maximum_monthly_amount'] ) ? $record['maximum_monthly_amount'] * $default_frequency['times_per_year'] : '';
+			$default_annual  = is_numeric( $record['starting_value'] ) ? $record['starting_value'] * $default_frequency['times_per_year'] : '';
 		} else {
 			$minimum_monthly = $record['minimum_monthly_amount'] / $default_frequency['times_per_year'];
 			$maximum_monthly = $record['maximum_monthly_amount'] / $default_frequency['times_per_year'];
+			$default_monthly = $record['starting_value'] / $default_frequency['starting_value'];
 			$minimum_annual  = $record['minimum_monthly_amount'];
 			$maximum_annual  = $record['maximum_monthly_amount'];
+			$default_annual  = $record['starting_value'];
 		}
 		$range = array();
 		if ( 1 !== $minimum_monthly && '' !== $maximum_monthly ) {
@@ -167,6 +171,8 @@ class MinnPost_Membership_Member_Level {
 				'monthly' => esc_html( '$' ) . $minimum_monthly . esc_html( '+' ),
 			);
 		}
+		$range['default_monthly'] = esc_attr( $default_monthly );
+		$range['default_yearly']  = esc_attr( $default_annual );
 		return $range;
 	}
 

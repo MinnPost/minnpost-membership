@@ -44,7 +44,7 @@
 	</div>
 
 	<div class="minnpost-member-level-starting-value">
-		<label for="starting-value"><?php echo esc_html__( 'Starting value', 'minnpost-membership' ); ?>: </label>
+		<label for="starting-value"><?php echo esc_html__( 'Starting monthly value', 'minnpost-membership' ); ?>: </label>
 		<input type="tel" id="starting-value" name="starting_value" value="<?php echo isset( $starting_value ) ? esc_attr( $starting_value ) : ''; ?>" />
 	</div>
 
