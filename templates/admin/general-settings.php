@@ -16,7 +16,7 @@
 			?>
 				<?php foreach ( $all_member_levels as $key => $record ) : ?>
 					<?php $ranges = $this->member_levels->calculate_ranges( $record ); ?>
-					<article class="minnpost-membership-member-level minnpost-membership-member-level-<?php echo $record['slug']; ?>">
+					<article class="minnpost-membership-member-level minnpost-membership-member-level-<?php echo $record['slug']; ?> minnpost-membership-member-level-<?php echo $key + 1; ?>">
 						<header class="member-level-brief">
 							<h4><?php echo esc_html( $record['name'] ); ?></h4>
 							<?php if ( 1 !== intval( $record['is_nonmember'] ) ) : ?>
@@ -29,7 +29,7 @@
 									<?php endif; ?>
 								</div>
 								<div class="enter">
-									<input type="hidden" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>">
+									<input class="amount-entry" type="hidden" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) {?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
 								</div>
 							<?php endif; ?>
 

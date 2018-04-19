@@ -15,10 +15,6 @@
 		});
 	}
 
-	function changeMemberLevelAmounts() {
-
-	}
-
 	$(document).ready(function() {
 
 		// show or hide member level fields
@@ -27,18 +23,15 @@
 		}
 
 		$('.minnpost-membership-general-settings').minnpost_membership({
+			'amount_viewer' : '.amount h5',
 			'frequency_selector' : 'input[name="minnpost_membership_default_frequency[]"]',
 			'frequency_selector_type' : 'radio',
 			'levels_container' : '.minnpost-membership-member-levels',
 			'single_level_container' : '.minnpost-membership-member-level',
 			'single_level_summary_selector' : '.member-level-brief',
-			'amount_selector' : '.amount h5',
 			'flipped_items' : 'div.amount, div.enter',
+			'level_frequency_text_selector' : '.show-frequency',
 		});
-
-		if ($('.minnpost_membership_default_frequency').length > 0 ) {
-			changeMemberLevelAmounts();
-		}
 
 	});
 

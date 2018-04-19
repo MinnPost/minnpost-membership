@@ -75,17 +75,27 @@
 						$( options.single_level_summary_selector, element).removeClass( 'active' );
 						$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
 						level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
-						that.changeFrequency(frequency_string, level, element, options );
+						that.changeFrequency( frequency_string, level, element, options );
 
 						if ( frequency == 1 ) {
-							$( options.amount_selector).val( $( event.target ).closest( $(options.amount_viewer )).data('default-yearly') );
+							$( options.amount_selector).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-yearly' ) );
 						} else if ( frequency == 12 ) {
-							$( options.amount_selector).val( $( event.target ).closest( $(options.amount_viewer )).data('default-monthly') );
+							$( options.amount_selector).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-monthly' ) );
 						}
 
 					} else if ( options.level_frequency_text_selector.length > 0 ) {
 						$(options.level_frequency_text_selector, element).text(frequency_name);
+						$( options.single_level_container ).each( function() {
+							level_number = $(options.amount_selector, $(this)).data('member-level-number');
+							if ( typeof level_number !== 'undefined' ) {
+								amount = $( options.amount_selector, $(this) ).val();
+								level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
+							}
+						});
 					}
+
+					that.changeAmountPreview( frequency_string, level, element, options );
+
 				});
 			}
 			if ( options.choose_amount_selector.length > 0 ) {
@@ -171,8 +181,6 @@
 			    var once_value     = $( options.amount_viewer, $(this) ).data('one-time');
 			    var frequency_name = selected.split(' - ')[0];
 			    var frequency      = parseInt( selected.split(' - ')[1] );
-			    var minimum        = $( options.amount_selector, $(this) ).prop('min');
-			    var amount         = $( options.amount_selector, $(this) ).val();
 
 			    $( options.frequency_selector ).val( selected );
     			$( options.frequency_selector ).prop( 'selected', selected );
@@ -193,6 +201,30 @@
 
 			} );
 		}, // end changeFrequency
+
+		changeAmountPreview: function( selected, level, element, options ) {
+			$( options.single_level_summary_selector ).each( function() {
+				var range          = $( options.amount_viewer, $(this) ).text();
+				var month_value    = $( options.amount_viewer, $(this) ).data('month');
+			    var year_value     = $( options.amount_viewer, $(this) ).data('year');
+			    var once_value     = $( options.amount_viewer, $(this) ).data('one-time');
+			    var frequency_name = selected.split(' - ')[0];
+
+				if ( frequency_name == 'per month' ) {
+					range = month_value;
+					$( options.amount_viewer, $(this) ).removeClass( 'smaller' );
+				} else if ( frequency_name == 'per year' ) {
+					range = year_value;
+					$( options.amount_viewer, $(this) ).addClass( 'smaller' );
+				} else if (frequency_name == 'one-time' ) {
+					range = once_value;
+					$( options.amount_viewer, $(this) ).addClass('smaller' );
+				}
+
+				$( options.amount_viewer, $(this) ).text( range );
+
+			} );
+		}, // end changeAmountPreview
 
 	}; // end Plugin.prototype
 
