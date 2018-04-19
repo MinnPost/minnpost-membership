@@ -42,6 +42,8 @@ class MinnPost_Membership_Front_End {
 
 		$this->add_actions();
 
+		$this->allowed_urls = $this->get_allowed_urls();
+
 	}
 
 	/**
@@ -51,46 +53,118 @@ class MinnPost_Membership_Front_End {
 	public function add_actions() {
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
-			add_action( 'init', array( $this, 'rewrite_rules' ) );
-			add_action( 'template_include', array( $this, 'include_template' ) );
-			add_filter( 'request', array( $this, 'membership_urls' ) );
 		}
+		add_action( 'init', array( $this, 'rewrite_rules' ) );
+		add_action( 'template_include', array( $this, 'include_template' ) );
+		add_filter( 'request', array( $this, 'membership_urls' ) );
 
 	}
 
+	/**
+	* Create array from URL options. These are the allowed public URLs for this plugin.
+	*
+	* @return array $urls
+	*
+	*/
+	public function get_allowed_urls() {
+		$urls = '';
+
+		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
+
+		$urls .= $payment_urls;
+		$urls  = explode( "\r\n", $urls );
+		return $urls;
+	}
+
+	/**
+	* Handle rewrite rules for plugin
+	*
+	*/
 	public function rewrite_rules() {
-		//add_rewrite_endpoint( 'support', EP_ROOT );
-		add_rewrite_rule( 'support/(.+?)/?$', 'index.php?support_page=$matches[1]', 'top' );
-		add_rewrite_tag( '%support_page%', '([^&]+)' );
+		$urls = $this->allowed_urls;
+		foreach ( $urls as $url ) {
+			$url       = ltrim( $url, '/' );
+			$url_array = explode( '/', $url );
+
+			$rule = $url_array[0];
+			add_rewrite_rule( $rule . '/(.+?)/?$', 'index.php?' . $rule . '_page=$matches[1]', 'top' );
+			add_rewrite_tag( '%' . $rule . '_page%', '([^&]+)' );
+		}
 	}
 
+	/**
+	* Process URL requests for plugin
+	*
+	* @param array $vars
+	* @return array $vars
+	*
+	*/
 	public function membership_urls( $vars = array() ) {
-		if ( isset( $vars['category_name'] ) && 'support' === $vars['category_name'] ) {
-			$vars['support_page'] = 'default';
-		} elseif ( isset( $vars['category_name'] ) ) {
-			$first  = substr( $vars['category_name'] . '/', 0, strpos( $vars['category_name'], '/' ) );
-			$second = substr( $vars['category_name'], strrpos( $vars['category_name'], '/' ) + 1 );
-			if ( 'support' === $first ) {
-				$vars['support_page'] = $second;
+
+		$urls = $this->allowed_urls;
+		foreach ( $urls as $url ) {
+			$url       = ltrim( $url, '/' );
+			$url_array = explode( '/', $url );
+
+			$rule = $url_array[0];
+
+			if ( isset( $vars['category_name'] ) && $rule === $vars['category_name'] ) {
+				$vars[ $rule . '_page' ] = 'default';
+			} elseif ( isset( $vars['category_name'] ) ) {
+				$first  = substr( $vars['category_name'] . '/', 0, strpos( $vars['category_name'], '/' ) );
+				$second = substr( $vars['category_name'], strrpos( $vars['category_name'], '/' ) + 1 );
+				if ( $rule === $first ) {
+					$vars[ $rule . '_page' ] = $second;
+				}
 			}
 		}
 
 		return $vars;
 	}
 
+	/**
+	* Load template HTML for plugin URLs
+	*
+	* @param string $template
+	* @return string $template or echo HTML
+	*
+	*/
 	public function include_template( $template ) {
-		//try and get the query var we registered in our query_vars() function
-		$support_page = get_query_var( 'support_page' );
-		// if the query var has data, we must be on the right page, load our custom template
-		if ( $support_page ) {
-			if ( 'default' === $support_page ) {
-				$template_name = 'support';
-			} else {
-				$template_name = 'support-' . $support_page;
+		// try and get the query var we registered in our query_vars() function
+		$urls = $this->allowed_urls;
+		foreach ( $urls as $url ) {
+			$url       = ltrim( $url, '/' );
+			$url_array = explode( '/', $url );
+
+			$rule = $url_array[0];
+			$page = get_query_var( $rule . '_page' );
+			if ( ! isset( $url_array[1] ) ) {
+				if ( 'default' === $page ) {
+					$template_name = $rule;
+					continue;
+				}
 			}
 
+			// if the query var has data, we must be on the right page, load our custom template
+			if ( isset( $url_array[1] ) && $page === $url_array[1] ) {
+				$template_name = $rule . '-' . $page;
+				continue;
+			}
+		}
+
+		global $wp_query;
+		if ( isset( $template_name ) ) {
 			// Render the template
+			$wp_query->is_404     = false;
+			$wp_query->is_archive = false;
+			$wp_query->is_home    = false;
+			//$wp_query->is_singular = true;
 			echo $this->get_template_html( $template_name, 'front-end' );
+		} else {
+			$wp_query->is_404 = true;
+			$wp_query->set_404();
+			status_header( 404 );
+			include( get_404_template() );
 		}
 
 		return $template;
