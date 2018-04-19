@@ -251,12 +251,14 @@ class MinnPost_Membership_Admin {
 		$input_callback_default   = array( $this, 'display_input_field' );
 		$input_checkboxes_default = array( $this, 'display_checkboxes' );
 		$input_select_default     = array( $this, 'display_select' );
+		$textarea_default         = array( $this, 'display_textarea' );
 		$link_default             = array( $this, 'display_link' );
 
 		$all_field_callbacks = array(
 			'text'       => $input_callback_default,
 			'checkboxes' => $input_checkboxes_default,
 			'select'     => $input_select_default,
+			'textarea'   => $textarea_default,
 			'link'       => $link_default,
 		);
 
@@ -425,15 +427,16 @@ class MinnPost_Membership_Admin {
 		}
 
 		$settings = array(
-			'default_payment_url' => array(
-				'title'    => __( 'Default URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
+			'payment_urls' => array(
+				'title'    => __( 'Payment URLs', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
 				'page'     => 'taking_payments',
 				'section'  => 'taking_payments',
 				'args'     => array(
-					'type'     => 'text',
 					'desc'     => '',
 					'constant' => '',
+					'rows'     => 5,
+					'cols'     => '',
 				),
 			),
 			'benefit_picker_url'  => array(
@@ -707,6 +710,56 @@ class MinnPost_Membership_Admin {
 				);
 			}
 			echo '</div>';
+		} else {
+			echo sprintf( '<p><code>%1$s</code></p>',
+				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
+			);
+		}
+	}
+
+	/**
+	* Display for a dropdown/select
+	*
+	* @param array $args
+	*/
+	public function display_textarea( $args ) {
+		$id    = $args['label_for'];
+		$name  = $args['name'];
+		$desc  = $args['desc'];
+		$rows  = $args['rows'];
+		$cols  = $args['cols'];
+		$class = 'regular-text';
+		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
+			$value = esc_attr( get_option( $id, '' ) );
+			if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
+				$value = $args['default'];
+			}
+
+			if ( '' !== $rows ) {
+				$rows_attr = ' rows="' . esc_attr( $rows ) . '"';
+			} else {
+				$rows_attr = '';
+			}
+
+			if ( '' !== $cols ) {
+				$cols_attr = ' cols="' . esc_attr( $cols ) . '"';
+			} else {
+				$cols_attr = '';
+			}
+
+			echo sprintf( '<textarea name="%1$s" id="%2$s" class="%3$s"%4$s%5$s>%6$s</textarea>',
+				esc_attr( $name ),
+				esc_attr( $id ),
+				sanitize_html_class( $class . esc_html( ' code' ) ),
+				$rows_attr,
+				$cols_attr,
+				esc_attr( $value )
+			);
+			if ( '' !== $desc ) {
+				echo sprintf( '<p class="description">%1$s</p>',
+					esc_html( $desc )
+				);
+			}
 		} else {
 			echo sprintf( '<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
