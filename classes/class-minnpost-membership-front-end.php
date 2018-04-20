@@ -9,6 +9,9 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
 	die();
 }
 
+use Brain\Cortex\Route\RouteCollectionInterface;
+use Brain\Cortex\Route\QueryRoute;
+
 /**
  * Create default WordPress front end functionality
  */
@@ -54,9 +57,72 @@ class MinnPost_Membership_Front_End {
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
-		add_action( 'init', array( $this, 'rewrite_rules' ) );
-		add_action( 'template_include', array( $this, 'include_template' ) );
-		add_filter( 'request', array( $this, 'membership_urls' ) );
+		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
+		add_filter( 'init', array( $this, 'cortex_routes' ) );
+	}
+
+	/**
+	* Set query properties on membership pages
+	*
+	*/
+	public function set_query_properties( $query ) {
+		if ( ! is_admin() && isset( $query->query['is_membership'] ) && true === $query->query['is_membership'] ) {
+			$query->set( 'is_archive', false );
+			$query->set( 'is_category', false );
+			$query->set( 'is_home', false );
+		}
+	}
+
+	/**
+	* Create routes from plugin's allowed URLs
+	*
+	*/
+	public function cortex_routes() {
+		flush_rewrite_rules();
+		if ( ! class_exists( 'Brain\Cortex' ) ) {
+			require_once( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' );
+		}
+		Brain\Cortex::boot();
+		add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
+			foreach ( $this->allowed_urls as $url ) {
+				$routes->addRoute( new QueryRoute(
+					$url,
+					function ( array $matches ) {
+						// send this object to the template so it can be called
+						global $minnpost_membership;
+						$minnpost_membership = MinnPost_Membership::get_instance();
+						// set a query var so we can filter it
+						$query = array(
+							'is_membership' => true,
+						);
+						return $query;
+					},
+					[ 'template' => $this->get_template_for_url( $url ) ]
+				));
+			}
+		});
+	}
+
+	/**
+	* Get correct template path for URLs from plugin or theme folder
+	*
+	* @param string $url
+	* @return string $theme_path|$plugin_path
+	*
+	*/
+	private function get_template_for_url( $url ) {
+		$location = 'front-end/';
+
+		$template_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $url, '/' ) );
+
+		$theme_path  = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name;
+		$plugin_path = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name;
+
+		if ( file_exists( $theme_path . '.php' ) ) {
+			return $theme_path;
+		} elseif ( file_exists( $plugin_path . '.php' ) ) {
+			return $plugin_path;
+		}
 
 	}
 
@@ -66,108 +132,26 @@ class MinnPost_Membership_Front_End {
 	* @return array $urls
 	*
 	*/
-	public function get_allowed_urls() {
-		$urls = '';
+	private function get_allowed_urls( $key = '' ) {
+		$urls = array();
 
 		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
 
-		$urls .= $payment_urls;
-		$urls  = explode( "\r\n", $urls );
+		$all_urls  = '';
+		$all_urls .= $payment_urls;
+		$all_urls  = explode( "\r\n", $all_urls );
+
+		if ( 0 === $key ) {
+			foreach ( $all_urls as $url ) {
+				$url       = ltrim( $url, '/' );
+				$url_array = explode( '/', $url );
+				$urls[]    = $url_array[0];
+			}
+		}
+
+		$urls = $all_urls;
+
 		return $urls;
-	}
-
-	/**
-	* Handle rewrite rules for plugin
-	*
-	*/
-	public function rewrite_rules() {
-		$urls = $this->allowed_urls;
-		foreach ( $urls as $url ) {
-			$url       = ltrim( $url, '/' );
-			$url_array = explode( '/', $url );
-
-			$rule = $url_array[0];
-			add_rewrite_rule( $rule . '/(.+?)/?$', 'index.php?' . $rule . '_page=$matches[1]', 'top' );
-			add_rewrite_tag( '%' . $rule . '_page%', '([^&]+)' );
-		}
-	}
-
-	/**
-	* Process URL requests for plugin
-	*
-	* @param array $vars
-	* @return array $vars
-	*
-	*/
-	public function membership_urls( $vars = array() ) {
-
-		$urls = $this->allowed_urls;
-		foreach ( $urls as $url ) {
-			$url       = ltrim( $url, '/' );
-			$url_array = explode( '/', $url );
-
-			$rule = $url_array[0];
-
-			if ( isset( $vars['category_name'] ) && $rule === $vars['category_name'] ) {
-				$vars[ $rule . '_page' ] = 'default';
-			} elseif ( isset( $vars['category_name'] ) ) {
-				$first  = substr( $vars['category_name'] . '/', 0, strpos( $vars['category_name'], '/' ) );
-				$second = substr( $vars['category_name'], strrpos( $vars['category_name'], '/' ) + 1 );
-				if ( $rule === $first ) {
-					$vars[ $rule . '_page' ] = $second;
-				}
-			}
-		}
-
-		return $vars;
-	}
-
-	/**
-	* Load template HTML for plugin URLs
-	*
-	* @param string $template
-	* @return string $template or echo HTML
-	*
-	*/
-	public function include_template( $template ) {
-		// try and get the query var we registered in our query_vars() function
-		$urls = $this->allowed_urls;
-		foreach ( $urls as $url ) {
-			$url       = ltrim( $url, '/' );
-			$url_array = explode( '/', $url );
-
-			$rule = $url_array[0];
-			$page = get_query_var( $rule . '_page' );
-			if ( ! isset( $url_array[1] ) ) {
-				if ( 'default' === $page ) {
-					$template_name = $rule;
-					continue;
-				}
-			}
-
-			// if the query var has data, we must be on the right page, load our custom template
-			if ( isset( $url_array[1] ) && $page === $url_array[1] ) {
-				$template_name = $rule . '-' . $page;
-				continue;
-			}
-		}
-
-		global $wp_query;
-		if ( isset( $template_name ) ) {
-			// Render the template
-			$wp_query->is_404     = false;
-			$wp_query->is_archive = false;
-			$wp_query->is_home    = false;
-			//$wp_query->is_singular = true;
-			echo $this->get_template_html( $template_name, 'front-end' );
-		} else {
-			$wp_query->is_404 = true;
-			$wp_query->set_404();
-			status_header( 404 );
-			include( get_404_template() );
-		}
-
-		return $template;
 	}
 
 	/**
@@ -195,45 +179,6 @@ class MinnPost_Membership_Front_End {
 		if ( '1' !== $disable_css ) {
 			wp_enqueue_style( $this->slug . '-front-end', plugins_url( '../assets/css/' . $this->slug . '-front-end.min.css', __FILE__ ), array(), $this->version, 'all' );
 		}
-	}
-
-	/**
-	 * Renders the contents of the given template to a string and returns it.
-	 *
-	 * @param string $template_name The name of the template to render (without .php)
-	 * @param string $location      Folder location for the template (ie front-end or admin)
-	 * @param array  $attributes    The PHP variables for the template
-	 *
-	 * @return string               The contents of the template.
-	 */
-	public function get_template_html( $template_name, $location = '', $attributes = null ) {
-		if ( ! $attributes ) {
-			$attributes = array();
-		}
-
-		if ( '' !== $location ) {
-			$location = $location . '/';
-		}
-
-		ob_start();
-
-		do_action( 'minnpost_membership_before_' . $template_name );
-
-		// allow users to put templates into their theme
-		if ( file_exists( get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php' ) ) {
-			$file = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php';
-		} else {
-			$file = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name . '.php';
-		}
-
-		require( $file );
-
-		do_action( 'minnpost_membership_after_' . $template_name );
-
-		$html = ob_get_contents();
-		ob_end_clean();
-
-		return $html;
 	}
 
 }

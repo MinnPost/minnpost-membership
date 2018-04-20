@@ -28,7 +28,7 @@ class MinnPost_Membership {
 	* @var string
 	* The plugin's prefix for saving options
 	*/
-	protected $option_prefix;
+	public $option_prefix;
 
 	/**
 	* @var object
