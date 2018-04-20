@@ -64,7 +64,7 @@
 				$( options.single_level_summary_selector, element ).each(function() {
 					$( options.flipped_items, $(this) ).wrapAll( '<div class="flipper"/>' );
 				});
-				$( options.frequency_selector, element ).change( function( event ) {
+				$( options.frequency_selector, element ).on('focusout change', function (event) {
 					level_number = $(this).data('member-level-number');
 					frequency_string = $(this).val();
 					frequency = frequency_string.split(' - ')[1];
