@@ -13,7 +13,7 @@
 		'single_level_summary_selector' : '.m-member-level-brief',
 		'flipped_items' : 'div.amount, div.enter',
 		'level_frequency_text_selector' : '.show-frequency',
-		'choose_amount_selector' : '.amount .a-button-choose',
+		'choose_amount_selector' : '.amount .a-button-flip',
 		'amount_selector' : '.enter input.amount-entry',
 	}; // end defaults
 
