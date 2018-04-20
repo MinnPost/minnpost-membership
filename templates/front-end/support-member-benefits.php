@@ -37,8 +37,8 @@ global $minnpost_membership;
 										$is_flipped = ( $record['slug'] === $default_member_level && true === $show_flipped ) ? ' flipped' : '';
 										?>
 
-										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?> m-membership-member-level-<?php echo $key + 1; ?><?php echo $is_active; ?><?php echo $is_flipped; ?>">
-											<section class="m-member-level-brief">
+										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?> m-membership-member-level-<?php echo $key + 1; ?><?php echo $is_active; ?>">
+											<section class="m-member-level-brief<?php echo $is_flipped; ?>">
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
 												<div class="amount">
 													<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>" data-default-monthly="<?php echo $ranges['default_monthly']; ?>" data-default-yearly="<?php echo $ranges['default_yearly']; ?>">
