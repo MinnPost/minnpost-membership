@@ -249,6 +249,7 @@ class MinnPost_Membership_Admin {
 		$input_checkboxes_default = array( $this, 'display_checkboxes' );
 		$input_select_default     = array( $this, 'display_select' );
 		$textarea_default         = array( $this, 'display_textarea' );
+		$editor_default           = array( $this, 'display_editor' );
 		$link_default             = array( $this, 'display_link' );
 
 		$all_field_callbacks = array(
@@ -256,6 +257,7 @@ class MinnPost_Membership_Admin {
 			'checkboxes' => $input_checkboxes_default,
 			'select'     => $input_select_default,
 			'textarea'   => $textarea_default,
+			'editor'     => $editor_default,
 			'link'       => $link_default,
 		);
 
@@ -462,7 +464,7 @@ class MinnPost_Membership_Admin {
 
 		$settings['support-member-benefits_title'] = array(
 			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
+			'callback' => $callbacks['editor'],
 			'page'     => 'member-benefits',
 			'section'  => 'member-benefits',
 			'args'     => array(
@@ -886,6 +888,38 @@ class MinnPost_Membership_Admin {
 				$cols_attr,
 				esc_attr( $value )
 			);
+			if ( '' !== $desc ) {
+				echo sprintf( '<p class="description">%1$s</p>',
+					esc_html( $desc )
+				);
+			}
+		} else {
+			echo sprintf( '<p><code>%1$s</code></p>',
+				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
+			);
+		}
+	}
+
+	/**
+	* Display for a wysiwyg editir
+	*
+	* @param array $args
+	*/
+	public function display_editor( $args ) {
+		$id      = $args['label_for'];
+		$name    = $args['name'];
+		$desc    = $args['desc'];
+		$checked = '';
+
+		$class = 'regular-text';
+
+		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
+			$value = esc_attr( get_option( $id, '' ) );
+			if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
+				$value = $args['default'];
+			}
+
+			wp_editor( $value, $id );
 			if ( '' !== $desc ) {
 				echo sprintf( '<p class="description">%1$s</p>',
 					esc_html( $desc )

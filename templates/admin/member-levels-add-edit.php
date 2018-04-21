@@ -50,7 +50,12 @@
 
 	<div class="minnpost-member-level-benefits">
 		<label for="benefits"><?php echo esc_html__( 'Benefits', 'minnpost-membership' ); ?>: </label>
-		<textarea id="benefits" name="benefits"><?php echo isset( $benefits ) ? esc_html( $benefits ) : ''; ?></textarea>
+		<?php
+		$settings = array(
+			'media_buttons' => false,
+		);
+		wp_editor( $benefits, 'benefits', $settings );
+		?>
 	</div>
 	<?php
 		submit_button(
