@@ -59,6 +59,7 @@ class MinnPost_Membership_Front_End {
 		}
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
+		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 	}
 
 	/**
@@ -100,6 +101,18 @@ class MinnPost_Membership_Front_End {
 				));
 			}
 		});
+	}
+
+	public function set_wp_title( $title ) {
+		$path = rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' );
+		if ( in_array( $path, $this->allowed_urls ) ) {
+			$title_path   = preg_replace( '/[\W\s\/]+/', '-', ltrim( $path, '/' ) );
+			$title_option = get_option( $this->option_prefix . $title_path . '_title', '' );
+			if ( '' !== $title_option ) {
+				$title['title'] = $title_option . ' | ' . get_bloginfo( 'name' );
+			}
+		}
+		return $title;
 	}
 
 	/**

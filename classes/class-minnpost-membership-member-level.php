@@ -86,11 +86,24 @@ class MinnPost_Membership_Member_Level {
 		return $member_levels;
 	}
 
+	/**
+	* Get default member leel
+	* @return string $default
+	*
+	*/
 	public function get_default_member_level() {
-		$default = get_option( $this->option_prefix . 'member-benefits_default_level', 'member_silver' );
+		$default = get_option( $this->option_prefix . 'support-member-benefits_default_level', 'member_silver' );
 		return $default;
 	}
 
+	/**
+	* Array of options for frequencies. This is used in admin, but also elsewhere.
+	*
+	* @param string $key
+	* @param string $value
+	* @return array $options
+	*
+	*/
 	public function get_frequency_options( $key = '', $field = 'value' ) {
 		$frequencies = array(
 			array(
@@ -121,6 +134,14 @@ class MinnPost_Membership_Member_Level {
 		return $frequencies;
 	}
 
+	/**
+	* Get name and times per year for each frequency
+	*
+	* @param array $frequencies
+	* @param string $default
+	* @return array $frequencyvalues
+	*
+	*/
 	function get_frequency_values( $frequencies, $default ) {
 		$splitdefault  = explode( 'per ', $default );
 		$splitdefault  = end( $splitdefault );
@@ -136,6 +157,13 @@ class MinnPost_Membership_Member_Level {
 		return $frequencyvalues;
 	}
 
+	/**
+	* Calculate price ranges for member levels
+	*
+	* @param array $record
+	* @return string $range
+	*
+	*/
 	public function calculate_ranges( $record = '' ) {
 		$default_frequency = $this->get_frequency_values( $this->get_frequency_options(), get_option( $this->option_prefix . 'default_frequency', '' )[0] );
 
@@ -178,10 +206,6 @@ class MinnPost_Membership_Member_Level {
 		$range['default_monthly'] = esc_attr( $default_monthly );
 		$range['default_yearly']  = esc_attr( $default_annual );
 		return $range;
-	}
-
-	public function calculate_member_level_amount( $amount, $frequency ) {
-		return $amount;
 	}
 
 	/**

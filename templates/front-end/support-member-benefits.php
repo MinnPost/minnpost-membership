@@ -11,9 +11,17 @@ global $minnpost_membership;
 	<div id="primary" class="m-layout-membership o-support">
 		<main id="main" class="site-main" role="main">
 			<header class="m-membership-intro">
-				<h1 class="a-standalone-title"><?php echo esc_html__( 'MinnPost member benefits give you more good reasons to support great nonprofit journalism', 'minnpost-membership' ); ?></h1>
+				<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefits_title', '' ); ?></h1>
 			</header>
 			<div class="m-entry-content">
+
+				<?php
+				$intro = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_pre_form_text', '' );
+				if ( '' !== $intro ) {
+					echo '<div class="m-membership-pre-form">' . $intro . '</div>';
+				}
+				?>
+
 				<?php $use_member_levels = get_option( $minnpost_membership->option_prefix . 'use_member_levels', false ); ?>
 				<?php if ( 1 === intval( $use_member_levels ) ) : ?>
 					<form class="m-form m-form-membership m-form-membership-member-levels">
@@ -61,7 +69,7 @@ global $minnpost_membership;
 															</select>
 														</div>
 													<?php endif; ?>
-													<a href="#" class="a-button a-button-flip"><?php echo __( 'Set Amount', 'minnpost-membership' ); ?></a>
+													<a href="#" class="a-button a-button-flip"><?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefits_level_button_text', '' ); ?></a>
 												</div>
 												<div class="enter">
 													<h3><?php echo esc_html( '$' ); ?><div class="m-form-item">
@@ -82,7 +90,7 @@ global $minnpost_membership;
 															<?php endforeach; ?>
 														</select>
 													</div>
-													<input class="a-button" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo __( 'Give Now', 'minnpost-membership' ); ?>" type="submit">
+													<input class="a-button" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefits_give_button_text', '' ); ?>" type="submit">
 												</div>
 											</section>
 										</article>

@@ -460,7 +460,7 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['member-benefits_title'] = array(
+		$settings['support-member-benefits_title'] = array(
 			'title'    => __( 'Page title', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => 'member-benefits',
@@ -472,7 +472,7 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['member-benefits_pre_form_text'] = array(
+		$settings['support-member-benefits_pre_form_text'] = array(
 			'title'    => __( 'Pre-form text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => 'member-benefits',
@@ -484,7 +484,7 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['member-benefits_post_form_text'] = array(
+		/*$settings['support-member-benefits_post_form_text'] = array(
 			'title'    => __( 'Post-form text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => 'member-benefits',
@@ -496,8 +496,33 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['member-benefits_post_form_text_link'] = array(
+		$settings['support-member-benefits_post_form_text_link'] = array(
 			'title'    => __( 'Post-form text link', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);*/
+
+		$settings['support-member-benefits_default_level'] = array(
+			'title'    => __( 'Default level', 'minnpost-membership' ),
+			'callback' => $callbacks['select'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'type'     => 'select',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $this->get_member_level_options(),
+			),
+		);
+
+		$settings['support-member-benefits_level_button_text'] = array(
+			'title'    => __( 'Level button text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => 'member-benefits',
 			'section'  => 'member-benefits',
@@ -508,16 +533,15 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['member-benefits_default_level'] = array(
-			'title'    => __( 'Default level', 'minnpost-membership' ),
-			'callback' => $callbacks['select'],
+		$settings['support-member-benefits_give_button_text'] = array(
+			'title'    => __( 'Give button text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
 			'page'     => 'member-benefits',
 			'section'  => 'member-benefits',
 			'args'     => array(
-				'type'     => 'select',
 				'desc'     => '',
 				'constant' => '',
-				'items'    => $this->get_member_level_options(),
+				'type'     => 'text',
 			),
 		);
 
@@ -575,6 +599,11 @@ class MinnPost_Membership_Admin {
 		return $sections;
 	}
 
+	/**
+	* Setting options for picking a member level
+	* @return array $options
+	*
+	*/
 	private function get_member_level_options() {
 		$member_levels = $this->member_levels->get_member_levels();
 		$options       = array();
