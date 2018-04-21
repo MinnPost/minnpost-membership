@@ -32,7 +32,7 @@ global $minnpost_membership;
 								<section class="o-membership-member-levels">
 									<?php foreach ( $all_member_levels as $key => $record ) : ?>
 										<?php
-										$ranges = $minnpost_membership->member_levels->calculate_ranges( $record );
+										$ranges     = $minnpost_membership->member_levels->calculate_ranges( $record );
 										$is_active  = ( $record['slug'] === $default_member_level ) ? ' active' : '';
 										$is_flipped = ( $record['slug'] === $default_member_level && true === $show_flipped ) ? ' flipped' : '';
 										?>
@@ -65,7 +65,7 @@ global $minnpost_membership;
 												</div>
 												<div class="enter">
 													<h3><?php echo esc_html( '$' ); ?><div class="m-form-item">
-															<input class="amount-entry" type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) {?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
+															<input class="amount-entry" type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) { ?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
 														</div>
 													</h3>
 													<div class="m-form-item">
