@@ -106,12 +106,25 @@ $vertical-space: 15px;
 				}
 			}
 		}
-		&.m-membership-member-level-non-member {
-			clear: both;
-			width: 100%;
-			margin-right: 0;
-			border: 1px solid $border-color-darker;
-			background: $border-color-lighter;
+		.m-member-level-benefits {
+			ul, ul li {
+			  list-style: none;
+			  padding-left: 0;
+			}
+			ul {
+			  color: #7A7A7A;
+			  font-size: 0.9em;
+			  li {
+				  padding: 0 0.5em;
+				  line-height: 1.5em;
+				  margin-bottom: 1.5em;
+				}
+			}
+		}
+		&:hover .m-member-level-benefits, &.active .m-member-level-benefits {
+			ul {
+				color: #1a1818;
+			}
 		}
 	}
 }

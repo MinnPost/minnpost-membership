@@ -93,6 +93,9 @@ global $minnpost_membership;
 													<input class="a-button" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefits_give_button_text', '' ); ?>" type="submit">
 												</div>
 											</section>
+											<section class="m-member-level-benefits">
+												<?php echo $record['benefits']; ?>
+											</section>
 										</article>
 									<?php endforeach; ?>
 								</section>

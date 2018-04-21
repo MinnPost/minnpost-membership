@@ -160,6 +160,7 @@ class MinnPost_Membership_Admin {
 
 						if ( isset( $posted ) && is_array( $posted ) ) {
 							$member_level = $posted;
+							$id = $member_level['id'];
 						} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
 							$id           = $get_data['id'];
 							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '' );
@@ -633,7 +634,7 @@ class MinnPost_Membership_Admin {
 	*/
 	public function prepare_member_level_data() {
 		$error     = false;
-		$post_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+		$post_data = $_POST;
 		$cachekey  = md5( wp_json_encode( $post_data ) );
 
 		if ( ! isset( $post_data['name'] ) || ! isset( $post_data['benefits'] ) ) {
@@ -662,7 +663,7 @@ class MinnPost_Membership_Admin {
 				}
 			} else {
 				if ( isset( $post_data['transient'] ) ) { // there was previously an error saved. can delete it now.
-					$this->mp_mem_transients->delete( esc_attr( $post_data['map_transient'] ) );
+					$this->mp_mem_transients->delete( esc_attr( $post_data['transient'] ) );
 				}
 				// then send the user to the list of fieldmaps
 				$url = esc_url_raw( $post_data['redirect_url_success'] );

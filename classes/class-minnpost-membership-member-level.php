@@ -300,7 +300,7 @@ class MinnPost_Membership_Member_Level {
 			'minimum_monthly_amount' => ( isset( $data['minimum_monthly_amount'] ) && '' !== $data['minimum_monthly_amount'] ) ? intval( $data['minimum_monthly_amount'] ) : 1,
 			'maximum_monthly_amount' => ( isset( $data['maximum_monthly_amount'] ) && '' !== $data['maximum_monthly_amount'] ) ? intval( $data['maximum_monthly_amount'] ) : '',
 			'starting_value'         => ( isset( $data['starting_value'] ) && '' !== $data['starting_value'] ) ? intval( $data['starting_value'] ) : 0,
-			'benefits'               => sanitize_textarea_field( $data['benefits'] ),
+			'benefits'               => wp_kses_post( $data['benefits'] ),
 		);
 		return $data;
 	}
