@@ -465,7 +465,7 @@ class MinnPost_Membership_Admin {
 
 		$settings['support-member-benefits_title'] = array(
 			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
+			'callback' => $callbacks['text'],
 			'page'     => 'member-benefits',
 			'section'  => 'member-benefits',
 			'args'     => array(
