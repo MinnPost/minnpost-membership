@@ -584,16 +584,18 @@ class MinnPost_Membership_Admin {
 		);
 
 		$urls = get_option( $this->option_prefix . 'payment_urls', array() );
-		$urls = explode( "\r\n", $urls );
-		foreach ( $urls as $url ) {
-			$url       = ltrim( $url, '/' );
-			$url_array = explode( '/', $url );
-			if ( isset( $url_array[1] ) ) {
-				$url = $url_array[1];
-			}
-			$title = ucwords( str_replace( '-', ' ', $url ) );
+		if ( ! empty( $urls ) ) {
+			$urls = explode( "\r\n", $urls );
+			foreach ( $urls as $url ) {
+				$url       = ltrim( $url, '/' );
+				$url_array = explode( '/', $url );
+				if ( isset( $url_array[1] ) ) {
+					$url = $url_array[1];
+				}
+				$title = ucwords( str_replace( '-', ' ', $url ) );
 
-			$sections[ $url ] = $title;
+				$sections[ $url ] = $title;
+			}
 		}
 
 		return $sections;
