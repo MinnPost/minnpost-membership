@@ -548,6 +548,80 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['support-member-benefits_post_body_text'] = array(
+			'title'    => __( 'Post body text', 'minnpost-membership' ),
+			'callback' => $callbacks['textarea'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+				'rows'     => 5,
+				'cols'     => '',
+			),
+		);
+
+		$settings['support-member-benefits_post_body_link_url'] = array(
+			'title'    => __( 'Post body link URL', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-member-benefits_post_body_link_fragment'] = array(
+			'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-member-benefits_post_body_link_class'] = array(
+			'title'    => __( 'Post body link class', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-member-benefits_post_body_link_text'] = array(
+			'title'    => __( 'Post body link text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-member-benefits_post_body_show_member_details_link'] = array(
+			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'checkbox',
+			),
+		);
+
 		foreach ( $settings as $key => $attributes ) {
 			$id       = $this->option_prefix . $key;
 			$name     = $this->option_prefix . $key;

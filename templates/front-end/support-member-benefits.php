@@ -36,7 +36,7 @@ global $minnpost_membership;
 						}
 						if ( ! empty( $all_member_levels ) ) :
 						?>
-							<fieldset>
+							<fieldset id="choose-member-level">
 								<section class="o-membership-member-levels">
 									<?php foreach ( $all_member_levels as $key => $record ) : ?>
 										<?php
@@ -101,6 +101,35 @@ global $minnpost_membership;
 								</section>
 							</fieldset>
 						<?php endif; ?>
+						<?php
+
+						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_text', '' ) ) {
+
+							$text          = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_text', '' );
+							$link          = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_url', '' );
+							$link_text     = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_text', '' );
+							$link_fragment = ltrim( get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_fragment', '' ), '#' );
+							$link_class    = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_class', '' );
+							$link_text     = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_text', '' );
+
+							if ( '' !== $link && '' !== $link_text ) {
+								if ( '' !== $link_fragment ) {
+									$link .= '#' . $link_fragment;
+								}
+								if ( '' !== $link_class ) {
+									$class = ' class="' . $link_class . '"';
+								} else {
+									$class = '';
+								}
+
+								$link = '<a href="' . esc_url( $link ) . '"' . $class . '>' . $link_text . '</a>';
+							}
+
+							echo sprintf( '<h3 class="a-finish-strong">%1$s</h3>',
+								str_replace( $link_text, $link, $text )
+							);
+						}
+						?>
 					</form>
 				<?php endif; ?>
 			</div>

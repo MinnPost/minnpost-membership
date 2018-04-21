@@ -43,10 +43,27 @@
 			// and this.options
 			// you can add more functions like the one below and
 			// call them like so: this.yourOtherFunction(this.element, this.options).
-
+			this.catchHashLinks( this.element, this.options);
 			this.levelFlipper( this.element, this.options );
+			this.startLevelClick( this.element, this.options );
 
 		},
+
+		catchHashLinks: function( element, options ) {
+			$('a[href*="#"]:not([href="#"])', element).click(function(e) {
+			    var target = $(e.target);
+			    if (target.parent('.comment-title').length == 0 && location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+				    var target = $(this.hash);
+				    target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+					if (target.length) {
+						$('html,body').animate({
+							scrollTop: target.offset().top
+						}, 1000);
+						return false;
+					}
+				}
+			});
+		}, // end catchLinks
 
 		levelFlipper: function( element, options ) {
 			var that = this;
@@ -72,7 +89,7 @@
 				    if ( typeof level_number !== 'undefined' ) {
 						amount = $( options.amount_selector + '[data-member-level-number="' + level_number + '"]').val();
 						$( options.single_level_summary_selector, element).removeClass( 'flipped' );
-						$( options.single_level_summary_selector, element).removeClass( 'active' );
+						$( options.single_level_container, element).removeClass( 'active' );
 						$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
 						level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
 						that.changeFrequency( frequency_string, level, element, options );
@@ -102,7 +119,7 @@
 				$( options.choose_amount_selector, element ).click( function( event ) {
 					level_number = $( options.frequency_selector, element ).data('member-level-number');
 					$( options.single_level_summary_selector, element).removeClass( 'flipped' );
-					$( options.single_level_summary_selector, element).removeClass( 'active' );
+					$( options.single_level_container, element).removeClass( 'active' );
 					$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
 					frequency_string = $(options.frequency_selector, $(this).parent() ).val();
 					frequency = frequency_string.split(' - ')[1];
@@ -165,7 +182,7 @@
 		  $('h2', options.single_level_summary_selector).each( function() {
 		    //console.log('this text is ' + $(this).text() + ' and the level is ' + level);
 		    if ( $(this).text() == level ) {
-		      $( options.single_level_summary_selector, element).removeClass( 'active' );
+		      $( options.single_level_container, element).removeClass( 'active' );
 		      //var parent = $(this).parent().parent().addClass( 'active' );
 		    }
 		  } );
@@ -225,6 +242,17 @@
 
 			} );
 		}, // end changeAmountPreview
+
+		startLevelClick: function( element, options ) {
+			$('.start-level').click(function() {
+				var level_class = $( this ).prop( 'class' );
+				var level_number = level_class[level_class.length -1];
+			    $( options.single_level_summary_selector, element).removeClass( 'flipped' );
+				$( options.single_level_container, element).removeClass( 'active' );
+			    $( options.single_level_container + '-' + level_number, element ).addClass( 'active' );
+			    $( options.single_level_container + '-' + level_number + ' ' + options.single_level_summary_selector ).addClass( 'flipped' );
+			  });
+		}, // end startLevelClick
 
 	}; // end Plugin.prototype
 
