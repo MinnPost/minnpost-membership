@@ -87,7 +87,8 @@ class MinnPost_Membership_Member_Level {
 	}
 
 	public function get_default_member_level() {
-		return 'member_silver';
+		$default = get_option( $this->option_prefix . 'member-benefits_default_level', 'member_silver' );
+		return $default;
 	}
 
 	public function get_frequency_options( $key = '', $field = 'value' ) {
@@ -116,7 +117,6 @@ class MinnPost_Membership_Member_Level {
 		);
 		if ( '' !== $key ) {
 			return $frequencies[ array_search( $key, array_column( $frequencies, $field ) ) ];
-			//return $frequencies[ $key ];
 		}
 		return $frequencies;
 	}

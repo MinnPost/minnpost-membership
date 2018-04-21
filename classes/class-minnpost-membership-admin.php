@@ -92,12 +92,9 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
-			$this->slug . '-finances'           => array(
-				'title'    => __( 'Member Finances', 'minnpost-membership' ),
-				'sections' => array(
-					'taking_payments'   => __( 'Taking payments', 'minnpost-membership' ),
-					'managing_payments' => __( 'Managing payments', 'minnpost-membership' ),
-				),
+			$this->slug . '-taking-payments'    => array(
+				'title'    => __( 'Taking Payments', 'minnpost-membership' ),
+				'sections' => $this->setup_payment_page_sections(),
 				'use_tabs' => true,
 			),
 			$this->slug . '-benefits'           => array(
@@ -430,8 +427,8 @@ class MinnPost_Membership_Admin {
 			'payment_urls' => array(
 				'title'    => __( 'Payment URLs', 'minnpost-membership' ),
 				'callback' => $callbacks['textarea'],
-				'page'     => 'taking_payments',
-				'section'  => 'taking_payments',
+				'page'     => 'pages',
+				'section'  => 'pages',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -439,27 +436,88 @@ class MinnPost_Membership_Admin {
 					'cols'     => '',
 				),
 			),
-			'benefit_picker_url'  => array(
-				'title'    => __( 'Benefit picker URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => 'taking_payments',
-				'section'  => 'taking_payments',
-				'args'     => array(
-					'type'     => 'text',
-					'desc'     => '',
-					'constant' => '',
-				),
+		);
+
+		$payment_sections = $this->setup_payment_page_sections();
+		if ( ! empty( $payment_sections ) ) {
+			foreach ( $payment_sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+			}
+		}
+
+		$settings['support_title'] = array(
+			'title'    => __( 'Page title', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'support',
+			'section'  => 'support',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
 			),
-			'list_url'  => array(
-				'title'    => __( 'List URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => 'managing_payments',
-				'section'  => 'managing_payments',
-				'args'     => array(
-					'type'     => 'text',
-					'desc'     => '',
-					'constant' => '',
-				),
+		);
+
+		$settings['member-benefits_title'] = array(
+			'title'    => __( 'Page title', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['member-benefits_pre_form_text'] = array(
+			'title'    => __( 'Pre-form text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['member-benefits_post_form_text'] = array(
+			'title'    => __( 'Post-form text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['member-benefits_post_form_text_link'] = array(
+			'title'    => __( 'Post-form text link', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['member-benefits_default_level'] = array(
+			'title'    => __( 'Default level', 'minnpost-membership' ),
+			'callback' => $callbacks['select'],
+			'page'     => 'member-benefits',
+			'section'  => 'member-benefits',
+			'args'     => array(
+				'type'     => 'select',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $this->get_member_level_options(),
 			),
 		);
 
@@ -488,6 +546,48 @@ class MinnPost_Membership_Admin {
 			add_settings_field( $id, $title, $callback, $page, $section, $args );
 			register_setting( $section, $id );
 		}
+	}
+
+	/**
+	* Set up options tab for each payment page URL in the options
+	*
+	* @return $array $sections
+	*
+	*/
+	private function setup_payment_page_sections() {
+		$sections = array(
+			'pages' => __( 'Payment Pages', 'minnpost-membership' ),
+		);
+
+		$urls = get_option( $this->option_prefix . 'payment_urls', array() );
+		$urls = explode( "\r\n", $urls );
+		foreach ( $urls as $url ) {
+			$url       = ltrim( $url, '/' );
+			$url_array = explode( '/', $url );
+			if ( isset( $url_array[1] ) ) {
+				$url = $url_array[1];
+			}
+			$title = ucwords( str_replace( '-', ' ', $url ) );
+
+			$sections[ $url ] = $title;
+		}
+
+		return $sections;
+	}
+
+	private function get_member_level_options() {
+		$member_levels = $this->member_levels->get_member_levels();
+		$options       = array();
+		foreach ( $member_levels as $member_level ) {
+			$options[] = array(
+				'id'      => $member_level['slug'],
+				'value'   => $member_level['slug'],
+				'text'    => $member_level['name'],
+				'desc'    => '',
+				'default' => '',
+			);
+		}
+		return $options;
 	}
 
 	/**
