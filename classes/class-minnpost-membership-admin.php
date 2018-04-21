@@ -160,7 +160,7 @@ class MinnPost_Membership_Admin {
 
 						if ( isset( $posted ) && is_array( $posted ) ) {
 							$member_level = $posted;
-							$id = $member_level['id'];
+							$id           = $member_level['id'];
 						} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
 							$id           = $get_data['id'];
 							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '' );
