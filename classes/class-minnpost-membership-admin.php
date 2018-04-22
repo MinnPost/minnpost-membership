@@ -57,6 +57,8 @@ class MinnPost_Membership_Admin {
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts_and_styles' ) );
 			add_action( 'admin_post_post_member_level', array( $this, 'prepare_member_level_data' ) );
 			add_action( 'admin_post_delete_member_level', array( $this, 'delete_member_level' ) );
+			add_filter( 'pre_update_option_' . $this->option_prefix . 'payment_urls', array( $this, 'url_option_updated' ), 10, 2 );
+			add_filter( 'pre_update_option_' . $this->option_prefix . 'member_benefit_urls', array( $this, 'url_option_updated' ), 10, 2 );
 		}
 
 	}
@@ -97,10 +99,10 @@ class MinnPost_Membership_Admin {
 				'sections' => $this->setup_payment_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-benefits'           => array(
+			$this->slug . '-member-benefits'    => array(
 				'title'    => __( 'Member Benefits', 'minnpost-membership' ),
-				'sections' => array(),
-				'use_tabs' => false,
+				'sections' => $this->setup_benefit_page_sections(),
+				'use_tabs' => true,
 			),
 			$this->slug . '-member-drive'       => array(
 				'title'    => __( 'Member Drive', 'minnpost-membership' ),
@@ -185,15 +187,6 @@ class MinnPost_Membership_Admin {
 						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
 					}
 					break;
-				case 'allowed_resources':
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
-					break;
-				case 'resource_settings':
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
-					break;
-				case 'subresource_settings':
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
-					break;
 				default:
 					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
 					break;
@@ -264,9 +257,7 @@ class MinnPost_Membership_Admin {
 
 		$this->general_settings( $page, $all_field_callbacks );
 		$this->member_finances( $page, $all_field_callbacks );
-		//$this->allowed_resources( 'allowed_resources', 'allowed_resources', $all_field_callbacks );
-		//$this->resource_settings( 'resource_settings', 'resource_settings', $all_field_callbacks );
-		//$this->subresource_settings( 'subresource_settings', 'subresource_settings', $all_field_callbacks );
+		$this->member_benefits( $page, $all_field_callbacks );
 
 	}
 
@@ -430,8 +421,8 @@ class MinnPost_Membership_Admin {
 			'payment_urls' => array(
 				'title'    => __( 'Payment URLs', 'minnpost-membership' ),
 				'callback' => $callbacks['textarea'],
-				'page'     => 'pages',
-				'section'  => 'pages',
+				'page'     => 'payment_pages',
+				'section'  => 'payment_pages',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -657,10 +648,151 @@ class MinnPost_Membership_Admin {
 	*/
 	private function setup_payment_page_sections() {
 		$sections = array(
-			'pages' => __( 'Payment Pages', 'minnpost-membership' ),
+			'payment_pages' => __( 'Payment Pages', 'minnpost-membership' ),
 		);
 
 		$urls = get_option( $this->option_prefix . 'payment_urls', array() );
+		if ( ! empty( $urls ) ) {
+			$urls = explode( "\r\n", $urls );
+			foreach ( $urls as $url ) {
+				$url       = ltrim( $url, '/' );
+				$url_array = explode( '/', $url );
+				if ( isset( $url_array[1] ) ) {
+					$url = $url_array[1];
+				}
+				$title = ucwords( str_replace( '-', ' ', $url ) );
+
+				$sections[ $url ] = $title;
+			}
+		}
+
+		return $sections;
+	}
+
+	/**
+	* Fields for the Member Benefits page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function member_benefits( $page, $callbacks ) {
+		$sections = $this->get_admin_pages()[ $page ]['sections'];
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+			}
+		} else {
+			$section = $page;
+			$title   = $this->get_admin_pages()[ $page ]['title'];
+			add_settings_section( $section, $title, null, $page );
+		}
+
+		$settings = array(
+			'member_benefit_urls' => array(
+				'title'    => __( 'Member benefit URLs', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => 'benefit_pages',
+				'section'  => 'benefit_pages',
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'rows'     => 5,
+					'cols'     => '',
+				),
+			),
+		);
+
+		$benefit_sections = $this->setup_benefit_page_sections();
+		if ( ! empty( $benefit_sections ) ) {
+			foreach ( $benefit_sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+			}
+		}
+
+		$settings['support-member-benefit-details_title'] = array(
+			'title'    => __( 'Page title', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => 'member-benefit-details',
+			'section'  => 'member-benefit-details',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-member-benefit-details_body'] = array(
+			'title'    => __( 'Page body', 'minnpost-membership' ),
+			'callback' => $callbacks['editor'],
+			'page'     => 'member-benefit-details',
+			'section'  => 'member-benefit-details',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-member-benefit-details_link_from_other_pages'] = array(
+			'title'    => __( 'Link from other pages', 'minnpost-membership' ),
+			'callback' => $callbacks['textarea'],
+			'page'     => 'member-benefit-details',
+			'section'  => 'member-benefit-details',
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+				'rows'     => 5,
+				'cols'     => '',
+			),
+		);
+
+		foreach ( $settings as $key => $attributes ) {
+			$id       = $this->option_prefix . $key;
+			$name     = $this->option_prefix . $key;
+			$title    = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$args     = array_merge(
+				$attributes['args'],
+				array(
+					'title'     => $title,
+					'id'        => $id,
+					'label_for' => $id,
+					'name'      => $name,
+					'class'     => 'minnpost-member-field ' . $id,
+				)
+			);
+
+			// if there is a constant and it is defined, don't run a validate function if there is one
+			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+				$validate = '';
+			}
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
+		}
+	}
+
+	/**
+	* Set up options tab for each payment page URL in the options
+	*
+	* @return $array $sections
+	*
+	*/
+	private function setup_benefit_page_sections() {
+		$sections = array(
+			'benefit_pages' => __( 'Member Benefit Pages', 'minnpost-membership' ),
+		);
+
+		$urls = get_option( $this->option_prefix . 'member_benefit_urls', array() );
 		if ( ! empty( $urls ) ) {
 			$urls = explode( "\r\n", $urls );
 			foreach ( $urls as $url ) {
@@ -766,6 +898,21 @@ class MinnPost_Membership_Admin {
 			wp_safe_redirect( $url );
 			exit();
 		}
+	}
+
+	/**
+	* Call this method on all the url option fields, so we can flush the rewrite rules when they get updated
+	*
+	* @param string $new_value
+	* @param string $old_value
+	* @return string $new_value
+	*
+	*/
+	public function url_option_updated( $new_value, $old_value ) {
+		if ( $new_value !== $old_value && ! empty( $new_value ) ) {
+			flush_rewrite_rules();
+		}
+		return $new_value;
 	}
 
 
@@ -989,7 +1136,7 @@ class MinnPost_Membership_Admin {
 		$class = 'regular-text';
 
 		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
-			$value = esc_attr( get_option( $id, '' ) );
+			$value = wp_kses_post( get_option( $id, '' ) );
 			if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
 				$value = $args['default'];
 			}

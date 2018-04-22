@@ -147,10 +147,12 @@ class MinnPost_Membership_Front_End {
 	private function get_allowed_urls( $key = '' ) {
 		$urls = array();
 
-		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
+		$payment_urls        = get_option( $this->option_prefix . 'payment_urls', '' );
+		$member_benefit_urls = get_option( $this->option_prefix . 'member_benefit_urls', '' );
 
 		$all_urls  = '';
 		$all_urls .= $payment_urls;
+		$all_urls .= "\r\n" . $member_benefit_urls;
 		$all_urls  = explode( "\r\n", $all_urls );
 
 		if ( 0 === $key ) {

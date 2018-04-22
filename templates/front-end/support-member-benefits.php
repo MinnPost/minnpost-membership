@@ -101,8 +101,8 @@ global $minnpost_membership;
 								</section>
 							</fieldset>
 						<?php endif; ?>
-						<?php
 
+						<?php
 						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_text', '' ) ) {
 
 							$text          = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_text', '' );
@@ -127,6 +127,14 @@ global $minnpost_membership;
 
 							echo sprintf( '<h3 class="a-finish-strong">%1$s</h3>',
 								str_replace( $link_text, $link, $text )
+							);
+						}
+						?>
+
+						<?php
+						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) ) {
+							echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
+								get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
 							);
 						}
 						?>
