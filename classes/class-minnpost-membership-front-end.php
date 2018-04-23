@@ -61,6 +61,8 @@ class MinnPost_Membership_Front_End {
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
+		add_action( 'wp_ajax_membership_form_submit', array( $this, 'form_submit' ) );
+		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'form_submit' ) );
 	}
 
 	/**
@@ -147,6 +149,33 @@ class MinnPost_Membership_Front_End {
 			}
 		}
 		return $title;
+	}
+
+	/**
+	* Process membership form submission
+	*
+	*/
+	public function form_submit() {
+		if ( wp_verify_nonce( $_POST['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
+			/*if ( '' === $_POST['new_password'] ) {
+				$redirect_url = add_query_arg( 'errors', 'new_password_empty', $redirect_url );
+			} else {
+				$user_data = array(
+					'ID'        => $user_id,
+					'user_pass' => $_POST['new_password'],
+				);
+				wp_update_user( $user_data );
+				$redirect_url = add_query_arg( 'password-reset', 'true', $redirect_url );
+			}
+
+			if ( isset( $redirect_url ) ) {
+				$redirect_url = wp_validate_redirect( $redirect_url, $redirect_url );
+			}
+			if ( ! empty( $redirect_url ) ) {
+				wp_redirect( $redirect_url );
+				exit;
+			}*/
+		}
 	}
 
 	/**
