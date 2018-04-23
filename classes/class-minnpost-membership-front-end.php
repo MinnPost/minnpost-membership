@@ -56,11 +56,24 @@ class MinnPost_Membership_Front_End {
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
+		add_filter( 'allowed_redirect_hosts', array( $this, 'allowed_redirect_hosts' ), 10 );
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 		add_action( 'wp_ajax_membership_form_submit', array( $this, 'form_submit' ) );
 		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'form_submit' ) );
+	}
+
+	/**
+	* Allow for redirecting to the processor domain
+	*
+	* @param array $hosts
+	* @return array $hosts
+	*/
+	public function allowed_redirect_hosts( $hosts ) {
+		$processor_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		$hosts[]       = parse_url( $processor_url, PHP_URL_HOST );
+		return $hosts;
 	}
 
 	/**
@@ -171,24 +184,59 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function form_submit() {
 		if ( wp_verify_nonce( $_POST['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
-			/*if ( '' === $_POST['new_password'] ) {
-				$redirect_url = add_query_arg( 'errors', 'new_password_empty', $redirect_url );
-			} else {
-				$user_data = array(
-					'ID'        => $user_id,
-					'user_pass' => $_POST['new_password'],
-				);
-				wp_update_user( $user_data );
-				$redirect_url = add_query_arg( 'password-reset', 'true', $redirect_url );
-			}
+			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+			if ( '' !== $redirect_url ) {
 
-			if ( isset( $redirect_url ) ) {
-				$redirect_url = wp_validate_redirect( $redirect_url, $redirect_url );
-			}
-			if ( ! empty( $redirect_url ) ) {
-				wp_redirect( $redirect_url );
+				// do we already know who this user is?
+				$user = wp_get_current_user();
+				if ( isset( $user->first_name ) && '' !== $user->first_name ) {
+					$params['firstname'] = $user->first_name;
+				}
+				if ( isset( $user->last_name ) && '' !== $user->last_name ) {
+					$params['lastname'] = $user->last_name;
+				}
+				if ( isset( $user->user_email ) && '' !== $user->user_email ) {
+					$params['email'] = $user->user_email;
+				}
+
+				// sanitize form data we accept
+				$post_params = $this->process_parameters( 'post' );
+				$params      = array_merge( $params, $post_params );
+
+				// different buttons might have been clicked if it was a level picker
+
+				$member_levels = $this->member_levels->get_member_levels();
+				foreach ( $member_levels as $key => $value ) {
+					$level_number = $key + 1;
+					if ( isset( $_POST[ 'membership-submit-' . $level_number ] ) ) {
+						$params['amount']    = filter_var( $_POST[ 'amount-level-' . $level_number ], FILTER_SANITIZE_NUMBER_INT );
+						$params['frequency'] = $this->process_frequency_value( $_POST[ 'membership-frequency-' . $level_number ] );
+						continue;
+					}
+				}
+
+				// send the valid form data to the payment processor as url parameters
+				foreach ( $params as $key => $value ) {
+					if ( false !== $value ) {
+						$redirect_url = add_query_arg( $key, $value, $redirect_url );
+					}
+				}
+
+				// amount is the only thing our processor requires in order to function
+				if ( ! isset( $params['amount'] ) ) {
+					$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				// this requires us to hook into the allowed url thing
+				wp_safe_redirect( $redirect_url );
 				exit;
-			}*/
+
+			} else {
+				exit;
+			}
 		}
 	}
 
@@ -243,6 +291,25 @@ class MinnPost_Membership_Front_End {
 		$urls = $all_urls;
 
 		return $urls;
+	}
+
+	/**
+	* Process frequency value so it returns the correct value for the payment processor
+	*
+	* @param string $frequency
+	* @return string $frequency
+	*
+	*/
+	private function process_frequency_value( $frequency ) {
+		$frequency = filter_var( $frequency, FILTER_SANITIZE_STRING );
+		$options   = $this->member_levels->get_frequency_options( $frequency, 'value' );
+		// if we don't get a valid frequency back, just return false so it won't be on the url
+		if ( false !== $options ) {
+			$frequency = $options['id'];
+		} else {
+			$frequency = $options;
+		}
+		return $frequency;
 	}
 
 	/**
