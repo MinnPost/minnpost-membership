@@ -27,6 +27,7 @@ global $minnpost_membership;
 					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-member-levels">
 						<input type="hidden" name="action" value="membership_form_submit">
 						<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
+						<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
 						<?php $url_params = $minnpost_membership->front_end->process_parameters( 'get' ); ?>
 						<?php if ( ! empty( $url_params ) ) : ?>
 							<?php foreach ( $url_params as $key => $value ) : ?>
@@ -46,6 +47,11 @@ global $minnpost_membership;
 						?>
 							<fieldset id="choose-member-level">
 								<section class="o-membership-member-levels">
+									<?php if ( ! empty( $_GET['errors'] ) ) : ?>
+									<div class="m-form-message m-form-message-error">
+										<p><?php echo $minnpost_membership->front_end->get_error_message( $_GET['errors'] ); ?></p>
+									</div>
+								<?php endif; ?>
 									<?php foreach ( $all_member_levels as $key => $record ) : ?>
 										<?php
 										$ranges     = $minnpost_membership->member_levels->calculate_ranges( $record );

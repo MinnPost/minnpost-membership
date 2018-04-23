@@ -258,4 +258,37 @@ class MinnPost_Membership_Front_End {
 		}
 	}
 
+	/**
+	 * Finds and returns a matching error message for the given error code.
+	 *
+	 * @param string $error_code    The error code to look up.
+	 * @param array $data           This should be user data, either provided by a form or a hook
+	 *
+	 * @return string               An error message.
+	 */
+	public function get_error_message( $error_code, $data = array() ) {
+		$error_code     = filter_var( $error_code, FILTER_SANITIZE_STRING );
+		$custom_message = apply_filters( 'minnpost_membership_custom_error_message', '', $error_code, $data );
+		if ( '' !== $custom_message ) {
+			return $custom_message;
+		}
+		// example to change the error message
+		/*
+		add_filter( 'minnpost_membership_custom_error_message', 'error_message', 10, 3 );
+		function error_message( $message, $error_code, $data ) {
+			$message = 'this is my error';
+			return $message;
+		}
+		*/
+		switch ( $error_code ) {
+			case 'empty_amount':
+				return __( 'You did not enter an amount.', 'minnpost-membership' );
+			case 'invalid_amount':
+				return __( 'You entered an invalid amount.', 'minnpost-membership' );
+			default:
+				return __( 'We were unable to send your information to start our payment processor. Try again.', 'minnpost-membership' );
+		}
+		return __( 'An unknown error occurred. Please try again later.', 'minnpost-membership' );
+	}
+
 }
