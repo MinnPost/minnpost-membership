@@ -453,11 +453,13 @@ class MinnPost_Membership_Admin {
 			}
 		}
 
+		// /support page options
+		$this_section              = 'support';
 		$settings['support_title'] = array(
 			'title'    => __( 'Page title', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'support',
-			'section'  => 'support',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -465,11 +467,87 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['support_post_body_text'] = array(
+			'title'    => __( 'Post body text', 'minnpost-membership' ),
+			'callback' => $callbacks['textarea'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+				'rows'     => 5,
+				'cols'     => '',
+			),
+		);
+
+		$settings['support_post_body_link_url'] = array(
+			'title'    => __( 'Post body link URL', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_body_link_fragment'] = array(
+			'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_body_link_class'] = array(
+			'title'    => __( 'Post body link class', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_body_link_text'] = array(
+			'title'    => __( 'Post body link text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_body_show_member_details_link'] = array(
+			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'checkbox',
+			),
+		);
+
+		// /support/member-benefits page options
+		$this_section                              = 'member-benefits';
 		$settings['support-member-benefits_title'] = array(
 			'title'    => __( 'Page title', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -480,8 +558,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_pre_form_text'] = array(
 			'title'    => __( 'Pre-form text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -492,8 +570,8 @@ class MinnPost_Membership_Admin {
 		/*$settings['support-member-benefits_post_form_text'] = array(
 			'title'    => __( 'Post-form text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -504,8 +582,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_form_text_link'] = array(
 			'title'    => __( 'Post-form text link', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -516,8 +594,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_default_level'] = array(
 			'title'    => __( 'Default level', 'minnpost-membership' ),
 			'callback' => $callbacks['select'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'type'     => 'select',
 				'desc'     => '',
@@ -529,8 +607,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_level_button_text'] = array(
 			'title'    => __( 'Level button text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -541,8 +619,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_give_button_text'] = array(
 			'title'    => __( 'Give button text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -553,8 +631,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_body_text'] = array(
 			'title'    => __( 'Post body text', 'minnpost-membership' ),
 			'callback' => $callbacks['textarea'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -567,8 +645,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_body_link_url'] = array(
 			'title'    => __( 'Post body link URL', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -579,8 +657,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_body_link_fragment'] = array(
 			'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -591,8 +669,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_body_link_class'] = array(
 			'title'    => __( 'Post body link class', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -603,8 +681,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_body_link_text'] = array(
 			'title'    => __( 'Post body link text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -615,8 +693,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefits_post_body_show_member_details_link'] = array(
 			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefits',
-			'section'  => 'member-benefits',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -727,11 +805,13 @@ class MinnPost_Membership_Admin {
 			}
 		}
 
+		// /support/member-benefit-details options
+		$this_section                                     = 'member-benefit-details';
 		$settings['support-member-benefit-details_title'] = array(
 			'title'    => __( 'Page title', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
-			'page'     => 'member-benefit-details',
-			'section'  => 'member-benefit-details',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -742,8 +822,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefit-details_body'] = array(
 			'title'    => __( 'Page body', 'minnpost-membership' ),
 			'callback' => $callbacks['editor'],
-			'page'     => 'member-benefit-details',
-			'section'  => 'member-benefit-details',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
@@ -754,8 +834,8 @@ class MinnPost_Membership_Admin {
 		$settings['support-member-benefit-details_link_from_other_pages'] = array(
 			'title'    => __( 'Link from other pages', 'minnpost-membership' ),
 			'callback' => $callbacks['textarea'],
-			'page'     => 'member-benefit-details',
-			'section'  => 'member-benefit-details',
+			'page'     => $this_section,
+			'section'  => $this_section,
 			'args'     => array(
 				'desc'     => '',
 				'constant' => '',
