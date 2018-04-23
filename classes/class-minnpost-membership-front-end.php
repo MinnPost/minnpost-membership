@@ -45,9 +45,7 @@ class MinnPost_Membership_Front_End {
 
 		$this->add_actions();
 
-		$this->allowed_urls   = $this->get_allowed_urls();
-		$this->url_parameters = $this->get_url_parameters();
-
+		$this->allowed_urls = $this->get_allowed_urls();
 	}
 
 	/**
