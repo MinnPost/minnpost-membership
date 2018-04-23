@@ -27,7 +27,7 @@ global $minnpost_membership;
 					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-member-levels">
 						<input type="hidden" name="action" value="membership_form_submit">
 						<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
-						<?php $url_params = $minnpost_membership->front_end->url_parameters; ?>
+						<?php $url_params = $minnpost_membership->front_end->process_parameters( 'get' ); ?>
 						<?php if ( ! empty( $url_params ) ) : ?>
 							<?php foreach ( $url_params as $key => $value ) : ?>
 								<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
@@ -58,7 +58,12 @@ global $minnpost_membership;
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
 												<div class="amount">
 													<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>" data-default-monthly="<?php echo $ranges['default_monthly']; ?>" data-default-yearly="<?php echo $ranges['default_yearly']; ?>">
-														<?php echo $ranges[ $minnpost_membership->member_levels->get_frequency_options( get_option( $minnpost_membership->option_prefix . 'default_frequency', '' ) )['id'] ]; ?>
+														<?php
+														$default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
+														//echo 'default is ' . $default_frequency;
+														$current_frequency = $minnpost_membership->member_levels->get_frequency_options( $default_frequency );
+														echo $ranges[ $current_frequency['id'] ];
+														?>
 													</h3>
 													<?php $frequency_options = $minnpost_membership->member_levels->get_frequency_options(); ?>
 													<?php if ( ! empty( $frequency_options ) ) : ?>

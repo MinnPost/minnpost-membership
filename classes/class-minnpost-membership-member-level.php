@@ -129,7 +129,12 @@ class MinnPost_Membership_Member_Level {
 			),
 		);
 		if ( '' !== $key ) {
-			return $frequencies[ array_search( $key, array_column( $frequencies, $field ) ) ];
+			$search_result = array_search( $key, array_column( $frequencies, $field ) );
+			if ( false !== $search_result ) {
+				return $frequencies[ $search_result ];
+			} else {
+				return $search_result;
+			}
 		}
 		return $frequencies;
 	}
