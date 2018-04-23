@@ -17,12 +17,40 @@ global $minnpost_membership;
 				<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
 					<input type="hidden" name="action" value="membership_form_submit">
 					<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
-					<?php $url_params = $minnpost_membership->front_end->url_parameters; ?>
+					<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
+					<?php $url_params = $minnpost_membership->front_end->process_parameters( 'get' ); ?>
 					<?php if ( ! empty( $url_params ) ) : ?>
 						<?php foreach ( $url_params as $key => $value ) : ?>
 							<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
 						<?php endforeach; ?>
 					<?php endif; ?>
+
+					put the summary stuff here
+
+					put the campaign messaging here, if applicable
+
+					<?php if ( ! empty( $_GET['errors'] ) ) : ?>
+						<div class="m-form-message m-form-message-error">
+							<p><?php echo $minnpost_membership->front_end->get_error_message( $_GET['errors'] ); ?></p>
+						</div>
+					<?php endif; ?>
+
+					put the i would like to give here
+					then the field
+					then the radios
+
+					then the membership indicator
+
+					then the give button
+					then the learn about benefits (make sure it gets all the query values)
+
+					then the heading
+					then the reasons
+
+					then the learn more about benefits
+
+					then the details page link
+
 				</form>
 			</div>
 		</main><!-- #main -->
