@@ -25,6 +25,12 @@ global $minnpost_membership;
 				<?php $use_member_levels = get_option( $minnpost_membership->option_prefix . 'use_member_levels', false ); ?>
 				<?php if ( 1 === intval( $use_member_levels ) ) : ?>
 					<form class="m-form m-form-membership m-form-membership-member-levels">
+						<?php $url_params = $minnpost_membership->front_end->url_parameters; ?>
+						<?php if ( ! empty( $url_params ) ) : ?>
+							<?php foreach ( $url_params as $key => $value ) : ?>
+								<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
+							<?php endforeach; ?>
+						<?php endif; ?>
 						<?php
 						$all_member_levels = $minnpost_membership->member_levels->get_member_levels( '' );
 

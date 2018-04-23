@@ -45,7 +45,8 @@ class MinnPost_Membership_Front_End {
 
 		$this->add_actions();
 
-		$this->allowed_urls = $this->get_allowed_urls();
+		$this->allowed_urls   = $this->get_allowed_urls();
+		$this->url_parameters = $this->get_url_parameters();
 
 	}
 
@@ -103,6 +104,39 @@ class MinnPost_Membership_Front_End {
 		});
 	}
 
+	/**
+	* Handle GET parameters
+	*
+	* @return array $params
+	*
+	*/
+	public function get_url_parameters() {
+		$params = array();
+		if ( isset( $_GET['email'] ) ) {
+			$params['email'] = filter_var( $_GET['email'], FILTER_SANITIZE_EMAIL );
+		}
+		if ( isset( $_GET['firstname'] ) ) {
+			$params['firstname'] = filter_var( $_GET['firstname'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $_GET['lastname'] ) ) {
+			$params['lastname'] = filter_var( $_GET['lastname'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $_GET['campaign'] ) ) {
+			$params['campaign'] = filter_var( $_GET['campaign'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $_GET['amount'] ) ) {
+			$params['amount'] = filter_var( $_GET['amount'], FILTER_SANITIZE_NUMBER_INT );
+		}
+		return $params;
+	}
+
+	/**
+	* Set title tags
+	*
+	* @param array $title
+	* @return array $title
+	*
+	*/
 	public function set_wp_title( $title ) {
 		$path = rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' );
 		if ( in_array( $path, $this->allowed_urls ) ) {
