@@ -107,26 +107,42 @@ class MinnPost_Membership_Front_End {
 	/**
 	* Handle GET parameters
 	*
+	* @param string $direction
 	* @return array $params
 	*
 	*/
-	public function get_url_parameters() {
+	public function process_parameters( $direction = 'get' ) {
 		$params = array();
-		if ( isset( $_GET['email'] ) ) {
-			$params['email'] = filter_var( $_GET['email'], FILTER_SANITIZE_EMAIL );
+		if ( 'get' === $direction ) {
+			$data = $_GET;
+		} elseif ( 'post' === $direction ) {
+			$data = $_POST;
 		}
-		if ( isset( $_GET['firstname'] ) ) {
-			$params['firstname'] = filter_var( $_GET['firstname'], FILTER_SANITIZE_STRING );
+		if ( isset( $data['amount'] ) ) {
+			$params['amount'] = filter_var( $data['amount'], FILTER_SANITIZE_NUMBER_INT );
 		}
-		if ( isset( $_GET['lastname'] ) ) {
-			$params['lastname'] = filter_var( $_GET['lastname'], FILTER_SANITIZE_STRING );
+		if ( isset( $data['campaign'] ) ) {
+			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
 		}
-		if ( isset( $_GET['campaign'] ) ) {
-			$params['campaign'] = filter_var( $_GET['campaign'], FILTER_SANITIZE_STRING );
+		if ( isset( $data['customer_id'] ) ) {
+			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
 		}
-		if ( isset( $_GET['amount'] ) ) {
-			$params['amount'] = filter_var( $_GET['amount'], FILTER_SANITIZE_NUMBER_INT );
+		if ( isset( $data['email'] ) ) {
+			$params['email'] = filter_var( $data['email'], FILTER_SANITIZE_EMAIL );
 		}
+		if ( isset( $data['firstname'] ) ) {
+			$params['firstname'] = filter_var( $data['firstname'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $data['frequency'] ) ) {
+			$params['frequency'] = filter_var( $data['frequency'], FILTER_SANITIZE_NUMBER_INT );
+		}
+		if ( isset( $data['lastname'] ) ) {
+			$params['lastname'] = filter_var( $data['lastname'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $data['show_ach'] ) ) {
+			$params['show_ach'] = filter_var( $data['show_ach'], FILTER_SANITIZE_STRING );
+		}
+
 		return $params;
 	}
 
