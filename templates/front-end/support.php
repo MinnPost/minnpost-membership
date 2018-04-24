@@ -25,7 +25,11 @@ global $minnpost_membership;
 						<?php endforeach; ?>
 					<?php endif; ?>
 
-					put the summary stuff here
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
+						<section class="m-membership-summary">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+						</section>
+					<?php endif; ?>
 
 					put the campaign messaging here, if applicable
 
@@ -48,9 +52,9 @@ global $minnpost_membership;
 					then the reasons
 
 					<?php
-					if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_text', '' ) ) {
+					if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_text_link', '' ) ) {
 
-						$text          = get_option( $minnpost_membership->option_prefix . 'support_post_body_text', '' );
+						$text          = get_option( $minnpost_membership->option_prefix . 'support_post_body_text_link', '' );
 						$link          = get_option( $minnpost_membership->option_prefix . 'support_post_body_link_url', '' );
 						$link_text     = get_option( $minnpost_membership->option_prefix . 'support_post_body_link_text', '' );
 						$link_fragment = ltrim( get_option( $minnpost_membership->option_prefix . 'support_post_body_link_fragment', '' ), '#' );

@@ -467,8 +467,36 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['support_post_body_text'] = array(
+		$settings['support_summary'] = array(
+			'title'    => __( 'Summary', 'minnpost-membership' ),
+			'callback' => $callbacks['editor'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'          => '',
+				'constant'      => '',
+				'type'          => 'text',
+				'rows'          => '5',
+				'media_buttons' => false,
+			),
+		);
+
+		$settings['support_post_body'] = array(
 			'title'    => __( 'Post body text', 'minnpost-membership' ),
+			'callback' => $callbacks['editor'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'          => '',
+				'constant'      => '',
+				'type'          => 'text',
+				'rows'          => '5',
+				'media_buttons' => false,
+			),
+		);
+
+		$settings['support_post_body_text_link'] = array(
+			'title'    => __( 'Post body text link', 'minnpost-membership' ),
 			'callback' => $callbacks['textarea'],
 			'page'     => $this_section,
 			'section'  => $this_section,
@@ -476,7 +504,7 @@ class MinnPost_Membership_Admin {
 				'desc'     => '',
 				'constant' => '',
 				'type'     => 'text',
-				'rows'     => 5,
+				'rows'     => 3,
 				'cols'     => '',
 			),
 		);
@@ -1232,7 +1260,51 @@ class MinnPost_Membership_Admin {
 				$value = $args['default'];
 			}
 
-			wp_editor( $value, $id );
+			$settings = array();
+			if ( isset( $args['wpautop'] ) ) {
+				$settings['wpautop'] = $args['wpautop'];
+			}
+			if ( isset( $args['media_buttons'] ) ) {
+				$settings['media_buttons'] = $args['media_buttons'];
+			}
+			if ( isset( $args['default_editor'] ) ) {
+				$settings['default_editor'] = $args['default_editor'];
+			}
+			if ( isset( $args['drag_drop_upload'] ) ) {
+				$settings['drag_drop_upload'] = $args['drag_drop_upload'];
+			}
+			if ( isset( $args['name'] ) ) {
+				$settings['textarea_name'] = $args['name'];
+			}
+			if ( isset( $args['rows'] ) ) {
+				$settings['textarea_rows'] = $args['rows']; // default is 20
+			}
+			if ( isset( $args['tabindex'] ) ) {
+				$settings['tabindex'] = $args['tabindex'];
+			}
+			if ( isset( $args['tabfocus_elements'] ) ) {
+				$settings['tabfocus_elements'] = $args['tabfocus_elements'];
+			}
+			if ( isset( $args['editor_css'] ) ) {
+				$settings['editor_css'] = $args['editor_css'];
+			}
+			if ( isset( $args['editor_class'] ) ) {
+				$settings['editor_class'] = $args['editor_class'];
+			}
+			if ( isset( $args['teeny'] ) ) {
+				$settings['teeny'] = $args['teeny'];
+			}
+			if ( isset( $args['dfw'] ) ) {
+				$settings['dfw'] = $args['dfw'];
+			}
+			if ( isset( $args['tinymce'] ) ) {
+				$settings['tinymce'] = $args['tinymce'];
+			}
+			if ( isset( $args['quicktags'] ) ) {
+				$settings['quicktags'] = $args['quicktags'];
+			}
+
+			wp_editor( $value, $id, $settings );
 			if ( '' !== $desc ) {
 				echo sprintf( '<p class="description">%1$s</p>',
 					esc_html( $desc )

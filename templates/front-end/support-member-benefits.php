@@ -113,7 +113,7 @@ global $minnpost_membership;
 												</div>
 											</section>
 											<section class="m-member-level-benefits">
-												<?php echo $record['benefits']; ?>
+												<?php echo wpautop( $record['benefits'] ); ?>
 											</section>
 										</article>
 									<?php endforeach; ?>
