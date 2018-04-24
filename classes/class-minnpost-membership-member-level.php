@@ -213,6 +213,46 @@ class MinnPost_Membership_Member_Level {
 	}
 
 	/**
+	* Calculate level for an amount/frequency
+	*
+	* @param array $record
+	* @return string $range
+	*
+	*/
+	public function calculate_level( $amount = '', $frequency = 'one-time' ) {
+		$level = '';
+		if ( '' === $frequency ) {
+			$frequency = 'one-time';
+		}
+		$frequency       = $this->get_frequency_options( $frequency, 'id' )['value'];
+		$all_levels      = $this->get_member_levels();
+		$amount_per_year = $this->get_frequency_values( $frequency )['times_per_year'];
+		$monthly_amount  = floor( ( $amount * $amount_per_year ) / 12 );
+		foreach ( $all_levels as $level ) {
+
+			$minimum_monthly = $level['minimum_monthly_amount'];
+			$maximum_monthly = $level['maximum_monthly_amount'];
+
+			if ( '' === $maximum_monthly ) {
+				if ( $monthly_amount < $minimum_monthly ) {
+					continue;
+				} else {
+					$level = $level['slug'];
+					return $level;
+				}
+			} else {
+				if ( ( $monthly_amount < $minimum_monthly ) || ( $monthly_amount > $maximum_monthly ) ) {
+					continue;
+				} else {
+					$level = $level['slug'];
+					return $level;
+				}
+			}
+		}
+		return $level;
+	}
+
+	/**
 	* Create a member level
 	*
 	* @param array $post_data
