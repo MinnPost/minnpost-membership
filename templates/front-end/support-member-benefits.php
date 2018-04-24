@@ -71,7 +71,7 @@ global $minnpost_membership;
 											<section class="m-member-level-brief<?php echo $is_flipped; ?>">
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
 												<?php
-												if ( '' === $url_frequency ) {
+												if ( ! isset( $url_frequency ) || '' === $url_frequency ) {
 													$default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
 													$default_amount    = $record['starting_value'];
 												} else {
