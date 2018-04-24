@@ -488,6 +488,54 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['support_pre_form_text'] = array(
+			'title'    => __( 'Pre form text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => 'This is the text before, and on the same line as, the form fields',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_start_value'] = array(
+			'title'    => __( 'Start value', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_button_text'] = array(
+			'title'    => __( 'Button text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_benefits_link_text'] = array(
+			'title'    => __( 'Benefits link text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
 		$settings['support_post_body'] = array(
 			'title'    => __( 'Post body text', 'minnpost-membership' ),
 			'callback' => $callbacks['editor'],

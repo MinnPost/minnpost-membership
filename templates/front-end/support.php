@@ -51,9 +51,42 @@ $url_params = $minnpost_membership->front_end->process_parameters( 'get' );
 						</div>
 					<?php endif; ?>
 
-					put the i would like to give here
-					then the field
-					then the radios
+					<section class="m-membership-fast-select">
+						<fieldset>
+							<div class="m-form-item-wrap">
+								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
+									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
+								<?php endif; ?>
+								<span class="a-fast-select-currency">&dollar;</span>
+								<div id="amount-item" class="m-form-item">
+									<input id="amount" min="1" name="amount" value="<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) { echo get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ); } ?>" type="number">
+								</div>
+								<?php
+								$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
+								$default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
+								?>
+								<?php if ( ! empty( $frequency_options ) ) : ?>
+									<div class="m-form-radios">
+										<?php foreach ( $frequency_options as $key => $option ) : ?>
+											<?php
+											$id_key = $key + 1;
+											if ( $default_frequency === $option['value'] ) {
+												$checked = ' checked';
+											} else {
+												$checked = '';
+											}
+											$frequency_values  = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+											?>
+											<div class="m-form-item">
+												<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
+												<label for="frequencies-<?php echo $id_key; ?>"  class="a-frequency-option"><?php echo $option['text']; ?></label>
+											</div>
+										<?php endforeach; ?>
+									</div>
+								<?php endif; ?>
+							</div>
+						</fieldset>
+					</section>
 
 					then the membership indicator
 

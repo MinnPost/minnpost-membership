@@ -1,10 +1,5 @@
 // variables
-$box-shadow-less: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-$box-shadow-more: 0 1px 1px rgba(0, 0, 0, 0.04);
-$border-color-darker: #e1e1e1;
 $border-color-lighter: #e5e5e5;
-$horizontal-space: 10px;
-$success-color: #46b450;
 $vertical-space: 1em;
 
 .m-layout-membership {
@@ -21,6 +16,29 @@ $vertical-space: 1em;
 
 .m-membership-summary {
 	margin-bottom: $vertical-space;
+}
+
+.m-membership-fast-select {
+	font-size: 1.5em;
+	text-align: center;
+	border: 0;
+	margin: $vertical-space * 2 0 $vertical-space 0;
+	padding: 0;
+	min-width: 0;
+	.m-form-item-wrap {
+		margin: 0 0 $vertical-space / 2 0;
+	}
+	.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios {
+		display: inline-block;
+		margin: 0;
+		vertical-align: top;
+	}
+	.a-fast-select-currency, .a-fast-select-intro {
+		padding-top: 0.35em;
+	}
+	.a-fast-select-intro {
+		padding-right: 0.5em;
+	}
 }
 
 .o-membership-member-levels {
