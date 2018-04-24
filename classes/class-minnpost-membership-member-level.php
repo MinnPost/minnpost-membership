@@ -146,7 +146,7 @@ class MinnPost_Membership_Member_Level {
 	* @return array $frequencyvalues
 	*
 	*/
-	function get_frequency_values( $value ) {
+	public function get_frequency_values( $value ) {
 		$splitdefault  = explode( 'per ', $value );
 		$splitdefault  = end( $splitdefault );
 		$defaultvalues = explode( ' - ', $splitdefault );
