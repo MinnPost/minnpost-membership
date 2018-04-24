@@ -99,6 +99,11 @@ class MinnPost_Membership_Admin {
 				'sections' => $this->setup_payment_page_sections(),
 				'use_tabs' => true,
 			),
+			$this->slug . '-campaign-settings'  => array(
+				'title'    => __( 'Campaign Settings', 'minnpost-membership' ),
+				'sections' => $this->setup_campaign_sections(),
+				'use_tabs' => true,
+			),
 			$this->slug . '-member-benefits'    => array(
 				'title'    => __( 'Member Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_benefit_page_sections(),
@@ -256,7 +261,8 @@ class MinnPost_Membership_Admin {
 		);
 
 		$this->general_settings( $page, $all_field_callbacks );
-		$this->member_finances( $page, $all_field_callbacks );
+		$this->taking_payments( $page, $all_field_callbacks );
+		$this->campaign_settings( $page, $all_field_callbacks );
 		$this->member_benefits( $page, $all_field_callbacks );
 
 	}
@@ -396,13 +402,13 @@ class MinnPost_Membership_Admin {
 	}
 
 	/**
-	* Fields for the Member Finances page
+	* Fields for the Taking Payments page
 	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
 	*
 	* @param string $page
 	* @param array $callbacks
 	*/
-	private function member_finances( $page, $callbacks ) {
+	private function taking_payments( $page, $callbacks ) {
 		$sections = $this->get_admin_pages()[ $page ]['sections'];
 		if ( ! empty( $sections ) ) {
 			foreach ( $sections as $key => $value ) {
@@ -758,6 +764,110 @@ class MinnPost_Membership_Admin {
 	}
 
 	/**
+	* Fields for the Campaign Settings page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function campaign_settings( $page, $callbacks ) {
+		$sections = $this->get_admin_pages()[ $page ]['sections'];
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+			}
+		} else {
+			$section = $page;
+			$title   = $this->get_admin_pages()[ $page ]['title'];
+			add_settings_section( $section, $title, null, $page );
+		}
+
+		$settings = array(
+			'campaign_ids' => array(
+				'title'    => __( 'Campaign IDs', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => 'campaigns',
+				'section'  => 'campaigns',
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'rows'     => 5,
+					'cols'     => '',
+				),
+			),
+		);
+
+		$campaign_sections = $this->setup_campaign_sections();
+		if ( ! empty( $campaign_sections ) ) {
+			foreach ( $campaign_sections as $key => $value ) {
+				$section = $key;
+				$title   = 'Campaign: ' . $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+
+				if ( 'campaigns' !== $key ) {
+					// campaign specific settings
+					$settings[ 'support_title_' . $value ] = array(
+						'title'    => __( 'Page title', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $key,
+						'section'  => $key,
+						'args'     => array(
+							'desc'     => '',
+							'constant' => '',
+							'type'     => 'text',
+						),
+					);
+
+					$settings[ 'support_summary_' . $value ] = array(
+						'title'    => __( 'Summary', 'minnpost-membership' ),
+						'callback' => $callbacks['editor'],
+						'page'     => $key,
+						'section'  => $key,
+						'args'     => array(
+							'desc'          => '',
+							'constant'      => '',
+							'type'          => 'text',
+							'rows'          => '5',
+							'media_buttons' => false,
+						),
+					);
+				}
+
+			}
+		}
+
+		foreach ( $settings as $key => $attributes ) {
+			$id       = $this->option_prefix . $key;
+			$name     = $this->option_prefix . $key;
+			$title    = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$args     = array_merge(
+				$attributes['args'],
+				array(
+					'title'     => $title,
+					'id'        => $id,
+					'label_for' => $id,
+					'name'      => $name,
+					'class'     => 'minnpost-member-field ' . $id,
+				)
+			);
+
+			// if there is a constant and it is defined, don't run a validate function if there is one
+			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+				$validate = '';
+			}
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
+		}
+	}
+
+	/**
 	* Set up options tab for each payment page URL in the options
 	*
 	* @return $array $sections
@@ -780,6 +890,30 @@ class MinnPost_Membership_Admin {
 				$title = ucwords( str_replace( '-', ' ', $url ) );
 
 				$sections[ $url ] = $title;
+			}
+		}
+
+		return $sections;
+	}
+
+	/**
+	* Set up options tab for each campaign ID in the options
+	*
+	* @return $array $sections
+	*
+	*/
+	private function setup_campaign_sections() {
+		$sections = array(
+			'campaigns' => __( 'Campaigns', 'minnpost-membership' ),
+		);
+
+		$campaign_ids = get_option( $this->option_prefix . 'campaign_ids', array() );
+		if ( ! empty( $campaign_ids ) ) {
+			$campaign_ids = explode( "\r\n", $campaign_ids );
+			foreach ( $campaign_ids as $key => $value ) {
+				$key = $key + 1;
+
+				$sections[ 'campaign_' . $key ] = $value;
 			}
 		}
 
