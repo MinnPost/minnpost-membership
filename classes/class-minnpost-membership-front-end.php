@@ -147,7 +147,7 @@ class MinnPost_Membership_Front_End {
 			$params['firstname'] = filter_var( $data['firstname'], FILTER_SANITIZE_STRING );
 		}
 		if ( isset( $data['frequency'] ) ) {
-			$params['frequency'] = filter_var( $data['frequency'], FILTER_SANITIZE_NUMBER_INT );
+			$params['frequency'] = filter_var( $data['frequency'], FILTER_SANITIZE_STRING );
 		}
 		if ( isset( $data['lastname'] ) ) {
 			$params['lastname'] = filter_var( $data['lastname'], FILTER_SANITIZE_STRING );
