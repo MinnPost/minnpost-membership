@@ -140,15 +140,14 @@ class MinnPost_Membership_Member_Level {
 	}
 
 	/**
-	* Get name and times per year for each frequency
+	* Get name and times per year for a given frequency value
 	*
-	* @param array $frequencies
-	* @param string $default
+	* @param string $value
 	* @return array $frequencyvalues
 	*
 	*/
-	function get_frequency_values( $frequencies, $default ) {
-		$splitdefault  = explode( 'per ', $default );
+	function get_frequency_values( $value ) {
+		$splitdefault  = explode( 'per ', $value );
 		$splitdefault  = end( $splitdefault );
 		$defaultvalues = explode( ' - ', $splitdefault );
 
@@ -170,7 +169,7 @@ class MinnPost_Membership_Member_Level {
 	*
 	*/
 	public function calculate_ranges( $record = '' ) {
-		$default_frequency = $this->get_frequency_values( $this->get_frequency_options(), get_option( $this->option_prefix . 'default_frequency', '' )[0] );
+		$default_frequency = $this->get_frequency_values( get_option( $this->option_prefix . 'default_frequency', '' )[0] );
 
 		if ( 1 === $record['minimum_monthly_amount'] ) {
 			$record['maximum_monthly_amount'] = $record['maximum_monthly_amount'] + 1;
