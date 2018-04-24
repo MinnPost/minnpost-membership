@@ -62,11 +62,10 @@ global $minnpost_membership;
 										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?> m-membership-member-level-<?php echo $key + 1; ?><?php echo $is_active; ?>">
 											<section class="m-member-level-brief<?php echo $is_flipped; ?>">
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
+												<?php $default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0]; ?>
 												<div class="amount">
 													<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>" data-default-monthly="<?php echo $ranges['default_monthly']; ?>" data-default-yearly="<?php echo $ranges['default_yearly']; ?>">
 														<?php
-														$default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
-														//echo 'default is ' . $default_frequency;
 														$current_frequency = $minnpost_membership->member_levels->get_frequency_options( $default_frequency );
 														echo $ranges[ $current_frequency['id'] ];
 														?>
@@ -77,7 +76,7 @@ global $minnpost_membership;
 															<select id="membership-frequency-preview-<?php echo $key + 1; ?>" name="membership-frequency-preview-<?php echo $key + 1; ?>" class="a-form-item-membership-frequency" data-member-level-number="<?php echo $key + 1; ?>">
 																<?php foreach ( $frequency_options as $option ) : ?>
 																	<?php
-																	if ( $minnpost_membership->member_levels->get_frequency_options( get_option( $minnpost_membership->option_prefix . 'default_frequency', '' ) )['value'] === $option['value'] ) {
+																	if ( $default_frequency === $option['value'] ) {
 																		$selected = ' selected';
 																	} else {
 																		$selected = '';
@@ -99,8 +98,8 @@ global $minnpost_membership;
 														<select id="membership-frequency-<?php echo $key + 1; ?>" name="membership-frequency-<?php echo $key + 1; ?>" class="a-form-item-membership-frequency" data-member-level-number="<?php echo $key + 1; ?>">
 															<?php foreach ( $frequency_options as $option ) : ?>
 																<?php
-																if ( $minnpost_membership->member_levels->get_frequency_options( get_option( $minnpost_membership->option_prefix . 'default_frequency', '' ) )['value'] === $option['value'] ) {
-																	$selected = ' selected';
+																if ( $default_frequency === $option['value'] ) {
+																		$selected = ' selected';
 																} else {
 																	$selected = '';
 																}
