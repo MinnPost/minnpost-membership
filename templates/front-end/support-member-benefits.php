@@ -31,17 +31,25 @@ global $minnpost_membership;
 						<?php $url_params = $minnpost_membership->front_end->process_parameters( 'get' ); ?>
 						<?php if ( ! empty( $url_params ) ) : ?>
 							<?php foreach ( $url_params as $key => $value ) : ?>
-								<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
+								<?php if ( 'amount' !== $key && 'frequency' !== $key ) : ?>
+									<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
+								<?php endif; ?>
 							<?php endforeach; ?>
 						<?php endif; ?>
 						<?php
 						$all_member_levels = $minnpost_membership->member_levels->get_member_levels( '' );
 
-						$show_flipped = isset( $_GET['level'] ) ? true : false;
-						if ( true === $show_flipped ) {
-							$default_member_level = 'member_' . filter_var( $_GET['level'], FILTER_SANITIZE_STRING );
+						if ( isset( $url_params['amount'] ) ) {
+							$url_frequency        = isset( $url_params['frequency'] ) ? $url_params['frequency'] : '';
+							$show_flipped         = true;
+							$default_member_level = $minnpost_membership->member_levels->calculate_level( $url_params['amount'], $url_frequency );
 						} else {
-							$default_member_level = $minnpost_membership->member_levels->get_default_member_level();
+							$show_flipped = isset( $_GET['level'] ) ? true : false;
+							if ( true === $show_flipped ) {
+								$default_member_level = 'member_' . filter_var( $_GET['level'], FILTER_SANITIZE_STRING );
+							} else {
+								$default_member_level = $minnpost_membership->member_levels->get_default_member_level();
+							}
 						}
 						if ( ! empty( $all_member_levels ) ) :
 						?>
@@ -62,7 +70,20 @@ global $minnpost_membership;
 										<article class="m-membership-member-level m-membership-member-level-<?php echo $record['slug']; ?> m-membership-member-level-<?php echo $key + 1; ?><?php echo $is_active; ?>">
 											<section class="m-member-level-brief<?php echo $is_flipped; ?>">
 												<h2><?php echo esc_html( $record['name'] ); ?></h2>
-												<?php $default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0]; ?>
+												<?php
+												if ( '' === $url_frequency ) {
+													$default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
+													$default_amount    = $record['starting_value'];
+												} else {
+													$default_frequency = $minnpost_membership->member_levels->get_frequency_options( $url_frequency, 'id' )['value'];
+													$frequency_values  = $minnpost_membership->member_levels->get_frequency_values( $default_frequency );
+													if ( 'month' !== $frequency_values['frequency_name'] ) {
+														$default_amount = $url_params['amount'] * $frequency_values['times_per_year'];
+													} else {
+														$default_amount = $url_params['amount'];
+													}
+												}
+												?>
 												<div class="amount">
 													<h3 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>" data-default-monthly="<?php echo $ranges['default_monthly']; ?>" data-default-yearly="<?php echo $ranges['default_yearly']; ?>">
 														<?php
@@ -91,7 +112,7 @@ global $minnpost_membership;
 												</div>
 												<div class="enter">
 													<h3><?php echo esc_html( '$' ); ?><div class="m-form-item">
-															<input class="amount-entry" type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) { ?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
+															<input class="amount-entry" type="number" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $default_amount; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) { ?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
 														</div>
 													</h3>
 													<div class="m-form-item">
