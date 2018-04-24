@@ -13,12 +13,12 @@ $url_params = $minnpost_membership->front_end->process_parameters( 'get' );
 		<main id="main" class="site-main" role="main">
 			<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ) ) : ?>
 				<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>
-					<header class="m-membership-intro">
+					<header class="m-membership-intro m-membership-support-intro">
 						<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title', '' ); ?></h1>
 					</header>
 				<?php endif; ?>
 			<?php else : ?>
-				<header class="m-membership-intro m-membership-intro-campaign-<?php echo $url_params['campaign']; ?>">
+				<header class="m-membership-intro m-membership-intro-campaign-<?php echo $url_params['campaign']; ?> m-membership-support-intro">
 					<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ); ?></h1>
 				</header>
 			<?php endif; ?>

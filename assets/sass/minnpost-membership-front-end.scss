@@ -5,10 +5,13 @@ $border-color-darker: #e1e1e1;
 $border-color-lighter: #e5e5e5;
 $horizontal-space: 10px;
 $success-color: #46b450;
-$vertical-space: 15px;
+$vertical-space: 1em;
 
 .m-layout-membership {
 	width: 100%;
+}
+.m-membership-support-intro {
+	margin-bottom: $vertical-space;
 }
 .m-form-membership fieldset {
 	border: 0;
@@ -16,16 +19,20 @@ $vertical-space: 15px;
 	padding: 0;
 }
 
+.m-membership-summary {
+	margin-bottom: $vertical-space;
+}
+
 .o-membership-member-levels {
-	margin: 3em 0 1em 0;
+	margin: 3em 0 $vertical-space 0;
 	padding: 0;
 	min-width: 0;
 	.m-membership-member-level {
-		margin-bottom: 2em;
+		margin-bottom: $vertical-space * 2;
 		.m-member-level-brief {
 			border: 1px solid $border-color-lighter;
 			padding: 0.5em;
-			margin-bottom: 2em;
+			margin-bottom: $vertical-space * 2;
 			text-align: center;
 			h2 {
 				margin: 0 0 0.5em 0;
