@@ -72,19 +72,27 @@ $url_params = $minnpost_membership->front_end->process_parameters( 'get' );
 								</div>
 								<?php
 								$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
-								$default_frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
 								?>
 								<?php if ( ! empty( $frequency_options ) ) : ?>
 									<div class="m-form-radios">
 										<?php foreach ( $frequency_options as $key => $option ) : ?>
 											<?php
 											$id_key = $key + 1;
-											if ( $default_frequency === $option['value'] ) {
+
+											if ( isset( $url_params['frequency'] ) ) {
+												$frequency = $minnpost_membership->member_levels->get_frequency_options( $url_params['frequency'], 'id' )['value'];
+											} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0] ) {
+												$frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
+											} else {
+												$frequency = '';
+											}
+
+											if ( $frequency === $option['value'] ) {
 												$checked = ' checked';
 											} else {
 												$checked = '';
 											}
-											$frequency_values  = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+											$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
 											?>
 											<div class="m-form-item">
 												<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
