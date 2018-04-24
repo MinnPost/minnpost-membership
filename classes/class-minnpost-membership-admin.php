@@ -59,6 +59,7 @@ class MinnPost_Membership_Admin {
 			add_action( 'admin_post_delete_member_level', array( $this, 'delete_member_level' ) );
 			add_filter( 'pre_update_option_' . $this->option_prefix . 'payment_urls', array( $this, 'url_option_updated' ), 10, 2 );
 			add_filter( 'pre_update_option_' . $this->option_prefix . 'member_benefit_urls', array( $this, 'url_option_updated' ), 10, 2 );
+			add_filter( 'pre_update_option_' . $this->option_prefix . 'campaign_ids', array( $this, 'campaign_ids_updated' ), 10, 2 );
 		}
 
 	}
@@ -1168,6 +1169,28 @@ class MinnPost_Membership_Admin {
 		return $new_value;
 	}
 
+	/**
+	* Call this method on the campaign id field so we can clear out old options
+	*
+	* @param string $new_value
+	* @param string $old_value
+	* @return string $new_value
+	*
+	*/
+	public function campaign_ids_updated( $new_value, $old_value ) {
+		if ( $new_value !== $old_value ) {
+			$new_ids = explode( "\r\n", $new_value );
+			$old_ids = explode( "\r\n", $old_value );
+			foreach ( $old_ids as $key => $value ) {
+				if ( ! in_array( $value, $new_ids ) ) {
+					// clear out options if the old id is no longer in the list of campaigns
+					delete_option( $this->option_prefix . 'support_title_' . $value );
+					delete_option( $this->option_prefix . 'support_summary_' . $value );
+				}
+			}
+		}
+		return $new_value;
+	}
 
 	/**
 	* Default display for <input> fields

@@ -6,32 +6,44 @@
 get_header(); ?>
 <?php
 global $minnpost_membership;
+$url_params = $minnpost_membership->front_end->process_parameters( 'get' );
 ?>
 
 	<div id="primary" class="m-layout-membership o-support">
 		<main id="main" class="site-main" role="main">
-			<header class="m-membership-intro">
-				<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title', '' ); ?></h1>
-			</header>
+			<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ) ) : ?>
+				<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>
+					<header class="m-membership-intro">
+						<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title', '' ); ?></h1>
+					</header>
+				<?php endif; ?>
+			<?php else : ?>
+				<header class="m-membership-intro m-membership-intro-campaign-<?php echo $url_params['campaign']; ?>">
+					<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ); ?></h1>
+				</header>
+			<?php endif; ?>
 			<div class="m-entry-content">
 				<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
 					<input type="hidden" name="action" value="membership_form_submit">
 					<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
 					<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
-					<?php $url_params = $minnpost_membership->front_end->process_parameters( 'get' ); ?>
 					<?php if ( ! empty( $url_params ) ) : ?>
 						<?php foreach ( $url_params as $key => $value ) : ?>
 							<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
 						<?php endforeach; ?>
 					<?php endif; ?>
 
-					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
-						<section class="m-membership-summary">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+					<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
+						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
+							<section class="m-membership-summary">
+								<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+							</section>
+						<?php endif; ?>
+					<?php else : ?>
+						<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
 						</section>
 					<?php endif; ?>
-
-					put the campaign messaging here, if applicable
 
 					<?php if ( ! empty( $_GET['errors'] ) ) : ?>
 						<div class="m-form-message m-form-message-error">
