@@ -50,6 +50,12 @@ class MinnPost_Membership {
 
 	/**
 	* @var object
+	* Load and initialize the MinnPost_Membership_User_Info class
+	*/
+	public $user_info;
+
+	/**
+	* @var object
 	* Load and initialize the MinnPost_Membership_Front_End class
 	*/
 	public $front_end;
@@ -92,6 +98,8 @@ class MinnPost_Membership {
 		$this->member_levels = $this->member_levels();
 		// admin settings
 		$this->admin = $this->admin();
+		// user info for membership
+		$this->user_info = $this->user_info();
 		// front end settings
 		$this->front_end = $this->front_end();
 
@@ -123,7 +131,7 @@ class MinnPost_Membership {
 	/**
 	 * Member levels
 	 *
-	 * @return array $member_levels
+	 * @return object $member_levels
 	 */
 	public function member_levels() {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-member-level.php' );
@@ -141,6 +149,17 @@ class MinnPost_Membership {
 		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
 		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
 		return $admin;
+	}
+
+	/**
+	 * User information
+	 *
+	 * @return object $user_info
+	 */
+	public function user_info() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-user-info.php' );
+		$user_info = new MinnPost_Membership_User_Info( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
+		return $user_info;
 	}
 
 	/**
