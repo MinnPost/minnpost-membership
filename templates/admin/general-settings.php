@@ -19,14 +19,25 @@
 					<article class="minnpost-membership-member-level minnpost-membership-member-level-<?php echo $record['slug']; ?> minnpost-membership-member-level-<?php echo $key + 1; ?>">
 						<header class="member-level-brief">
 							<h4><?php echo esc_html( $record['name'] ); ?></h4>
+
+							<?php
+							$default_frequency = get_option( $this->option_prefix . 'default_frequency', '' )[0];
+							$default_amount    = $record['starting_value'];
+
+							?>
+
 							<?php if ( 1 !== intval( $record['is_nonmember'] ) ) : ?>
 								<div class="amount">
-									<h5 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>">
-										<?php echo $ranges[ $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['id'] ]; ?>
+									<h5 data-one-time="<?php echo $ranges['yearly']; ?>" data-year="<?php echo $ranges['yearly']; ?>" data-month="<?php echo $ranges['monthly']; ?>" data-default-monthly="<?php echo $ranges['default_monthly']; ?>" data-default-yearly="<?php echo $ranges['default_yearly']; ?>">
+									<?php
+									$current_frequency = $this->member_levels->get_frequency_options( $default_frequency );
+									echo $ranges[ $current_frequency['id'] ];
+									?>
 									</h5>
-									<?php if ( '' !== get_option( $this->option_prefix . 'default_frequency', '' ) ) : ?>
-										<p class="show-frequency"><?php echo $this->member_levels->get_frequency_options( get_option( $this->option_prefix . 'default_frequency', '' ) )['text']; ?></p>
+									<?php if ( '' !== $current_frequency['text'] ) : ?>
+										<p class="show-frequency"><?php echo $current_frequency['text']; ?></p>
 									<?php endif; ?>
+
 								</div>
 								<div class="enter">
 									<input class="amount-entry" type="hidden" id="amount-level-<?php echo $key + 1; ?>" name="amount-level-<?php echo $key + 1; ?>" value="<?php echo $record['starting_value']; ?>" data-member-level-number="<?php echo $key + 1; ?>"<?php if ( '' !== $record['minimum_monthly_amount'] ) {?> min="<?php echo $record['minimum_monthly_amount']; ?>"<?php } ?>>
