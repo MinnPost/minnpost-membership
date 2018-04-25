@@ -24,8 +24,8 @@
 
 		$('.minnpost-membership-general-settings').minnpost_membership({
 			'amount_viewer' : '.amount h5',
-			'frequency_selector' : 'input[name="minnpost_membership_default_frequency[]"]',
-			'frequency_selector_type' : 'radio',
+			'frequency_selector_in_levels' : 'input[name="minnpost_membership_default_frequency[]"]',
+			'frequency_selector_in_levels_type' : 'radio',
 			'levels_container' : '.minnpost-membership-member-levels',
 			'single_level_container' : '.minnpost-membership-member-level',
 			'single_level_summary_selector' : '.member-level-brief',
