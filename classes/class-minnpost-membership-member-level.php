@@ -50,12 +50,13 @@ class MinnPost_Membership_Member_Level {
 	/**
 	* Get all, or one, of the member levels
 	*
-	* @param  int     $id
+	* @param  string  $value
 	* @param  boool   $show_nonmember
+	* @param  string  $field
 	* @return array $member_levels
 	*
 	*/
-	public function get_member_levels( $id = '', $show_nonmember = false ) {
+	public function get_member_levels( $value = '', $show_nonmember = false, $field = 'id' ) {
 		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
 		if ( true !== $show_nonmember ) {
 			$key = array_search( 'non-member', array_column( $member_levels, 'slug' ) );
@@ -80,8 +81,13 @@ class MinnPost_Membership_Member_Level {
 			$cached = $this->cache->cache_set( $call, $member_levels );
 		}*/
 
-		if ( '' !== $id ) {
-			return $member_levels[ $id ];
+		if ( '' !== $value ) {
+			if ( 'id' === $field ) {
+				return $member_levels[ $value ];
+			} else {
+				$key = array_search( $value, array_column( $member_levels, $field ) );
+				return $member_levels[ $key ];
+			}
 		}
 		return $member_levels;
 	}
@@ -215,16 +221,18 @@ class MinnPost_Membership_Member_Level {
 	/**
 	* Calculate level for an amount/frequency
 	*
-	* @param array $record
+	* @param int $amount
+	* @param string $frequency
+	* @param string $key
 	* @return string $range
 	*
 	*/
-	public function calculate_level( $amount = '', $frequency = 'one-time' ) {
+	public function calculate_level( $amount = '', $frequency = 'one-time', $key = 'id' ) {
 		$level = '';
 		if ( '' === $frequency ) {
 			$frequency = 'one-time';
 		}
-		$frequency       = $this->get_frequency_options( $frequency, 'id' )['value'];
+		$frequency       = $this->get_frequency_options( $frequency, $key )['value'];
 		$all_levels      = $this->get_member_levels();
 		$amount_per_year = $this->get_frequency_values( $frequency )['times_per_year'];
 		$monthly_amount  = floor( ( $amount * $amount_per_year ) / 12 );
