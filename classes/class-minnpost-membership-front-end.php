@@ -21,6 +21,7 @@ class MinnPost_Membership_Front_End {
 	protected $version;
 	protected $slug;
 	protected $member_levels;
+	protected $user_info;
 	protected $cache;
 
 	/**
@@ -29,16 +30,18 @@ class MinnPost_Membership_Front_End {
 	* @param string $option_prefix
 	* @param string $version
 	* @param string $slug
-	* @param array $member_levels
+	* @param object $member_levels
+	* @param object $user_info
 	* @param object $cache
 	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $cache ) {
+	public function __construct( $option_prefix, $version, $slug, $member_levels, $user_info, $cache ) {
 
 		$this->option_prefix = $option_prefix;
 		$this->version       = $version;
 		$this->slug          = $slug;
 		$this->member_levels = $member_levels;
+		$this->user_info     = $user_info;
 		$this->cache         = $cache;
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
@@ -323,10 +326,10 @@ class MinnPost_Membership_Front_End {
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( '1' !== $disable_javascript ) {
 			wp_enqueue_script( $this->slug . '-front-end', plugins_url( '../assets/js/' . $this->slug . '-front-end.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
-			/*$minnpost_membership_data = array(
-				'current_user' => array( $this, 'get_user_membership_info' ),
+			$minnpost_membership_data = array(
+				'current_user' => $this->get_user_membership_info(),
 			);
-			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );*/
+			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
 			wp_add_inline_script( $this->slug . '-front-end', "
 				jQuery(document).ready(function ($) {
 					$('.m-form-membership').minnpost_membership();
@@ -335,6 +338,13 @@ class MinnPost_Membership_Front_End {
 		if ( '1' !== $disable_css ) {
 			wp_enqueue_style( $this->slug . '-front-end', plugins_url( '../assets/css/' . $this->slug . '-front-end.min.css', __FILE__ ), array(), $this->version, 'all' );
 		}
+	}
+
+	public function get_user_membership_info() {
+		$user_membership_info = array(
+			'current_user' => $this->user_info->user_membership_info(),
+		);
+		return $user_membership_info;
 	}
 
 	/**
