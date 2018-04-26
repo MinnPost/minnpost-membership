@@ -40,6 +40,9 @@ class MinnPost_Membership_User_Info {
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
+		// include the non member level for this purpose
+		$this->all_member_levels = $this->member_levels->get_member_levels( '', true );
+
 		$this->add_actions();
 
 	}
@@ -53,6 +56,29 @@ class MinnPost_Membership_User_Info {
 
 		}
 
+	}
+
+	public function user_member_level( $user_id = 0 ) {
+
+		$user_member_level = array(
+			'is_nonmember' => true,
+		);
+
+		// if the user id is not a user, they are not a member
+		if ( 0 === $user_id ) {
+			return $user_member_level;
+		}
+
+		$user_info  = get_userdata( $user_id );
+		$user_roles = $user_info->roles;
+
+		if ( is_array( $user_roles ) && ! empty( $user_roles ) ) {
+			$highest_user_role_name = $user_roles[ max( array_keys( $user_roles ) ) ];
+			$highest_user_role_key  = array_search( $highest_user_role_name, array_column( $this->all_member_levels, 'slug' ) );
+			$user_member_level      = $this->all_member_levels[ $highest_user_role_key ];
+		}
+
+		return $user_member_level;
 	}
 
 }
