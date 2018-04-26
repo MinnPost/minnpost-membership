@@ -15,11 +15,33 @@
 		});
 	}
 
+	function toggleMembershipChangeFields() {
+		var $toggle = $('#minnpost_membership_support_post_form_change_for_members');
+		var fields = '.minnpost_membership_support_post_form_nochange, .minnpost_membership_support_post_form_change';
+		if ($toggle.is(':checked')) {
+			$(fields).show();
+		} else {
+			$(fields).hide();
+		}
+		$toggle.on('click', function(e) {
+			var checkbox = $(this);
+			if (checkbox.is(':checked')) {
+				$(fields).show();
+			} else {
+				$(fields).hide();
+			}
+		});
+	}
+
 	$(document).ready(function() {
 
 		// show or hide member level fields
 		if ($('.minnpost_membership_use_member_levels').length > 0 ) {
 			showMemberLevelFields();
+		}
+
+		if ( $('.minnpost_membership_support_post_form_change_for_members').length > 0 ) {
+			toggleMembershipChangeFields();
 		}
 
 		$('.minnpost-membership-general-settings').minnpost_membership({
