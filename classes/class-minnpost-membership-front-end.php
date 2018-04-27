@@ -289,7 +289,7 @@ class MinnPost_Membership_Front_End {
 		$post_form_text_default = get_option( $this->option_prefix . 'support_post_form_nonmembers', '' );
 		$post_form_text_default = str_replace( '$level', '<strong>' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text_default );
 
-		$change_for_members = get_option( $this->option_prefix . 'support_post_form_change_for_members', false );
+		$change_for_members = $this->user_info->change_for_members;
 
 		$post_form_text_changed = get_option( $this->option_prefix . 'support_post_form_change', '' );
 		$post_form_text_changed = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text_changed );

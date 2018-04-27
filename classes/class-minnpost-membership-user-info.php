@@ -20,6 +20,8 @@ class MinnPost_Membership_User_Info {
 	protected $member_levels;
 	protected $cache;
 
+	public $change_for_members;
+
 	/**
 	* Constructor which sets up user information related to membership
 	*
@@ -37,6 +39,8 @@ class MinnPost_Membership_User_Info {
 		$this->slug          = $slug;
 		$this->member_levels = $member_levels;
 		$this->cache         = $cache;
+
+		$this->change_for_members = get_option( $this->option_prefix . 'support_post_form_change_for_members', false );
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
