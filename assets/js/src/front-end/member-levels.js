@@ -115,11 +115,10 @@
 					frequency = frequency_string.split(' - ')[1];
 					frequency_name = frequency_string.split(' - ')[0];
 				    if ( typeof level_number !== 'undefined' ) {
-						amount = $( options.amount_selector_in_levels + '[data-member-level-number="' + level_number + '"]').val();
+
 						$( options.single_level_summary_selector, element).removeClass( 'flipped' );
 						$( options.single_level_container, element).removeClass( 'active' );
 						$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
-						that.changeFrequency( frequency_string, level, element, options );
 
 						if ( frequency == 1 ) {
 							$( options.amount_selector_in_levels).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-yearly' ) );
@@ -127,7 +126,11 @@
 							$( options.amount_selector_in_levels).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-monthly' ) );
 						}
 
+						amount = $( options.amount_selector_in_levels + '[data-member-level-number="' + level_number + '"]').val();
+
 						level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
+						that.changeFrequency( frequency_string, level['name'], element, options );
+
 					} else if ( $( options.level_frequency_text_selector ).length > 0 ) {
 						$(options.level_frequency_text_selector, element).text(frequency_name);
 						$( options.single_level_container ).each( function() {
