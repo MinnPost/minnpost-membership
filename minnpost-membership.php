@@ -169,7 +169,7 @@ class MinnPost_Membership {
 	 */
 	public function front_end() {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-front-end.php' );
-		$front_end = new MinnPost_Membership_Front_End( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
+		$front_end = new MinnPost_Membership_Front_End( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->cache );
 		return $front_end;
 	}
 
