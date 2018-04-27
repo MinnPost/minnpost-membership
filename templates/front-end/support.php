@@ -7,6 +7,7 @@ get_header(); ?>
 <?php
 global $minnpost_membership;
 $url_params = $minnpost_membership->front_end->process_parameters( 'get' );
+$user_id    = get_current_user_id();
 ?>
 
 	<div id="primary" class="m-layout-membership o-support">
@@ -103,9 +104,14 @@ $url_params = $minnpost_membership->front_end->process_parameters( 'get' );
 								<?php endif; ?>
 							</div>
 						</fieldset>
+
+						<?php
+						$on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
+						$new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
+						$minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
+						?>
 					</section>
 
-					then the membership indicator
 
 					then the give button
 					then the learn about benefits (make sure it gets all the query values)
