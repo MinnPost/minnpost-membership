@@ -75,16 +75,12 @@ class MinnPost_Membership_User_Info {
 		$user_info = get_userdata( $user_id );
 
 		$user_membership_info['member_level'] = $this->user_member_level( $user_id )['slug'];
-		/*
-		$page_amount = variable_get('minnpost_support_page_form_start', 1) * $defaultfrequency;
-		$prior_year_amount = $account['prior_year_contributions'];
-		$coming_year_amount = $account['coming_year_contributions'];
-		$annual_recurring_amount = $account['annual_recurring_amount'];
-		*/
 
+		// i do not think these are the ideal fields, but for now we'll keep them
 		$user_membership_info['prior_year_contributions']  = isset( $user_info->_prior_year_contributions ) ? $user_info->_prior_year_contributions : 0;
 		$user_membership_info['annual_recurring_amount']   = isset( $user_info->_annual_recurring_amount ) ? $user_info->_annual_recurring_amount : 0;
 		$user_membership_info['coming_year_contributions'] = isset( $user_info->_coming_year_contributions ) ? $user_info->_coming_year_contributions : 0;
+
 		return $user_membership_info;
 	}
 
@@ -116,6 +112,45 @@ class MinnPost_Membership_User_Info {
 		}
 
 		return $user_member_level;
+	}
+
+	/**
+	* Get the new amount for the given user, based on their past info and what is currently on the page
+	*
+	* @param int $user_id
+	* @param int $on_page_amount
+	* @param array $on_page_frequency
+	* @return int $new_amount_this_year
+	*
+	*/
+	public function get_user_new_amount( $user_id = 0, $on_page_amount, $on_page_frequency ) {
+		$new_amount_this_year = 0;
+
+		if ( 0 === $user_id ) {
+			return $new_amount_this_year;
+		}
+
+		// get member info based on salesforce
+		// i do not think these are the ideal fields, but for now we'll keep them
+		$user_member_info        = $this->user_membership_info( $user_id );
+		$prior_year_amount       = $user_member_info['prior_year_contributions'];
+		$coming_year_amount      = $user_member_info['coming_year_contributions'];
+		$annual_recurring_amount = $user_member_info['annual_recurring_amount'];
+
+		// deal with on-page info
+		$frequency_values = $this->member_levels->get_frequency_values( $on_page_frequency['value'] );
+		$on_page_amount   = $on_page_amount * $frequency_values['times_per_year'];
+
+		// use formula for calculating membership level here
+		if ( 'one-time' === $on_page_frequency['id'] ) {
+			$prior_year_amount = $prior_year_amount + $on_page_amount;
+		} else {
+			$annual_recurring_amount = $annual_recurring_amount + $on_page_amount;
+		}
+
+		$new_amount_this_year = max( $prior_year_amount, $coming_year_amount, $annual_recurring_amount );
+
+		return $new_amount_this_year;
 	}
 
 }
