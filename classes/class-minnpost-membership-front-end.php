@@ -244,6 +244,81 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Echo post form text
+	*
+	* @param int $page_amount
+	* @param array $frequency
+	* @param int $new_amount_this_year
+	* @param int $user_id
+	*
+	*/
+	public function post_form_text( $page_amount, $frequency, $new_amount_this_year, $user_id = 0 ) {
+
+		$post_form_text_display = $this->get_post_form_text( $page_amount, $frequency, $new_amount_this_year, $user_id );
+
+		if ( '' !== $post_form_text_display ) {
+			echo $post_form_text_display;
+		}
+
+	}
+
+
+	/**
+	* Get post form text
+	*
+	* @param int $page_amount
+	* @param array $frequency
+	* @param int $amount_this_year
+	* @param int $user_id
+	*
+	* @return string $post_form_text_display
+	*
+	*/
+	private function get_post_form_text( $page_amount, $frequency, $amount_this_year, $user_id = 0 ) {
+		$post_form_text_display = '';
+
+		if ( 0 === $user_id ) {
+			return $post_form_text_display;
+		}
+
+		$user_member_level = $this->user_info->user_member_level( $user_id );
+
+		$page_level_slug = $this->member_levels->calculate_level( $page_amount, $frequency['value'], 'value', $amount_this_year );
+		$page_level      = $this->member_levels->get_member_levels( $page_level_slug, true, 'slug' );
+
+		$post_form_text_default = get_option( $this->option_prefix . 'support_post_form_nonmembers', '' );
+		$change_for_members     = get_option( $this->option_prefix . 'support_post_form_change_for_members', false );
+
+		if ( '1' === $change_for_members ) {
+			if ( $page_level['name'] !== $user_member_level['name'] ) {
+				$post_form_text = get_option( $this->option_prefix . 'support_post_form_change', '' );
+			} else {
+				$post_form_text = get_option( $this->option_prefix . 'support_post_form_nochange', '' );
+			}
+		} else {
+			$post_form_text = $post_form_text_default;
+		}
+
+		$post_form_text = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text );
+		$post_form_text = str_replace( '$new_level', '<strong class="a-new-level">' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text );
+		$post_form_text = str_replace( '$level', '<strong>' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text );
+
+		$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
+
+		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
+			$post_form_text_display .= '<a href="' . get_option( $this->option_prefix . 'support_post_form_link_url', '' ) . '">';
+		}
+		$post_form_text_display .= $post_form_text;
+		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
+			$post_form_text_display .= '</a>';
+		}
+
+		$post_form_text_display .= '</p>';
+
+		return $post_form_text_display;
+	}
+
+	/**
 	* Get correct template path for URLs from plugin or theme folder
 	*
 	* @param string $url
