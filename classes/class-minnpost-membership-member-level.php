@@ -224,18 +224,25 @@ class MinnPost_Membership_Member_Level {
 	* @param int $amount
 	* @param string $frequency
 	* @param string $key
+	* @param int $amount_per_year
 	* @return string $range
 	*
 	*/
-	public function calculate_level( $amount = '', $frequency = 'one-time', $key = 'id' ) {
+	public function calculate_level( $amount = '', $frequency = 'one-time', $key = 'id', $amount_per_year = 0 ) {
 		$level = '';
 		if ( '' === $frequency ) {
 			$frequency = 'one-time';
 		}
-		$frequency       = $this->get_frequency_options( $frequency, $key )['value'];
-		$all_levels      = $this->get_member_levels();
-		$amount_per_year = $this->get_frequency_values( $frequency )['times_per_year'];
-		$monthly_amount  = floor( ( $amount * $amount_per_year ) / 12 );
+		$frequency  = $this->get_frequency_options( $frequency, $key )['value'];
+		$all_levels = $this->get_member_levels();
+		if ( 0 === $amount_per_year ) {
+			$times_per_year = $this->get_frequency_values( $frequency )['times_per_year'];
+			$monthly_amount = floor( ( $amount * $times_per_year ) / 12 );
+		} else {
+			error_log( 'amount per year is ' . $amount_per_year );
+			$monthly_amount = floor( $amount_per_year / 12 );
+		}
+
 		foreach ( $all_levels as $level ) {
 
 			$minimum_monthly = $level['minimum_monthly_amount'];
