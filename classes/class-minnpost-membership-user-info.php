@@ -77,9 +77,11 @@ class MinnPost_Membership_User_Info {
 		$user_membership_info['member_level'] = $this->user_member_level( $user_id )['slug'];
 
 		// i do not think these are the ideal fields, but for now we'll keep them
-		$user_membership_info['prior_year_contributions']  = isset( $user_info->_prior_year_contributions ) ? $user_info->_prior_year_contributions : 0;
-		$user_membership_info['annual_recurring_amount']   = isset( $user_info->_annual_recurring_amount ) ? $user_info->_annual_recurring_amount : 0;
-		$user_membership_info['coming_year_contributions'] = isset( $user_info->_coming_year_contributions ) ? $user_info->_coming_year_contributions : 0;
+		$user_membership_info['previous_amount'] = array(
+			'prior_year_contributions'  => isset( $user_info->_prior_year_contributions ) ? $user_info->_prior_year_contributions : 0,
+			'annual_recurring_amount'   => isset( $user_info->_annual_recurring_amount ) ? $user_info->_annual_recurring_amount : 0,
+			'coming_year_contributions' => isset( $user_info->_coming_year_contributions ) ? $user_info->_coming_year_contributions : 0,
+		);
 
 		// i think ideally we should be passing just one value here, which we can then modify based on what is happening on the page to calculate stuff.
 
@@ -135,9 +137,10 @@ class MinnPost_Membership_User_Info {
 		// get member info based on salesforce
 		// i do not think these are the ideal fields, but for now we'll keep them
 		$user_member_info        = $this->user_membership_info( $user_id );
-		$prior_year_amount       = $user_member_info['prior_year_contributions'];
-		$coming_year_amount      = $user_member_info['coming_year_contributions'];
-		$annual_recurring_amount = $user_member_info['annual_recurring_amount'];
+		$previous_amount         = $user_member_info['previous_amount'];
+		$prior_year_amount       = $previous_amount['prior_year_contributions'];
+		$coming_year_amount      = $previous_amount['coming_year_contributions'];
+		$annual_recurring_amount = $previous_amount['annual_recurring_amount'];
 
 		// deal with on-page info
 		$frequency_values = $this->member_levels->get_frequency_values( $on_page_frequency['value'] );
