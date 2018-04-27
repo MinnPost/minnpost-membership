@@ -512,18 +512,6 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['support_button_text'] = array(
-			'title'    => __( 'Button text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
 		$settings['support_post_form_nonmembers'] = array(
 			'title'    => __( 'Post form text - non-members', 'minnpost-membership' ),
 			'callback' => $callbacks['textarea'],
@@ -590,8 +578,32 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['support_post_form_benefit_link_text'] = array(
-			'title'    => __( 'Post form benefit link text', 'minnpost-membership' ),
+		$settings['support_button_text'] = array(
+			'title'    => __( 'Button text', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_form_link_text_next_to_button'] = array(
+			'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_form_link_url_next_to_button'] = array(
+			'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => $this_section,
 			'section'  => $this_section,

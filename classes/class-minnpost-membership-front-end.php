@@ -320,7 +320,7 @@ class MinnPost_Membership_Front_End {
 		}
 
 		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '<a href="' . get_option( $this->option_prefix . 'support_post_form_link_url', '' ) . '">';
+			$post_form_text_display .= '<a href="' . esc_url( get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) . '">';
 		}
 		$post_form_text_display .= $post_form_text;
 		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
@@ -330,6 +330,16 @@ class MinnPost_Membership_Front_End {
 		$post_form_text_display .= '</p>';
 
 		return $post_form_text_display;
+	}
+
+	/**
+	* Display the link next to the main button
+	*
+	*/
+	public function link_next_to_button() {
+		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_text_next_to_button', '' ) && '' !== get_option( $this->option_prefix . 'support_post_form_link_url_next_to_button', '' ) ) {
+			echo '<a href="' . esc_url( get_option( $this->option_prefix . 'support_post_form_link_url_next_to_button', '' ) ) . '">' . get_option( $this->option_prefix . 'support_post_form_link_text_next_to_button', '' ) . '</a>';
+		}
 	}
 
 	/**
