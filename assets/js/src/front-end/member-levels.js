@@ -85,15 +85,23 @@
 				frequency = frequency_string.split(' - ')[1];
 				frequency_name = frequency_string.split(' - ')[0];
 
-			    level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
+			    level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
 			    $(options.frequency_selector_standalone).change( function() {
-			      level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), $( options.frequency_selector_standalone + ':checked' ).val(), previous_amount, element, options );
+
+			    	frequency_string = $( options.frequency_selector_standalone + ':checked').val()
+					frequency = frequency_string.split(' - ')[1];
+					frequency_name = frequency_string.split(' - ')[0];
+
+			      level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), frequency_name, previous_amount, element, options );
 			    });
 
 			    $(options.amount_selector_standalone).bind('keyup mouseup', function() {
+			    	frequency_string = $( options.frequency_selector_standalone + ':checked').val()
+					frequency = frequency_string.split(' - ')[1];
+					frequency_name = frequency_string.split(' - ')[0];
 			      if($(this).data('last-value') != $(this).val()) {
 			        $(this).data('last-value', $(this).val());
-			        level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), $( options.frequency_selector_standalone + ':checked').val(), previous_amount, element, options );
+			        level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), frequency_name, previous_amount, element, options );
 			      };
 			    });
 			}
@@ -111,7 +119,6 @@
 						$( options.single_level_summary_selector, element).removeClass( 'flipped' );
 						$( options.single_level_container, element).removeClass( 'active' );
 						$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
-						level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
 						that.changeFrequency( frequency_string, level, element, options );
 
 						if ( frequency == 1 ) {
@@ -120,13 +127,14 @@
 							$( options.amount_selector_in_levels).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-monthly' ) );
 						}
 
+						level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
 					} else if ( $( options.level_frequency_text_selector ).length > 0 ) {
 						$(options.level_frequency_text_selector, element).text(frequency_name);
 						$( options.single_level_container ).each( function() {
 							level_number = $(options.amount_selector_in_levels, $(this)).data('member-level-number');
 							if ( typeof level_number !== 'undefined' ) {
 								amount = $( options.amount_selector_in_levels, $(this) ).val();
-								level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
+								level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
 							}
 						});
 					}
@@ -144,7 +152,7 @@
 					frequency_string = $(options.frequency_selector_in_levels, $(this).parent() ).val();
 					frequency = frequency_string.split(' - ')[1];
 					amount = $( options.amount_selector_in_levels + '[data-member-level-number="' + level_number + '"]').val();
-					level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
+					level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
 					event.preventDefault();
 				});
 			}
