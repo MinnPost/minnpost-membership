@@ -112,6 +112,7 @@
 			        that.showNewLevel( element, options, level );
 			      };
 			    });
+
 			}
 			if ( $( options.levels_container ).length > 0 ) {
 				$( options.single_level_summary_selector, element ).each(function() {
