@@ -524,8 +524,74 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['support_benefits_link_text'] = array(
-			'title'    => __( 'Benefits link text', 'minnpost-membership' ),
+		$settings['support_post_form_nonmembers'] = array(
+			'title'    => __( 'Post form text - non-members', 'minnpost-membership' ),
+			'callback' => $callbacks['textarea'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level',
+				'constant' => '',
+				'type'     => 'text',
+				'rows'     => 3,
+				'cols'     => '',
+			),
+		);
+
+		$settings['support_post_form_link_url'] = array(
+			'title'    => __( 'Post form link URL', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => 'If present, this URL will wrap the above (or below) text value.',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support_post_form_change_for_members'] = array(
+			'title'    => __( 'Change post-form text for members?', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.',
+				'constant' => '',
+				'type'     => 'checkbox',
+			),
+		);
+
+		$settings['support_post_form_nochange'] = array(
+			'title'    => __( 'Post form text - no change', 'minnpost-membership' ),
+			'callback' => $callbacks['textarea'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+				'constant' => '',
+				'type'     => 'text',
+				'rows'     => 5,
+				'cols'     => '',
+			),
+		);
+
+		$settings['support_post_form_change'] = array(
+			'title'    => __( 'Post form text - change', 'minnpost-membership' ),
+			'callback' => $callbacks['textarea'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+				'constant' => '',
+				'type'     => 'text',
+				'rows'     => 5,
+				'cols'     => '',
+			),
+		);
+
+		$settings['support_post_form_benefit_link_text'] = array(
+			'title'    => __( 'Post form benefit link text', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => $this_section,
 			'section'  => $this_section,
