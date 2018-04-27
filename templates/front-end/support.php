@@ -96,7 +96,7 @@ $url_params = $minnpost_membership->front_end->process_parameters( 'get' );
 											?>
 											<div class="m-form-item">
 												<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
-												<label for="frequencies-<?php echo $id_key; ?>"  class="a-frequency-option"><?php echo $option['text']; ?></label>
+												<label for="frequencies-<?php echo $id_key; ?>"  class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
 											</div>
 										<?php endforeach; ?>
 									</div>
