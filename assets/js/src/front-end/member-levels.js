@@ -80,7 +80,7 @@
 			var frequency_string = '';
 			var frequency = '';
 			var frequency_name = '';
-			if ( typeof minnpost_membership_data !== 'undefined' ) {
+			if ( typeof minnpost_membership_data !== 'undefined' && $( options.user_current_level ).length > 0 ) {
 				previous_amount = minnpost_membership_data.current_user.previous_amount;
 			}
 			if ( $( options.amount_selector_standalone ).length > 0 ) {
