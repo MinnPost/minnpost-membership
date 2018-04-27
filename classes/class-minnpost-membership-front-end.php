@@ -425,7 +425,8 @@ class MinnPost_Membership_Front_End {
 
 	public function get_user_membership_info() {
 		$user_membership_info = array(
-			'current_user' => $this->user_info->user_membership_info( get_current_user_id() ),
+			'member_level_prefix' => $this->member_levels->member_level_prefix,
+			'current_user'        => $this->user_info->user_membership_info( get_current_user_id() ),
 		);
 		return $user_membership_info;
 	}

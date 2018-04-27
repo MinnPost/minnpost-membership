@@ -19,6 +19,8 @@ class MinnPost_Membership_Member_Level {
 	protected $slug;
 	protected $cache;
 
+	public $member_level_prefix;
+
 	/**
 	* Constructor which sets up member levels
 	*
@@ -34,6 +36,8 @@ class MinnPost_Membership_Member_Level {
 		$this->version       = $version;
 		$this->slug          = $slug;
 		$this->cache         = $cache;
+
+		$this->member_level_prefix = 'member_';
 
 		$this->add_actions();
 
@@ -347,7 +351,7 @@ class MinnPost_Membership_Member_Level {
 	*/
 	private function setup_member_level_data( $data ) {
 		if ( ! isset( $data['is_nonmember'] ) || 1 !== intval( $data['is_nonmember'] ) ) {
-			$prefix = 'member_';
+			$prefix = $this->member_level_prefix;
 		} else {
 			$prefix = '';
 		}
