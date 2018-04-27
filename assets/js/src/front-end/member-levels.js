@@ -84,19 +84,16 @@
 				frequency_string = $(options.frequency_selector_standalone + ':checked').val();
 				frequency = frequency_string.split(' - ')[1];
 				frequency_name = frequency_string.split(' - ')[0];
-				console.log( 'there is an amount field. value is ' + amount );
+
 			    level = that.checkLevel( amount, frequency, frequency_string, previous_amount, element, options );
-			    console.log('initial level is ' + level);
 			    $(options.frequency_selector_standalone).change( function() {
 			      level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), $( options.frequency_selector_standalone + ':checked' ).val(), previous_amount, element, options );
-			      console.log('input radio change level is ' + level);
 			    });
 
 			    $(options.amount_selector_standalone).bind('keyup mouseup', function() {
 			      if($(this).data('last-value') != $(this).val()) {
 			        $(this).data('last-value', $(this).val());
 			        level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), $( options.frequency_selector_standalone + ':checked').val(), previous_amount, element, options );
-			        console.log('input text change level is ' + level);
 			      };
 			    });
 			}
