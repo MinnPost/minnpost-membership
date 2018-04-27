@@ -7,6 +7,10 @@
 		'debug' : false, // this can be set to true on page level options
 		'amount_selector_standalone' : '#amount-item #amount',
 		'frequency_selector_standalone' : '.m-membership-fast-select input[type="radio"]',
+		'level_viewer_container' : '.a-show-level',
+		'level_name' : '.a-level',
+		'user_current_level' : '.a-current-level',
+		'user_new_level' : '.a-new-level',
 		'amount_viewer' : '.amount h3',
 		'frequency_selector_in_levels' : '.a-form-item-membership-frequency',
 		'frequency_selector_in_levels_type' : 'select',
@@ -86,6 +90,8 @@
 				frequency_name = frequency_string.split(' - ')[0];
 
 			    level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
+			    that.showNewLevel( element, options, level );
+
 			    $(options.frequency_selector_standalone).change( function() {
 
 			    	frequency_string = $( options.frequency_selector_standalone + ':checked').val()
@@ -93,6 +99,7 @@
 					frequency_name = frequency_string.split(' - ')[0];
 
 			      level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), frequency_name, previous_amount, element, options );
+			      that.showNewLevel( element, options, level );
 			    });
 
 			    $(options.amount_selector_standalone).bind('keyup mouseup', function() {
@@ -102,6 +109,7 @@
 			      if($(this).data('last-value') != $(this).val()) {
 			        $(this).data('last-value', $(this).val());
 			        level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), frequency_name, previous_amount, element, options );
+			        that.showNewLevel( element, options, level );
 			      };
 			    });
 			}
@@ -208,6 +216,40 @@
 			}
 			return level;
 		}, // end getLevel
+
+		showNewLevel: function( element, options, level ) {
+			var member_level_prefix = '';
+			var old_level = '';
+			var level_viewer_container_selector = options.level_viewer_container; // this should change when we replace the text, if there is a link inside it
+			var decodeHtmlEntity = function( str ) {
+				return str.replace( /&#(\d+);/g, function( match, dec ) {
+					return String.fromCharCode( dec );
+				});
+			};
+			if ( typeof minnpost_membership_data !== 'undefined' ) {
+				member_level_prefix = minnpost_membership_data.member_level_prefix;
+			}
+
+			$(options.level_viewer_container).prop( 'class', 'a-show-level a-show-level-' + level['name'].toLowerCase() );
+
+			if ( minnpost_membership_data.current_user.member_level.length > 0 ) {
+
+				if ( 'a', $( options.level_viewer_container ).length > 0 ) {
+					level_viewer_container_selector = options.level_viewer_container + ' a';
+				}
+
+				old_level = minnpost_membership_data.current_user.member_level.replace( member_level_prefix, '' );
+
+				if ( old_level !== level['name'].toLowerCase() ) {
+					$( level_viewer_container_selector ).html( decodeHtmlEntity( $( options.level_viewer_container ).data( 'changed' ) ) );
+				} else {
+					$( level_viewer_container_selector ).html( decodeHtmlEntity( $( options.level_viewer_container ).data( 'not-changed' ) ) );
+				}
+			}
+
+			$(options.level_name, options.level_viewer_container).text( level['name'] );
+
+		}, // end showNewLevel
 
 		changeFrequency: function( selected, level, element, options ) {
 			$( options.single_level_summary_selector ).each( function() {
