@@ -219,6 +219,11 @@ class MinnPost_Membership_Front_End {
 					}
 				}
 
+				// if we're on a page without a level picker, the frequency is one field
+				if ( isset( $_POST['frequencies'] ) ) {
+					$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
+				}
+
 				// send the valid form data to the payment processor as url parameters
 				foreach ( $params as $key => $value ) {
 					if ( false !== $value ) {
