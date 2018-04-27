@@ -151,14 +151,12 @@
 		}, // end levelFlipper
 
 		checkLevel: function( amount, frequency, type, previous_amount, element, options ) {
-		  var thisyear = amount * frequency;
+		  var thisyear = parseInt( amount ) * parseInt( frequency );
 		  var level = '';
-
 		  if ( typeof previous_amount !== 'undefined' && previous_amount !== '' ) {
-		    var prior_year_amount = previous_amount.prior_year_amount;
-		    var coming_year_amount = previous_amount.coming_year_amount;
-		    var annual_recurring_amount = previous_amount.annual_recurring_amount;
-
+		    var prior_year_amount = parseInt( previous_amount.prior_year_contributions );
+		    var coming_year_amount = parseInt( previous_amount.coming_year_contributions );
+		    var annual_recurring_amount = parseInt( previous_amount.annual_recurring_amount );
 		    // calculate member level formula
 		    if ( type === 'one-time' ) {
 		      prior_year_amount += thisyear;
@@ -174,7 +172,7 @@
 		  $('h2', options.single_level_summary_selector).each( function() {
 		    if ( $(this).text() == level['name'] ) {
 		      $( options.single_level_container, element).removeClass( 'active' );
-		      //var parent = $(this).parent().parent().addClass( 'active' );
+		      $(this).parent().parent().addClass( 'active' );
 		    }
 		  } );
 		  return level;
