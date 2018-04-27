@@ -233,7 +233,7 @@
 
 			$(options.level_viewer_container).prop( 'class', 'a-show-level a-show-level-' + level['name'].toLowerCase() );
 
-			if ( minnpost_membership_data.current_user.member_level.length > 0 ) {
+			if ( $( options.user_current_level ).length > 0 && minnpost_membership_data.current_user.member_level.length > 0 ) {
 
 				if ( 'a', $( options.level_viewer_container ).length > 0 ) {
 					level_viewer_container_selector = options.level_viewer_container + ' a';

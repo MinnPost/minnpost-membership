@@ -313,7 +313,11 @@ class MinnPost_Membership_Front_End {
 			return $post_form_text_display;
 		}
 
-		$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '" data-changed="' . htmlentities( $post_form_text_changed ) . '" data-not-changed="' . htmlentities( $post_form_text_not_changed ) . '">';
+		if ( '1' === $change_for_members ) {
+			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '" data-changed="' . htmlentities( $post_form_text_changed ) . '" data-not-changed="' . htmlentities( $post_form_text_not_changed ) . '">';
+		} else {
+			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
+		}
 
 		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
 			$post_form_text_display .= '<a href="' . get_option( $this->option_prefix . 'support_post_form_link_url', '' ) . '">';
