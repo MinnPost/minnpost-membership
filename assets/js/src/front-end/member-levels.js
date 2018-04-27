@@ -131,7 +131,7 @@
 						});
 					}
 
-					that.changeAmountPreview( frequency_string, level, element, options );
+					that.changeAmountPreview( frequency_string, level['name'], element, options );
 
 				});
 			}
@@ -153,7 +153,6 @@
 		checkLevel: function( amount, frequency, type, previous_amount, element, options ) {
 		  var thisyear = amount * frequency;
 		  var level = '';
-		  var level_number = '';
 
 		  if ( typeof previous_amount !== 'undefined' && previous_amount !== '' ) {
 		    var prior_year_amount = previous_amount.prior_year_amount;
@@ -170,45 +169,36 @@
 		    thisyear = Math.max( prior_year_amount, coming_year_amount, annual_recurring_amount );
 		  }
 
-		  if ( thisyear > 0 && thisyear < 60 ) {
-		    level = 'Bronze';
-		    level_number = 1;
-		  }
-		  else if (thisyear > 59 && thisyear < 120) {
-		    level = 'Silver';
-		    level_number = 2;
-		  } else if (thisyear > 119 && thisyear < 240) {
-		    level = 'Gold';
-		    level_number = 3;
-		  } else if (thisyear > 239) {
-		    level = 'Platinum';
-		    level_number = 4;
-		  }
-		  //console.log('level is ' + level + ' and amount is ' + thisyear);
-		  $('.fast-select .level').text(level);
-		  $('.fast-select .show-level').attr('class', 'show-level ' + level_number);
-
-		  if ( $( '.current-level' ).length > 0 ) {
-		    //console.dir('compare ' + $('.current-level').text().replace(/(<([^>]+)>)/ig,'') + ' to ' + $('.new-level').text().replace(/(<([^>]+)>)/ig,''));
-		    if ( $('.current-level').text().replace(/(<([^>]+)>)/ig,'') != $('.new-level').text().replace(/(<([^>]+)>)/ig,'') ) {
-		      $('.show-level .change').show();
-		      $('.show-level .nochange').hide();
-		    } else {
-		      $('.show-level .change').hide();
-		      $('.show-level .nochange').show();
-		    }
-		  }
+		  level = this.getLevel( thisyear );
 
 		  $('h2', options.single_level_summary_selector).each( function() {
-		    //console.log('this text is ' + $(this).text() + ' and the level is ' + level);
-		    if ( $(this).text() == level ) {
+		    if ( $(this).text() == level['name'] ) {
 		      $( options.single_level_container, element).removeClass( 'active' );
 		      //var parent = $(this).parent().parent().addClass( 'active' );
 		    }
 		  } );
-		  return level.toLowerCase();
+		  return level;
 
 		}, // end checkLevel
+
+		getLevel: function( thisyear ) {
+			var level = [];
+			if ( thisyear > 0 && thisyear < 60 ) {
+				level['name'] = 'Bronze';
+				level['number'] = 1;
+			}
+			else if (thisyear > 59 && thisyear < 120) {
+				level['name'] = 'Silver';
+				level['number'] = 2;
+			} else if (thisyear > 119 && thisyear < 240) {
+				level['name'] = 'Gold';
+				level['number'] = 3;
+			} else if (thisyear > 239) {
+				level['name'] = 'Platinum';
+				level['number'] = 4;
+			}
+			return level;
+		}, // end getLevel
 
 		changeFrequency: function( selected, level, element, options ) {
 			$( options.single_level_summary_selector ).each( function() {
