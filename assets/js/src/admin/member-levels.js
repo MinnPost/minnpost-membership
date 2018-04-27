@@ -44,7 +44,7 @@
 			toggleMembershipChangeFields();
 		}
 
-		$('.minnpost-membership-general-settings').minnpost_membership({
+		$('.minnpost-membership-general-settings').minnpostMembership({
 			'amount_viewer' : '.amount h5',
 			'frequency_selector_in_levels' : 'input[name="minnpost_membership_default_frequency[]"]',
 			'frequency_selector_in_levels_type' : 'radio',
