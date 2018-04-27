@@ -81,6 +81,8 @@ class MinnPost_Membership_User_Info {
 		$user_membership_info['annual_recurring_amount']   = isset( $user_info->_annual_recurring_amount ) ? $user_info->_annual_recurring_amount : 0;
 		$user_membership_info['coming_year_contributions'] = isset( $user_info->_coming_year_contributions ) ? $user_info->_coming_year_contributions : 0;
 
+		// i think ideally we should be passing just one value here, which we can then modify based on what is happening on the page to calculate stuff.
+
 		return $user_membership_info;
 	}
 
