@@ -415,7 +415,7 @@ class MinnPost_Membership_Front_End {
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
 			wp_add_inline_script( $this->slug . '-front-end', "
 				jQuery(document).ready(function ($) {
-					$('.m-form-membership').minnpost_membership();
+					$('.m-form-membership').minnpostMembership();
 				});" );
 		}
 		if ( '1' !== $disable_css ) {

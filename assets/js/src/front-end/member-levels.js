@@ -2,7 +2,7 @@
 ;(function ( $, window, document, undefined ) {
 
 	// Create the defaults once
-	var pluginName = 'minnpost_membership',
+	var pluginName = 'minnpostMembership',
 	defaults = {
 		'debug' : false, // this can be set to true on page level options
 		'amount_selector_standalone' : '#amount-item #amount',
