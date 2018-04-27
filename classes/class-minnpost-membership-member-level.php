@@ -239,7 +239,6 @@ class MinnPost_Membership_Member_Level {
 			$times_per_year = $this->get_frequency_values( $frequency )['times_per_year'];
 			$monthly_amount = floor( ( $amount * $times_per_year ) / 12 );
 		} else {
-			error_log( 'amount per year is ' . $amount_per_year );
 			$monthly_amount = floor( $amount_per_year / 12 );
 		}
 
