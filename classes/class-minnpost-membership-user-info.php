@@ -58,6 +58,43 @@ class MinnPost_Membership_User_Info {
 
 	}
 
+	/**
+	* Store the user's membership info to be passed around
+	*
+	* @param int $user_id
+	* @return array $user_info
+	*
+	*/
+	public function user_membership_info( $user_id = 0 ) {
+
+		$user_membership_info = array();
+		if ( 0 === $user_id ) {
+			return $user_membership_info;
+		}
+
+		$user_info = get_userdata( $user_id );
+
+		$user_membership_info['member_level'] = $this->user_member_level( $user_id )['slug'];
+		/*
+		$page_amount = variable_get('minnpost_support_page_form_start', 1) * $defaultfrequency;
+		$prior_year_amount = $account['prior_year_contributions'];
+		$coming_year_amount = $account['coming_year_contributions'];
+		$annual_recurring_amount = $account['annual_recurring_amount'];
+		*/
+
+		$user_membership_info['prior_year_contributions']  = isset( $user_info->_prior_year_contributions ) ? $user_info->_prior_year_contributions : 0;
+		$user_membership_info['annual_recurring_amount']   = isset( $user_info->_annual_recurring_amount ) ? $user_info->_annual_recurring_amount : 0;
+		$user_membership_info['coming_year_contributions'] = isset( $user_info->_coming_year_contributions ) ? $user_info->_coming_year_contributions : 0;
+		return $user_membership_info;
+	}
+
+	/**
+	* Store the user's member level info
+	*
+	* @param int $user_id
+	* @return array $user_member_level
+	*
+	*/
 	public function user_member_level( $user_id = 0 ) {
 
 		$user_member_level = array(
