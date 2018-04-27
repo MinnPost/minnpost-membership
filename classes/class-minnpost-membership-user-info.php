@@ -132,9 +132,13 @@ class MinnPost_Membership_User_Info {
 	*
 	*/
 	public function get_user_new_amount( $user_id = 0, $on_page_amount, $on_page_frequency ) {
-		$new_amount_this_year = 0;
 
-		if ( 0 === $user_id ) {
+		// deal with on-page info
+		$frequency_values     = $this->member_levels->get_frequency_values( $on_page_frequency['value'] );
+		$new_amount_this_year = $on_page_amount * $frequency_values['times_per_year'];
+
+		// if there is no logged in user, or if the settings say to ignore user's member data, go ahead and return this amount
+		if ( 0 === $user_id || '1' !== $this->change_for_members ) {
 			return $new_amount_this_year;
 		}
 
@@ -145,10 +149,6 @@ class MinnPost_Membership_User_Info {
 		$prior_year_amount       = $previous_amount['prior_year_contributions'];
 		$coming_year_amount      = $previous_amount['coming_year_contributions'];
 		$annual_recurring_amount = $previous_amount['annual_recurring_amount'];
-
-		// deal with on-page info
-		$frequency_values = $this->member_levels->get_frequency_values( $on_page_frequency['value'] );
-		$on_page_amount   = $on_page_amount * $frequency_values['times_per_year'];
 
 		// use formula for calculating membership level here
 		if ( 'one-time' === $on_page_frequency['id'] ) {
