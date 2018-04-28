@@ -77,10 +77,14 @@ global $minnpost_membership;
 												} else {
 													$default_frequency = $minnpost_membership->member_levels->get_frequency_options( $url_frequency, 'id' )['value'];
 													$frequency_values  = $minnpost_membership->member_levels->get_frequency_values( $default_frequency );
-													if ( 'month' !== $frequency_values['frequency_name'] ) {
-														$default_amount = $url_params['amount'] * $frequency_values['times_per_year'];
+													if ( $record['slug'] === $default_member_level ) {
+														if ( 'month' !== $frequency_values['frequency_name'] ) {
+															$default_amount = $url_params['amount'] * $frequency_values['times_per_year'];
+														} else {
+															$default_amount = $url_params['amount'];
+														}
 													} else {
-														$default_amount = $url_params['amount'];
+														$default_amount    = $record['starting_value'];
 													}
 												}
 												?>
