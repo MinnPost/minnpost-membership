@@ -620,7 +620,7 @@ class MinnPost_Membership_Admin {
 			'page'     => $this_section,
 			'section'  => $this_section,
 			'args'     => array(
-				'desc'          => '',
+				'desc'          => 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.',
 				'constant'      => '',
 				'type'          => 'text',
 				'rows'          => '5',

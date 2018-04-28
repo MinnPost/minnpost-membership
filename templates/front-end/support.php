@@ -118,8 +118,9 @@ $user_id    = get_current_user_id();
 						<?php $minnpost_membership->front_end->link_next_to_button(); ?>
 					</div>
 
-					then the heading
-					then the reasons
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ) ) : ?>
+						<?php echo get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ); ?>
+					<?php endif; ?>
 
 					<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
 
