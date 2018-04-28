@@ -145,34 +145,7 @@ global $minnpost_membership;
 							</fieldset>
 						<?php endif; ?>
 
-						<?php
-						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_text', '' ) ) {
-
-							$text          = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_text', '' );
-							$link          = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_url', '' );
-							$link_text     = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_text', '' );
-							$link_fragment = ltrim( get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_fragment', '' ), '#' );
-							$link_class    = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_class', '' );
-							$link_text     = get_option( $minnpost_membership->option_prefix . 'support-member-benefits_post_body_link_text', '' );
-
-							if ( '' !== $link && '' !== $link_text ) {
-								if ( '' !== $link_fragment ) {
-									$link .= '#' . $link_fragment;
-								}
-								if ( '' !== $link_class ) {
-									$class = ' class="' . $link_class . '"';
-								} else {
-									$class = '';
-								}
-
-								$link = '<a href="' . esc_url( $link ) . '"' . $class . '>' . $link_text . '</a>';
-							}
-
-							echo sprintf( '<h3 class="a-finish-strong">%1$s</h3>',
-								str_replace( $link_text, $link, $text )
-							);
-						}
-						?>
+						<?php $minnpost_membership->front_end->post_body_text_link( 'support-member-benefits' ); ?>
 
 						<?php
 						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) ) {

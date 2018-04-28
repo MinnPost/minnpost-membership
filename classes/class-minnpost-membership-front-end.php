@@ -378,6 +378,74 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Display the link after the body content
+	*
+	* @param string $page
+	*
+	*/
+	public function post_body_text_link( $page ) {
+		$link = $this->get_post_body_text_link( $page );
+		if ( '' !== $link ) {
+			echo $link;
+		}
+	}
+
+	/**
+	* Get the link after the body content
+	*
+	* @param string $page
+	* @return string $full_text
+	*
+	*/
+	private function get_post_body_text_link( $page ) {
+		$full_text = '';
+		if ( '' !== get_option( $this->option_prefix . $page . '_post_body_text_link', '' ) ) {
+
+			$text          = get_option( $this->option_prefix . $page . '_post_body_text_link', '' );
+			$url           = get_option( $this->option_prefix . $page . '_post_body_link_url', '' );
+			$link_text     = get_option( $this->option_prefix . $page . '_post_body_link_text', '' );
+			$link_fragment = ltrim( get_option( $this->option_prefix . $page . '_post_body_link_fragment', '' ), '#' );
+			$link_class    = get_option( $this->option_prefix . $page . '_post_body_link_class', '' );
+			$link_text     = get_option( $this->option_prefix . $page . '_post_body_link_text', '' );
+
+			$url = esc_url( $url );
+
+			$current_host = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_HOST );
+			$link_host    = parse_url( $url, PHP_URL_HOST );
+
+			if ( '' !== $url && '' !== $link_text ) {
+				if ( '' !== $link_fragment ) {
+					$url .= '#' . $link_fragment;
+				}
+				if ( '' !== $link_class ) {
+					$class = ' class="' . $link_class . '"';
+				} else {
+					$class = '';
+				}
+
+				// preserve valid form parameters
+				if ( '' === $link_host || $link_host === $current_host ) {
+					$url_params = $this->process_parameters( 'get' );
+					foreach ( $url_params as $key => $value ) {
+						if ( false !== $value ) {
+							$url = add_query_arg( $key, $value, $url );
+						}
+					}
+				}
+
+				$link = '<a href="' . $url . '"' . $class . '>' . $link_text . '</a>';
+			}
+
+			$link = str_replace( $link_text, $link, $text );
+
+			$full_text = '<h3 class="a-finish-strong">' . $link . '</h3>';
+
+		}
+
+		return $full_text;
+	}
+
+	/**
 	* Get correct template path for URLs from plugin or theme folder
 	*
 	* @param string $url

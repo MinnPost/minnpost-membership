@@ -615,7 +615,7 @@ class MinnPost_Membership_Admin {
 		);
 
 		$settings['support_post_body'] = array(
-			'title'    => __( 'Post body text', 'minnpost-membership' ),
+			'title'    => __( 'Post body content', 'minnpost-membership' ),
 			'callback' => $callbacks['editor'],
 			'page'     => $this_section,
 			'section'  => $this_section,
@@ -789,8 +789,8 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['support-member-benefits_post_body_text'] = array(
-			'title'    => __( 'Post body text', 'minnpost-membership' ),
+		$settings['support-member-benefits_post_body_text_link'] = array(
+			'title'    => __( 'Post body text link', 'minnpost-membership' ),
 			'callback' => $callbacks['textarea'],
 			'page'     => $this_section,
 			'section'  => $this_section,

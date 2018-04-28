@@ -118,48 +118,10 @@ $user_id    = get_current_user_id();
 						<?php $minnpost_membership->front_end->link_next_to_button(); ?>
 					</div>
 
-
-					then the give button
-					then the learn about benefits (make sure it gets all the query values)
-
 					then the heading
 					then the reasons
 
-					<?php
-					if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_text_link', '' ) ) {
-
-						$text          = get_option( $minnpost_membership->option_prefix . 'support_post_body_text_link', '' );
-						$link          = get_option( $minnpost_membership->option_prefix . 'support_post_body_link_url', '' );
-						$link_text     = get_option( $minnpost_membership->option_prefix . 'support_post_body_link_text', '' );
-						$link_fragment = ltrim( get_option( $minnpost_membership->option_prefix . 'support_post_body_link_fragment', '' ), '#' );
-						$link_class    = get_option( $minnpost_membership->option_prefix . 'support_post_body_link_class', '' );
-						$link_text     = get_option( $minnpost_membership->option_prefix . 'support_post_body_link_text', '' );
-
-						if ( '' !== $link && '' !== $link_text ) {
-							if ( '' !== $link_fragment ) {
-								$link .= '#' . $link_fragment;
-							}
-							if ( '' !== $link_class ) {
-								$class = ' class="' . $link_class . '"';
-							} else {
-								$class = '';
-							}
-
-							// preserve valid form parameters
-							foreach ( $url_params as $key => $value ) {
-								if ( false !== $value ) {
-									$link = add_query_arg( $key, $value, $link );
-								}
-							}
-
-							$link = '<a href="' . esc_url( $link ) . '"' . $class . '>' . $link_text . '</a>';
-						}
-
-						echo sprintf( '<h3 class="a-finish-strong">%1$s</h3>',
-							str_replace( $link_text, $link, $text )
-						);
-					}
-					?>
+					<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
 
 					<?php
 					if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link' ) ) {
