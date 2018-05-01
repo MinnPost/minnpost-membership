@@ -1094,6 +1094,32 @@ class MinnPost_Membership_Admin {
 			}
 		}
 
+		// /support/fan-club options
+		$this_section                       = 'fan-club';
+		$settings['support-fan-club_title'] = array(
+			'title'    => __( 'Page title', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-fan-club_body'] = array(
+			'title'    => __( 'Page body', 'minnpost-membership' ),
+			'callback' => $callbacks['editor'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
 		// /support/member-benefit-details options
 		$this_section                                     = 'member-benefit-details';
 		$settings['support-member-benefit-details_title'] = array(
