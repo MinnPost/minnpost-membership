@@ -1094,6 +1094,45 @@ class MinnPost_Membership_Admin {
 			}
 		}
 
+		// /support/partner-offers options
+		$this_section                             = 'partner-offers';
+		$settings['support-partner-offers_title'] = array(
+			'title'    => __( 'Page title', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-partner-offers_body'] = array(
+			'title'    => __( 'Page body', 'minnpost-membership' ),
+			'callback' => $callbacks['editor'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-partner-offers_eligible_levels'] = array(
+			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'type'     => 'select',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $this->get_member_level_options(),
+			),
+		);
+
 		// /support/fan-club options
 		$this_section                       = 'fan-club';
 		$settings['support-fan-club_title'] = array(
@@ -1117,6 +1156,19 @@ class MinnPost_Membership_Admin {
 				'desc'     => '',
 				'constant' => '',
 				'type'     => 'text',
+			),
+		);
+
+		$settings['support-fan-club_eligible_levels'] = array(
+			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'type'     => 'select',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $this->get_member_level_options(),
 			),
 		);
 
