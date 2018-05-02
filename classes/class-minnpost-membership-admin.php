@@ -1172,6 +1172,30 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['support-fan-club_post_body_link_text_next_to_button'] = array(
+			'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
+		$settings['support-fan-club_post_body_link_url_next_to_button'] = array(
+			'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
 		// /support/member-benefit-details options
 		$this_section                                     = 'member-benefit-details';
 		$settings['support-member-benefit-details_title'] = array(
