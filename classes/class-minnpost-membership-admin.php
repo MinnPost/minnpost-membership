@@ -18,6 +18,7 @@ class MinnPost_Membership_Admin {
 	protected $version;
 	protected $slug;
 	protected $member_levels;
+	protected $user_info;
 	protected $cache;
 
 	/**
@@ -26,16 +27,18 @@ class MinnPost_Membership_Admin {
 	* @param string $option_prefix
 	* @param string $version
 	* @param string $slug
-	* @param array $member_levels
+	* @param object $member_levels
+	* @param object $user_info
 	* @param object $cache
 	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $cache ) {
+	public function __construct( $option_prefix, $version, $slug, $member_levels, $user_info, $cache ) {
 
 		$this->option_prefix = $option_prefix;
 		$this->version       = $version;
 		$this->slug          = $slug;
 		$this->member_levels = $member_levels;
+		$this->user_info     = $user_info;
 		$this->cache         = $cache;
 
 		$this->pages = $this->get_admin_pages();

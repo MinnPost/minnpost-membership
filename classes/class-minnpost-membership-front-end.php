@@ -540,6 +540,11 @@ class MinnPost_Membership_Front_End {
 		}
 	}
 
+	/**
+	* Get the current user's membership information
+	*
+	* @return array $user_membership_info
+	*/
 	public function get_user_membership_info() {
 		$user_membership_info = array(
 			'member_level_prefix' => $this->member_levels->member_level_prefix,

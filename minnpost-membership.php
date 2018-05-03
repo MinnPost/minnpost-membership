@@ -44,15 +44,15 @@ class MinnPost_Membership {
 
 	/**
 	* @var object
-	* Load and initialize the MinnPost_Membership_Admin class
-	*/
-	public $admin;
-
-	/**
-	* @var object
 	* Load and initialize the MinnPost_Membership_User_Info class
 	*/
 	public $user_info;
+
+	/**
+	* @var object
+	* Load and initialize the MinnPost_Membership_Admin class
+	*/
+	public $admin;
 
 	/**
 	* @var object
@@ -96,10 +96,10 @@ class MinnPost_Membership {
 		$this->cache = $this->cache();
 		// member levels
 		$this->member_levels = $this->member_levels();
-		// admin settings
-		$this->admin = $this->admin();
 		// user info for membership
 		$this->user_info = $this->user_info();
+		// admin settings
+		$this->admin = $this->admin();
 		// front end settings
 		$this->front_end = $this->front_end();
 
@@ -140,18 +140,6 @@ class MinnPost_Membership {
 	}
 
 	/**
-	 * Plugin admin
-	 *
-	 * @return object $admin
-	 */
-	public function admin() {
-		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-admin.php' );
-		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
-		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
-		return $admin;
-	}
-
-	/**
 	 * User information
 	 *
 	 * @return object $user_info
@@ -160,6 +148,18 @@ class MinnPost_Membership {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-user-info.php' );
 		$user_info = new MinnPost_Membership_User_Info( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->cache );
 		return $user_info;
+	}
+
+	/**
+	 * Plugin admin
+	 *
+	 * @return object $admin
+	 */
+	public function admin() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-admin.php' );
+		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->cache );
+		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
+		return $admin;
 	}
 
 	/**
