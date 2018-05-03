@@ -105,9 +105,14 @@ class MinnPost_Membership_Admin {
 				'sections' => $this->setup_campaign_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-member-benefits'    => array(
-				'title'    => __( 'Member Benefits', 'minnpost-membership' ),
-				'sections' => $this->setup_benefit_page_sections(),
+			$this->slug . '-explain-benefits'   => array(
+				'title'    => __( 'Explain Benefits', 'minnpost-membership' ),
+				'sections' => $this->setup_explain_benefit_page_sections(),
+				'use_tabs' => true,
+			),
+			$this->slug . '-use-benefits'       => array(
+				'title'    => __( 'Use Benefits', 'minnpost-membership' ),
+				'sections' => $this->setup_use_benefit_page_sections(),
 				'use_tabs' => true,
 			),
 			$this->slug . '-member-drive'       => array(
@@ -120,11 +125,11 @@ class MinnPost_Membership_Admin {
 				'sections' => array(),
 				'use_tabs' => false,
 			),
-			$this->slug . '-site-notifications' => array(
+			/*$this->slug . '-site-notifications' => array(
 				'title'    => __( 'Site Notifications', 'minnpost-membership' ),
 				'sections' => array(),
 				'use_tabs' => false,
-			),
+			),*/
 		); // this creates the pages for the admin
 		return $pages;
 	}
@@ -264,7 +269,7 @@ class MinnPost_Membership_Admin {
 		$this->general_settings( $page, $all_field_callbacks );
 		$this->taking_payments( $page, $all_field_callbacks );
 		$this->campaign_settings( $page, $all_field_callbacks );
-		$this->member_benefits( $page, $all_field_callbacks );
+		$this->explain_benefits( $page, $all_field_callbacks );
 
 	}
 
@@ -1048,13 +1053,13 @@ class MinnPost_Membership_Admin {
 	}
 
 	/**
-	* Fields for the Member Benefits page
+	* Fields for the Explain Benefits page
 	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
 	*
 	* @param string $page
 	* @param array $callbacks
 	*/
-	private function member_benefits( $page, $callbacks ) {
+	private function explain_benefits( $page, $callbacks ) {
 		$sections = $this->get_admin_pages()[ $page ]['sections'];
 		if ( ! empty( $sections ) ) {
 			foreach ( $sections as $key => $value ) {
@@ -1084,7 +1089,7 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$benefit_sections = $this->setup_benefit_page_sections();
+		$benefit_sections = $this->setup_explain_benefit_page_sections();
 		if ( ! empty( $benefit_sections ) ) {
 			foreach ( $benefit_sections as $key => $value ) {
 				$section = $key;
@@ -1132,6 +1137,80 @@ class MinnPost_Membership_Admin {
 				'items'    => $this->get_member_level_options(),
 			),
 		);
+
+		// states a user can have with these benefits
+		$benefit_states = array(
+			array(
+				'id'      => 'not_logged_in',
+				'value'   => 'not_logged_in',
+				'text'    => __( 'Not logged in', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			array(
+				'id'      => 'logged_in_non_member',
+				'value'   => 'logged_in_non_member',
+				'text'    => __( 'Logged in non-member', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			array(
+				'id'      => 'member_ineligible',
+				'value'   => 'member_ineligible',
+				'text'    => __( 'Member not eligible', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+			array(
+				'id'      => 'member_eligible',
+				'value'   => 'member_eligible',
+				'text'    => __( 'Member eligible', 'minnpost-membership' ),
+				'desc'    => '',
+				'default' => '',
+			),
+		);
+
+		$settings['support-partner-offers-user_state'] = array(
+			'title'    => __( 'Switch user state', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'type'     => 'radio',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $benefit_states,
+			),
+		);
+
+		// action boxes for partner offers
+		foreach ( $benefit_states as $benefit_state ) {
+			$settings[ 'support-partner-offers_action_title_' . $benefit_state['id'] ] = array(
+				'title'    => $benefit_state['text'] . __( ' action title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-partner-offers_action_body_' . $benefit_state['id'] ] = array(
+				'title'    => $benefit_state['text'] . __( ' action body', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => '',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+		}
 
 		// /support/fan-club options
 		$this_section                       = 'fan-club';
@@ -1264,12 +1343,22 @@ class MinnPost_Membership_Admin {
 	}
 
 	/**
-	* Set up options tab for each payment page URL in the options
+	* Fields for the Use Benefits page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function use_benefits( $page, $callbacks ) {
+	}
+
+	/**
+	* Set up options tab for each explain benefit page URL in the options
 	*
 	* @return $array $sections
 	*
 	*/
-	private function setup_benefit_page_sections() {
+	private function setup_explain_benefit_page_sections() {
 		$sections = array(
 			'benefit_pages' => __( 'Member Benefit Pages', 'minnpost-membership' ),
 		);
@@ -1290,6 +1379,15 @@ class MinnPost_Membership_Admin {
 		}
 
 		return $sections;
+	}
+
+	/**
+	* Set up options tab for each use benefit page URL in the options
+	*
+	* @return $array $sections
+	*
+	*/
+	private function setup_use_benefit_page_sections() {
 	}
 
 	/**

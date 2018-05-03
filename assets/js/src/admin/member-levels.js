@@ -33,6 +33,29 @@
 		});
 	}
 
+	function toggleBenefitActionFields() {
+		var $toggle = $('input[name="minnpost_membership_support-partner-offers-user_state[]"]');
+
+		$($toggle).each(function() {
+			$( '.minnpost_membership_support-partner-offers_action_title_' + $(this).val() + ', .minnpost_membership_support-partner-offers_action_body_' + $(this).val() ).hide();
+	    });
+
+		if ($toggle.is(':checked')) {
+			$( '.minnpost_membership_support-partner-offers_action_title_' + $('input[name="minnpost_membership_support-partner-offers-user_state[]"]:checked').val() + ', .minnpost_membership_support-partner-offers_action_body_' + $('input[name="minnpost_membership_support-partner-offers-user_state[]"]:checked').val() ).show();
+		}
+		$toggle.on('click', function(e) {
+			var checkbox = $(this);
+
+			$($toggle).each(function() {
+				$( '.minnpost_membership_support-partner-offers_action_title_' + $(this).val() + ', .minnpost_membership_support-partner-offers_action_body_' + $(this).val() ).hide();
+		    });
+
+			if (checkbox.is(':checked')) {
+				$( '.minnpost_membership_support-partner-offers_action_title_' + $(this).val() + ', .minnpost_membership_support-partner-offers_action_body_' + $(this).val() ).show();
+			}
+		});
+	}
+
 	$(document).ready(function() {
 
 		// show or hide member level fields
@@ -42,6 +65,10 @@
 
 		if ( $('.minnpost_membership_support_post_form_change_for_members').length > 0 ) {
 			toggleMembershipChangeFields();
+		}
+
+		if ( $('.minnpost_membership_support-partner-offers-user_state').length > 0 ) {
+			toggleBenefitActionFields();
 		}
 
 		$('.minnpost-membership-general-settings').minnpostMembership({
