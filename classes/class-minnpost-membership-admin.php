@@ -387,6 +387,7 @@ class MinnPost_Membership_Admin {
 			$callback = $attributes['callback'];
 			$page     = $attributes['page'];
 			$section  = $attributes['section'];
+			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
 			$args     = array_merge(
 				$attributes['args'],
 				array(
@@ -394,7 +395,7 @@ class MinnPost_Membership_Admin {
 					'id'        => $id,
 					'label_for' => $id,
 					'name'      => $name,
-					'class'     => 'minnpost-member-field ' . $id,
+					'class'     => $class,
 				)
 			);
 
@@ -875,6 +876,7 @@ class MinnPost_Membership_Admin {
 			$callback = $attributes['callback'];
 			$page     = $attributes['page'];
 			$section  = $attributes['section'];
+			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
 			$args     = array_merge(
 				$attributes['args'],
 				array(
@@ -882,7 +884,7 @@ class MinnPost_Membership_Admin {
 					'id'        => $id,
 					'label_for' => $id,
 					'name'      => $name,
-					'class'     => 'minnpost-member-field ' . $id,
+					'class'     => $class,
 				)
 			);
 
@@ -979,6 +981,7 @@ class MinnPost_Membership_Admin {
 			$callback = $attributes['callback'];
 			$page     = $attributes['page'];
 			$section  = $attributes['section'];
+			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
 			$args     = array_merge(
 				$attributes['args'],
 				array(
@@ -986,7 +989,7 @@ class MinnPost_Membership_Admin {
 					'id'        => $id,
 					'label_for' => $id,
 					'name'      => $name,
-					'class'     => 'minnpost-member-field ' . $id,
+					'class'     => $class,
 				)
 			);
 
@@ -1186,10 +1189,11 @@ class MinnPost_Membership_Admin {
 		// action boxes for partner offers
 		foreach ( $benefit_states as $benefit_state ) {
 			$settings[ 'support-partner-offers_action_title_' . $benefit_state['id'] ] = array(
-				'title'    => $benefit_state['text'] . __( ' action title', 'minnpost-membership' ),
+				'title'    => __( 'Action title', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1198,19 +1202,85 @@ class MinnPost_Membership_Admin {
 			);
 
 			$settings[ 'support-partner-offers_action_body_' . $benefit_state['id'] ] = array(
-				'title'    => $benefit_state['text'] . __( ' action body', 'minnpost-membership' ),
+				'title'    => __( 'Action body', 'minnpost-membership' ),
 				'callback' => $callbacks['editor'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
 				'args'     => array(
-					'desc'          => '',
+					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
 					'constant'      => '',
 					'type'          => 'text',
 					'rows'          => '5',
 					'media_buttons' => false,
 				),
 			);
+
+			$settings[ 'support-partner-offers_post_body_button_text_' . $benefit_state['id'] ] = array(
+				'title'    => __( 'Button text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-partner-offers_post_body_button_url_' . $benefit_state['id'] ] = array(
+				'title'    => __( 'Button URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-partner-offers_post_body_link_text_next_to_button_' . $benefit_state['id'] ] = array(
+				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-partner-offers_post_body_link_url_next_to_button_' . $benefit_state['id'] ] = array(
+				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
 		}
+
+		$settings['support-partner-offers_post_body_show_member_details_link'] = array(
+			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'checkbox',
+			),
+		);
 
 		// /support/fan-club options
 		$this_section                       = 'fan-club';
@@ -1322,6 +1392,7 @@ class MinnPost_Membership_Admin {
 			$callback = $attributes['callback'];
 			$page     = $attributes['page'];
 			$section  = $attributes['section'];
+			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
 			$args     = array_merge(
 				$attributes['args'],
 				array(
@@ -1329,7 +1400,7 @@ class MinnPost_Membership_Admin {
 					'id'        => $id,
 					'label_for' => $id,
 					'name'      => $name,
-					'class'     => 'minnpost-member-field ' . $id,
+					'class'     => $class,
 				)
 			);
 

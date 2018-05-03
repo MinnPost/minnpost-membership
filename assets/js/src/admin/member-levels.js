@@ -37,21 +37,21 @@
 		var $toggle = $('input[name="minnpost_membership_support-partner-offers-user_state[]"]');
 
 		$($toggle).each(function() {
-			$( '.minnpost_membership_support-partner-offers_action_title_' + $(this).val() + ', .minnpost_membership_support-partner-offers_action_body_' + $(this).val() ).hide();
+			$( '.minnpost-member-field-' + $(this).val() ).wrapAll( '<tr class="minnpost-member-fields-wrap minnpost-member-fields-wrap-' + $(this).val() + '"><td colspan="2"><table />');
+			$( '.minnpost-member-fields-wrap' ).hide();
+			$( '.minnpost-member-fields-wrap-' + $(this).val() + ' table' ).before( '<h3>' + $(this).parent().text() + ' settings</h3>' );
 	    });
 
 		if ($toggle.is(':checked')) {
-			$( '.minnpost_membership_support-partner-offers_action_title_' + $('input[name="minnpost_membership_support-partner-offers-user_state[]"]:checked').val() + ', .minnpost_membership_support-partner-offers_action_body_' + $('input[name="minnpost_membership_support-partner-offers-user_state[]"]:checked').val() ).show();
+			$( '.minnpost-member-fields-wrap-' + $('input[name="minnpost_membership_support-partner-offers-user_state[]"]:checked').val() ).show();
 		}
 		$toggle.on('click', function(e) {
 			var checkbox = $(this);
 
-			$($toggle).each(function() {
-				$( '.minnpost_membership_support-partner-offers_action_title_' + $(this).val() + ', .minnpost_membership_support-partner-offers_action_body_' + $(this).val() ).hide();
-		    });
+			$( '.minnpost-member-fields-wrap' ).hide();
 
 			if (checkbox.is(':checked')) {
-				$( '.minnpost_membership_support-partner-offers_action_title_' + $(this).val() + ', .minnpost_membership_support-partner-offers_action_body_' + $(this).val() ).show();
+				$( '.minnpost-member-fields-wrap-' + $(this).val() ).show();
 			}
 		});
 	}
