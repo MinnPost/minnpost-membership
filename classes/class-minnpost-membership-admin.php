@@ -148,12 +148,12 @@ class MinnPost_Membership_Admin {
 		<div class="wrap">
 			<h1><?php _e( get_admin_page_title(), 'minnpost-membership' ); ?></h1>
 			<?php
-			$page    = isset( $get_data['page'] ) ? sanitize_key( $get_data['page'] ) : $this->slug . '-settings';
-			$tab     = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
-			$section = $tab;
-			$tabs    = $this->pages[ $page ]['sections'];
-			if ( ! empty( $tabs ) && true === $this->pages[ $page ]['use_tabs'] ) {
-
+			$page     = isset( $get_data['page'] ) ? sanitize_key( $get_data['page'] ) : $this->slug . '-settings';
+			$tab      = isset( $get_data['tab'] ) ? sanitize_key( $get_data['tab'] ) : $page;
+			$section  = $tab;
+			$sections = $this->pages[ $page ]['sections'];
+			if ( ! empty( $sections ) && true === $this->pages[ $page ]['use_tabs'] ) {
+				$tabs = $this->pages[ $page ]['sections'];
 				if ( isset( $get_data['tab'] ) ) {
 					$tab = sanitize_key( $get_data['tab'] );
 				} else {
