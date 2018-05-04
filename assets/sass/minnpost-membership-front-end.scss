@@ -197,6 +197,23 @@ $vertical-space: 1em;
 	}
 }
 
+.m-membership-action {
+	padding: $vertical-space;
+	margin: $vertical-space 0;
+	border: 1px solid $border-color-lighter;
+	h2 {
+		margin-bottom: $vertical-space / 2;
+	}
+	p:last-of-type {
+		margin-bottom: 0;
+	}
+	.a-button {
+		display: inline-block;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+}
+
 @media screen and (min-width: 700px) {
 	.m-membership-member-level {
 		width: 46%;
