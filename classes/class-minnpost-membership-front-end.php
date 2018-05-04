@@ -341,8 +341,8 @@ class MinnPost_Membership_Front_End {
 	* Display the link next to the main button
 	*
 	*/
-	public function link_next_to_button() {
-		$link = $this->get_link_next_to_button();
+	public function link_next_to_button( $page, $after = 'form', $state = '' ) {
+		$link = $this->get_link_next_to_button( $page, $after, $state );
 		if ( '' !== $link ) {
 			echo $link;
 		}
@@ -352,11 +352,14 @@ class MinnPost_Membership_Front_End {
 	* Get the link next to the main button
 	*
 	*/
-	private function get_link_next_to_button() {
+	private function get_link_next_to_button( $page, $after = 'form', $state = '' ) {
 		$link = '';
-		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_text_next_to_button', '' ) && '' !== get_option( $this->option_prefix . 'support_post_form_link_url_next_to_button', '' ) ) {
+		if ( '' !== $state ) {
+			$state = '_' . $state;
+		}
+		if ( '' !== get_option( $this->option_prefix . $page . '_post_' . $after . '_link_text_next_to_button' . $state, '' ) && '' !== get_option( $this->option_prefix . $page . '_post_' . $after . '_link_url_next_to_button' . $state, '' ) ) {
 
-			$url = esc_url( get_option( $this->option_prefix . 'support_post_form_link_url_next_to_button', '' ) );
+			$url = esc_url( get_option( $this->option_prefix . $page . '_post_' . $after . '_link_url_next_to_button' . $state, '' ) );
 
 			$current_host = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_HOST );
 			$link_host    = parse_url( $url, PHP_URL_HOST );
@@ -371,7 +374,7 @@ class MinnPost_Membership_Front_End {
 				}
 			}
 
-			$link = '<a href="' . $url . '">' . get_option( $this->option_prefix . 'support_post_form_link_text_next_to_button', '' ) . '</a>';
+			$link = '<a href="' . $url . '">' . get_option( $this->option_prefix . $page . '_post_' . $after . '_link_text_next_to_button' . $state, '' ) . '</a>';
 
 		}
 		return $link;
