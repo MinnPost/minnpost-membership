@@ -44,6 +44,8 @@ class MinnPost_Membership_User_Info {
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
+		// eligibility possibilities. we can hardcode these.
+		$this->eligibility_states = $this->get_eligibility_states();
 		// include the non member level for this purpose
 		$this->all_member_levels = $this->member_levels->get_member_levels( '', true );
 
@@ -60,6 +62,22 @@ class MinnPost_Membership_User_Info {
 
 		}
 
+	}
+
+	/**
+	* Create the states of eligibility a user can have
+	*
+	*/
+	public function get_eligibility_states() {
+
+		$eligibility_states = array(
+			'not_logged_in'        => __( 'Not logged in', 'minnpost-membership' ),
+			'logged_in_non_member' => __( 'Logged in non-member', 'minnpost-membership' ),
+			'member_ineligible'    => __( 'Member not eligible', 'minnpost-membership' ),
+			'member_eligible'      => __( 'Member eligible', 'minnpost-membership' ),
+		);
+
+		return $eligibility_states;
 	}
 
 	/**

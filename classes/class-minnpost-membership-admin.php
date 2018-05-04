@@ -1144,37 +1144,7 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		// states a user can have with these benefits
-		$benefit_states = array(
-			array(
-				'id'      => 'not_logged_in',
-				'value'   => 'not_logged_in',
-				'text'    => __( 'Not logged in', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-			array(
-				'id'      => 'logged_in_non_member',
-				'value'   => 'logged_in_non_member',
-				'text'    => __( 'Logged in non-member', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-			array(
-				'id'      => 'member_ineligible',
-				'value'   => 'member_ineligible',
-				'text'    => __( 'Member not eligible', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-			array(
-				'id'      => 'member_eligible',
-				'value'   => 'member_eligible',
-				'text'    => __( 'Member eligible', 'minnpost-membership' ),
-				'desc'    => '',
-				'default' => '',
-			),
-		);
+		$eligibility_states = $this->get_user_eligibility_states();
 
 		$settings['support-partner-offers-user_state'] = array(
 			'title'    => __( 'Switch user state', 'minnpost-membership' ),
@@ -1185,18 +1155,18 @@ class MinnPost_Membership_Admin {
 				'type'     => 'radio',
 				'desc'     => '',
 				'constant' => '',
-				'items'    => $benefit_states,
+				'items'    => $eligibility_states,
 			),
 		);
 
 		// action boxes for partner offers
-		foreach ( $benefit_states as $benefit_state ) {
-			$settings[ 'support-partner-offers_action_title_' . $benefit_state['id'] ] = array(
+		foreach ( $eligibility_states as $eligibility_state ) {
+			$settings[ 'support-partner-offers_action_title_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Action title', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1204,12 +1174,12 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
-			$settings[ 'support-partner-offers_action_body_' . $benefit_state['id'] ] = array(
+			$settings[ 'support-partner-offers_action_body_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Action body', 'minnpost-membership' ),
 				'callback' => $callbacks['editor'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
 					'constant'      => '',
@@ -1219,12 +1189,12 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
-			$settings[ 'support-partner-offers_post_body_button_text_' . $benefit_state['id'] ] = array(
+			$settings[ 'support-partner-offers_post_body_button_text_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Button text', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1232,12 +1202,12 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
-			$settings[ 'support-partner-offers_post_body_button_url_' . $benefit_state['id'] ] = array(
+			$settings[ 'support-partner-offers_post_body_button_url_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Button URL', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1245,12 +1215,12 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
-			$settings[ 'support-partner-offers_post_body_link_text_next_to_button_' . $benefit_state['id'] ] = array(
+			$settings[ 'support-partner-offers_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1258,12 +1228,12 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
-			$settings[ 'support-partner-offers_post_body_link_url_next_to_button_' . $benefit_state['id'] ] = array(
+			$settings[ 'support-partner-offers_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $benefit_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1482,6 +1452,27 @@ class MinnPost_Membership_Admin {
 			);
 		}
 		return $options;
+	}
+
+	/**
+	* Options for what states can apply to a user's eligibility
+	* @return array $admin_states
+	*
+	*/
+	private function get_user_eligibility_states() {
+		// states a user can have
+		$eligibility_states = $this->user_info->eligibility_states;
+		$admin_states       = array();
+		foreach ( $eligibility_states as $key => $value ) {
+			$admin_states[] = array(
+				'value'   => $key,
+				'text'    => $value,
+				'id'      => $key,
+				'desc'    => '',
+				'default' => '',
+			);
+		}
+		return $admin_states;
 	}
 
 	/**
