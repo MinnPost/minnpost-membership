@@ -16,6 +16,15 @@ global $minnpost_membership;
 			<div class="m-entry-content">
 				<?php echo get_option( $minnpost_membership->option_prefix . 'support-partner-offers_body', '' ); ?>
 			</div>
+			<aside class="m-entry-content">
+				<?php
+				if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) ) {
+					echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
+						get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
+					);
+				}
+				?>
+			</aside>
 		</main><!-- #main -->
 
 	</div><!-- #primary -->
