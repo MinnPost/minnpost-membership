@@ -339,6 +339,49 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Display the button if it is stored in the options
+	*
+	*/
+	public function button( $page, $after = 'form', $state = '' ) {
+		$link = $this->get_button( $page, $after, $state );
+		if ( '' !== $link ) {
+			echo $link;
+		}
+	}
+
+	/**
+	* Get the button if it is stored in the options
+	*
+	*/
+	private function get_button( $page, $after = 'form', $state = '' ) {
+		$link = '';
+		if ( '' !== $state ) {
+			$state = '_' . $state;
+		}
+		if ( '' !== get_option( $this->option_prefix . $page . '_post_' . $after . '_button_text' . $state, '' ) && '' !== get_option( $this->option_prefix . $page . '_post_' . $after . '_button_url' . $state, '' ) ) {
+
+			$url = esc_url( get_option( $this->option_prefix . $page . '_post_' . $after . '_button_url' . $state, '' ) );
+
+			$current_host = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_HOST );
+			$link_host    = parse_url( $url, PHP_URL_HOST );
+
+			// preserve valid form parameters
+			if ( '' === $link_host || $link_host === $current_host ) {
+				$url_params = $this->process_parameters( 'get' );
+				foreach ( $url_params as $key => $value ) {
+					if ( false !== $value ) {
+						$url = add_query_arg( $key, $value, $url );
+					}
+				}
+			}
+
+			$link = '<a href="' . $url . '" class="a-button">' . get_option( $this->option_prefix . $page . '_post_' . $after . '_button_text' . $state, '' ) . '</a>';
+
+		}
+		return $link;
+	}
+
+	/**
 	* Display the link next to the main button
 	*
 	*/

@@ -125,7 +125,9 @@ class MinnPost_Membership_Admin {
 			),
 			$this->slug . '-premium-content'    => array(
 				'title'    => __( 'Premium Content', 'minnpost-membership' ),
-				'sections' => array(),
+				'sections' => array(
+					'access_settings' => __( 'Access settings', 'minnpost-membership' ),
+				),
 				'use_tabs' => false,
 			),
 			/*$this->slug . '-site-notifications' => array(
@@ -273,6 +275,7 @@ class MinnPost_Membership_Admin {
 		$this->taking_payments( $page, $all_field_callbacks );
 		$this->campaign_settings( $page, $all_field_callbacks );
 		$this->explain_benefits( $page, $all_field_callbacks );
+		$this->premium_content( $page, $all_field_callbacks );
 
 	}
 
@@ -1394,6 +1397,70 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function use_benefits( $page, $callbacks ) {
+	}
+
+	/**
+	* Fields for the Premium Content page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function premium_content( $page, $callbacks ) {
+		$sections = $this->get_admin_pages()[ $page ]['sections'];
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				add_settings_section( $section, $title, null, $page );
+			}
+		} else {
+			$section = $page;
+			$title   = $this->get_admin_pages()[ $page ]['title'];
+			add_settings_section( $section, $title, null, $page );
+		}
+
+		$this_section = 'access_settings';
+		$settings     = array(
+			'post_access_meta_key' => array(
+				'title'    => __( 'Post access meta key', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $page,
+				'section'  => $this_section,
+				'args'     => array(
+					'type'     => 'text',
+					'desc'     => '',
+					'constant' => '',
+				),
+			),
+		);
+
+		foreach ( $settings as $key => $attributes ) {
+			$id       = $this->option_prefix . $key;
+			$name     = $this->option_prefix . $key;
+			$title    = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+			$args     = array_merge(
+				$attributes['args'],
+				array(
+					'title'     => $title,
+					'id'        => $id,
+					'label_for' => $id,
+					'name'      => $name,
+					'class'     => $class,
+				)
+			);
+
+			// if there is a constant and it is defined, don't run a validate function if there is one
+			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+				$validate = '';
+			}
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
+		}
 	}
 
 	/**
