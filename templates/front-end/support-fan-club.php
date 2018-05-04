@@ -13,9 +13,9 @@ global $minnpost_membership;
 			<header class="m-entry-header m-entry-header-singular">
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support-fan-club_title', '' ); ?></h1>
 			</header>
-			<div class="m-entry-content">
+			<section class="m-entry-content">
 				<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support-fan-club_body', '' ) ); ?>
-			</div>
+			</section>
 			<aside class="m-entry-content">
 				<?php
 				if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) ) {
