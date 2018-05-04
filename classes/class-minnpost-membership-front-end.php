@@ -49,6 +49,7 @@ class MinnPost_Membership_Front_End {
 		$this->add_actions();
 
 		$this->allowed_urls = $this->get_allowed_urls();
+
 	}
 
 	/**
@@ -554,6 +555,32 @@ class MinnPost_Membership_Front_End {
 			'current_user'        => $this->user_info->user_membership_info( get_current_user_id() ),
 		);
 		return $user_membership_info;
+	}
+
+	/**
+	* Get option field based on a user's status
+	*
+	* @param string $key
+	* @param string $user_state
+	* @return string $option_value
+	*/
+	public function get_option_based_on_user_status( $key, $user_state = '', $user_id = '' ) {
+		$option_value = '';
+		if ( '' === $user_state ) {
+			$path       = sanitize_title( rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ) );
+			$user_state = $this->user_info->get_user_state( '', $path );
+		}
+		$option_key   = $key . '_' . $user_state;
+		$option_value = get_option( $option_key, '' );
+		if ( '' !== $user_state ) {
+			if ( '' === $user_id ) {
+				$user_id = get_current_user_id();
+			}
+			$user_member_level = $this->user_info->user_member_level( $user_id );
+			$option_value      = str_replace( '$memberlevel', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $option_value );
+		}
+
+		return $option_value;
 	}
 
 	/**

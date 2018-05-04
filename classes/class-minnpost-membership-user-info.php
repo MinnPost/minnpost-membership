@@ -44,6 +44,12 @@ class MinnPost_Membership_User_Info {
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
+		$this->post_access_meta_key = get_option( $this->option_prefix . 'post_access_meta_key', '' );
+		$this->option_levels_key    = 'eligible_levels';
+
+		$can_see_blocked_content       = array( 'administrator', 'editor', 'business' );
+		$this->can_see_blocked_content = apply_filters( 'minnpost_membership_can_see_blocked_content', $can_see_blocked_content );
+
 		// eligibility possibilities. we can hardcode these.
 		$this->eligibility_states = $this->get_eligibility_states();
 		// include the non member level for this purpose
@@ -78,6 +84,41 @@ class MinnPost_Membership_User_Info {
 		);
 
 		return $eligibility_states;
+	}
+
+	/**
+	* Get the current state of this user for this content
+	*
+	*/
+	public function get_user_state( $user_id = '', $url = '' ) {
+
+		if ( '' === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		if ( 0 === $user_id ) {
+			$user_state = 'not_logged_in';
+			return $user_state;
+		} elseif ( '' === $url ) {
+			$post_id       = get_the_ID();
+			$post_meta_key = $this->post_access_meta_key;
+			$can_access    = $this->user_can_access( $user_id, $post_id, $post_meta_key );
+		} else {
+			$can_access = $this->user_can_access( $user_id, '', '', $url );
+		}
+
+		if ( true === $can_access ) {
+			$user_state = 'member_eligible';
+		} else {
+			$user_member_level = $this->user_member_level( $user_id );
+			if ( true === $user_member_level['is_nonmember'] ) {
+				$user_state = 'logged_in_non_member';
+			} else {
+				$user_state = 'member_ineligible';
+			}
+		}
+
+		return $user_state;
 	}
 
 	/**
@@ -178,6 +219,91 @@ class MinnPost_Membership_User_Info {
 		$new_amount_this_year = max( $prior_year_amount, $coming_year_amount, $annual_recurring_amount );
 
 		return $new_amount_this_year;
+	}
+
+	/**
+	* Determine whether a user can access a post, based on the user ID and a post id and meta key, or url, that can access this content
+	*
+	* @param int $user_id
+	* @param int $post_id
+	* @param string $post_meta_key
+	* @param string $url
+	*
+	* @return bool $can_access
+	*/
+	public function user_can_access( $user_id = '', $post_id = '', $post_meta_key = '', $url = '' ) {
+
+		if ( '' === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		if ( '' === $url ) {
+			if ( '' === $post_id ) {
+				$post_id = get_the_ID();
+			}
+			$content_access_level = get_post_meta( $post_id, $post_meta_key, true );
+		} else {
+			// get all the levels from the option value
+			$content_access_levels = get_option( $this->option_prefix . $url . '_' . $this->option_levels_key, array() );
+			// get the minimum level required for this content
+			$content_access_level = $content_access_levels[ min( array_keys( $content_access_levels ) ) ];
+		}
+
+		if ( '' === $content_access_level ) {
+			return true;
+		}
+
+		// at this point, the default access answer should be false because the single item has a level meta value. user roles override it.
+		$can_access = false;
+
+		// if the user id is not a user, they can't access any restricted content
+		if ( 0 === $user_id ) {
+			return $can_access;
+		}
+
+		// if the content access level is only registered, let the user in because they are signed in
+		if ( 'registered' === $content_access_level ) {
+			return true;
+		}
+
+		// get the text value of the content access level
+		if ( false === filter_var( $content_access_level, FILTER_VALIDATE_INT ) ) {
+			$key = array_search( $content_access_level, array_column( $this->all_member_levels, 'slug' ) );
+		} else {
+			$key = $content_access_level;
+		}
+
+		// if we have a slug here, it is the lowest level required for this content
+		if ( isset( $content_access_level['slug'] ) ) {
+			$content_access_level = $this->all_member_levels[ $key ]['slug'];
+		}
+
+		// if we have a slug here, it is the user's member level
+		$user_member_level = $this->user_member_level( $user_id );
+		if ( isset( $user_member_level['slug'] ) ) {
+			$user_member_level = $user_member_level['slug'];
+		} else {
+			return $can_access;
+		}
+
+		if ( $user_member_level === $content_access_level ) {
+			$can_access = true;
+		}
+
+		if ( true === $can_access ) {
+			return $can_access;
+		}
+
+		// if user has a role that allows them to see everything, let them see everything
+		/*$user_info      = get_userdata( $user_id );
+		$all_user_roles = $user_info->roles;
+
+		$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
+		if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
+			$can_access = true;
+		}*/
+
+		return $can_access;
 	}
 
 }
