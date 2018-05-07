@@ -619,8 +619,10 @@ class MinnPost_Membership_Front_End {
 			if ( '' === $user_id ) {
 				$user_id = get_current_user_id();
 			}
-			$user_member_level = $this->user_info->user_member_level( $user_id );
-			$option_value      = str_replace( '$memberlevel', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $option_value );
+			if ( 0 !== $user_id ) {
+				$user_member_level = $this->user_info->user_member_level( $user_id );
+				$option_value      = str_replace( '$memberlevel', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $option_value );
+			}
 		}
 
 		return $option_value;
