@@ -1154,6 +1154,7 @@ class MinnPost_Membership_Admin {
 			'callback' => $callbacks['checkboxes'],
 			'page'     => $this_section,
 			'section'  => $this_section,
+			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 			'args'     => array(
 				'type'     => 'radio',
 				'desc'     => '',
@@ -1297,29 +1298,105 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['support-fan-club_post_body_link_text_next_to_button'] = array(
-			'title'    => __( 'Link text next to button', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
+		$eligibility_states = $this->get_user_eligibility_states();
+
+		$settings['support-fan-club-user_state'] = array(
+			'title'    => __( 'Switch user state', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
 			'page'     => $this_section,
 			'section'  => $this_section,
+			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 			'args'     => array(
+				'type'     => 'radio',
 				'desc'     => '',
 				'constant' => '',
-				'type'     => 'text',
+				'items'    => $eligibility_states,
 			),
 		);
 
-		$settings['support-fan-club_post_body_link_url_next_to_button'] = array(
-			'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
+		// action boxes for fan club
+		foreach ( $eligibility_states as $eligibility_state ) {
+			$settings[ 'support-fan-club_action_title_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Action title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-fan-club_action_body_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Action body', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+
+			$settings[ 'support-fan-club_post_body_button_text_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Button text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-fan-club_post_body_button_url_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Button URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-fan-club_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ 'support-fan-club_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+		}
 
 		// /support/member-benefit-details options
 		$this_section                                     = 'member-benefit-details';

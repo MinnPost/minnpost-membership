@@ -33,8 +33,8 @@
 		});
 	}
 
-	function toggleBenefitActionFields() {
-		var $toggle = $('input[name="minnpost_membership_support-partner-offers-user_state[]"]');
+	function toggleActionFields( parent ) {
+		var $toggle = $('input[type="radio"]', $(parent) );
 
 		$($toggle).each(function() {
 			$( '.minnpost-member-field-' + $(this).val() ).wrapAll( '<tr class="minnpost-member-fields-wrap minnpost-member-fields-wrap-' + $(this).val() + '"><td colspan="2"><table />');
@@ -43,7 +43,7 @@
 	    });
 
 		if ($toggle.is(':checked')) {
-			$( '.minnpost-member-fields-wrap-' + $('input[name="minnpost_membership_support-partner-offers-user_state[]"]:checked').val() ).show();
+			$( '.minnpost-member-fields-wrap-' + $('input[type="radio"]:checked', $(parent) ).val() ).show();
 		}
 		$toggle.on('click', function(e) {
 			var checkbox = $(this);
@@ -67,8 +67,8 @@
 			toggleMembershipChangeFields();
 		}
 
-		if ( $('.minnpost_membership_support-partner-offers-user_state').length > 0 ) {
-			toggleBenefitActionFields();
+		if ( $('.minnpost-member-field-user-state-toggle').length > 0 ) {
+			toggleActionFields( '.minnpost-member-field-user-state-toggle' );
 		}
 
 		$('.minnpost-membership-general-settings').minnpostMembership({
