@@ -31,7 +31,7 @@ $user_state = $minnpost_membership->user_info->get_user_state( '', 'support-part
 			</section>
 			<aside class="m-entry-content">
 				<?php
-				if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) ) {
+				if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support-partner-offers_post_body_show_member_details_link', '' ) ) {
 					echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
 						get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
 					);

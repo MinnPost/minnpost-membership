@@ -126,7 +126,7 @@ $user_id    = get_current_user_id();
 
 					<aside>
 						<?php
-						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link' ) ) {
+						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link', '' ) ) {
 							echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
 								get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
 							);

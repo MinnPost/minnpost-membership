@@ -149,7 +149,7 @@ global $minnpost_membership;
 
 						<aside>
 							<?php
-							if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) ) {
+							if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) ) {
 								echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
 									get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
 								);

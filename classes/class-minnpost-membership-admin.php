@@ -1398,6 +1398,18 @@ class MinnPost_Membership_Admin {
 
 		}
 
+		$settings['support-fan-club_post_body_show_member_details_link'] = array(
+			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'checkbox',
+			),
+		);
+
 		// /support/member-benefit-details options
 		$this_section                                     = 'member-benefit-details';
 		$settings['support-member-benefit-details_title'] = array(
