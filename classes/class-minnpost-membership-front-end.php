@@ -305,7 +305,7 @@ class MinnPost_Membership_Front_End {
 		$post_form_text_not_changed = get_option( $this->option_prefix . 'support_post_form_nochange', '' );
 		$post_form_text_not_changed = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text_not_changed );
 
-		if ( '1' === $change_for_members ) {
+		if ( true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
 			if ( $page_level['name'] !== $user_member_level['name'] ) {
 				$post_form_text = $post_form_text_changed;
 			} else {
@@ -319,7 +319,7 @@ class MinnPost_Membership_Front_End {
 			return $post_form_text_display;
 		}
 
-		if ( '1' === $change_for_members ) {
+		if ( true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '" data-changed="' . htmlentities( $post_form_text_changed ) . '" data-not-changed="' . htmlentities( $post_form_text_not_changed ) . '">';
 		} else {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
@@ -573,7 +573,7 @@ class MinnPost_Membership_Front_End {
 		// we need to make this themeable, i think
 		$disable_javascript = get_option( $this->option_prefix . 'disable_javascript', false );
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
-		if ( '1' !== $disable_javascript ) {
+		if ( true !== filter_var( $disable_javascript, FILTER_VALIDATE_BOOLEAN ) ) {
 			wp_enqueue_script( $this->slug . '-front-end', plugins_url( '../assets/js/' . $this->slug . '-front-end.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
 			$minnpost_membership_data = $this->get_user_membership_info();
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
@@ -582,7 +582,7 @@ class MinnPost_Membership_Front_End {
 					$('.m-form-membership').minnpostMembership();
 				});" );
 		}
-		if ( '1' !== $disable_css ) {
+		if ( true !== filter_var( $disable_css, FILTER_VALIDATE_BOOLEAN ) ) {
 			wp_enqueue_style( $this->slug . '-front-end', plugins_url( '../assets/css/' . $this->slug . '-front-end.min.css', __FILE__ ), array(), $this->version, 'all' );
 		}
 	}

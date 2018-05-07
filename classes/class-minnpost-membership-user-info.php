@@ -111,7 +111,7 @@ class MinnPost_Membership_User_Info {
 			$user_state = 'member_eligible';
 		} else {
 			$user_member_level = $this->user_member_level( $user_id );
-			if ( true === $user_member_level['is_nonmember'] ) {
+			if ( true === filter_var( $user_member_level['is_nonmember'], FILTER_VALIDATE_BOOLEAN ) ) {
 				$user_state = 'logged_in_non_member';
 			} else {
 				$user_state = 'member_ineligible';
@@ -160,9 +160,9 @@ class MinnPost_Membership_User_Info {
 	*/
 	public function user_member_level( $user_id = 0 ) {
 
-		$user_member_level = array(
-			'is_nonmember' => true,
-		);
+		// by default, we should assume the user is a non member
+		$highest_user_role_key = array_search( '1', array_column( $this->all_member_levels, 'is_nonmember' ) );
+		$user_member_level     = $this->all_member_levels[ $highest_user_role_key ];
 
 		// if the user id is not a user, they are not a member
 		if ( 0 === $user_id ) {
