@@ -93,8 +93,8 @@ class MinnPost_Membership_Admin {
 			$this->slug . '-settings'           => array(
 				'title'    => __( 'General Settings', 'minnpost-membership' ),
 				'sections' => array(
-					'member_levels' => __( 'Member levels', 'minnpost-membership' ),
-					'more_settings' => __( 'More settings', 'minnpost-membership' ),
+					'member-levels' => __( 'Member levels', 'minnpost-membership' ),
+					'more-settings' => __( 'More settings', 'minnpost-membership' ),
 				),
 				'use_tabs' => false,
 			),
@@ -321,7 +321,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'Use member levels?', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $page,
-				'section'  => 'member_levels',
+				'section'  => 'member-levels',
 				'args'     => array(
 					'type'     => 'checkbox',
 					'desc'     => '',
@@ -332,7 +332,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'Frequency options', 'minnpost-membership' ),
 				'callback' => $callbacks['checkboxes'],
 				'page'     => $page,
-				'section'  => 'member_levels',
+				'section'  => 'member-levels',
 				'args'     => array(
 					'type'     => 'select',
 					'desc'     => '',
@@ -344,7 +344,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'Disable plugin JavaScript?', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $page,
-				'section'  => 'more_settings',
+				'section'  => 'more-settings',
 				'args'     => array(
 					'type'     => 'checkbox',
 					'desc'     => 'Checking this will keep the plugin from adding its JavaScript to the front end interface.',
@@ -355,7 +355,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'Disable plugin CSS?', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $page,
-				'section'  => 'more_settings',
+				'section'  => 'more-settings',
 				'args'     => array(
 					'type'     => 'checkbox',
 					'desc'     => 'Checking this will keep the plugin from adding its stylesheet to the front end interface.',
@@ -376,7 +376,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'Default frequency', 'minnpost-membership' ),
 				'callback' => $callbacks['checkboxes'],
 				'page'     => $page,
-				'section'  => 'member_levels',
+				'section'  => 'member-levels',
 				'args'     => array(
 					'type'     => 'radio',
 					'desc'     => '',
