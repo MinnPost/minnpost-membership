@@ -90,7 +90,7 @@ class MinnPost_Membership_User_Info {
 	* Get the current state of this user for this content
 	*
 	*/
-	public function get_user_state( $user_id = '', $url = '' ) {
+	public function get_user_access( $user_id = '', $url = '' ) {
 
 		if ( '' === $user_id ) {
 			$user_id = get_current_user_id();
@@ -98,8 +98,9 @@ class MinnPost_Membership_User_Info {
 
 		if ( 0 === $user_id ) {
 			$user_state = 'not_logged_in';
-			return $user_state;
-		} elseif ( '' === $url ) {
+			//return $user_state;
+		}
+		if ( '' === $url ) {
 			$post_id       = get_the_ID();
 			$post_meta_key = $this->post_access_meta_key;
 			$can_access    = $this->user_can_access( $user_id, $post_id, $post_meta_key );
@@ -107,18 +108,25 @@ class MinnPost_Membership_User_Info {
 			$can_access = $this->user_can_access( $user_id, '', '', $url );
 		}
 
-		if ( true === $can_access ) {
-			$user_state = 'member_eligible';
-		} else {
-			$user_member_level = $this->user_member_level( $user_id );
-			if ( true === filter_var( $user_member_level['is_nonmember'], FILTER_VALIDATE_BOOLEAN ) ) {
-				$user_state = 'logged_in_non_member';
+		if ( ! isset( $user_state ) ) {
+			if ( true === $can_access ) {
+				$user_state = 'member_eligible';
 			} else {
-				$user_state = 'member_ineligible';
+				$user_member_level = $this->user_member_level( $user_id );
+				if ( true === filter_var( $user_member_level['is_nonmember'], FILTER_VALIDATE_BOOLEAN ) ) {
+					$user_state = 'logged_in_non_member';
+				} else {
+					$user_state = 'member_ineligible';
+				}
 			}
 		}
 
-		return $user_state;
+		$user_access = array(
+			'state'      => $user_state,
+			'can_access' => $can_access,
+		);
+
+		return $user_access;
 	}
 
 	/**

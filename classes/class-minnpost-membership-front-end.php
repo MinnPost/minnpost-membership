@@ -53,6 +53,8 @@ class MinnPost_Membership_Front_End {
 
 		$this->allowed_urls = $this->get_allowed_urls();
 
+		$this->blocked_template_suffix = '-' . get_option( $this->option_prefix . 'post_access_template_suffix', '' );
+
 	}
 
 	/**
@@ -69,6 +71,8 @@ class MinnPost_Membership_Front_End {
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 		add_action( 'wp_ajax_membership_form_submit', array( $this, 'form_submit' ) );
 		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'form_submit' ) );
+		// this could be used for any other template as well, but we are sticking with single by default.
+		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
 	}
 
 	/**
@@ -249,6 +253,40 @@ class MinnPost_Membership_Front_End {
 			} else {
 				exit;
 			}
+		}
+	}
+
+	/**
+	* Choose template depending on whether a post has an access level, and if so, whether a user can access it.
+	* The important thing to know is that this adds type-blocked-postname, type-blocked-post, type-blocked
+	* to the beginning of the template hierarchy, and then attempts to locate them in the theme.
+	* If no blocked templates exist, it will contine to check the default hierarchy for a matching file.
+	*
+	* @param string $template
+	* @param string $type
+	* @param array $templates
+	*
+	* @return string template
+	*/
+	public function template_show_or_block( $template, $type, $templates ) {
+		global $post;
+		$user_id    = get_current_user_id();
+		$can_access = $this->user_info->get_user_access( $user_id )['can_access'];
+
+		if ( true === $can_access ) {
+			return $template;
+		} else {
+			$blocked_templates = array();
+			foreach ( $templates as $default_template ) {
+				$blocked_templates[] = substr_replace( $default_template, $type . $this->blocked_template_suffix, 0, strlen( $type ) );
+			}
+			//$blocked_templates = array_merge( $blocked_templates, $templates );
+			if ( locate_template( $blocked_templates ) ) {
+				$template = locate_template( $blocked_templates );
+			} else {
+				$template = dirname( __FILE__ ) . '/../templates/blocked/default.php';
+			}
+			return $template;
 		}
 	}
 
@@ -614,7 +652,7 @@ class MinnPost_Membership_Front_End {
 		$option_value = '';
 		if ( '' === $user_state ) {
 			$path       = sanitize_title( rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ) );
-			$user_state = $this->user_info->get_user_state( '', $path );
+			$user_state = $this->user_info->get_user_access( '', $path )['state'];
 		}
 		$option_key   = $key . '_' . $user_state;
 		$option_value = get_option( $option_key, '' );
@@ -629,6 +667,45 @@ class MinnPost_Membership_Front_End {
 		}
 
 		return $option_value;
+	}
+
+	/**
+	 * Renders the contents of the given template to a string and returns it.
+	 *
+	 * @param string $template_name The name of the template to render (without .php)
+	 * @param string $location      Folder location for the template (ie front-end or admin)
+	 * @param array  $attributes    The PHP variables for the template
+	 *
+	 * @return string               The contents of the template.
+	 */
+	public function get_template_html( $template_name, $location = '', $attributes = null ) {
+		if ( ! $attributes ) {
+			$attributes = array();
+		}
+
+		if ( '' !== $location ) {
+			$location = $location . '/';
+		}
+
+		ob_start();
+
+		do_action( 'minnpost_membership_before_' . $template_name );
+
+		// allow users to put templates into their theme
+		if ( file_exists( get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php' ) ) {
+			$file = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php';
+		} else {
+			$file = plugin_dir_path( __FILE__ ) . 'templates/' . $location . $template_name . '.php';
+		}
+
+		require( $file );
+
+		do_action( 'minnpost_membership_after_' . $template_name );
+
+		$html = ob_get_contents();
+		ob_end_clean();
+
+		return $html;
 	}
 
 	/**

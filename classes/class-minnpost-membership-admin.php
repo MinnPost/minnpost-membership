@@ -1551,6 +1551,48 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['post_access_eligible_levels'] = array(
+			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
+			'page'     => $page,
+			'section'  => $this_section,
+			'args'     => array(
+				'type'     => 'select',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $this->get_member_level_options(),
+			),
+		);
+
+		$eligibility_states = $this->get_user_eligibility_states( true ); // this is a use screen
+
+		$settings['post_access_user_state'] = array(
+			'title'    => __( 'Switch user state', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
+			'page'     => $page,
+			'section'  => $this_section,
+			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
+			'args'     => array(
+				'type'     => 'radio',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $eligibility_states,
+			),
+		);
+
+		$settings['post_access_template_suffix'] = array(
+			'title'    => __( 'Blocked template suffix', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $page,
+			'section'  => $this_section,
+			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
+			'args'     => array(
+				'type'     => 'text',
+				'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call.',
+				'constant' => '',
+			),
+		);
+
 		foreach ( $settings as $key => $attributes ) {
 			$id       = $this->option_prefix . $key;
 			$name     = $this->option_prefix . $key;
@@ -1639,14 +1681,20 @@ class MinnPost_Membership_Admin {
 
 	/**
 	* Options for what states can apply to a user's eligibility
+	* @param bool $use - if this is true, skip the "member eligible" because the user is able to do the task they're trying to do
 	* @return array $admin_states
 	*
 	*/
-	private function get_user_eligibility_states() {
+	private function get_user_eligibility_states( $use = false ) {
 		// states a user can have
 		$eligibility_states = $this->user_info->eligibility_states;
 		$admin_states       = array();
 		foreach ( $eligibility_states as $key => $value ) {
+			if ( true === $use ) {
+				if ( 'member_eligible' === $key ) {
+					continue;
+				}
+			}
 			$admin_states[] = array(
 				'value'   => $key,
 				'text'    => $value,

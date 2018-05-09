@@ -6,7 +6,7 @@
 get_header(); ?>
 <?php
 global $minnpost_membership;
-$user_state = $minnpost_membership->user_info->get_user_state( '', 'support-partner-offers' );
+$user_state = $minnpost_membership->user_info->get_user_access( '', 'support-fan-club' )['state'];
 ?>
 
 	<div id="primary" class="m-layout-membership o-partner-offers m-page">
