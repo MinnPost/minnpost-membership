@@ -1247,6 +1247,18 @@ class MinnPost_Membership_Admin {
 
 		}
 
+		$settings['support-partner-offers_list_all_partners'] = array(
+			'title'    => __( 'List all partners?', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'checkbox',
+			),
+		);
+
 		$settings['support-partner-offers_post_body_show_member_details_link'] = array(
 			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
