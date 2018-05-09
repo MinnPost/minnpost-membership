@@ -29,6 +29,22 @@ $user_state = $minnpost_membership->user_info->get_user_state( '', 'support-part
 					<?php $minnpost_membership->front_end->link_next_to_button( 'support-partner-offers', 'body', $user_state ); ?>
 				</div>
 			</section>
+			<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-partner-offers_list_all_partners', '' ) ) : ?>
+				<section class="m-all-partners">
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-partner-offers_partner_list_heading', '' ) ) : ?>
+						<h2><?php echo get_option( $minnpost_membership->option_prefix . 'support-partner-offers_partner_list_heading', '' ); ?></h2>
+					<?php endif; ?>
+					<ol class="m-partner-list">
+						<?php $content = $minnpost_membership->content_items->get_partners(); ?>
+						<?php while ( $content->have_posts() ) : $content->the_post(); ?>
+							<li>
+								<?php $minnpost_membership->content_items->partner_figure(); ?>
+							</li>
+						<?php endwhile; ?>
+					</ol>
+					<?php wp_reset_postdata(); ?>
+				</section>
+			<?php endif; ?>
 			<aside class="m-entry-content">
 				<?php
 				if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support-partner-offers_post_body_show_member_details_link', '' ) ) {
