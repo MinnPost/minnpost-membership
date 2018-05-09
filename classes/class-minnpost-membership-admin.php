@@ -1262,6 +1262,18 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['support-partner-offers_partner_list_heading'] = array(
+			'title'    => __( 'Partner list heading', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'     => '',
+				'constant' => '',
+				'type'     => 'text',
+			),
+		);
+
 		$settings['support-partner-offers_post_body_show_member_details_link'] = array(
 			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
@@ -1752,6 +1764,11 @@ class MinnPost_Membership_Admin {
 			}
 		}
 		return $new_value;
+	}
+
+	private function get_partners() {
+		$partners = $this->content_items->get_partners();
+		return $partners;
 	}
 
 	/**
