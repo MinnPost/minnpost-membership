@@ -224,24 +224,16 @@ $vertical-space: 1em;
 		align-items: center;
 		flex-wrap: wrap;
 		padding: 0;
+		margin-left: 0;
 		li {
-			margin-left: 0;
-			padding-left: 0;
 			padding: 20px;
-			width: 22%;
+			width: 44%;
 			list-style: none;
 		}
 		img {
 			display: block;
 			width: 100%;
 		}
-	}
-}
-
-.no-borderimage .m-all-partners .m-partner-list {
-	display: block;
-	li {
-	  display: inline-block;
 	}
 }
 
@@ -256,6 +248,13 @@ $vertical-space: 1em;
 @media screen and (min-width: 890px) {
 	.m-membership-member-level {
 		width: 23%;
+	}
+	.m-all-partners {
+		.m-partner-list {
+			li {
+				width: 22%;
+			}
+		}
 	}
 }
 
@@ -272,5 +271,12 @@ $vertical-space: 1em;
 		.enter select, .amount .a-button {
 			display: none;
 		}
+	}
+}
+
+.no-borderimage .m-all-partners .m-partner-list {
+	display: block;
+	li {
+	  display: inline-block;
 	}
 }
