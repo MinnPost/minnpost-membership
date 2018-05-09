@@ -164,7 +164,7 @@ class MinnPost_Membership_Admin {
 				}
 				$this->render_tabs( $page, $tabs, $tab );
 			}
-			switch ( $tab ) {
+			switch ( $page ) {
 				case $this->slug . '-settings':
 					if ( isset( $get_data['method'] ) ) {
 						$method      = sanitize_key( $get_data['method'] );
