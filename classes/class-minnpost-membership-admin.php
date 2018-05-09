@@ -116,9 +116,25 @@ class MinnPost_Membership_Admin {
 				'sections' => $this->setup_explain_benefit_page_sections(),
 				'use_tabs' => true,
 			),
+			$this->slug . '-benefit-content'    => array(
+				'title'    => __( 'Benefit Content', 'minnpost-membership' ),
+				'sections' => array(
+					'partner-offers-content' => __( 'Partner offers', 'minnpost-membership' ),
+					'fan-club-content'       => __( 'FAN Club', 'minnpost-membership' ),
+				),
+				'use_tabs' => true,
+			),
 			$this->slug . '-use-benefits'       => array(
 				'title'    => __( 'Use Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_use_benefit_page_sections(),
+				'use_tabs' => true,
+			),
+			$this->slug . '-benefit-results'    => array(
+				'title'    => __( 'Benefit Results', 'minnpost-membership' ),
+				'sections' => array(
+					'partner-offer-claims' => __( 'Partner offer claims', 'minnpost-membership' ),
+					'fan-club-votes'       => __( 'FAN Club results', 'minnpost-membership' ),
+				),
 				'use_tabs' => true,
 			),
 			$this->slug . '-member-drive'       => array(
@@ -204,6 +220,47 @@ class MinnPost_Membership_Admin {
 					} else {
 						$member_levels = $this->member_levels->get_member_levels();
 						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
+					}
+					break;
+				case $this->slug . '-benefit-content':
+					if ( isset( $get_data['tab'] ) ) {
+						$tab = sanitize_key( $get_data['tab'] );
+					} else {
+						$tab = 'partner-offers-content';
+					}
+					$template = str_replace( '-content', '', $tab );
+					if ( isset( $get_data['method'] ) ) {
+						$method      = sanitize_key( $get_data['method'] );
+						$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&tab=' . $tab . '&method=' . $method );
+						$success_url = get_admin_url( null, 'admin.php?page=' . $page . '&tab=' . $tab );
+
+						if ( isset( $get_data['transient'] ) ) {
+							$transient = sanitize_key( $get_data['transient'] );
+							$posted    = $this->mp_mem_transients->get( $transient );
+						}
+
+						if ( isset( $posted ) && is_array( $posted ) ) {
+							$member_level = $posted;
+							$id           = $member_level['id'];
+						} elseif ( 'edit' === $method || 'delete' === $method ) {
+							$id           = $get_data['id'];
+							$content_item = 'what';
+						}
+
+						if ( isset( $content_item ) && is_array( $content_item ) ) {
+							$name = $content_item['name'];
+						}
+
+						if ( 'add' === $method || 'edit' === $method ) {
+							//require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
+						} elseif ( 'delete' === $method ) {
+							//require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
+						}
+					} else {
+						if ( 'partner-offers' === $template ) {
+							$content = $this->get_partners();
+						}
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/benefit-content-' . $template . '.php' );
 					}
 					break;
 				default:
