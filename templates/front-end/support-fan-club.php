@@ -25,8 +25,8 @@ $user_state = $minnpost_membership->user_info->get_user_state( '', 'support-fan-
 					<?php echo wpautop( $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'support-fan-club_action_body' ) ); ?>
 				<?php endif; ?>
 				<div class="m-form-actions m-membership-form-actions">
-					<?php $minnpost_membership->front_end->button( 'support-fan-club', 'body', $minnpost_membership->user_info->get_user_state( '', 'support-fan-club' ) ); ?>
-					<?php $minnpost_membership->front_end->link_next_to_button( 'support-fan-club', 'body', $minnpost_membership->user_info->get_user_state( '', 'support-fan-club' ) ); ?>
+					<?php $minnpost_membership->front_end->button( 'support-fan-club', 'body', $user_state ); ?>
+					<?php $minnpost_membership->front_end->link_next_to_button( 'support-fan-club', 'body', $user_state ); ?>
 				</div>
 			</section>
 			<aside class="m-entry-content">
