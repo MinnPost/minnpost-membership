@@ -50,6 +50,12 @@ class MinnPost_Membership {
 
 	/**
 	* @var object
+	* Load and initialize the MinnPost_Membership_Content_Items class
+	*/
+	public $content_items;
+
+	/**
+	* @var object
 	* Load and initialize the MinnPost_Membership_Admin class
 	*/
 	public $admin;
@@ -98,6 +104,8 @@ class MinnPost_Membership {
 		$this->member_levels = $this->member_levels();
 		// user info for membership
 		$this->user_info = $this->user_info();
+		// content items
+		$this->content_items = $this->content_items();
 		// admin settings
 		$this->admin = $this->admin();
 		// front end settings
@@ -151,13 +159,24 @@ class MinnPost_Membership {
 	}
 
 	/**
+	 * Plugin content items
+	 *
+	 * @return object $content_items
+	 */
+	public function content_items() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-content-items.php' );
+		$content_items = new MinnPost_Membership_Content_Items( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->cache );
+		return $content_items;
+	}
+
+	/**
 	 * Plugin admin
 	 *
 	 * @return object $admin
 	 */
 	public function admin() {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-admin.php' );
-		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->cache );
+		$admin = new MinnPost_Membership_Admin( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->content_items, $this->cache );
 		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
 		return $admin;
 	}
@@ -169,7 +188,7 @@ class MinnPost_Membership {
 	 */
 	public function front_end() {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-front-end.php' );
-		$front_end = new MinnPost_Membership_Front_End( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->cache );
+		$front_end = new MinnPost_Membership_Front_End( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->content_items, $this->cache );
 		return $front_end;
 	}
 
