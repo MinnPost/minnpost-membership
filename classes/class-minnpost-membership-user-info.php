@@ -294,7 +294,8 @@ class MinnPost_Membership_User_Info {
 			return $can_access;
 		}
 
-		// if user has a role that allows them to see everything, let them see everything
+		// if user has a role that allows them to see everything, let them see everything.
+		// but we should also show that they're seeing something that doesn't match their level
 		/*$user_info      = get_userdata( $user_id );
 		$all_user_roles = $user_info->roles;
 
