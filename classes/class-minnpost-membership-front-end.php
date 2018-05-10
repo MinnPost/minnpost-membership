@@ -284,7 +284,7 @@ class MinnPost_Membership_Front_End {
 			if ( locate_template( $blocked_templates ) ) {
 				$template = locate_template( $blocked_templates );
 			} else {
-				$template = dirname( __FILE__ ) . '/../templates/blocked/default.php';
+				$template = dirname( __FILE__ ) . '/../templates/blocked/single.php';
 			}
 			return $template;
 		}
