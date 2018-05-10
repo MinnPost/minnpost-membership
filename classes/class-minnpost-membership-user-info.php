@@ -125,14 +125,16 @@ class MinnPost_Membership_User_Info {
 
 		// if user has a role that allows them to see everything, let them see everything.
 		// but we should also show that they're seeing something that doesn't match their level
-		$user_info      = get_userdata( $user_id );
-		$all_user_roles = $user_info->roles;
+		if ( 0 !== $user_id ) {
+			$user_info      = get_userdata( $user_id );
+			$all_user_roles = $user_info->roles;
 
-		$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
-		if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
-			$can_access = true;
-			$user_state = 'member_eligible';
-			$super_user = true;
+			$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
+			if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
+				$can_access = true;
+				$user_state = 'member_eligible';
+				$super_user = true;
+			}
 		}
 
 		$user_access = array(
