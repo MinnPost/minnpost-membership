@@ -92,6 +92,8 @@ class MinnPost_Membership_User_Info {
 	*/
 	public function get_user_access( $user_id = '', $url = '' ) {
 
+		$super_user = false;
+
 		if ( '' === $user_id ) {
 			$user_id = get_current_user_id();
 		}
@@ -121,9 +123,22 @@ class MinnPost_Membership_User_Info {
 			}
 		}
 
+		// if user has a role that allows them to see everything, let them see everything.
+		// but we should also show that they're seeing something that doesn't match their level
+		$user_info      = get_userdata( $user_id );
+		$all_user_roles = $user_info->roles;
+
+		$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
+		if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
+			$can_access = true;
+			$user_state = 'member_eligible';
+			$super_user = true;
+		}
+
 		$user_access = array(
 			'state'      => $user_state,
 			'can_access' => $can_access,
+			'super_user' => false,
 		);
 
 		return $user_access;
@@ -301,16 +316,6 @@ class MinnPost_Membership_User_Info {
 		if ( true === $can_access ) {
 			return $can_access;
 		}
-
-		// if user has a role that allows them to see everything, let them see everything.
-		// but we should also show that they're seeing something that doesn't match their level
-		/*$user_info      = get_userdata( $user_id );
-		$all_user_roles = $user_info->roles;
-
-		$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
-		if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
-			$can_access = true;
-		}*/
 
 		return $can_access;
 	}
