@@ -75,7 +75,7 @@ class MinnPost_Membership_Admin {
 	*
 	*/
 	public function create_admin_menu() {
-		$capability = 'manage_options';
+		$capability = 'manage_minnpost_membership_options';
 		add_menu_page( __( 'MinnPost Membership', 'minnpost-membership' ), __( 'Membership', 'minnpost-membership' ), $capability, $this->slug, array( $this, 'show_admin_page' ), 'dashicons-groups' );
 		$pages = $this->get_admin_pages();
 		foreach ( $pages as $key => $value ) {

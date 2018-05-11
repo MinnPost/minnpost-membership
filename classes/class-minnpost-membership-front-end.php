@@ -76,20 +76,6 @@ class MinnPost_Membership_Front_End {
 		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
 	}
 
-	public function prevent_ads( $prevent_ads = false, $post_id = '' ) {
-		if ( '' !== $post_id ) {
-			$user_id    = get_current_user_id();
-			$can_access = $this->user_info->get_user_access( $user_id )['can_access'];
-
-			if ( true === $can_access ) {
-				return $prevent_ads;
-			} else {
-				$prevent_ads = true;
-			}
-		}
-		return $prevent_ads;
-	}
-
 	/**
 	* Allow for redirecting to the processor domain
 	*
@@ -306,6 +292,28 @@ class MinnPost_Membership_Front_End {
 			}
 			return $template;
 		}
+	}
+
+	/**
+	* Allow the plugin to prevent ads on posts that have a paywall
+	*
+	* @param bool $prevent_ads
+	* @param int $post_id
+	* @return bool $prevent_ads
+	*
+	*/
+	public function prevent_ads( $prevent_ads = false, $post_id = '' ) {
+		if ( '' !== $post_id ) {
+			$user_id    = get_current_user_id();
+			$can_access = $this->user_info->get_user_access( $user_id )['can_access'];
+
+			if ( true === $can_access ) {
+				return $prevent_ads;
+			} else {
+				$prevent_ads = true;
+			}
+		}
+		return $prevent_ads;
 	}
 
 	/**

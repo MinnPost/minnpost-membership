@@ -207,6 +207,9 @@ class MinnPost_Membership {
 	 * @return void
 	 */
 	public function activate() {
+		// by default, only administrators can configure the plugin
+		$role = get_role( 'administrator' );
+		$role->add_cap( 'manage_minnpost_membership_options' );
 		flush_rewrite_rules();
 	}
 
