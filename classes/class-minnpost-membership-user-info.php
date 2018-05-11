@@ -110,7 +110,7 @@ class MinnPost_Membership_User_Info {
 			$can_access = $this->user_can_access( $user_id, '', '', $url );
 		}
 
-		if ( ! isset( $user_state ) ) {
+		if ( 0 !== $user_id ) {
 			if ( true === $can_access ) {
 				$user_state = 'member_eligible';
 			} else {
@@ -121,11 +121,10 @@ class MinnPost_Membership_User_Info {
 					$user_state = 'member_ineligible';
 				}
 			}
-		}
 
-		// if user has a role that allows them to see everything, let them see everything.
-		// but we should also show that they're seeing something that doesn't match their level
-		if ( 0 !== $user_id ) {
+			// if user has a role that allows them to see everything, let them see everything.
+			// but we should also show that they're seeing something that doesn't match their level
+
 			$user_info      = get_userdata( $user_id );
 			$all_user_roles = $user_info->roles;
 
@@ -291,27 +290,33 @@ class MinnPost_Membership_User_Info {
 			return true;
 		}
 
-		// get the text value of the content access level
+		// get the int value of the content access level
 		if ( false === filter_var( $content_access_level, FILTER_VALIDATE_INT ) ) {
-			$key = array_search( $content_access_level, array_column( $this->all_member_levels, 'slug' ) );
+			$content_key = array_search( $content_access_level, array_column( $this->all_member_levels, 'slug' ) );
 		} else {
-			$key = $content_access_level;
+			$content_key = $content_access_level;
 		}
 
-		// if we have a slug here, it is the lowest level required for this content
-		if ( isset( $content_access_level['slug'] ) ) {
-			$content_access_level = $this->all_member_levels[ $key ]['slug'];
+		// if we have a key here, it is the lowest level required for this content
+		if ( isset( $content_key ) ) {
+			$content_access_level = $content_key;
 		}
 
-		// if we have a slug here, it is the user's member level
+		// if we have a slug here, it is the user's member level. otherwise, return the access state.
 		$user_member_level = $this->user_member_level( $user_id );
 		if ( isset( $user_member_level['slug'] ) ) {
-			$user_member_level = $user_member_level['slug'];
+			$user_member_level_slug = $user_member_level['slug'];
 		} else {
 			return $can_access;
 		}
 
-		if ( $user_member_level === $content_access_level ) {
+		// get the int key of the user's member level array
+		if ( false === filter_var( $user_member_level, FILTER_VALIDATE_INT ) ) {
+			$user_member_level = array_search( $user_member_level_slug, array_column( $this->all_member_levels, 'slug' ) );
+		}
+
+		// if the user's level is greater than or equal to the content, they can access it
+		if ( $user_member_level >= $content_access_level ) {
 			$can_access = true;
 		}
 
