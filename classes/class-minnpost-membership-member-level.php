@@ -60,30 +60,25 @@ class MinnPost_Membership_Member_Level {
 	* @return array $member_levels
 	*
 	*/
-	public function get_member_levels( $value = '', $show_nonmember = false, $field = 'id' ) {
+	public function get_member_levels( $value = '', $show_nonmember = false, $field = 'id', $reset = false ) {
 		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
 		if ( true !== $show_nonmember ) {
 			$key = array_search( '1', array_column( $member_levels, 'is_nonmember' ) );
 			unset( $member_levels[ $key ] );
 		}
 
-		/*
-		if we have to cache the member levels, this is how to do it
-		usort( $member_levels, function( $a, $b ) {
-			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
-			}
-		});
+		$member_status  = array_column( $member_levels, 'is_nonmember' );
+		$minimum_amount = array_column( $member_levels, 'minimum_monthly_amount' );
+		array_multisort( $member_status, SORT_DESC, $minimum_amount, SORT_ASC, $member_levels );
 
-		$call = 'id=' . $id . 'show_nonmember=' . $show_nonmember;
-		$reset = true;
+		$call = $field . '=' . $value . 'show_nonmember=' . $show_nonmember;
 
 		$cached = $this->cache->cache_get( $call, $reset );
 		if ( is_array( $cached ) ) {
 			$member_levels = $cached;
 		} else {
 			$cached = $this->cache->cache_set( $call, $member_levels );
-		}*/
+		}
 
 		if ( '' !== $value ) {
 			if ( 'id' === $field ) {
