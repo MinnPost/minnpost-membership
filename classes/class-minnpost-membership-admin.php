@@ -1245,7 +1245,7 @@ class MinnPost_Membership_Admin {
 				'section'  => $this_section,
 				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
 					'constant'      => '',
 					'type'          => 'text',
 					'rows'          => '5',
@@ -1420,7 +1420,7 @@ class MinnPost_Membership_Admin {
 				'section'  => $this_section,
 				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
 					'constant'      => '',
 					'type'          => 'text',
 					'rows'          => '5',
@@ -1658,7 +1658,7 @@ class MinnPost_Membership_Admin {
 				'section'  => $this_section,
 				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
 					'constant'      => '',
 					'type'          => 'text',
 					'rows'          => '5',
