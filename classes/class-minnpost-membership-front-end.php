@@ -73,6 +73,21 @@ class MinnPost_Membership_Front_End {
 		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'form_submit' ) );
 		// this could be used for any other template as well, but we are sticking with single by default.
 		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
+		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
+	}
+
+	public function prevent_ads( $prevent_ads = false, $post_id = '' ) {
+		if ( '' !== $post_id ) {
+			$user_id    = get_current_user_id();
+			$can_access = $this->user_info->get_user_access( $user_id )['can_access'];
+
+			if ( true === $can_access ) {
+				return $prevent_ads;
+			} else {
+				$prevent_ads = true;
+			}
+		}
+		return $prevent_ads;
 	}
 
 	/**
