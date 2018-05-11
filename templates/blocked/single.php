@@ -8,6 +8,7 @@
  */
 
 get_header(); ?>
+
 <?php
 global $minnpost_membership;
 $user_state = $minnpost_membership->user_info->get_user_access( '' )['state'];
@@ -29,10 +30,7 @@ $user_state = $minnpost_membership->user_info->get_user_access( '' )['state'];
 				</header><!-- .m-entry-header -->
 
 				<div class="m-entry-content">
-
 					<?php echo apply_filters( 'the_content', $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'post_access_blocked_message', $user_state ) ); ?>
-
-
 				</div><!-- .m-entry-content -->
 
 			</article><!-- #post-## -->

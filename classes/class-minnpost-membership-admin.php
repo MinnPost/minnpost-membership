@@ -1637,18 +1637,35 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings['post_access_template_suffix'] = array(
-			'title'    => __( 'Blocked template suffix', 'minnpost-membership' ),
+		$settings['post_access_single_template_suffix'] = array(
+			'title'    => __( 'Blocked single template suffix', 'minnpost-membership' ),
 			'callback' => $callbacks['text'],
 			'page'     => $page,
 			'section'  => $this_section,
 			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 			'args'     => array(
 				'type'     => 'text',
-				'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call.',
+				'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
 				'constant' => '',
 			),
 		);
+		// action boxes for fan club
+		foreach ( $eligibility_states as $eligibility_state ) {
+			$settings[ 'post_access_blocked_message_' . $eligibility_state['id'] ] = array(
+				'title'    => __( 'Message', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $page,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'args'     => array(
+					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+		}
 
 		foreach ( $settings as $key => $attributes ) {
 			$id       = $this->option_prefix . $key;

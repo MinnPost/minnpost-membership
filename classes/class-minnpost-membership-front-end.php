@@ -53,7 +53,7 @@ class MinnPost_Membership_Front_End {
 
 		$this->allowed_urls = $this->get_allowed_urls();
 
-		$this->blocked_template_suffix = '-' . get_option( $this->option_prefix . 'post_access_template_suffix', '' );
+		$this->blocked_template_suffix = '-' . get_option( $this->option_prefix . 'post_access_single_template_suffix', '' );
 
 	}
 
@@ -280,7 +280,10 @@ class MinnPost_Membership_Front_End {
 			foreach ( $templates as $default_template ) {
 				$blocked_templates[] = substr_replace( $default_template, $type . $this->blocked_template_suffix, 0, strlen( $type ) );
 			}
-			//$blocked_templates = array_merge( $blocked_templates, $templates );
+			$minnpost_membership = MinnPost_Membership::get_instance();
+			set_query_var( 'minnpost_membership', $minnpost_membership );
+			$user_state = $this->user_info->get_user_access( '' )['state'];
+			set_query_var( 'user_state', $user_state );
 			if ( locate_template( $blocked_templates ) ) {
 				$template = locate_template( $blocked_templates );
 			} else {
