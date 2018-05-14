@@ -66,6 +66,9 @@ class MinnPost_Membership_Admin {
 			add_filter( 'pre_update_option_' . $this->option_prefix . 'payment_urls', array( $this, 'url_option_updated' ), 10, 2 );
 			add_filter( 'pre_update_option_' . $this->option_prefix . 'member_benefit_urls', array( $this, 'url_option_updated' ), 10, 2 );
 			add_filter( 'pre_update_option_' . $this->option_prefix . 'campaign_ids', array( $this, 'campaign_ids_updated' ), 10, 2 );
+
+			add_filter( 'tiny_mce_before_init', array( $this, 'editor_settings' ), 10, 2 );
+
 		}
 
 	}
@@ -1649,7 +1652,7 @@ class MinnPost_Membership_Admin {
 				'constant' => '',
 			),
 		);
-		// action boxes for fan club
+		// action boxes for benefit content
 		foreach ( $eligibility_states as $eligibility_state ) {
 			$settings[ 'post_access_blocked_message_' . $eligibility_state['id'] ] = array(
 				'title'    => __( 'Message', 'minnpost-membership' ),
@@ -1886,6 +1889,28 @@ class MinnPost_Membership_Admin {
 			}
 		}
 		return $new_value;
+	}
+
+	/**
+	* For editors where we need to change the settings, do it
+	*
+	* @param array $init
+	* @param string $editor_id
+	*
+	*/
+	public function editor_settings( $init, $editor_id ) {
+		$eligibility_states = $this->get_user_eligibility_states( true ); // this is a use screen
+		foreach ( $eligibility_states as $eligibility_state ) {
+			if ( 'post_access_blocked_message_' . $eligibility_state['id'] === $editor_id ) {
+				$init['wpautop'] = false;
+			    $init['forced_root_blocks'] = false;
+			    $init['force_p_newlines'] = false;
+			    $init['force_br_newlines'] = true;
+			}
+		}
+		// Pass $init back to WordPress
+		return $init;
+		// post_access_blocked_message_' . $eligibility_state['id'] is the editor id
 	}
 
 	private function get_partners() {
