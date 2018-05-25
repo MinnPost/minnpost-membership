@@ -130,9 +130,9 @@
 						$( event.target ).closest( options.single_level_summary_selector ).addClass( 'flipped' );
 
 						if ( frequency == 1 ) {
-							$( options.amount_selector_in_levels).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-yearly' ) );
+							$( options.amount_selector_in_levels, $( options.single_level_container + '-' + level_number ) ).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-yearly' ) );
 						} else if ( frequency == 12 ) {
-							$( options.amount_selector_in_levels).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-monthly' ) );
+							$( options.amount_selector_in_levels, $( options.single_level_container + '-' + level_number ) ).val( $( options.amount_viewer, $( options.single_level_container + '-' + level_number ) ).data('default-monthly' ) );
 						}
 
 						amount = $( options.amount_selector_in_levels + '[data-member-level-number="' + level_number + '"]').val();
