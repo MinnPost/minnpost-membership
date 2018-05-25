@@ -272,8 +272,10 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function template_show_or_block( $template, $type, $templates ) {
 		global $post;
-		$user_id    = get_current_user_id();
-		$can_access = $this->user_info->get_user_access( $user_id )['can_access'];
+		$user_id          = get_current_user_id();
+		$user_access_data = $this->user_info->get_user_access( $user_id );
+
+		$can_access = $user_access_data['can_access'];
 
 		if ( true === $can_access ) {
 			return $template;
