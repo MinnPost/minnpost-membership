@@ -113,13 +113,14 @@ class MinnPost_Membership_Front_End {
 			foreach ( $this->allowed_urls as $url ) {
 				$routes->addRoute( new QueryRoute(
 					$url,
-					function ( array $matches ) {
+					function ( array $matches, $this_url ) {
 						// send this object to the template so it can be called
 						global $minnpost_membership;
 						$minnpost_membership = MinnPost_Membership::get_instance();
 						// set a query var so we can filter it
 						$query = array(
-							'is_membership' => true,
+							'is_membership'  => true,
+							'membership_url' => implode( '-', $this_url->chunks() ),
 						);
 						return $query;
 					},
