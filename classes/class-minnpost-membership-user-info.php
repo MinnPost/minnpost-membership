@@ -96,16 +96,18 @@ class MinnPost_Membership_User_Info {
 	public function get_url_access( $url = '' ) {
 		$url_access = '';
 		if ( '' === $url ) {
-			$post_id              = get_the_ID();
-			$post_meta_key        = $this->post_access_meta_key;
-			$content_access_level = get_post_meta( $post_id, $post_meta_key, true );
+			$post_id       = get_the_ID();
+			$post_meta_key = $this->post_access_meta_key;
+			$url_access    = get_post_meta( $post_id, $post_meta_key, true );
 		} else {
 			// get all the levels from the option value
 			$content_access_levels = get_option( $this->option_prefix . $url . '_' . $this->option_levels_key, array() );
-			// get the minimum level required for this content
-			$content_access_level = $content_access_levels[ min( array_keys( $content_access_levels ) ) ];
+			if ( ! empty( $content_access_levels ) ) {
+				// get the minimum level required for this content
+				$url_access = $content_access_levels[ min( array_keys( $content_access_levels ) ) ];
+			}
 		}
-		return $content_access_level;
+		return $url_access;
 	}
 
 	/**
@@ -291,17 +293,7 @@ class MinnPost_Membership_User_Info {
 			$user_id = get_current_user_id();
 		}
 
-		if ( '' === $url ) {
-			if ( '' === $post_id ) {
-				$post_id = get_the_ID();
-			}
-			$content_access_level = get_post_meta( $post_id, $post_meta_key, true );
-		} else {
-			// get all the levels from the option value
-			$content_access_levels = get_option( $this->option_prefix . $url . '_' . $this->option_levels_key, array() );
-			// get the minimum level required for this content
-			$content_access_level = $content_access_levels[ min( array_keys( $content_access_levels ) ) ];
-		}
+		$content_access_level = $this->get_url_access( $url );
 
 		if ( '' === $content_access_level ) {
 			return true;
