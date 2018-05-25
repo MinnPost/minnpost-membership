@@ -87,11 +87,37 @@ class MinnPost_Membership_User_Info {
 	}
 
 	/**
+	* Detect the user access that is required for the current url
+	*
+	* @param string $url
+	* @return string|int $content_access_level - is a level integer or a string, depending on what the url is
+	*
+	*/
+	public function get_url_access( $url = '' ) {
+		$url_access = '';
+		if ( '' === $url ) {
+			$post_id              = get_the_ID();
+			$post_meta_key        = $this->post_access_meta_key;
+			$content_access_level = get_post_meta( $post_id, $post_meta_key, true );
+		} else {
+			// get all the levels from the option value
+			$content_access_levels = get_option( $this->option_prefix . $url . '_' . $this->option_levels_key, array() );
+			// get the minimum level required for this content
+			$content_access_level = $content_access_levels[ min( array_keys( $content_access_levels ) ) ];
+		}
+		return $content_access_level;
+	}
+
+	/**
 	* Get the current state of this user for this content
+	*
+	* @param int $user_id
+	* @param string $url
+	* @return array $user_access
 	*
 	*/
 	public function get_user_access( $user_id = '', $url = '' ) {
-
+		$url_access = $this->get_url_access( $url );
 		$super_user = false;
 
 		if ( '' === $user_id ) {
@@ -140,6 +166,7 @@ class MinnPost_Membership_User_Info {
 			'state'      => $user_state,
 			'can_access' => $can_access,
 			'super_user' => false,
+			'url_access' => $url_access,
 		);
 
 		return $user_access;
@@ -161,7 +188,8 @@ class MinnPost_Membership_User_Info {
 
 		$user_info = get_userdata( $user_id );
 
-		$user_membership_info['member_level'] = $this->user_member_level( $user_id )['slug'];
+		$user_membership_info['member_level']        = $this->user_member_level( $user_id )['slug'];
+		$user_membership_info['member_level_number'] = $this->user_member_level( $user_id )['number'];
 
 		// i do not think these are the ideal fields, but for now we'll keep them
 		$user_membership_info['previous_amount'] = array(
@@ -199,7 +227,9 @@ class MinnPost_Membership_User_Info {
 		if ( is_array( $user_roles ) && ! empty( $user_roles ) ) {
 			$highest_user_role_name = $user_roles[ max( array_keys( $user_roles ) ) ];
 			$highest_user_role_key  = array_search( $highest_user_role_name, array_column( $this->all_member_levels, 'slug' ) );
-			$user_member_level      = $this->all_member_levels[ $highest_user_role_key ];
+
+			$user_member_level           = $this->all_member_levels[ $highest_user_role_key ];
+			$user_member_level['number'] = $highest_user_role_key;
 		}
 
 		return $user_member_level;
