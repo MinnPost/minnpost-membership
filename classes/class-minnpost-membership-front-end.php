@@ -286,7 +286,7 @@ class MinnPost_Membership_Front_End {
 			}
 			$minnpost_membership = MinnPost_Membership::get_instance();
 			set_query_var( 'minnpost_membership', $minnpost_membership );
-			$user_state = $this->user_info->get_user_access( '' )['state'];
+			$user_state = $user_access_data['state'];
 			set_query_var( 'user_state', $user_state );
 			if ( locate_template( $blocked_templates ) ) {
 				$template = locate_template( $blocked_templates );
@@ -663,9 +663,16 @@ class MinnPost_Membership_Front_End {
 	* @return array $user_membership_info
 	*/
 	public function get_user_membership_info() {
+		$user_id          = get_current_user_id();
+		$user_access_data = $this->user_info->get_user_access( $user_id, $url );
+
+		$current_user = $this->user_info->user_membership_info( $user_id );
+
+		$current_user['can_access'] = $user_access_data['can_access'];
+
 		$user_membership_info = array(
 			'member_level_prefix' => $this->member_levels->member_level_prefix,
-			'current_user'        => $this->user_info->user_membership_info( get_current_user_id() ),
+			'current_user'        => $current_user,
 		);
 		return $user_membership_info;
 	}
