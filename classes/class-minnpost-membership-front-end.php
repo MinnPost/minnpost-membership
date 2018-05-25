@@ -276,6 +276,7 @@ class MinnPost_Membership_Front_End {
 		$user_access_data = $this->user_info->get_user_access( $user_id );
 
 		$can_access = $user_access_data['can_access'];
+		$url_access = $user_access_data['url_access'];
 
 		if ( true === $can_access ) {
 			return $template;
@@ -663,9 +664,17 @@ class MinnPost_Membership_Front_End {
 	* @return array $user_membership_info
 	*/
 	public function get_user_membership_info() {
+
+		global $wp_query;
+		$url = '';
+		if ( isset( $wp_query->query_vars['membership_url'] ) ) {
+			$url = $wp_query->query_vars['membership_url'];
+		}
+
 		$user_id          = get_current_user_id();
 		$user_access_data = $this->user_info->get_user_access( $user_id, $url );
 
+		$url_access   = $user_access_data['url_access'];
 		$current_user = $this->user_info->user_membership_info( $user_id );
 
 		$current_user['can_access'] = $user_access_data['can_access'];
@@ -673,6 +682,7 @@ class MinnPost_Membership_Front_End {
 		$user_membership_info = array(
 			'member_level_prefix' => $this->member_levels->member_level_prefix,
 			'current_user'        => $current_user,
+			'url_access_level'    => $url_access,
 		);
 		return $user_membership_info;
 	}
