@@ -96,7 +96,7 @@ class MinnPost_Membership_Admin {
 	*/
 	private function get_admin_pages() {
 		$pages = array(
-			$this->slug . '-settings'           => array(
+			$this->slug . '-settings'          => array(
 				'title'    => __( 'General Settings', 'minnpost-membership' ),
 				'sections' => array(
 					'member-levels' => __( 'Member levels', 'minnpost-membership' ),
@@ -104,22 +104,22 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
-			$this->slug . '-taking-payments'    => array(
+			$this->slug . '-taking-payments'   => array(
 				'title'    => __( 'Taking Payments', 'minnpost-membership' ),
 				'sections' => $this->setup_payment_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-campaign-settings'  => array(
+			$this->slug . '-campaign-settings' => array(
 				'title'    => __( 'Campaign Settings', 'minnpost-membership' ),
 				'sections' => $this->setup_campaign_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-explain-benefits'   => array(
+			$this->slug . '-explain-benefits'  => array(
 				'title'    => __( 'Explain Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_explain_benefit_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-benefit-content'    => array(
+			$this->slug . '-benefit-content'   => array(
 				'title'    => __( 'Benefit Content', 'minnpost-membership' ),
 				'sections' => array(
 					'partner-offers-content' => __( 'Partner offers', 'minnpost-membership' ),
@@ -127,12 +127,12 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => true,
 			),
-			$this->slug . '-use-benefits'       => array(
+			$this->slug . '-use-benefits'      => array(
 				'title'    => __( 'Use Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_use_benefit_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-benefit-results'    => array(
+			$this->slug . '-benefit-results'   => array(
 				'title'    => __( 'Benefit Results', 'minnpost-membership' ),
 				'sections' => array(
 					'partner-offer-claims' => __( 'Partner offer claims', 'minnpost-membership' ),
@@ -140,12 +140,12 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => true,
 			),
-			$this->slug . '-member-drive'       => array(
+			/*$this->slug . '-member-drive'       => array(
 				'title'    => __( 'Member Drive', 'minnpost-membership' ),
 				'sections' => array(),
 				'use_tabs' => false,
-			),
-			$this->slug . '-premium-content'    => array(
+			),*/
+			$this->slug . '-premium-content'   => array(
 				'title'    => __( 'Premium Content', 'minnpost-membership' ),
 				'sections' => array(
 					'access_settings' => __( 'Access settings', 'minnpost-membership' ),
