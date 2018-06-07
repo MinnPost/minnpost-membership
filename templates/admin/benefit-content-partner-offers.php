@@ -26,16 +26,16 @@
 							</td>
 							<td><?php echo get_post_status(); ?></td>
 							<td>
-								<a href=""><?php echo esc_html__( 'Edit', 'minnpost-membership' ); ?></a>
+								<a href="<?php echo esc_url( get_admin_url( null, 'admin.php?page=' . $page . '&method=edit-partner&partner_id=' . get_the_ID() ) ); ?>"><?php echo esc_html__( 'Edit', 'minnpost-membership' ); ?></a>
 							</td>
 							<td>
-								<a href=""><?php echo esc_html__( 'Delete', 'minnpost-membership' ); ?></a>
+								<a href="<?php echo esc_url( get_admin_url( null, 'admin.php?page=' . $page . '&method=delete-partner&partner_id=' . get_the_ID() ) ); ?>"><?php echo esc_html__( 'Delete', 'minnpost-membership' ); ?></a>
 							</td>
 							<td>
-								<a href=""><?php echo esc_html__( 'Add new offer', 'minnpost-membership' ); ?></a>
+								<a href="<?php echo esc_url( get_admin_url( null, 'admin.php?page=' . $page . '&method=add-partner-offer&partner_id=' . get_the_ID() ) ); ?>"><?php echo esc_html__( 'Add new offer', 'minnpost-membership' ); ?></a>
 							</td>
 							<td>
-								<a href=""><?php echo esc_html__( 'List offers', 'minnpost-membership' ); ?></a>
+								<a href="<?php echo esc_url( get_admin_url( null, 'admin.php?page=' . $page . '&method=list-partner-offers&partner_id=' . get_the_ID() ) ); ?>"><?php echo esc_html__( 'List offers', 'minnpost-membership' ); ?></a>
 							</td>
 						</tr>
 					<?php endwhile; ?>

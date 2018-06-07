@@ -243,20 +243,27 @@ class MinnPost_Membership_Admin {
 						}
 
 						if ( isset( $posted ) && is_array( $posted ) ) {
-							$member_level = $posted;
-							$id           = $member_level['id'];
-						} elseif ( 'edit' === $method || 'delete' === $method ) {
-							$id           = $get_data['id'];
-							$content_item = 'what';
+							$partner_id = isset( $posted['partner_id'] ) ? $posted['partner_id'] : '';
+						} elseif ( 'edit-partner' === $method || 'delete-partner' === $method ) {
+							$partner_id = isset( $get_data['partner_id'] ) ? $get_data['partner_id'] : '';
+							if ( '' !== $partner_id ) {
+								$partner = $this->get_partners( $partner_id );
+							}
+						} elseif ( 'edit-partner-offer' === $method || 'delete-partner-offer' === $method ) {
+							$partner_id = isset( $get_data['partner_id'] ) ? $get_data['partner_id'] : '';
+							if ( '' !== $partner_id ) {
+								$partner = $this->get_partners( $partner_id );
+							}
+							$partner_offer_id = isset( $get_data['partner_offer_id'] ) ? $get_data['partner_offer_id'] : '';
+							if ( '' !== $partner_offer_id ) {
+								$partner_offer = 'what';
+							}
 						}
 
-						if ( isset( $content_item ) && is_array( $content_item ) ) {
-							$name = $content_item['name'];
-						}
 
-						if ( 'add' === $method || 'edit' === $method ) {
-							//require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
-						} elseif ( 'delete' === $method ) {
+						if ( 'add-partner' === $method || 'edit-partner' === $method ) {
+							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/partner-add-edit.php' );
+						} elseif ( 'delete-partner' === $method ) {
 							//require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
 						}
 					} else {
@@ -1902,10 +1909,10 @@ class MinnPost_Membership_Admin {
 		$eligibility_states = $this->get_user_eligibility_states( true ); // this is a use screen
 		foreach ( $eligibility_states as $eligibility_state ) {
 			if ( 'post_access_blocked_message_' . $eligibility_state['id'] === $editor_id ) {
-				$init['wpautop'] = false;
-			    $init['forced_root_blocks'] = false;
-			    $init['force_p_newlines'] = false;
-			    $init['force_br_newlines'] = true;
+				$init['wpautop']            = false;
+				$init['forced_root_blocks'] = false;
+				$init['force_p_newlines']   = false;
+				$init['force_br_newlines']  = true;
 			}
 		}
 		// Pass $init back to WordPress
@@ -1913,8 +1920,8 @@ class MinnPost_Membership_Admin {
 		// post_access_blocked_message_' . $eligibility_state['id'] is the editor id
 	}
 
-	private function get_partners() {
-		$partners = $this->content_items->get_partners();
+	private function get_partners( $partner_id = '' ) {
+		$partners = $this->content_items->get_partners( $partner_id );
 		return $partners;
 	}
 

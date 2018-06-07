@@ -168,10 +168,13 @@ class MinnPost_Membership_Content_Items {
 			'order'          => 'ASC',
 		);
 		if ( '' !== $partner_id ) {
-			$args['p'] = $partner_id;
+			$partner       = get_post( $partner_id );
+			$partner->meta = get_post_meta( $partner_id );
+			return $partner;
+		} else {
+			$partners = new WP_Query( $args );
+			return $partners;
 		}
-		$partners = new WP_Query( $args );
-		return $partners;
 	}
 
 	/**
