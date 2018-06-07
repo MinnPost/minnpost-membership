@@ -1624,6 +1624,19 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$settings['post_access_single_template_suffix'] = array(
+			'title'    => __( 'Blocked single template suffix', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
+			'page'     => $page,
+			'section'  => $this_section,
+			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
+			'args'     => array(
+				'type'     => 'text',
+				'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
+				'constant' => '',
+			),
+		);
+
 		$eligibility_states = $this->get_user_eligibility_states( true ); // this is a use screen
 
 		$settings['post_access_user_state'] = array(
@@ -1637,19 +1650,6 @@ class MinnPost_Membership_Admin {
 				'desc'     => '',
 				'constant' => '',
 				'items'    => $eligibility_states,
-			),
-		);
-
-		$settings['post_access_single_template_suffix'] = array(
-			'title'    => __( 'Blocked single template suffix', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $page,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
-			'args'     => array(
-				'type'     => 'text',
-				'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
-				'constant' => '',
 			),
 		);
 		// action boxes for benefit content
