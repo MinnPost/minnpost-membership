@@ -119,14 +119,6 @@ class MinnPost_Membership_Admin {
 				'sections' => $this->setup_explain_benefit_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-benefit-content'   => array(
-				'title'    => __( 'Benefit Content', 'minnpost-membership' ),
-				'sections' => array(
-					'partner-offers-content' => __( 'Partner offers', 'minnpost-membership' ),
-					'fan-club-content'       => __( 'FAN Club', 'minnpost-membership' ),
-				),
-				'use_tabs' => true,
-			),
 			$this->slug . '-use-benefits'      => array(
 				'title'    => __( 'Use Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_use_benefit_page_sections(),
@@ -223,54 +215,6 @@ class MinnPost_Membership_Admin {
 					} else {
 						$member_levels = $this->member_levels->get_member_levels();
 						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
-					}
-					break;
-				case $this->slug . '-benefit-content':
-					if ( isset( $get_data['tab'] ) ) {
-						$tab = sanitize_key( $get_data['tab'] );
-					} else {
-						$tab = 'partner-offers-content';
-					}
-					$template = str_replace( '-content', '', $tab );
-					if ( isset( $get_data['method'] ) ) {
-						$method      = sanitize_key( $get_data['method'] );
-						$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&tab=' . $tab . '&method=' . $method );
-						$success_url = get_admin_url( null, 'admin.php?page=' . $page . '&tab=' . $tab );
-
-						if ( isset( $get_data['transient'] ) ) {
-							$transient = sanitize_key( $get_data['transient'] );
-							$posted    = $this->mp_mem_transients->get( $transient );
-						}
-
-						if ( isset( $posted ) && is_array( $posted ) ) {
-							$partner_id = isset( $posted['partner_id'] ) ? $posted['partner_id'] : '';
-						} elseif ( 'edit-partner' === $method || 'delete-partner' === $method ) {
-							$partner_id = isset( $get_data['partner_id'] ) ? $get_data['partner_id'] : '';
-							if ( '' !== $partner_id ) {
-								$partner = $this->get_partners( $partner_id );
-							}
-						} elseif ( 'edit-partner-offer' === $method || 'delete-partner-offer' === $method ) {
-							$partner_id = isset( $get_data['partner_id'] ) ? $get_data['partner_id'] : '';
-							if ( '' !== $partner_id ) {
-								$partner = $this->get_partners( $partner_id );
-							}
-							$partner_offer_id = isset( $get_data['partner_offer_id'] ) ? $get_data['partner_offer_id'] : '';
-							if ( '' !== $partner_offer_id ) {
-								$partner_offer = 'what';
-							}
-						}
-
-
-						if ( 'add-partner' === $method || 'edit-partner' === $method ) {
-							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/partner-add-edit.php' );
-						} elseif ( 'delete-partner' === $method ) {
-							//require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
-						}
-					} else {
-						if ( 'partner-offers' === $template ) {
-							$content = $this->get_partners();
-						}
-						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/benefit-content-' . $template . '.php' );
 					}
 					break;
 				default:

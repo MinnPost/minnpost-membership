@@ -53,7 +53,40 @@ class MinnPost_Membership_Content_Items {
 	*/
 	public function add_actions() {
 		add_action( 'init', array( $this, 'create_partner' ), 0 );
+		add_action( 'init', array( $this, 'create_partner_offer' ), 0 );
+		add_action( 'admin_menu', array( $this, 'create_sub_menus' ), 20 );
+		// make the partner offer a child of the partner
+		add_action('admin_menu', function() {
+			remove_meta_box( 'pageparentdiv', 'partner_offer', 'normal' );
+		});
+		add_action( 'add_meta_boxes', function() {
+			add_meta_box( 'partner_offer-parent', 'Partners', array( $this, 'partner_offer_attributes_meta_box' ), 'partner_offer', 'side', 'high' );
+		});
 		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
+		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
+	}
+
+	/**
+	* Pick the partner for the partner offer
+	*
+	* @param string $post
+	*
+	*/
+	public function partner_offer_attributes_meta_box( $post ) {
+		$post_type_object = get_post_type_object( $post->post_type );
+		if ( $post_type_object->hierarchical ) {
+			$pages = wp_dropdown_pages( array(
+				'post_type'        => 'partner',
+				'selected'         => $post->post_parent,
+				'name'             => 'parent_id',
+				'show_option_none' => __( 'Choose Partner', 'minnpost-membership' ),
+				'sort_column'      => 'menu_order, post_title',
+				'echo'             => 0,
+			) );
+			if ( ! empty( $pages ) ) {
+				echo $pages;
+			}
+		}
 	}
 
 	/**
@@ -93,16 +126,15 @@ class MinnPost_Membership_Content_Items {
 		);
 		$args   = array(
 			'label'               => __( 'Partner', 'minnpost-membership' ),
-			'description'         => __( 'Post Type Description', 'minnpost-membership' ),
+			'description'         => __( 'Partner organizations that can provide offers', 'minnpost-membership' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title', 'revisions' ),
 			'hierarchical'        => true,
-			'public'              => false,
+			'public'              => true,
 			'show_ui'             => true,
-			'show_in_menu'        => 'admin.php?page=minnpost-membership',
-			'menu_position'       => 5,
+			'show_in_menu'        => false,
 			'show_in_admin_bar'   => true,
-			'show_in_nav_menus'   => false,
+			'show_in_nav_menus'   => true,
 			'can_export'          => true,
 			'has_archive'         => false,
 			'exclude_from_search' => true,
@@ -110,7 +142,68 @@ class MinnPost_Membership_Content_Items {
 			'capability_type'     => 'page',
 		);
 		register_post_type( 'partner', $args );
+	}
 
+	/**
+	* Create the partner offer content type
+	*
+	*/
+	public function create_partner_offer() {
+
+		$labels = array(
+			'name'                  => _x( 'Partner Offers', 'Post Type General Name', 'minnpost-membership' ),
+			'singular_name'         => _x( 'Partner Offer', 'Post Type Singular Name', 'minnpost-membership' ),
+			'menu_name'             => __( 'Partner Offers', 'minnpost-membership' ),
+			'name_admin_bar'        => __( 'Partner Offer', 'minnpost-membership' ),
+			'archives'              => __( 'Partner Offer Archives', 'minnpost-membership' ),
+			'attributes'            => __( 'Partner Offer Attributes', 'minnpost-membership' ),
+			'parent_item_colon'     => __( 'Parent Partner Offer:', 'minnpost-membership' ),
+			'all_items'             => __( 'All Partner Offers', 'minnpost-membership' ),
+			'add_new_item'          => __( 'Add New Partner Offer', 'minnpost-membership' ),
+			'add_new'               => __( 'Add New', 'minnpost-membership' ),
+			'new_item'              => __( 'New Partner Offer', 'minnpost-membership' ),
+			'edit_item'             => __( 'Edit Partner Offer', 'minnpost-membership' ),
+			'update_item'           => __( 'Update Partner Offer', 'minnpost-membership' ),
+			'view_item'             => __( 'View Partner Offer', 'minnpost-membership' ),
+			'view_items'            => __( 'View Partner Offers', 'minnpost-membership' ),
+			'search_items'          => __( 'Search Partner Offers', 'minnpost-membership' ),
+			'not_found'             => __( 'Not found', 'minnpost-membership' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'minnpost-membership' ),
+			'featured_image'        => __( 'Featured Image', 'minnpost-membership' ),
+			'set_featured_image'    => __( 'Set featured image', 'minnpost-membership' ),
+			'remove_featured_image' => __( 'Remove featured image', 'minnpost-membership' ),
+			'use_featured_image'    => __( 'Use as featured image', 'minnpost-membership' ),
+			'insert_into_item'      => __( 'Insert into partner offer', 'minnpost-membership' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this partner offer', 'minnpost-membership' ),
+			'items_list'            => __( 'Partner Offers list', 'minnpost-membership' ),
+			'items_list_navigation' => __( 'Partner Offers list navigation', 'minnpost-membership' ),
+			'filter_items_list'     => __( 'Filter partner offers list', 'minnpost-membership' ),
+		);
+		$args   = array(
+			'label'               => 'Partner offer',
+			'description'         => 'A partner-specific offer.',
+			'labels'              => $labels,
+			'supports'            => array(),
+			'hierarchical'        => true,
+			'public'              => true,
+			'show_ui'             => true,
+			'show_in_menu'        => false,
+			'show_in_admin_bar'   => true,
+			'show_in_nav_menus'   => true,
+			'can_export'          => true,
+			'has_archive'         => false,
+			'exclude_from_search' => true,
+			'publicly_queryable'  => true,
+			'capability_type'     => 'page',
+		);
+		register_post_type( 'partner_offer', $args );
+	}
+
+	public function create_sub_menus() {
+		$partner = 'edit.php?post_type=partner';
+		add_submenu_page( $this->slug, 'Partners', 'Partners', 'manage_options', $partner );
+		$partner_offer = 'edit.php?post_type=partner_offer';
+		add_submenu_page( $this->slug, 'Partner Offers', 'Partner Offers', 'manage_options', $partner_offer );
 	}
 
 	/**
@@ -152,6 +245,23 @@ class MinnPost_Membership_Content_Items {
 				'type' => 'image',
 			),
 		) );
+	}
+
+	/**
+	* Create the partner offer fields with CMB2
+	*
+	*/
+	public function create_partner_offer_fields() {
+		$object_type = 'partner_offer';
+		$prefix      = '_mp_partner_offer_';
+
+		/*$partner_fields = new_cmb2_box( array(
+			'id'           => $prefix . 'parent',
+			'title'        => 'Partners',
+			'object_types' => $object_type,
+			'context'      => 'side',
+			'priority'     => 'high',
+		) );*/
 	}
 
 	/**
