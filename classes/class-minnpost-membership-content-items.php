@@ -55,38 +55,9 @@ class MinnPost_Membership_Content_Items {
 		add_action( 'init', array( $this, 'create_partner' ), 0 );
 		add_action( 'init', array( $this, 'create_partner_offer' ), 0 );
 		add_action( 'admin_menu', array( $this, 'create_sub_menus' ), 20 );
-		// make the partner offer a child of the partner
-		add_action('admin_menu', function() {
-			remove_meta_box( 'pageparentdiv', 'partner_offer', 'normal' );
-		});
-		add_action( 'add_meta_boxes', function() {
-			add_meta_box( 'partner_offer-parent', 'Partners', array( $this, 'partner_offer_attributes_meta_box' ), 'partner_offer', 'side', 'high' );
-		});
+		add_filter( 'enter_title_here', array( $this, 'title_placeholders' ), 10, 1 );
 		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
-	}
-
-	/**
-	* Pick the partner for the partner offer
-	*
-	* @param string $post
-	*
-	*/
-	public function partner_offer_attributes_meta_box( $post ) {
-		$post_type_object = get_post_type_object( $post->post_type );
-		if ( $post_type_object->hierarchical ) {
-			$pages = wp_dropdown_pages( array(
-				'post_type'        => 'partner',
-				'selected'         => $post->post_parent,
-				'name'             => 'parent_id',
-				'show_option_none' => __( 'Choose Partner', 'minnpost-membership' ),
-				'sort_column'      => 'menu_order, post_title',
-				'echo'             => 0,
-			) );
-			if ( ! empty( $pages ) ) {
-				echo $pages;
-			}
-		}
 	}
 
 	/**
@@ -183,7 +154,7 @@ class MinnPost_Membership_Content_Items {
 			'label'               => 'Partner offer',
 			'description'         => 'A partner-specific offer.',
 			'labels'              => $labels,
-			'supports'            => array(),
+			'supports'            => array( 'title', 'revisions' ),
 			'hierarchical'        => true,
 			'public'              => true,
 			'show_ui'             => true,
@@ -199,11 +170,33 @@ class MinnPost_Membership_Content_Items {
 		register_post_type( 'partner_offer', $args );
 	}
 
+	/**
+	* Create submenus for these content items
+	*
+	*/
 	public function create_sub_menus() {
 		$partner = 'edit.php?post_type=partner';
 		add_submenu_page( $this->slug, 'Partners', 'Partners', 'manage_options', $partner );
 		$partner_offer = 'edit.php?post_type=partner_offer';
 		add_submenu_page( $this->slug, 'Partner Offers', 'Partner Offers', 'manage_options', $partner_offer );
+	}
+
+	/**
+	* Create the partner offer content type
+	*
+	* @param string $title
+	* @return string $title
+	*
+	*/
+	public function title_placeholders( $title ) {
+		$screen = get_current_screen();
+		if ( 'partner' === $screen->post_type ) {
+			$title = 'Enter partner name here';
+		}
+		if ( 'partner_offer' === $screen->post_type ) {
+			$title = 'Enter offer name here';
+		}
+		return $title;
 	}
 
 	/**
@@ -219,8 +212,6 @@ class MinnPost_Membership_Content_Items {
 			'id'           => $prefix . 'partner_fields',
 			'title'        => 'Partner Fields',
 			'object_types' => $object_type,
-			//'context'    => 'after_title',
-			//'priority'   => 'high',
 		) );
 		$partner_fields->add_field( array(
 			'name' => 'Link URL',
@@ -255,13 +246,39 @@ class MinnPost_Membership_Content_Items {
 		$object_type = 'partner_offer';
 		$prefix      = '_mp_partner_offer_';
 
-		/*$partner_fields = new_cmb2_box( array(
+		remove_meta_box( 'pageparentdiv', $object_type, 'normal' );
+
+		$partner_box = new_cmb2_box( array(
 			'id'           => $prefix . 'parent',
-			'title'        => 'Partners',
+			'title'        => 'Partner',
 			'object_types' => $object_type,
 			'context'      => 'side',
 			'priority'     => 'high',
-		) );*/
+		) );
+
+		$posts = get_posts(
+			array(
+				'post_type'      => 'partner',
+				'posts_per_page' => -1,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+			)
+		);
+		$items = array();
+		foreach ( $posts as $post ) {
+			$items[ $post->ID ] = $post->post_title;
+		}
+
+		$partner_box->add_field( array(
+			'name'             => '',
+			'desc'             => '',
+			'id'               => 'partner_id',
+			'type'             => 'select',
+			'show_option_none' => __( 'Choose Partner', 'minnpost-membership' ),
+			'default'          => '',
+			'options'          => $items,
+		) );
+
 	}
 
 	/**
