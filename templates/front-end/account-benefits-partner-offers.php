@@ -14,7 +14,7 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 			<header class="m-entry-header m-entry-header-singular">
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'account-benefits-partner-offers_title', '' ); ?></h1>
 			</header>
-			<section class="m-partner-offers">
+			<section class="m-entry-content m-partner-offers">
 				<?php $offers = $minnpost_membership->content_items->get_partner_offers(); ?>
 				<?php if ( $offers ) : ?>
 					<?php global $post; ?>
@@ -22,11 +22,16 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 						<article id="partner-offer-<?php the_ID(); ?>" <?php post_class( 'm-partner-offer' ); ?>>
 							<?php setup_postdata( $post ); ?>
 							<?php $minnpost_membership->content_items->partner_offer_image( $post->post_parent ); ?>
-							<header class="m-entry-header m-partner-offer-header">
-								<?php the_title( '<h1 class="a-entry-title">', '</h1>' ); ?>
-							</header>
-							<div class="m-entry-content">
-								<p>this is an offer</p>
+							<div class="m-partner-offer-content">
+								<header class="m-entry-header m-partner-offer-header">
+									<?php the_title( '<h1 class="a-entry-title">', '</h1>' ); ?>
+									<?php if ( null !== $post->quantity && null !== $post->offer_type ) : ?>
+										<h2 class="a-offer"><?php echo $post->quantity . ' ' . $post->offer_type; ?></h2>
+									<?php endif; ?>
+								</header>
+								<?php if ( null !== $post->restriction ) : ?>
+									<p><?php echo $post->restriction; ?></p>
+								<?php endif; ?>
 							</div>
 						</article>
 					<?php endforeach; ?>

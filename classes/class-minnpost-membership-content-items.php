@@ -295,9 +295,7 @@ class MinnPost_Membership_Content_Items {
 			'default'    => '',
 			'id'         => $prefix . 'quantity',
 			'type'       => 'text_small',
-			'attributes' => array(
-				'required' => 'required',
-			),
+			'attributes' => array(),
 		) );
 		$offer_fields->add_field( array(
 			'name'       => __( 'Type', 'minnpost-membership' ),
@@ -305,9 +303,15 @@ class MinnPost_Membership_Content_Items {
 			'default'    => '',
 			'id'         => $prefix . 'type',
 			'type'       => 'text',
-			'attributes' => array(
-				'required' => 'required',
-			),
+			'attributes' => array(),
+		) );
+		$offer_fields->add_field( array(
+			'name'       => __( 'Restriction', 'minnpost-membership' ),
+			'desc'       => '',
+			'default'    => '',
+			'id'         => $prefix . 'restriction',
+			'type'       => 'text',
+			'attributes' => array(),
 		) );
 		/*$offer_fields->add_field( array(
 			'name'       => __( 'Offer Image', 'minnpost-membership' ),
@@ -546,6 +550,7 @@ class MinnPost_Membership_Content_Items {
 				partner_link.meta_value as partner_link_url,
 				quantity.meta_value as quantity,
 				offer_type.meta_value as offer_type,
+				restriction.meta_value as restriction,
 				claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
 
 				instance.meta_value as instances
@@ -559,6 +564,7 @@ class MinnPost_Membership_Content_Items {
 
 				LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS restriction ON offer.ID = restriction.post_id AND '_mp_partner_offer_restriction' = restriction.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
 
