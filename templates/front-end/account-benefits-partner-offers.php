@@ -32,6 +32,17 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 								<?php if ( null !== $post->restriction ) : ?>
 									<p><?php echo $post->restriction; ?></p>
 								<?php endif; ?>
+
+								<?php if ( null !== $post->more_info_text ) : ?>
+									<?php if ( null !== $post->more_info_url ) : ?>
+										<a href="<?php echo $post->more_info_url; ?>">
+									<?php endif; ?>
+									<?php echo $post->more_info_text; ?>
+									<?php if ( null !== $post->more_info_url ) : ?>
+										</a>
+									<?php endif; ?>
+								<?php endif; ?>
+
 							</div>
 						</article>
 					<?php endforeach; ?>

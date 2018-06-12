@@ -331,6 +331,31 @@ class MinnPost_Membership_Content_Items {
 			),
 		) );*/
 
+		// set more info partner offer fields
+		$more_info_fields = new_cmb2_box( array(
+			'id'           => $prefix . 'more_info_fields',
+			'title'        => __( 'More info fields', 'minnpost-membership' ),
+			'object_types' => $object_type,
+			'context'      => 'normal',
+			//'priority'     => 'high',
+		) );
+		$more_info_fields->add_field( array(
+			'name'       => __( 'Text', 'minnpost-membership' ),
+			'desc'       => '',
+			'default'    => '',
+			'id'         => $prefix . 'more_info_text',
+			'type'       => 'text',
+			'attributes' => array(),
+		) );
+		$more_info_fields->add_field( array(
+			'name'       => __( 'URL', 'minnpost-membership' ),
+			'desc'       => '',
+			'default'    => '',
+			'id'         => $prefix . 'more_info_url',
+			'type'       => 'text',
+			'attributes' => array(),
+		) );
+
 		$claimable_dates = new_cmb2_box( array(
 			'id'           => $prefix . 'claimable_dates',
 			'title'        => __( 'Claimable dates', 'minnpost-membership' ),
@@ -551,6 +576,8 @@ class MinnPost_Membership_Content_Items {
 				quantity.meta_value as quantity,
 				offer_type.meta_value as offer_type,
 				restriction.meta_value as restriction,
+				more_info_text.meta_value as more_info_text,
+				more_info_url.meta_value as more_info_url,
 				claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
 
 				instance.meta_value as instances
@@ -565,6 +592,8 @@ class MinnPost_Membership_Content_Items {
 				LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS restriction ON offer.ID = restriction.post_id AND '_mp_partner_offer_restriction' = restriction.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS more_info_text ON offer.ID = more_info_text.post_id AND '_mp_partner_offer_more_info_text' = more_info_text.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS more_info_url ON offer.ID = more_info_url.post_id AND '_mp_partner_offer_more_info_url' = more_info_url.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
 				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
 
