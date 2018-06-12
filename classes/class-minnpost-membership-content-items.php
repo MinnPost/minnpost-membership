@@ -522,4 +522,50 @@ class MinnPost_Membership_Content_Items {
 		);
 		return $image_data;
 	}
+
+	/**
+	* Get all partner offers
+	* @param int $partner_offer_id
+	* @return object $partner_offers
+	*
+	*/
+	public function get_partner_offers( $partner_offer_id = '' ) {
+		if ( '' !== $partner_offer_id ) {
+			$partner_offer       = get_post( $partner_offer_id );
+			$partner_offer->meta = get_post_meta( $partner_offer_id );
+			return $partner_offer;
+		} else {
+			global $wpdb;
+
+			$partner_offers = $wpdb->get_results(
+				"SELECT
+				offer.ID, offer.post_title,
+				partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
+				partner_link.meta_value as partner_link_url,
+				quantity.meta_value as quantity,
+				offer_type.meta_value as offer_type,
+				claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
+
+				instance.meta_value as instances
+
+				FROM {$wpdb->prefix}posts offer
+
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner ON offer.ID = partner.post_id AND 'partner_id' = partner.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner_image_id ON partner.meta_value = partner_image_id.post_id AND '_mp_partner_logo_image_id' = partner_image_id.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner_image ON partner.meta_value = partner_image.post_id AND '_mp_partner_logo_image' = partner_image.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner_link ON partner.meta_value = partner_link.post_id AND '_mp_partner_link_url' = partner_link.meta_key
+
+				LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
+
+				LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
+
+				WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'"
+			);
+
+			return $partner_offers;
+		}
+	}
 }
