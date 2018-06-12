@@ -570,4 +570,92 @@ class MinnPost_Membership_Content_Items {
 			return $partner_offers;
 		}
 	}
+
+	/**
+	* Output partner offer image
+	*
+	* @param int $id
+	* @param array $attributes
+	* @param bool $lazy_load
+	*
+	*/
+	public function partner_offer_image( $id, $attributes = array(), $lazy_load = true ) {
+		$image_data = $this->get_partner_offer_image( $id, $attributes, $lazy_load );
+		if ( '' !== $image_data ) {
+			$image_id  = $image_data['image_id'];
+			$image_url = $image_data['image_url'];
+			$image     = $image_data['markup'];
+		}
+
+		if ( post_password_required() || is_attachment() || ( ! isset( $image_id ) && ! isset( $image_url ) ) ) {
+			return;
+		}
+
+		if ( true === $lazy_load ) {
+			$image = apply_filters( 'easy_lazy_loader_html', $image );
+		}
+
+		$caption = wp_get_attachment_caption( $image_id );
+		$credit  = get_media_credit_html( $image_id, false ); // don't show the uploader by default
+		?>
+		<figure class="m-partner-offer-image">
+			<?php echo $image; ?>
+			<?php if ( '' !== $caption || '' !== $credit ) { ?>
+			<figcaption>
+				<?php if ( '' !== $credit ) { ?>
+					<div class="a-media-meta a-media-credit"><?php echo $credit; ?></div>
+				<?php } ?>
+				<?php if ( '' !== $caption ) { ?>
+					<div class="a-media-meta a-media-caption"><?php echo $caption; ?></div>
+				<?php } ?>
+			</figcaption>
+			<?php } ?>
+		</figure><!-- .post-image -->
+		<?php
+	}
+
+
+	/**
+	* Get the partner offer image based on where it should go
+	*
+	* @param int $id
+	* @param array $attributes
+	* @param bool $lazy_load
+	*
+	* @return array $image_data
+	*
+	*/
+	public function get_partner_offer_image( $id, $attributes = array(), $lazy_load = true ) {
+
+		$image_url = get_post_meta( $id, '_mp_partner_logo_image', true );
+		$image_id  = get_post_meta( $id, '_mp_partner_logo_image_id', true );
+
+		if ( '' !== wp_get_attachment_image( $image_id, 'full' ) ) {
+			// this requires that the custom image sizes in custom-fields.php work correctly
+			$image = wp_get_attachment_image( $image_id, 'full' );
+		} else {
+			if ( '' !== $image_id ) {
+				$alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+			} else {
+				$alt = '';
+			}
+			$image = '<img src="' . $image_url . '" alt="' . $alt . '">';
+		}
+
+		if ( post_password_required() || is_attachment() || ( '' === $image_id && '' === $image_url ) ) {
+			return;
+		}
+
+		if ( true === $lazy_load ) {
+			$image = apply_filters( 'easy_lazy_loader_html', $image );
+		}
+
+		$image_data = array(
+			'image_id'  => $image_id,
+			'image_url' => $image_url,
+			'markup'    => $image,
+		);
+		return $image_data;
+	}
+
 }

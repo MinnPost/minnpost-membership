@@ -21,6 +21,7 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 					<?php foreach ( $offers as $post ) : ?>
 						<article id="partner-offer-<?php the_ID(); ?>" <?php post_class( 'm-partner-offer' ); ?>>
 							<?php setup_postdata( $post ); ?>
+							<?php $minnpost_membership->content_items->partner_offer_image( $post->post_parent ); ?>
 							<header class="m-entry-header m-partner-offer-header">
 								<?php the_title( '<h1 class="a-entry-title">', '</h1>' ); ?>
 							</header>
