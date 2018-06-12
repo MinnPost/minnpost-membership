@@ -540,6 +540,8 @@ class MinnPost_Membership_Content_Items {
 			$partner_offers = $wpdb->get_results(
 				"SELECT
 				offer.ID, offer.post_title,
+				partner.meta_value as post_parent,
+				offer.post_type as post_type,
 				partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
 				partner_link.meta_value as partner_link_url,
 				quantity.meta_value as quantity,
@@ -562,7 +564,7 @@ class MinnPost_Membership_Content_Items {
 
 				LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
 
-				WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'"
+				WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'", OBJECT
 			);
 
 			return $partner_offers;
