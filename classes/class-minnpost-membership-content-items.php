@@ -401,6 +401,13 @@ class MinnPost_Membership_Content_Items {
 		) );
 
 		$instance_box->add_group_field( $prefix . 'instance', array(
+			'name' => 'Enabled',
+			'id'   => $prefix . 'instance_enabled',
+			'type' => 'checkbox',
+			'desc' => '',
+		) );
+
+		$instance_box->add_group_field( $prefix . 'instance', array(
 			'name' => esc_html__( 'Instance date', 'minnpost-membership' ),
 			'id'   => $prefix . 'instance_date',
 			'type' => 'text_datetime_timestamp',
