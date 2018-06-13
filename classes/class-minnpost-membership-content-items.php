@@ -599,7 +599,12 @@ class MinnPost_Membership_Content_Items {
 
 				LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
 
-				WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'", OBJECT
+				WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'
+
+				#ORDER BY available_instance_count DESC, claimable_start_date DESC, claimable_end_date DESC
+				ORDER BY claimable_start_date DESC, claimable_end_date DESC
+
+				", OBJECT
 			);
 
 			return $partner_offers;
