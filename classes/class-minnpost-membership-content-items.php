@@ -10,7 +10,7 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
 }
 
 /**
- * Create default WordPress front end functionality
+ * Create default structure for content items
  */
 class MinnPost_Membership_Content_Items {
 
