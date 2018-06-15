@@ -689,6 +689,32 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Get the current user's benefit information
+	*
+	* @param string $benefit_name
+	* @return array $user_benefit_info
+	*/
+	public function get_user_benefit_info( $benefit_name ) {
+
+		$user_id          = get_current_user_id();
+		$user_access_data = $this->user_info->get_user_benefit_eligibility( $benefit_name, $user_id );
+
+		$benefit_access = $user_access_data['benefit_access'];
+		$date_eligible  = $user_access_data['date_eligible'];
+		$current_user   = $this->user_info->user_membership_info( $user_id );
+
+		$current_user['can_redeem'] = $user_access_data['can_redeem'];
+
+		$user_membership_info = array(
+			'member_level_prefix'  => $this->member_levels->member_level_prefix,
+			'current_user'         => $current_user,
+			'benefit_access_level' => $benefit_access,
+			'date_eligible'        => $date_eligible,
+		);
+		return $user_membership_info;
+	}
+
+	/**
 	* Get option field based on a user's status
 	*
 	* @param string $key

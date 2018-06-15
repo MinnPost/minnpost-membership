@@ -1526,13 +1526,13 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings[ $this_section . '_body' ] = array(
-			'title'    => __( 'Page body', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
+		$settings[ $this_section . '_claim_frequency' ] = array(
+			'title'    => __( 'How often users can claim', 'minnpost-membership' ),
+			'callback' => $callbacks['text'],
 			'page'     => $this_section,
 			'section'  => $this_section,
 			'args'     => array(
-				'desc'     => '',
+				'desc'     => 'Time period users have to wait between claiming offers.',
 				'constant' => '',
 				'type'     => 'text',
 			),
@@ -1552,8 +1552,8 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
-		$settings[ $this_section . '_body' ] = array(
-			'title'    => __( 'Page body', 'minnpost-membership' ),
+		$settings[ $this_section . '_intro' ] = array(
+			'title'    => __( 'Page intro', 'minnpost-membership' ),
 			'callback' => $callbacks['editor'],
 			'page'     => $this_section,
 			'section'  => $this_section,
@@ -1951,6 +1951,26 @@ class MinnPost_Membership_Admin {
 	*
 	*/
 	private function get_member_level_options() {
+		$member_levels = $this->member_levels->get_member_levels();
+		$options       = array();
+		foreach ( $member_levels as $member_level ) {
+			$options[] = array(
+				'id'      => $member_level['slug'],
+				'value'   => $member_level['slug'],
+				'text'    => $member_level['name'],
+				'desc'    => '',
+				'default' => '',
+			);
+		}
+		return $options;
+	}
+
+	/**
+	* Get eligible levels for benefit
+	* @return array $options
+	*
+	*/
+	private function get_benefit_eligibility_levels( $benefit = '' ) {
 		$member_levels = $this->member_levels->get_member_levels();
 		$options       = array();
 		foreach ( $member_levels as $member_level ) {
