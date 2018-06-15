@@ -425,6 +425,8 @@ class MinnPost_Membership_Content_Items {
 		foreach ( $member_levels as $member_level ) {
 			$roles[] = $member_level['slug'];
 		}
+		$roles[] = 'administrator';
+		$roles[] = 'business';
 
 		$instance_box->add_group_field( $prefix . 'instance', array(
 			'name'    => 'Claim user',
@@ -614,8 +616,43 @@ class MinnPost_Membership_Content_Items {
 				", OBJECT
 			);
 
+			foreach ( $partner_offers as $partner_offer ) {
+				$unclaimed_instance_count = 0;
+				if ( null !== $partner_offer->instances ) {
+					$instances = maybe_unserialize( $partner_offer->instances );
+					if ( is_array( $instances ) ) {
+						foreach ( $instances as $instance ) {
+							if ( 'on' !== $instance['_mp_partner_offer_instance_enabled'] ) {
+								continue;
+							}
+							if ( isset( $instance['_mp_partner_offer_claimed_date'] ) && '' !== $instance['_mp_partner_offer_claimed_date'] ) {
+								continue;
+							}
+							$unclaimed_instance_count++;
+						}
+					}
+					$partner_offer->instance_count = $unclaimed_instance_count;
+				} else {
+					$partner_offer->instance_count = $unclaimed_instance_count;
+				}
+			}
+
+			usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
+
 			return $partner_offers;
 		}
+	}
+
+	/**
+	* Sort partner offer instances by instance count
+	*
+	* @param object $a
+	* @param object $b
+	* @param array
+	*
+	*/
+	private function sort_partner_offer_instances( $a, $b ) {
+		return strcmp( $b->instance_count, $a->instance_count );
 	}
 
 	/**
