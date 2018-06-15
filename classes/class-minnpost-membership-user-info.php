@@ -350,6 +350,76 @@ class MinnPost_Membership_User_Info {
 	}
 
 	/**
+	* Determine whether a user can redeem a benefit, based on the user ID and the benefit name
+	*
+	* @param int $user_id
+	* @param string $benefit_name
+	*
+	* @return bool $can_redeem
+	*/
+	public function user_can_redeem( $benefit_name, $user_id = '' ) {
+
+		if ( '' === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		$benefit_access_level = $this->get_benefit_access( $benefit_name );
+
+		if ( '' === $benefit_access_level ) {
+			return true;
+		}
+
+		// at this point, the default redeem answer should be false because the single item has a level meta value. user roles override it.
+		$can_redeem = false;
+
+		// if the user id is not a user, they can't redeem any benefits
+		if ( 0 === $user_id ) {
+			return $can_redeem;
+		}
+
+		// if the benefit access level is only registered, let the user in because they are signed in
+		if ( 'registered' === $benefit_access_level ) {
+			return true;
+		}
+
+		// get the int value of the benefit access level
+		if ( false === filter_var( $benefit_access_level, FILTER_VALIDATE_INT ) ) {
+			$benefit_key = array_search( $benefit_access_level, array_column( $this->all_member_levels, 'slug' ) );
+		} else {
+			$benefit_key = $benefit_access_level;
+		}
+
+		// if we have a key here, it is the lowest level required for this benefit
+		if ( isset( $benefit_key ) ) {
+			$benefit_access_level = $benefit_key;
+		}
+
+		// if we have a slug here, it is the user's member level. otherwise, return the redeem state.
+		$user_member_level = $this->user_member_level( $user_id );
+		if ( isset( $user_member_level['slug'] ) ) {
+			$user_member_level_slug = $user_member_level['slug'];
+		} else {
+			return $can_redeem;
+		}
+
+		// get the int key of the user's member level array
+		if ( false === filter_var( $user_member_level, FILTER_VALIDATE_INT ) ) {
+			$user_member_level = array_search( $user_member_level_slug, array_column( $this->all_member_levels, 'slug' ) );
+		}
+
+		// if the user's level is greater than or equal to the benefit, they can redeem it
+		if ( $user_member_level >= $benefit_access_level ) {
+			$can_redeem = true;
+		}
+
+		if ( true === $can_redeem ) {
+			return $can_redeem;
+		}
+
+		return $can_redeem;
+	}
+
+	/**
 	* Determine whether a user can redeem a benefit, based on the offer's eligible date, and the date the user can next redeem, or the date they last redeemed
 	*
 	* @param int $user_id
