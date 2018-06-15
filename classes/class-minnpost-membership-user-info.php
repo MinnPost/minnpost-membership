@@ -111,6 +111,25 @@ class MinnPost_Membership_User_Info {
 	}
 
 	/**
+	* Detect the user access that is required for the current benefit
+	*
+	* @param string $benefit_name
+	* @return string|int $benefit_access - is a level integer or a string
+	*
+	*/
+	public function get_benefit_access( $benefit_name ) {
+		$benefit_access = '';
+		// get all the levels from the option value
+		$benefit_access_levels = get_option( $this->option_prefix . 'support-' . $benefit_name . '_eligible_levels', array() );
+		if ( ! empty( $benefit_access_levels ) ) {
+			// get the minimum level required for this benefit
+			$benefit_access = $benefit_access_levels[ min( array_keys( $benefit_access_levels ) ) ];
+		}
+
+		return $benefit_access;
+	}
+
+	/**
 	* Get the current state of this user for this content
 	*
 	* @param int $user_id
@@ -169,6 +188,63 @@ class MinnPost_Membership_User_Info {
 			'can_access' => $can_access,
 			'super_user' => false,
 			'url_access' => $url_access,
+		);
+
+		return $user_access;
+	}
+
+	/**
+	* Get the eligiblity of this user for this benefit
+	*
+	* @param string $benefit_name
+	* @param int $user_id
+	* @return array $user_access
+	*
+	*/
+	public function get_user_benefit_eligibility( $benefit_name, $user_id = '' ) {
+		$benefit_access = $this->get_benefit_access( $benefit_name );
+		$super_user     = false;
+
+		if ( '' === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		$can_redeem = $this->user_can_redeem( $benefit_name, $user_id );
+
+		if ( 0 !== $user_id ) {
+			if ( true === $can_redeem ) {
+				$user_state = 'member_eligible';
+			} else {
+				$user_member_level = $this->user_member_level( $user_id );
+				if ( true === filter_var( $user_member_level['is_nonmember'], FILTER_VALIDATE_BOOLEAN ) ) {
+					$user_state = 'logged_in_non_member';
+				} else {
+					$user_state = 'member_ineligible';
+				}
+			}
+
+			// if user has a role that allows them to see everything, let them see everything.
+			// but we should also show that they're seeing something that doesn't match their level
+
+			$user_info      = get_userdata( $user_id );
+			$all_user_roles = $user_info->roles;
+
+			$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
+			if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
+				$can_redeem = true;
+				$user_state = 'member_eligible';
+				$super_user = true;
+			}
+		}
+
+		$date_eligible = $this->user_redeem_date_eligible( $benefit_name, $user_id );
+
+		$user_access = array(
+			'state'          => $user_state,
+			'can_redeem'     => $can_redeem,
+			'super_user'     => false,
+			'benefit_access' => $benefit_access,
+			'date_eligible'  => $date_eligible,
 		);
 
 		return $user_access;
