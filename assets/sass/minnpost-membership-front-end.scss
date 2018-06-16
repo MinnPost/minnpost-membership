@@ -1,5 +1,6 @@
 // variables
 $border-color-lighter: #e5e5e5;
+$border-color-darker: #cdcdd0;
 $vertical-space: 1em;
 
 .m-layout-membership {
@@ -237,11 +238,49 @@ $vertical-space: 1em;
 	}
 }
 
+.m-entry-content.m-partner-offers {
+	margin: 1em 0;
+	padding: .5em 0;
+	.m-partner-offer {
+		border: 1px solid $border-color-darker;
+		margin-bottom: 1em;
+		padding: 0.5em;
+		.m-partner-offer-image {
+			width: 200px;
+		}
+		.m-partner-offer-content {
+			.m-partner-offer-header {
+				margin-bottom: 0;
+			}
+			.a-entry-title {
+				font-size: 215.4%;
+				margin-bottom: 0.25em;
+				line-height: 1.15em;
+			}
+		}
+	}
+}
+
 @media screen and (min-width: 700px) {
 	.m-membership-member-level {
 		width: 46%;
 		margin-right: 2%;
 		float: left;
+	}
+	.m-partner-offers {
+		.m-partner-offer {
+			//clear: both;
+			display: flex;
+			.m-partner-offer-image {
+				margin: 0 1em 0 0;
+				//float: left;
+			}
+			.m-partner-offer-content {
+				//float: left;
+				//width: auto;
+				//max-width: 70%;
+			}
+		}
 	}
 }
 
