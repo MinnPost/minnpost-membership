@@ -701,15 +701,16 @@ class MinnPost_Membership_Front_End {
 
 		$benefit_access = $user_access_data['benefit_access'];
 		$date_eligible  = $user_access_data['date_eligible'];
+		$can_redeem     = $user_access_data['can_redeem'];
 		$current_user   = $this->user_info->user_membership_info( $user_id );
 
-		$current_user['can_redeem'] = $user_access_data['can_redeem'];
+		$current_user['can_redeem']           = $can_redeem;
+		$current_user['benefit_access_level'] = $benefit_access;
+		$current_user['date_eligible']        = $date_eligible;
 
 		$user_membership_info = array(
-			'member_level_prefix'  => $this->member_levels->member_level_prefix,
-			'current_user'         => $current_user,
-			'benefit_access_level' => $benefit_access,
-			'date_eligible'        => $date_eligible,
+			'member_level_prefix' => $this->member_levels->member_level_prefix,
+			'current_user'        => $current_user,
 		);
 		return $user_membership_info;
 	}
