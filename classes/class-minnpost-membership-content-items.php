@@ -635,6 +635,7 @@ class MinnPost_Membership_Content_Items {
 				} else {
 					$partner_offer->instance_count = $unclaimed_instance_count;
 				}
+				$partner_offer->instances = $instances;
 			}
 
 			usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
