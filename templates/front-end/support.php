@@ -6,7 +6,7 @@
 get_header(); ?>
 <?php
 global $minnpost_membership;
-$url_params = $minnpost_membership->front_end->process_parameters( 'get' );
+$url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' );
 $user_id    = get_current_user_id();
 ?>
 

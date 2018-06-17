@@ -28,7 +28,7 @@ global $minnpost_membership;
 						<input type="hidden" name="action" value="membership_form_submit">
 						<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
 						<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
-						<?php $url_params = $minnpost_membership->front_end->process_parameters( 'get' ); ?>
+						<?php $url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' ); ?>
 						<?php if ( ! empty( $url_params ) ) : ?>
 							<?php foreach ( $url_params as $key => $value ) : ?>
 								<?php if ( 'amount' !== $key && 'frequency' !== $key ) : ?>

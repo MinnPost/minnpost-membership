@@ -69,8 +69,11 @@ class MinnPost_Membership_Front_End {
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
-		add_action( 'wp_ajax_membership_form_submit', array( $this, 'form_submit' ) );
-		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'form_submit' ) );
+		add_action( 'wp_ajax_membership_form_submit', array( $this, 'membership_form_submit' ) );
+		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'membership_form_submit' ) );
+		// benefit form submits
+		add_action( 'wp_ajax_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
+		add_action( 'wp_ajax_nopriv_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
 		// this could be used for any other template as well, but we are sticking with single by default.
 		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
 		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
@@ -131,13 +134,13 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Handle GET parameters
+	* Handle GET and POST parameters for membership
 	*
 	* @param string $direction
 	* @return array $params
 	*
 	*/
-	public function process_parameters( $direction = 'get' ) {
+	public function process_membership_parameters( $direction = 'get' ) {
 		$params = array();
 		if ( 'get' === $direction ) {
 			$data = $_GET;
@@ -173,6 +176,31 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Handle GET and POST parameters for benefits
+	*
+	* @param string $direction
+	* @return array $params
+	*
+	*/
+	public function process_benefit_parameters( $direction = 'get' ) {
+		$params = array();
+		if ( 'get' === $direction ) {
+			$data = $_GET;
+		} elseif ( 'post' === $direction ) {
+			$data = $_POST;
+		}
+
+		if ( isset( $data['post_id'] ) ) {
+			$params['post_id'] = filter_var( $data['post_id'], FILTER_SANITIZE_NUMBER_INT );
+			if ( isset( $data[ 'instance-id-' . $data['post_id'] ] ) ) {
+				$params['instance_id'] = $data[ 'instance-id-' . $data['post_id'] ];
+			}
+		}
+
+		return $params;
+	}
+
+	/**
 	* Set title tags
 	*
 	* @param array $title
@@ -195,7 +223,7 @@ class MinnPost_Membership_Front_End {
 	* Process membership form submission
 	*
 	*/
-	public function form_submit() {
+	public function membership_form_submit() {
 		if ( wp_verify_nonce( $_POST['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
 			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
 			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
@@ -214,7 +242,7 @@ class MinnPost_Membership_Front_End {
 				}
 
 				// sanitize form data we accept
-				$post_params = $this->process_parameters( 'post' );
+				$post_params = $this->process_membership_parameters( 'post' );
 				$params      = array_merge( $params, $post_params );
 
 				// different buttons might have been clicked if it was a level picker
@@ -247,6 +275,68 @@ class MinnPost_Membership_Front_End {
 					wp_safe_redirect( site_url( $error_url ) );
 					exit;
 				}
+
+				// this requires us to hook into the allowed url thing
+				wp_safe_redirect( $redirect_url );
+				exit;
+
+			} else {
+				exit;
+			}
+		}
+	}
+
+	/**
+	* Process benefit form submission
+	*
+	*/
+	public function benefit_form_submit() {
+		if ( wp_verify_nonce( $_POST['minnpost_membership_benefit_form_nonce'], 'mem-form-nonce' ) ) {
+			$redirect_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+			if ( '' !== $redirect_url ) {
+				// do we already know who this user is?
+				$user = wp_get_current_user();
+
+				// sanitize form data we accept
+				$post_params = $this->process_benefit_parameters( 'post' );
+				if ( isset( $params ) ) {
+					$params = array_merge( $params, $post_params );
+				} else {
+					$params = $post_params;
+				}
+
+				if ( ! isset( $params['post_id'] ) ) {
+					$error_url = add_query_arg( 'errors', 'missing_partner_offer', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				if ( ! isset( $params['instance_id'] ) ) {
+					$error_url = add_query_arg( 'errors', 'missing_instance', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				$instances = get_post_meta( $params['post_id'], '_mp_partner_offer_instance', true );
+				if ( is_array( $instances ) ) {
+					$this_instance = $instances[ $params['instance_id'] ];
+				} else {
+					$error_url = add_query_arg( 'errors', 'no_instances', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				$now     = new DateTime();
+				$claimed = $now->getTimestamp();
+				$this_instance['_mp_partner_offer_claimed_date'] = $claimed;
+				$this_instance['_mp_partner_offer_claim_user']   = get_current_user_id();
+
+				$instances[ $params['instance_id'] ] = $this_instance;
+
+				update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
+
+				$redirect_url = add_query_arg( 'claimed', $params['post_id'], $redirect_url );
 
 				// this requires us to hook into the allowed url thing
 				wp_safe_redirect( $redirect_url );
@@ -438,7 +528,7 @@ class MinnPost_Membership_Front_End {
 
 			// preserve valid form parameters
 			if ( '' === $link_host || $link_host === $current_host ) {
-				$url_params = $this->process_parameters( 'get' );
+				$url_params = $this->process_membership_parameters( 'get' );
 				foreach ( $url_params as $key => $value ) {
 					if ( false !== $value ) {
 						$url = add_query_arg( $key, $value, $url );
@@ -481,7 +571,7 @@ class MinnPost_Membership_Front_End {
 
 			// preserve valid form parameters
 			if ( '' === $link_host || $link_host === $current_host ) {
-				$url_params = $this->process_parameters( 'get' );
+				$url_params = $this->process_membership_parameters( 'get' );
 				foreach ( $url_params as $key => $value ) {
 					if ( false !== $value ) {
 						$url = add_query_arg( $key, $value, $url );
@@ -543,7 +633,7 @@ class MinnPost_Membership_Front_End {
 
 				// preserve valid form parameters
 				if ( '' === $link_host || $link_host === $current_host ) {
-					$url_params = $this->process_parameters( 'get' );
+					$url_params = $this->process_membership_parameters( 'get' );
 					foreach ( $url_params as $key => $value ) {
 						if ( false !== $value ) {
 							$url = add_query_arg( $key, $value, $url );
