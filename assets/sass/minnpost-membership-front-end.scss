@@ -257,6 +257,16 @@ $vertical-space: 1em;
 				margin-bottom: 0.25em;
 				line-height: 1.15em;
 			}
+			p {
+				margin: 0;
+			}
+			.a-button {
+				margin: 0.25em 0;
+				display: block;
+			}
+			.a-partner-offer-learn-more {
+				display: block;
+			}
 		}
 	}
 }
