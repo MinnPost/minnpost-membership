@@ -33,6 +33,16 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 									<p><?php echo $post->restriction; ?></p>
 								<?php endif; ?>
 
+								<?php if ( null !== $post->instances ) : ?>
+									<div class="m-benefit-claim">
+										<div class="m-benefit-message m-benefit-message-info" data-message-all-claimed="All of the tickets for this offer were already claimed. Try another offer."></div>
+										<?php if ( 0 < $post->instance_count ) : ?>
+										<?php else : ?>
+											<button type="submit" value="claimed" name="instance_id" class="a-button a-benefit-button a-button-disabled" disabled="disabled">All Claimed</button>
+										<?php endif; ?>
+									</div>
+								<?php endif; ?>
+
 								<?php if ( null !== $post->more_info_text ) : ?>
 									<?php if ( null !== $post->more_info_url ) : ?>
 										<a href="<?php echo $post->more_info_url; ?>" class="a-partner-offer-learn-more">
