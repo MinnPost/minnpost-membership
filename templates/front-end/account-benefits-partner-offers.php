@@ -35,11 +35,15 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 
 								<?php if ( null !== $post->more_info_text ) : ?>
 									<?php if ( null !== $post->more_info_url ) : ?>
-										<a href="<?php echo $post->more_info_url; ?>">
+										<a href="<?php echo $post->more_info_url; ?>" class="a-partner-offer-learn-more">
+									<?php else : ?>
+										<p class="a-partner-offer-learn-more">
 									<?php endif; ?>
 									<?php echo $post->more_info_text; ?>
 									<?php if ( null !== $post->more_info_url ) : ?>
 										</a>
+									<?php else : ?>
+										</p>
 									<?php endif; ?>
 								<?php endif; ?>
 
