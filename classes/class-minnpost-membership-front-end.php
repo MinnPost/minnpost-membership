@@ -314,26 +314,35 @@ class MinnPost_Membership_Front_End {
 
 				if ( ! isset( $params['instance_id'] ) ) {
 					$error_url = add_query_arg( 'errors', 'missing_instance', $error_url );
+					$error_url = add_query_arg( 'not-claimed', $params['post_id'], $error_url );
 					wp_safe_redirect( site_url( $error_url ) );
 					exit;
 				}
 
-				$instances = get_post_meta( $params['post_id'], '_mp_partner_offer_instance', true );
+				$instances = $this->content_items->get_partner_offers( $params['post_id'] )->instances;
+
 				if ( is_array( $instances ) ) {
 					$this_instance = $instances[ $params['instance_id'] ];
+					error_log( 'this instance is ' . print_r( $this_instance, true ) );
 				} else {
 					$error_url = add_query_arg( 'errors', 'no_instances', $error_url );
+					$error_url = add_query_arg( 'not-claimed', $params['post_id'], $error_url );
 					wp_safe_redirect( site_url( $error_url ) );
 					exit;
 				}
+
+				$current_user = get_currentuserinfo();
 
 				$now     = new DateTime();
 				$claimed = $now->getTimestamp();
 				$this_instance['_mp_partner_offer_claimed_date'] = $claimed;
-				$this_instance['_mp_partner_offer_claim_user']   = get_current_user_id();
+				$this_instance['_mp_partner_offer_claim_user']   = array(
+					'name' => $current_user->display_name,
+					'id'   => get_current_user_id(),
+				);
 
 				$instances[ $params['instance_id'] ] = $this_instance;
-
+				//error_log( 'start updating meta for ' . $params['post_id'] . ' the new instance value is ' . print_r( $this_instance, true ) );
 				update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
 
 				$redirect_url = add_query_arg( 'claimed', $params['post_id'], $redirect_url );

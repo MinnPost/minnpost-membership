@@ -43,16 +43,16 @@
 	}
 
 	function benefitButton() {
-		$( '.m-benefit-message' ).hide();
 		$( '.a-benefit-button.a-button-disabled' ).removeAttr( 'disabled' );
 		$( '.a-benefit-button' ).click( function( event ) {
-			$( '.m-benefit-message' ).hide();
+			//$( '.m-benefit-message' ).hide();
+			$( '.m-benefit-message' ).removeClass()
 			var thisMessage = $( this ).parent().find( '.m-benefit-message' );
 			if ( $( this ).hasClass( 'a-button-disabled' ) ) {
-				thisMessage.html( thisMessage.data( 'message-all-claimed' ) );
-				thisMessage.fadeIn( 'slow' );
+				//thisMessage.html( thisMessage.data( 'message-all-claimed' ) );
+				//thisMessage.fadeIn( 'slow' );
+				event.preventDefault(); // this should go on enabled buttons too, but for now just here
 			}
-			event.preventDefault();
 		});
 	}
 

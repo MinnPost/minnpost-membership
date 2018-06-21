@@ -40,23 +40,28 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 										<?php endif; ?>
 
 										<?php if ( null !== $post->instances ) : ?>
-											<div class="m-benefit-claim">
-												<div class="m-benefit-message m-benefit-message-info" data-message-already-claimed-<?php the_ID(); ?>="You have successfully claimed this offer. You will receive an email with further details shortly." data-message-all-claimed="All of the tickets for this offer were already claimed. Try another offer."></div>
-												<?php if ( 0 < $post->instance_count ) : ?>
-													<?php if ( 1 === $post->instance_count ) : ?>
-														<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="0">
-													<?php else : ?>
-														<?php foreach ( $post->instances as $key => $instance ) : ?>
-															<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
-																<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
-																<?php break; ?>
-															<?php endif; ?>
-														<?php endforeach; ?>
-													<?php endif; ?>
-													<button type="submit" value="<?php the_ID(); ?>" name="post_id" class="a-button a-benefit-button">Claim Now</button>
-												<?php else : ?>
-													<button type="submit" value="claimed" name="post_id" class="a-button a-benefit-button a-button-disabled" disabled="disabled">All Claimed</button>
+
+											<?php $offer_status_content = $minnpost_membership->content_items->get_partner_offer_status_content( $post->unclaimed_instance_count, $post->instances ); ?>
+
+											<?php if ( 0 < $post->unclaimed_instance_count ) : ?>
+												<?php $key = 0; ?>
+
+													<?php foreach ( $post->instances as $key => $instance ) : ?>
+														<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
+															<?php break; ?>
+														<?php endif; ?>
+													<?php endforeach; ?>
+
+											<?php endif; ?>
+
+											<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
+											<div class="m-benefit-claim m-benefit-claim-<?php echo $offer_status_content['current_status']; ?>">
+												<?php if ( '' !== $offer_status_content['message'] ) : ?>
+													<div class="m-benefit-message">
+														<?php echo $offer_status_content['message']; ?>
+													</div>
 												<?php endif; ?>
+												<button type="submit" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $offer_status_content['button_class']; ?>"<?php echo $offer_status_content['button_attr']; ?>><?php echo $offer_status_content['button_label']; ?></button>
 											</div>
 										<?php endif; ?>
 

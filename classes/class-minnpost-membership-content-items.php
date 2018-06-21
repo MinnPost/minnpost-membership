@@ -569,9 +569,58 @@ class MinnPost_Membership_Content_Items {
 	*/
 	public function get_partner_offers( $partner_offer_id = '' ) {
 		if ( '' !== $partner_offer_id ) {
-			$partner_offer       = get_post( $partner_offer_id );
-			$partner_offer->meta = get_post_meta( $partner_offer_id );
-			return $partner_offer;
+
+			global $wpdb;
+
+			$partner_offers = $wpdb->get_results(
+				"SELECT
+				offer.ID, offer.post_title,
+				partner.meta_value as post_parent,
+				offer.post_type as post_type,
+				partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
+				partner_link.meta_value as partner_link_url,
+				quantity.meta_value as quantity,
+				offer_type.meta_value as offer_type,
+				restriction.meta_value as restriction,
+				more_info_text.meta_value as more_info_text,
+				more_info_url.meta_value as more_info_url,
+				claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
+
+				instance.meta_value as instances
+
+				FROM {$wpdb->prefix}posts offer
+
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner ON offer.ID = partner.post_id AND 'partner_id' = partner.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner_image_id ON partner.meta_value = partner_image_id.post_id AND '_mp_partner_logo_image_id' = partner_image_id.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner_image ON partner.meta_value = partner_image.post_id AND '_mp_partner_logo_image' = partner_image.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS partner_link ON partner.meta_value = partner_link.post_id AND '_mp_partner_link_url' = partner_link.meta_key
+
+				LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS restriction ON offer.ID = restriction.post_id AND '_mp_partner_offer_restriction' = restriction.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS more_info_text ON offer.ID = more_info_text.post_id AND '_mp_partner_offer_more_info_text' = more_info_text.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS more_info_url ON offer.ID = more_info_url.post_id AND '_mp_partner_offer_more_info_url' = more_info_url.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
+				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
+
+				LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
+
+				WHERE offer.post_status = 'publish' AND offer.ID = $partner_offer_id
+
+				#ORDER BY available_instance_count DESC, claimable_start_date DESC, claimable_end_date DESC
+				ORDER BY claimable_start_date DESC, claimable_end_date DESC
+
+				", OBJECT
+			);
+
+			foreach ( $partner_offers as $partner_offer ) {
+				$partner_offer = $this->save_partner_offer_instances( $partner_offer );
+			}
+
+			usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
+
+			return $partner_offers[0];
+
 		} else {
 			global $wpdb;
 
@@ -617,31 +666,45 @@ class MinnPost_Membership_Content_Items {
 			);
 
 			foreach ( $partner_offers as $partner_offer ) {
-				$unclaimed_instance_count = 0;
-				if ( null !== $partner_offer->instances ) {
-					$instances = maybe_unserialize( $partner_offer->instances );
-					if ( is_array( $instances ) ) {
-						foreach ( $instances as $instance ) {
-							if ( 'on' !== $instance['_mp_partner_offer_instance_enabled'] ) {
-								continue;
-							}
-							if ( isset( $instance['_mp_partner_offer_claimed_date'] ) && '' !== $instance['_mp_partner_offer_claimed_date'] ) {
-								continue;
-							}
-							$unclaimed_instance_count++;
-						}
-					}
-					$partner_offer->instance_count = $unclaimed_instance_count;
-				} else {
-					$partner_offer->instance_count = $unclaimed_instance_count;
-				}
-				$partner_offer->instances = $instances;
+				$partner_offer = $this->save_partner_offer_instances( $partner_offer );
 			}
 
 			usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
 
 			return $partner_offers;
 		}
+	}
+
+	/**
+	* Save partner offer instances to the partner offer object
+	*
+	* @param object $partner_offer
+	* @return object $partner_offer
+	*
+	*/
+	private function save_partner_offer_instances( $partner_offer ) {
+		$unclaimed_instance_count = 0;
+
+		if ( null !== $partner_offer->instances ) {
+			$instances = maybe_unserialize( $partner_offer->instances );
+			if ( is_array( $instances ) ) {
+				foreach ( $instances as $key => $instance ) {
+					if ( ! isset( $instance['_mp_partner_offer_instance_enabled'] ) || 'on' !== $instance['_mp_partner_offer_instance_enabled'] ) {
+						continue;
+					}
+					if ( isset( $instance['_mp_partner_offer_claimed_date'] ) && '' !== $instance['_mp_partner_offer_claimed_date'] ) {
+						continue;
+					}
+					$unclaimed_instance_count++;
+				}
+			}
+			$partner_offer->unclaimed_instance_count = $unclaimed_instance_count;
+		} else {
+			$partner_offer->unclaimed_instance_count = $unclaimed_instance_count;
+		}
+		$partner_offer->instances = $instances;
+
+		return $partner_offer;
 	}
 
 	/**
@@ -653,7 +716,7 @@ class MinnPost_Membership_Content_Items {
 	*
 	*/
 	private function sort_partner_offer_instances( $a, $b ) {
-		return strcmp( $b->instance_count, $a->instance_count );
+		return strcmp( $b->unclaimed_instance_count, $a->unclaimed_instance_count );
 	}
 
 	/**
@@ -741,6 +804,53 @@ class MinnPost_Membership_Content_Items {
 			'markup'    => $image,
 		);
 		return $image_data;
+	}
+
+	/**
+	* Get content for partner offer that changes based on its claim/availability/etc status
+	* @param int $unclaimed_instance_count
+	* @param array $instances
+	* @return array $offer_status
+	*
+	*/
+	public function get_partner_offer_status_content( $unclaimed_instance_count, $instances ) {
+		$offer_status_content = array(
+			'current_status' => 'closed',
+			'button_class'   => '',
+			'button_attr'    => '',
+			'button_value'   => '', // value should come from plugin options
+			'button_label'   => '', // value should come from plugin options
+			'message'        => '', // value should come from plugin options
+		);
+
+		// regardless of what the user did, something will display for these things
+		if ( 0 < $unclaimed_instance_count ) {
+			$offer_status_content['current_status'] = 'open';
+			$offer_status_content['button_value']   = get_the_ID();
+			$offer_status_content['button_label']   = 'Claim Now'; // value should come from plugin options
+		} else {
+			$offer_status_content['button_value'] = 'claimed';
+			$offer_status_content['button_class'] = ' a-button-disabled';
+			$offer_status_content['button_attr']  = ' disabled="disabled"';
+			$offer_status_content['button_label'] = 'All Claimed'; // value should come from plugin options
+		}
+
+		// if user successfully made a claim, show them
+		if ( isset( $_GET['claimed'] ) ) {
+			$claimed = filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING );
+			if ( get_the_ID() === (int) $_GET['claimed'] ) {
+				$offer_status_content['current_status'] = 'success';
+				$offer_status_content['message']        = 'You have successfully claimed this offer. You will receive an email with further details shortly.'; // value should come from plugin options
+				return $offer_status_content;
+			} // if the ids don't match, it's not the offer the user claimed
+		}
+
+		// if user tried to claim but it failed, show them
+		if ( isset( $_GET['not-claimed'] ) ) {
+			echo 'count is ' . $unclaimed_instance_count;
+		}
+
+		return $offer_status_content;
 	}
 
 }
