@@ -295,8 +295,31 @@ class MinnPost_Membership_Front_End {
 			$redirect_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 			if ( '' !== $redirect_url ) {
-				// do we already know who this user is?
-				$user = wp_get_current_user();
+
+				$benefit_info = $this->get_user_benefit_info( 'partner-offers' );
+
+				// if there is no current user info, exit
+				if ( ! isset( $benefit_info['current_user'] ) ) {
+					$error_url = add_query_arg( 'errors', 'ineligible-user', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				// if there are not can redeem and date eligible fields, exit
+				if ( ! isset( $benefit_info['current_user']['can_redeem'] ) || ! isset( $benefit_info['current_user']['date_eligible'] ) ) {
+					$error_url = add_query_arg( 'errors', 'ineligible-user', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				// if the can redeem or date eligible fields are not true, exit
+				if ( true !== filter_var( $benefit_info['current_user']['can_redeem'], FILTER_VALIDATE_BOOLEAN ) || true !== filter_var( $benefit_info['current_user']['date_eligible'], FILTER_VALIDATE_BOOLEAN ) ) {
+					$error_url = add_query_arg( 'errors', 'ineligible-user', $error_url );
+					wp_safe_redirect( site_url( $error_url ) );
+					exit;
+				}
+
+				// at this point, the user is ok, so handle the form submission
 
 				// sanitize form data we accept
 				$post_params = $this->process_benefit_parameters( 'post' );
@@ -323,7 +346,6 @@ class MinnPost_Membership_Front_End {
 
 				if ( is_array( $instances ) ) {
 					$this_instance = $instances[ $params['instance_id'] ];
-					error_log( 'this instance is ' . print_r( $this_instance, true ) );
 				} else {
 					$error_url = add_query_arg( 'errors', 'no_instances', $error_url );
 					$error_url = add_query_arg( 'not-claimed', $params['post_id'], $error_url );
@@ -342,7 +364,6 @@ class MinnPost_Membership_Front_End {
 				);
 
 				$instances[ $params['instance_id'] ] = $this_instance;
-				//error_log( 'start updating meta for ' . $params['post_id'] . ' the new instance value is ' . print_r( $this_instance, true ) );
 				update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
 
 				$redirect_url = add_query_arg( 'claimed', $params['post_id'], $redirect_url );
@@ -803,13 +824,13 @@ class MinnPost_Membership_Front_End {
 		$can_redeem     = $user_access_data['can_redeem'];
 		$current_user   = $this->user_info->user_membership_info( $user_id );
 
-		$current_user['can_redeem']           = $can_redeem;
-		$current_user['benefit_access_level'] = $benefit_access;
-		$current_user['date_eligible']        = $date_eligible;
+		$current_user['can_redeem']    = $can_redeem;
+		$current_user['date_eligible'] = $date_eligible;
 
 		$user_membership_info = array(
-			'member_level_prefix' => $this->member_levels->member_level_prefix,
-			'current_user'        => $current_user,
+			'member_level_prefix'  => $this->member_levels->member_level_prefix,
+			'current_user'         => $current_user,
+			'benefit_access_level' => $benefit_access,
 		);
 		return $user_membership_info;
 	}
