@@ -190,6 +190,10 @@ class MinnPost_Membership_Front_End {
 			$data = $_POST;
 		}
 
+		if ( isset( $data['benefit-name'] ) ) {
+			$params['benefit-name'] = filter_var( $data['benefit-name'], FILTER_SANITIZE_STRING );
+		}
+
 		if ( isset( $data['post_id'] ) ) {
 			$params['post_id'] = filter_var( $data['post_id'], FILTER_SANITIZE_NUMBER_INT );
 			if ( isset( $data[ 'instance-id-' . $data['post_id'] ] ) ) {
