@@ -194,7 +194,7 @@ class MinnPost_Membership_Content_Items {
 			$title = __( 'Enter partner name here', 'minnpost-membership' );
 		}
 		if ( 'partner_offer' === $screen->post_type ) {
-			$title = __( 'Enter offer/event name here', 'minnpost-membership' );;
+			$title = __( 'Enter offer/event name here', 'minnpost-membership' );
 		}
 		return $title;
 	}

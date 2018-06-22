@@ -1120,6 +1120,7 @@ class MinnPost_Membership_Admin {
 			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 			'args'     => array(
 				'type'     => 'radio',
+				'label'    => 'parallel',
 				'desc'     => '',
 				'constant' => '',
 				'items'    => $eligibility_states,
@@ -1295,6 +1296,7 @@ class MinnPost_Membership_Admin {
 			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 			'args'     => array(
 				'type'     => 'radio',
+				'label'    => 'parallel',
 				'desc'     => '',
 				'constant' => '',
 				'items'    => $eligibility_states,
@@ -1587,6 +1589,7 @@ class MinnPost_Membership_Admin {
 			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 			'args'     => array(
 				'type'     => 'radio',
+				'label'    => 'parallel',
 				'desc'     => '',
 				'constant' => '',
 				'items'    => $eligibility_states,
@@ -2233,14 +2236,25 @@ class MinnPost_Membership_Admin {
 
 			$input_name = $name;
 
-			echo sprintf( '<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
-				esc_attr( $type ),
-				esc_attr( $item_value ),
-				esc_attr( $input_name ),
-				esc_attr( $id ),
-				esc_html( $checked ),
-				esc_html( $text )
-			);
+			if ( ! isset( $args['label'] ) || 'parallel' !== $args['label'] ) {
+				echo sprintf( '<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
+					esc_attr( $type ),
+					esc_attr( $item_value ),
+					esc_attr( $input_name ),
+					esc_attr( $id ),
+					esc_html( $checked ),
+					esc_html( $text )
+				);
+			} else {
+				echo sprintf( '<div class="checkbox"><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s><label for="%4$s">%6$s</label></div>',
+					esc_attr( $type ),
+					esc_attr( $item_value ),
+					esc_attr( $input_name ),
+					esc_attr( $id ),
+					esc_html( $checked ),
+					esc_html( $text )
+				);
+			}
 			if ( '' !== $desc ) {
 				echo sprintf( '<p class="description">%1$s</p>',
 					esc_html( $desc )
