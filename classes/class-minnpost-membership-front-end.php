@@ -985,6 +985,26 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	 * Get result message based on the current page status for display
+	 * @return string $message
+	 *
+	 */
+	public function get_benefit_message() {
+		$message = '';
+		if ( isset( $_GET['claimed'] ) ) {
+			$claimed = filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING );
+			if ( get_the_ID() === (int) $_GET['claimed'] ) {
+				$message = $this->get_result_message( 'claimed' );
+				return $message;
+			} // if the ids don't match, it's not the offer the user claimed
+		}
+		if ( isset( $_GET['not-claimed'] ) ) {
+			$message = 'count is ' . $unclaimed_instance_count;
+		}
+		return $message;
+	}
+
+	/**
 	 * Finds and returns a matching result message for the given status code.
 	 *
 	 * @param string $param   The status parameter to look up.
@@ -1008,13 +1028,15 @@ class MinnPost_Membership_Front_End {
 		*/
 		switch ( $param ) {
 			case 'ineligible_user':
-				return __( 'You are not eligible to claim a partner offer.', 'minnpost-membership' );
+				$message = __( 'You are not eligible to claim a partner offer.', 'minnpost-membership' );
+				return $message;
 			case 'claimed':
-				return __( 'you claimed!', 'minnpost-membership' );
+				$message = __( 'You have successfully claimed this offer. You will receive an email with further details shortly.', 'minnpost-membership' );
+				return $message;
 			default:
-				return __( 'We were unable to send your information to start our payment processor. Try again.', 'minnpost-membership' );
+				return __( 'Our system was unable to claim this partner offer for you. Try again.', 'minnpost-membership' );
 		}
-		return __( 'An unknown error occurred. Please try again later.', 'minnpost-membership' );
+		return __( 'An error we don\'t know about has occurred. Please try again.', 'minnpost-membership' );
 	}
 
 }

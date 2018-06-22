@@ -835,21 +835,6 @@ class MinnPost_Membership_Content_Items {
 			$offer_status_content['button_label'] = 'All Claimed'; // value should come from plugin options
 		}
 
-		// if user successfully made a claim, show them
-		if ( isset( $_GET['claimed'] ) ) {
-			$claimed = filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING );
-			if ( get_the_ID() === (int) $_GET['claimed'] ) {
-				$offer_status_content['current_status'] = 'success';
-				$offer_status_content['message']        = 'You have successfully claimed this offer. You will receive an email with further details shortly.'; // value should come from plugin options
-				return $offer_status_content;
-			} // if the ids don't match, it's not the offer the user claimed
-		}
-
-		// if user tried to claim but it failed, show them
-		if ( isset( $_GET['not-claimed'] ) ) {
-			echo 'count is ' . $unclaimed_instance_count;
-		}
-
 		return $offer_status_content;
 	}
 
