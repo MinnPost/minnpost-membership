@@ -315,6 +315,21 @@ class MinnPost_Membership_Front_End {
 
 				if ( isset( $params['benefit-name'] ) ) {
 					$benefit_name = $params['benefit-name'];
+				} else {
+					$error_data = array(
+						'param' => 'missing_benefit',
+					);
+				}
+
+				if ( ! empty( $error_data ) ) {
+					if ( false === $is_ajax ) {
+						$error_url = add_query_arg( 'errors', $error_data['param'], $error_url );
+						wp_safe_redirect( site_url( $error_url ) );
+						exit;
+					} else {
+						$error_data['message'] = $this->get_result_message( $error_data['param'] );
+						wp_send_json_error( $error_data );
+					}
 				}
 
 				$benefit_info = $this->get_user_benefit_info( $benefit_name );
