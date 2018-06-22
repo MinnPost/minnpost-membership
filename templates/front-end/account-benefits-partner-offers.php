@@ -56,13 +56,20 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 											<?php endif; ?>
 
 											<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
-											<div class="m-benefit-claim m-benefit-claim-<?php echo $offer_status_content['current_status']; ?>">
-												<?php if ( '' !== $offer_status_content['message'] ) : ?>
-													<div class="m-benefit-message">
-														<?php echo $offer_status_content['message']; ?>
-													</div>
-												<?php endif; ?>
-												<button type="submit" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $offer_status_content['button_class']; ?>"<?php echo $offer_status_content['button_attr']; ?>><?php echo $offer_status_content['button_label']; ?></button>
+											<div class="m-benefit-claim">
+												<?php
+												$message_class = '';
+												$message       = $minnpost_membership->front_end->get_benefit_message();
+												if ( '' !== $message ) {
+													$message_class = ' m-benefit-message-visible';
+												}
+												?>
+												<div class="m-benefit-message<?php echo $message_class; ?>">
+													<?php if ( '' !== $message ) : ?>
+														<?php echo $message; ?>
+													<?php endif; ?>
+												</div>
+												<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $offer_status_content['button_class']; ?>"<?php echo $offer_status_content['button_attr']; ?>><?php echo $offer_status_content['button_label']; ?></button>
 											</div>
 										<?php endif; ?>
 
