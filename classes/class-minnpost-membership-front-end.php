@@ -300,32 +300,10 @@ class MinnPost_Membership_Front_End {
 		if ( wp_verify_nonce( $_POST['minnpost_membership_benefit_form_nonce'], 'mem-form-nonce' ) ) {
 			$redirect_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+			$is_ajax      = isset( $_POST['is_ajax'] ) ? filter_var( $_POST['is_ajax'], FILTER_VALIDATE_BOOLEAN ) : false;
 			if ( '' !== $redirect_url ) {
 
-				$benefit_info = $this->get_user_benefit_info( 'partner-offers' );
-
-				// if there is no current user info, exit
-				if ( ! isset( $benefit_info['current_user'] ) ) {
-					$error_url = add_query_arg( 'errors', 'ineligible-user', $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
-				}
-
-				// if there are not can redeem and date eligible fields, exit
-				if ( ! isset( $benefit_info['current_user']['can_redeem'] ) || ! isset( $benefit_info['current_user']['date_eligible'] ) ) {
-					$error_url = add_query_arg( 'errors', 'ineligible-user', $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
-				}
-
-				// if the can redeem or date eligible fields are not true, exit
-				if ( true !== filter_var( $benefit_info['current_user']['can_redeem'], FILTER_VALIDATE_BOOLEAN ) || true !== filter_var( $benefit_info['current_user']['date_eligible'], FILTER_VALIDATE_BOOLEAN ) ) {
-					$error_url = add_query_arg( 'errors', 'ineligible-user', $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
-				}
-
-				// at this point, the user is ok, so handle the form submission
+				$error_data = array();
 
 				// sanitize form data we accept
 				$post_params = $this->process_benefit_parameters( 'post' );
@@ -335,52 +313,147 @@ class MinnPost_Membership_Front_End {
 					$params = $post_params;
 				}
 
-				if ( ! isset( $params['post_id'] ) ) {
-					$error_url = add_query_arg( 'errors', 'missing_partner_offer', $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
+				if ( isset( $params['benefit-name'] ) ) {
+					$benefit_name = $params['benefit-name'];
 				}
 
-				if ( ! isset( $params['instance_id'] ) ) {
-					$error_url = add_query_arg( 'errors', 'missing_instance', $error_url );
-					$error_url = add_query_arg( 'not-claimed', $params['post_id'], $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
+				$benefit_info = $this->get_user_benefit_info( $benefit_name );
+
+				// if there is no current user info, exit
+				if ( ! isset( $benefit_info['current_user'] ) ) {
+					$error_data = array(
+						'param' => 'ineligible_user',
+					);
 				}
 
-				$instances = $this->content_items->get_partner_offers( $params['post_id'] )->instances;
-
-				if ( is_array( $instances ) ) {
-					$this_instance = $instances[ $params['instance_id'] ];
-				} else {
-					$error_url = add_query_arg( 'errors', 'no_instances', $error_url );
-					$error_url = add_query_arg( 'not-claimed', $params['post_id'], $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
+				// if there are not can redeem and date eligible fields, exit
+				if ( ! isset( $benefit_info['current_user']['can_redeem'] ) || ! isset( $benefit_info['current_user']['date_eligible'] ) ) {
+					$error_data = array(
+						'param' => 'ineligible_user',
+					);
 				}
 
-				$current_user = get_currentuserinfo();
+				// if the can redeem or date eligible fields are not true, exit
+				if ( true !== filter_var( $benefit_info['current_user']['can_redeem'], FILTER_VALIDATE_BOOLEAN ) || true !== filter_var( $benefit_info['current_user']['date_eligible'], FILTER_VALIDATE_BOOLEAN ) ) {
+					$error_data = array(
+						'param' => 'ineligible_user',
+					);
+				}
 
-				$now     = new DateTime();
-				$claimed = $now->getTimestamp();
-				$this_instance['_mp_partner_offer_claimed_date'] = $claimed;
-				$this_instance['_mp_partner_offer_claim_user']   = array(
-					'name' => $current_user->display_name,
-					'id'   => get_current_user_id(),
-				);
+				if ( ! empty( $error_data ) ) {
+					if ( false === $is_ajax ) {
+						$error_url = add_query_arg( 'errors', $error_data['param'], $error_url );
+						wp_safe_redirect( site_url( $error_url ) );
+						exit;
+					} else {
+						$error_data['message'] = $this->get_result_message( $error_data['param'] );
+						wp_send_json_error( $error_data );
+					}
+				}
 
-				$instances[ $params['instance_id'] ] = $this_instance;
-				update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
-
-				$redirect_url = add_query_arg( 'claimed', $params['post_id'], $redirect_url );
-
-				// this requires us to hook into the allowed url thing
-				wp_safe_redirect( $redirect_url );
-				exit;
-
+				// at this point, the user is ok, so handle the form submission
+				if ( 'partner-offers' === $benefit_name ) {
+					$claim_result = $this->claim_partner_offer_instance( $params, $error_data );
+					if ( 'error' === $claim_result['status'] ) {
+						if ( false === $is_ajax ) {
+							$error_url = add_query_arg( 'errors', $claim_result['param'], $error_url );
+							if ( isset( $claim_result['not-claimed'] ) ) {
+								$error_url = add_query_arg( 'not-claimed', $claim_result['not-claimed'], $error_url );
+							}
+							wp_safe_redirect( site_url( $error_url ) );
+							exit;
+						} else {
+							$claim_result['message'] = $this->get_result_message( $claim_result['param'] );
+							wp_send_json_error( $claim_result );
+						}
+					} elseif ( 'success' === $claim_result['status'] ) {
+						if ( false === $is_ajax ) {
+							$redirect_url = add_query_arg( 'claimed', $claim_result['post_id'], $redirect_url );
+							wp_safe_redirect( $redirect_url );
+							exit;
+						} else {
+							wp_send_json_success( $claim_result );
+						}
+					}
+				}
 			} else {
-				exit;
+				$error_data = array(
+					'param' => 'missing_url',
+				);
+				if ( ! empty( $error_data ) ) {
+					if ( false === $is_ajax ) {
+						$error_url = add_query_arg( 'errors', $error_data['param'], $error_url );
+						wp_safe_redirect( site_url( $error_url ) );
+						exit;
+					} else {
+						$error_data['message'] = $this->get_result_message( $error_data['param'] );
+						wp_send_json_error();
+					}
+				}
 			}
+		}
+	}
+
+	/**
+	* Claim a partner offer instance
+	* @param array $params
+	* @param array $error_data
+	* @return array $claim_result
+	*
+	*/
+	private function claim_partner_offer_instance( $params, $error_data = array() ) {
+		if ( ! isset( $params['post_id'] ) ) {
+			$claim_result = array(
+				'status' => 'error',
+				'param'  => 'missing_partner_offer',
+			);
+			return $claim_result;
+		}
+
+		if ( ! isset( $params['instance_id'] ) ) {
+			$claim_result = array(
+				'status'      => 'error',
+				'param'       => 'missing_instance',
+				'not-claimed' => $params['post_id'],
+			);
+			return $claim_result;
+		}
+
+		$instances = $this->content_items->get_partner_offers( $params['post_id'] )->instances;
+
+		if ( is_array( $instances ) ) {
+			$this_instance = $instances[ $params['instance_id'] ];
+		} else {
+			$claim_result = array(
+				'status'      => 'error',
+				'param'       => 'no_instances',
+				'not-claimed' => $params['post_id'],
+			);
+			return $claim_result;
+		}
+
+		$current_user = wp_get_current_user();
+
+		$claimed = current_time( 'timestamp' );
+
+		$this_instance['_mp_partner_offer_claimed_date'] = $claimed;
+		$this_instance['_mp_partner_offer_claim_user']   = array(
+			'name' => $current_user->display_name,
+			'id'   => get_current_user_id(),
+		);
+
+		$instances[ $params['instance_id'] ] = $this_instance;
+
+		$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
+
+		if ( true === $update_instance ) {
+			$claim_result = array(
+				'status'      => 'success',
+				'message'     => __( 'Thanks for claiming!', 'minnpost-membership' ),
+				'post_id'     => $params['post_id'],
+				'instance_id' => $params['instance_id'],
+			);
+			return $claim_result;
 		}
 	}
 
@@ -912,32 +985,32 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	 * Finds and returns a matching error message for the given error code.
+	 * Finds and returns a matching result message for the given status code.
 	 *
-	 * @param string $error_code    The error code to look up.
-	 * @param array $data           This should be user data, either provided by a form or a hook
+	 * @param string $param   The status parameter to look up.
+	 * @param array $data     This should be user data, either provided by a form or a hook
 	 *
-	 * @return string               An error message.
+	 * @return string               A user-facing result message.
 	 */
-	public function get_error_message( $error_code, $data = array() ) {
-		$error_code     = filter_var( $error_code, FILTER_SANITIZE_STRING );
-		$custom_message = apply_filters( 'minnpost_membership_custom_error_message', '', $error_code, $data );
+	public function get_result_message( $param, $data = array() ) {
+		$param          = filter_var( $param, FILTER_SANITIZE_STRING );
+		$custom_message = apply_filters( 'minnpost_membership_custom_error_message', '', $param, $data );
 		if ( '' !== $custom_message ) {
 			return $custom_message;
 		}
-		// example to change the error message
+		// example to change the result message
 		/*
-		add_filter( 'minnpost_membership_custom_error_message', 'error_message', 10, 3 );
-		function error_message( $message, $error_code, $data ) {
+		add_filter( 'minnpost_membership_custom_result_message', 'result_message', 10, 3 );
+		function result_message( $message, $param, $data ) {
 			$message = 'this is my error';
 			return $message;
 		}
 		*/
-		switch ( $error_code ) {
-			case 'empty_amount':
-				return __( 'You did not enter an amount.', 'minnpost-membership' );
-			case 'invalid_amount':
-				return __( 'You entered an invalid amount.', 'minnpost-membership' );
+		switch ( $param ) {
+			case 'ineligible_user':
+				return __( 'You are not eligible to claim a partner offer.', 'minnpost-membership' );
+			case 'claimed':
+				return __( 'you claimed!', 'minnpost-membership' );
 			default:
 				return __( 'We were unable to send your information to start our payment processor. Try again.', 'minnpost-membership' );
 		}
