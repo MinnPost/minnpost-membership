@@ -6,7 +6,8 @@
 get_header(); ?>
 <?php
 global $minnpost_membership;
-$user_state = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
+$user_state    = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
+$benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 ?>
 
 	<div id="primary" class="m-layout-membership o-fan-club m-page">
@@ -17,9 +18,9 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 			<section class="m-entry-content m-partner-offers">
 				<?php $offers = $minnpost_membership->content_items->get_partner_offers(); ?>
 				<?php if ( $offers ) : ?>
-					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-partner-offers">
+					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-benefit m-form-membership-partner-offers">
 						<input type="hidden" name="action" value="benefit_form_submit">
-						<input type="hidden" name="minnpost_membership_benefit_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
+						<input type="hidden" name="minnpost_membership_benefit_form_nonce" value="<?php echo $benefit_nonce; ?>">
 						<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
 						<input type="hidden" name="benefit-name" value="partner-offers">
 						<fieldset>
