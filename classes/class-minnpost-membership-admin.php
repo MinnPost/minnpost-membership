@@ -1626,6 +1626,18 @@ class MinnPost_Membership_Admin {
 						'type'     => 'text',
 					),
 				);
+				$settings[ $this_section . '_user_tried_but_all_claimed_' . $display_item['id'] ] = array(
+					'title'    => __( 'User tried to claim offer that is all claimed', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed if an offer has no available instances, but a user has tried to claim it. This is useful for possibly accidental button clicks or when other claims made it in sooner.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
 				$settings[ $this_section . '_claimed_' . $display_item['id'] ]                    = array(
 					'title'    => __( 'Successful claim', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
