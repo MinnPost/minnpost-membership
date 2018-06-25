@@ -568,113 +568,73 @@ class MinnPost_Membership_Content_Items {
 	*
 	*/
 	public function get_partner_offers( $partner_offer_id = '' ) {
+
+		global $wpdb;
+
+		$now = current_time( 'mysql' );
+		//$now = date( 'Y-m-d', strtotime( '-1 month' ) );
+		//$now = date( 'Y-m-d', strtotime( '+1 month' ) );
+
+		$query = $wpdb->prepare(
+			"SELECT
+			offer.ID, offer.post_title,
+			partner.meta_value as post_parent,
+			offer.post_type as post_type,
+			partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
+			partner_link.meta_value as partner_link_url,
+			quantity.meta_value as quantity,
+			offer_type.meta_value as offer_type,
+			restriction.meta_value as restriction,
+			more_info_text.meta_value as more_info_text,
+			more_info_url.meta_value as more_info_url,
+			claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
+
+			instance.meta_value as instances,
+
+			IF(%s BETWEEN FROM_UNIXTIME(claimable_start_date.meta_value) AND FROM_UNIXTIME(claimable_end_date.meta_value), true, false) as claimable
+
+			FROM {$wpdb->prefix}posts offer
+
+			LEFT JOIN {$wpdb->prefix}postmeta AS partner ON offer.ID = partner.post_id AND 'partner_id' = partner.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS partner_image_id ON partner.meta_value = partner_image_id.post_id AND '_mp_partner_logo_image_id' = partner_image_id.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS partner_image ON partner.meta_value = partner_image.post_id AND '_mp_partner_logo_image' = partner_image.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS partner_link ON partner.meta_value = partner_link.post_id AND '_mp_partner_link_url' = partner_link.meta_key
+
+			LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS restriction ON offer.ID = restriction.post_id AND '_mp_partner_offer_restriction' = restriction.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS more_info_text ON offer.ID = more_info_text.post_id AND '_mp_partner_offer_more_info_text' = more_info_text.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS more_info_url ON offer.ID = more_info_url.post_id AND '_mp_partner_offer_more_info_url' = more_info_url.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
+			LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
+
+			LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
+
+			WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'
+
+		", $now );
+
 		if ( '' !== $partner_offer_id ) {
+			$cond   = $wpdb->prepare( ' AND offer.ID = %s', $partner_offer_id );
+			$query .= $cond;
+		}
 
-			global $wpdb;
+		//$query .= 'ORDER BY available_instance_count DESC, claimable_start_date DESC, claimable_end_date DESC';
+		$query .= ' ORDER BY claimable_start_date DESC, claimable_end_date DESC';
 
-			$partner_offers = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT
-					offer.ID, offer.post_title,
-					partner.meta_value as post_parent,
-					offer.post_type as post_type,
-					partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
-					partner_link.meta_value as partner_link_url,
-					quantity.meta_value as quantity,
-					offer_type.meta_value as offer_type,
-					restriction.meta_value as restriction,
-					more_info_text.meta_value as more_info_text,
-					more_info_url.meta_value as more_info_url,
-					claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
+		$partner_offers = $wpdb->get_results( $query, OBJECT ); // WPCS: unprepared SQL ok.
+		foreach ( $partner_offers as $partner_offer ) {
+			$partner_offer = $this->store_partner_offer_instances( $partner_offer );
+		}
 
-					instance.meta_value as instances
+		usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
 
-					FROM {$wpdb->prefix}posts offer
-
-					LEFT JOIN {$wpdb->prefix}postmeta AS partner ON offer.ID = partner.post_id AND 'partner_id' = partner.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS partner_image_id ON partner.meta_value = partner_image_id.post_id AND '_mp_partner_logo_image_id' = partner_image_id.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS partner_image ON partner.meta_value = partner_image.post_id AND '_mp_partner_logo_image' = partner_image.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS partner_link ON partner.meta_value = partner_link.post_id AND '_mp_partner_link_url' = partner_link.meta_key
-
-					LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS restriction ON offer.ID = restriction.post_id AND '_mp_partner_offer_restriction' = restriction.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS more_info_text ON offer.ID = more_info_text.post_id AND '_mp_partner_offer_more_info_text' = more_info_text.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS more_info_url ON offer.ID = more_info_url.post_id AND '_mp_partner_offer_more_info_url' = more_info_url.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
-					LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
-
-					LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
-
-					WHERE offer.post_status = 'publish' AND offer.ID = %s
-
-					#ORDER BY available_instance_count DESC, claimable_start_date DESC, claimable_end_date DESC
-					ORDER BY claimable_start_date DESC, claimable_end_date DESC
-
-					", $partner_offer_id
-				), OBJECT
-			);
-
-			foreach ( $partner_offers as $partner_offer ) {
-				$partner_offer = $this->save_partner_offer_instances( $partner_offer );
-			}
-
-			usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
-
+		if ( '' !== $partner_offer_id ) {
 			return $partner_offers[0];
-
 		} else {
-			global $wpdb;
-
-			$partner_offers = $wpdb->get_results(
-				"SELECT
-				offer.ID, offer.post_title,
-				partner.meta_value as post_parent,
-				offer.post_type as post_type,
-				partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
-				partner_link.meta_value as partner_link_url,
-				quantity.meta_value as quantity,
-				offer_type.meta_value as offer_type,
-				restriction.meta_value as restriction,
-				more_info_text.meta_value as more_info_text,
-				more_info_url.meta_value as more_info_url,
-				claimable_start_date.meta_value as claimable_start_date, claimable_end_date.meta_value as claimable_end_date,
-
-				instance.meta_value as instances
-
-				FROM {$wpdb->prefix}posts offer
-
-				LEFT JOIN {$wpdb->prefix}postmeta AS partner ON offer.ID = partner.post_id AND 'partner_id' = partner.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS partner_image_id ON partner.meta_value = partner_image_id.post_id AND '_mp_partner_logo_image_id' = partner_image_id.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS partner_image ON partner.meta_value = partner_image.post_id AND '_mp_partner_logo_image' = partner_image.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS partner_link ON partner.meta_value = partner_link.post_id AND '_mp_partner_link_url' = partner_link.meta_key
-
-				LEFT JOIN {$wpdb->prefix}postmeta AS quantity ON offer.ID = quantity.post_id AND '_mp_partner_offer_quantity' = quantity.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS offer_type ON offer.ID = offer_type.post_id AND '_mp_partner_offer_type' = offer_type.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS restriction ON offer.ID = restriction.post_id AND '_mp_partner_offer_restriction' = restriction.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS more_info_text ON offer.ID = more_info_text.post_id AND '_mp_partner_offer_more_info_text' = more_info_text.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS more_info_url ON offer.ID = more_info_url.post_id AND '_mp_partner_offer_more_info_url' = more_info_url.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_start_date ON offer.ID = claimable_start_date.post_id AND '_mp_partner_offer_claimable_start_date' = claimable_start_date.meta_key
-				LEFT JOIN {$wpdb->prefix}postmeta AS claimable_end_date ON offer.ID = claimable_end_date.post_id AND '_mp_partner_offer_claimable_end_date' = claimable_end_date.meta_key
-
-				LEFT JOIN {$wpdb->prefix}postmeta AS instance ON offer.ID = instance.post_id AND '_mp_partner_offer_instance' = instance.meta_key
-
-				WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'
-
-				#ORDER BY available_instance_count DESC, claimable_start_date DESC, claimable_end_date DESC
-				ORDER BY claimable_start_date DESC, claimable_end_date DESC
-
-				", OBJECT
-			);
-
-			foreach ( $partner_offers as $partner_offer ) {
-				$partner_offer = $this->save_partner_offer_instances( $partner_offer );
-			}
-
-			usort( $partner_offers, array( $this, 'sort_partner_offer_instances' ) );
-
 			return $partner_offers;
 		}
+
 	}
 
 	/**
@@ -684,7 +644,7 @@ class MinnPost_Membership_Content_Items {
 	* @return object $partner_offer
 	*
 	*/
-	private function save_partner_offer_instances( $partner_offer ) {
+	private function store_partner_offer_instances( $partner_offer ) {
 		$unclaimed_instance_count = 0;
 
 		if ( null !== $partner_offer->instances ) {
