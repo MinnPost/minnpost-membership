@@ -1557,6 +1557,89 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		// settings for status messages and buttons on partner offers
+		foreach ( $display_items as $display_item ) {
+			// email settings need to be different
+			if ( 'email' !== $display_item['id'] ) {
+				$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ] = array(
+					'title'    => __( 'Instances not claimable yet', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				if ( 'status_message' === $display_item['id'] ) {
+					$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ]['args']['desc'] .= ' The $date and $time values will be replaced by the claimable start date and time.';
+				}
+
+				$settings[ $this_section . '_user_is_eligible_' . $display_item['id'] ]           = array(
+					'title'    => __( 'User is eligible', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed for each offer if the current user is eligible to claim it.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+				$settings[ $this_section . '_user_ineligible_membership_' . $display_item['id'] ] = array(
+					'title'    => __( 'User is ineligible due to membership status', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed for each offer if the current user does not have the required membership status.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+				$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
+					'title'    => __( 'User is ineligible due to claiming an offer too recently', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed for each offer if the current user claimed an offer too recently.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+				$settings[ $this_section . '_all_claimed_' . $display_item['id'] ]                = array(
+					'title'    => __( 'Offer is all claimed', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed if an offer has no available instances.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+				$settings[ $this_section . '_claimed_' . $display_item['id'] ]                    = array(
+					'title'    => __( 'Successful claim', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed on the offer a user successfully claimed.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+			}
+		}
 
 		$settings[ $this_section . '_no_offers' ] = array(
 			'title'    => __( 'No published offers', 'minnpost-membership' ),
@@ -2059,23 +2142,23 @@ class MinnPost_Membership_Admin {
 		if ( 'account-benefits-partner-offers' === $benefit_name ) {
 			$display_items = array(
 				array(
-					'value'   => 'status_messages',
+					'value'   => 'status_message',
 					'text'    => 'Status messages',
-					'id'      => 'status_messages',
+					'id'      => 'status_message',
 					'desc'    => '',
 					'default' => '',
 				),
 				array(
-					'value'   => 'buttons',
+					'value'   => 'button',
 					'text'    => 'Buttons',
-					'id'      => 'buttons',
+					'id'      => 'button',
 					'desc'    => '',
 					'default' => '',
 				),
 				array(
-					'value'   => 'emails',
+					'value'   => 'email',
 					'text'    => 'Emails',
-					'id'      => 'emails',
+					'id'      => 'email',
 					'desc'    => '',
 					'default' => '',
 				),
