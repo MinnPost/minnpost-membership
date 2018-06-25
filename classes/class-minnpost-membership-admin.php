@@ -1540,6 +1540,23 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+		$display_items = $this->get_benefit_display_items( $this_section );
+
+		$settings[ $this_section . '-display_item' ] = array(
+			'title'    => __( 'Switch display item', 'minnpost-membership' ),
+			'callback' => $callbacks['checkboxes'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'class'    => 'minnpost-member-field minnpost-member-field-display-item-toggle',
+			'args'     => array(
+				'type'     => 'radio',
+				'label'    => 'parallel',
+				'desc'     => '',
+				'constant' => '',
+				'items'    => $display_items,
+			),
+		);
+
 		// /account/benefits/fan-club options
 		$this_section                         = 'account-benefits-fan-club';
 		$settings[ $this_section . '_title' ] = array(
@@ -2013,6 +2030,43 @@ class MinnPost_Membership_Admin {
 			);
 		}
 		return $admin_states;
+	}
+
+	/**
+	* Options for what items can group the display
+	* @param string $benefit_name - sets the displays based on the benefit name
+	* @return array $display_states
+	*
+	*/
+	private function get_benefit_display_items( $benefit_name ) {
+		// items a display can have
+		$display_items = array();
+		if ( 'account-benefits-partner-offers' === $benefit_name ) {
+			$display_items = array(
+				array(
+					'value'   => 'status_messages',
+					'text'    => 'Status messages',
+					'id'      => 'status_messages',
+					'desc'    => '',
+					'default' => '',
+				),
+				array(
+					'value'   => 'buttons',
+					'text'    => 'Buttons',
+					'id'      => 'buttons',
+					'desc'    => '',
+					'default' => '',
+				),
+				array(
+					'value'   => 'emails',
+					'text'    => 'Emails',
+					'id'      => 'emails',
+					'desc'    => '',
+					'default' => '',
+				),
+			);
+		}
+		return $display_items;
 	}
 
 	/**
