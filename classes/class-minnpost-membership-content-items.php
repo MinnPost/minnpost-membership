@@ -818,6 +818,8 @@ class MinnPost_Membership_Content_Items {
 		if ( 'member_eligible' !== $user_state ) {
 			$offer_status_content['current_status'] = 'closed';
 			$offer_status_content['button_value']   = '';
+			$offer_status_content['button_class']   = ' a-button-disabled';
+			$offer_status_content['button_attr']    = ' disabled="disabled"';
 			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_ineligible_membership_button', '' );
 			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_user_ineligible_membership_status_message', '' );
 			$offer_status_content['message_class']  = 'm-benefit-message-error';
@@ -834,6 +836,8 @@ class MinnPost_Membership_Content_Items {
 			if ( $next_claim > $now ) {
 				$offer_status_content['current_status'] = 'closed';
 				$offer_status_content['button_value']   = '';
+				$offer_status_content['button_class']   = ' a-button-disabled';
+				$offer_status_content['button_attr']    = ' disabled="disabled"';
 				$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_claimed_recently_button', '' );
 				$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_user_claimed_recently_status_message', '' );
 				$offer_status_content['message_class']  = 'm-benefit-message-info';
@@ -844,7 +848,9 @@ class MinnPost_Membership_Content_Items {
 		// one of the currently active offers was claimed by this user
 		if ( ! empty( $user_claim ) && (int) $post->ID === (int) $user_claim->ID ) {
 			$offer_status_content['current_status'] = 'closed';
-			$offer_status_content['button_value']   = '';
+			$offer_status_content['button_value']   = 'claimed';
+			$offer_status_content['button_class']   = ' a-button-disabled';
+			$offer_status_content['button_attr']    = ' disabled="disabled"';
 			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_claimed_button', '' );
 			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_claimed_status_message', '' );
 			$offer_status_content['message_class']  = 'm-benefit-message-success';
@@ -855,6 +861,8 @@ class MinnPost_Membership_Content_Items {
 		if ( true !== filter_var( $post->claimable, FILTER_VALIDATE_BOOLEAN ) ) {
 			$offer_status_content['current_status'] = 'closed';
 			$offer_status_content['button_value']   = '';
+			$offer_status_content['button_class']   = ' a-button-disabled';
+			$offer_status_content['button_attr']    = ' disabled="disabled"';
 			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_not_claimable_yet_button', '' );
 			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_not_claimable_yet_status_message', '' );
 			$offer_status_content['message']        = str_replace( '$date', date_i18n( get_option( 'date_format' ), $post->claimable_start_date ), $offer_status_content['message'] );
