@@ -1557,6 +1557,21 @@ class MinnPost_Membership_Admin {
 			),
 		);
 
+
+		$settings[ $this_section . '_no_offers' ] = array(
+			'title'    => __( 'No published offers', 'minnpost-membership' ),
+			'callback' => $callbacks['editor'],
+			'page'     => $this_section,
+			'section'  => $this_section,
+			'args'     => array(
+				'desc'          => '',
+				'constant'      => '',
+				'type'          => 'text',
+				'rows'          => '3',
+				'media_buttons' => false,
+			),
+		);
+
 		// /account/benefits/fan-club options
 		$this_section                         = 'account-benefits-fan-club';
 		$settings[ $this_section . '_title' ] = array(

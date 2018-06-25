@@ -93,7 +93,7 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 						</fieldset>
 					</form>
 				<?php else : ?>
-					<?php get_template_part( 'template-parts/content', 'none' ); ?>
+					<?php echo get_option( $minnpost_membership->option_prefix . 'account-benefits-partner-offers_no_offers', '' ); ?>
 				<?php endif; ?>
 			</section>
 		</main><!-- #main -->
