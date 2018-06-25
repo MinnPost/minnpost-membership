@@ -13,6 +13,9 @@
 
 	$( document ).ready( function() {
 		clearDateTimeFields();
+		if ($('.minnpost-member-field-display-item-toggle').length > 0) {
+			toggleActionFields('.minnpost-member-field-display-item-toggle');
+		}
 	});
 
 })(jQuery);
