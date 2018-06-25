@@ -16,7 +16,10 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'account-benefits-partner-offers_title', '' ); ?></h1>
 			</header>
 			<section class="m-entry-content m-partner-offers">
-				<?php $offers = $minnpost_membership->content_items->get_partner_offers(); ?>
+				<?php
+				$offers     = $minnpost_membership->content_items->get_partner_offers();
+				$user_claim = $minnpost_membership->content_items->get_user_offer_claims()[0];
+				?>
 				<?php if ( $offers ) : ?>
 					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-benefit m-form-membership-partner-offers">
 						<input type="hidden" name="action" value="benefit_form_submit">
@@ -42,7 +45,7 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 
 										<?php if ( null !== $post->instances ) : ?>
 
-											<?php $offer_status_content = $minnpost_membership->content_items->get_partner_offer_status_content( $post->unclaimed_instance_count, $post->instances ); ?>
+											<?php $offer_status_content = $minnpost_membership->content_items->get_partner_offer_status_content( $post, $post->instances, $user_claim ); ?>
 
 											<?php if ( 0 < $post->unclaimed_instance_count ) : ?>
 												<?php $key = 0; ?>
@@ -58,10 +61,10 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 											<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
 											<div class="m-benefit-claim">
 												<?php
-												$message_class = '';
-												$message       = $minnpost_membership->front_end->get_benefit_message();
+												$message_class = $offer_status_content['message_class'];
+												$message       = $offer_status_content['message'];
 												if ( '' !== $message ) {
-													$message_class = ' m-benefit-message-visible';
+													$message_class = ' m-benefit-message-visible ' . $message_class;
 												}
 												?>
 												<div class="m-benefit-message<?php echo $message_class; ?>">
@@ -69,7 +72,9 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 														<?php echo $message; ?>
 													<?php endif; ?>
 												</div>
-												<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $offer_status_content['button_class']; ?>"<?php echo $offer_status_content['button_attr']; ?>><?php echo $offer_status_content['button_label']; ?></button>
+												<?php if ( '' !== $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
+													<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $offer_status_content['button_class']; ?>"<?php echo $offer_status_content['button_attr']; ?>><?php echo $offer_status_content['button_label']; ?></button>
+												<?php endif; ?>
 											</div>
 										<?php endif; ?>
 

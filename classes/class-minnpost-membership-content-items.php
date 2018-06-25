@@ -682,6 +682,29 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
+	* Get user's claims in descending order. Returns timestamp as key, partner offer post object as value
+	* @return array $user_claims
+	*
+	*/
+	public function get_user_offer_claims() {
+		$user_claims    = array();
+		$partner_offers = $this->get_partner_offers();
+		foreach ( $partner_offers as $partner_offer ) {
+			foreach ( $partner_offer->instances as $instance ) {
+				if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] || get_current_user_id() !== (int) $instance['_mp_partner_offer_claim_user']['id'] ) {
+					continue;
+				} else {
+					$partner_offer->user_claimed = $instance['_mp_partner_offer_claimed_date'];
+
+					$user_claims[ $instance['_mp_partner_offer_claimed_date'] ] = $partner_offer;
+				}
+			}
+		}
+		rsort( $user_claims );
+		return $user_claims;
+	}
+
+	/**
 	* Output partner offer image
 	*
 	* @param int $id
@@ -770,31 +793,86 @@ class MinnPost_Membership_Content_Items {
 
 	/**
 	* Get content for partner offer that changes based on its claim/availability/etc status
-	* @param int $unclaimed_instance_count
+	* @param object $post
 	* @param array $instances
+	* @param object $user_claim
 	* @return array $offer_status
 	*
 	*/
-	public function get_partner_offer_status_content( $unclaimed_instance_count, $instances ) {
+	public function get_partner_offer_status_content( $post, $instances, $user_claim ) {
 		$offer_status_content = array(
 			'current_status' => 'closed',
 			'button_class'   => '',
 			'button_attr'    => '',
-			'button_value'   => '', // value should come from plugin options
-			'button_label'   => '', // value should come from plugin options
-			'message'        => '', // value should come from plugin options
+			'button_value'   => '',
+			'button_label'   => '',
+			'message'        => '',
+			'message_class'  => '',
 		);
 
+		$benefit_name = 'account-benefits-partner-offers';
+
+		$user_state = $this->user_info->get_user_access( '', 'support-partner-offers' )['state'];
+
+		// user is not eligible based on membership
+		if ( 'member_eligible' !== $user_state ) {
+			$offer_status_content['current_status'] = 'closed';
+			$offer_status_content['button_value']   = '';
+			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_ineligible_membership_button', '' );
+			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_user_ineligible_membership_status_message', '' );
+			$offer_status_content['message_class']  = 'm-benefit-message-error';
+			return $offer_status_content;
+		}
+
+		// user recently claimed an offer, but it wasn't this one
+		if ( ! empty( $user_claim ) && (int) $post->ID !== (int) $user_claim->ID ) {
+			$how_often  = get_option( $this->option_prefix . $benefit_name . '_claim_frequency', '' );
+			$now        = current_time( get_option( 'date_format' ) );
+			$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
+			$next_claim = date_i18n( get_option( 'date_format' ), $next_claim );
+
+			if ( $next_claim > $now ) {
+				$offer_status_content['current_status'] = 'closed';
+				$offer_status_content['button_value']   = '';
+				$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_claimed_recently_button', '' );
+				$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_user_claimed_recently_status_message', '' );
+				$offer_status_content['message_class']  = 'm-benefit-message-info';
+				return $offer_status_content;
+			}
+		}
+
+		// one of the currently active offers was claimed by this user
+		if ( ! empty( $user_claim ) && (int) $post->ID === (int) $user_claim->ID ) {
+			$offer_status_content['current_status'] = 'closed';
+			$offer_status_content['button_value']   = '';
+			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_claimed_button', '' );
+			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_claimed_status_message', '' );
+			$offer_status_content['message_class']  = 'm-benefit-message-success';
+			return $offer_status_content;
+		}
+
+		// the offer is not claimable yet
+		if ( true !== filter_var( $post->claimable, FILTER_VALIDATE_BOOLEAN ) ) {
+			$offer_status_content['current_status'] = 'closed';
+			$offer_status_content['button_value']   = '';
+			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_not_claimable_yet_button', '' );
+			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_not_claimable_yet_status_message', '' );
+			$offer_status_content['message']        = str_replace( '$date', date_i18n( get_option( 'date_format' ), $post->claimable_start_date ), $offer_status_content['message'] );
+			$offer_status_content['message']        = str_replace( '$time', date_i18n( get_option( 'time_format' ), $post->claimable_start_date ), $offer_status_content['message'] );
+			$offer_status_content['message_class']  = 'm-benefit-message-future';
+			return $offer_status_content;
+		}
+
 		// regardless of what the user did, something will display for these things
-		if ( 0 < $unclaimed_instance_count ) {
+		if ( 0 < $post->unclaimed_instance_count ) {
 			$offer_status_content['current_status'] = 'open';
 			$offer_status_content['button_value']   = get_the_ID();
-			$offer_status_content['button_label']   = 'Claim Now'; // value should come from plugin options
+			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_is_eligible_button', '' );
 		} else {
 			$offer_status_content['button_value'] = 'claimed';
 			$offer_status_content['button_class'] = ' a-button-disabled';
 			$offer_status_content['button_attr']  = ' disabled="disabled"';
-			$offer_status_content['button_label'] = 'All Claimed'; // value should come from plugin options
+			$offer_status_content['button_label'] = get_option( $this->option_prefix . $benefit_name . '_all_claimed_button', '' );
 		}
 
 		return $offer_status_content;
