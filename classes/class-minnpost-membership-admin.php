@@ -1590,20 +1590,20 @@ class MinnPost_Membership_Admin {
 						'type'     => 'text',
 					),
 				);
-				$settings[ $this_section . '_user_ineligible_membership_' . $display_item['id'] ] = array(
-					'title'    => __( 'User is ineligible due to membership status', 'minnpost-membership' ),
+				$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ]            = array(
+					'title'    => __( 'User is ineligible', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 					'args'     => array(
-						'desc'     => 'This is displayed for each offer if the current user does not have the required membership status.',
+						'desc'     => 'This is displayed for each offer if the current user does not have the required status.',
 						'constant' => '',
 						'type'     => 'text',
 					),
 				);
 				$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
-					'title'    => __( 'User is ineligible due to claiming an offer too recently', 'minnpost-membership' ),
+					'title'    => __( 'User claimed too recently', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $this_section,
 					'section'  => $this_section,
@@ -1638,14 +1638,26 @@ class MinnPost_Membership_Admin {
 						'type'     => 'text',
 					),
 				);
-				$settings[ $this_section . '_claimed_' . $display_item['id'] ]                    = array(
-					'title'    => __( 'Successful claim', 'minnpost-membership' ),
+				$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ]    = array(
+					'title'    => __( 'Previous claim', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 					'args'     => array(
-						'desc'     => 'This is displayed on the offer a user successfully claimed.',
+						'desc'     => 'This is displayed on an offer a user has previously claimed, they return to the page.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+				$settings[ $this_section . '_user_just_claimed_' . $display_item['id'] ]          = array(
+					'title'    => __( 'Claim success message', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'This is displayed on an offer a user has just claimed.',
 						'constant' => '',
 						'type'     => 'text',
 					),
