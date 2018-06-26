@@ -45,7 +45,7 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 
 										<?php if ( null !== $post->instances ) : ?>
 
-											<?php $offer_status_content = $minnpost_membership->content_items->get_partner_offer_status_content( $post, $post->instances, $user_claim ); ?>
+											<?php $offer_status_content = $minnpost_membership->front_end->get_partner_offer_status_content( $post, $post->instances, $user_claim ); ?>
 
 											<?php if ( 0 < $post->unclaimed_instance_count ) : ?>
 												<?php $key = 0; ?>
