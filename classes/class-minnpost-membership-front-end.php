@@ -327,7 +327,7 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						$error_data['message'] = $this->get_result_message( $error_data['param'] );
+						$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
 						wp_send_json_error( $error_data );
 					}
 				}
@@ -361,7 +361,7 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						$error_data['message'] = $this->get_result_message( $error_data['param'] );
+						$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
 						wp_send_json_error( $error_data );
 					}
 				}
@@ -378,7 +378,7 @@ class MinnPost_Membership_Front_End {
 							wp_safe_redirect( site_url( $error_url ) );
 							exit;
 						} else {
-							$claim_result['message'] = $this->get_result_message( $claim_result['param'] );
+							$claim_result['message'] = $this->get_result_message( $claim_result['param'], $benefit_name );
 							wp_send_json_error( $claim_result );
 						}
 					} elseif ( 'success' === $claim_result['status'] ) {
@@ -1008,124 +1008,161 @@ class MinnPost_Membership_Front_End {
 	*
 	*/
 	public function get_partner_offer_status_content( $post, $instances, $user_claim ) {
-		$offer_status_content = array(
-			'current_status' => 'closed',
-			'button_class'   => '',
-			'button_attr'    => '',
-			'button_value'   => '',
-			'button_label'   => '',
-			'message'        => '',
-			'message_class'  => '',
-		);
 
-		$benefit_name = 'account-benefits-partner-offers';
+		$benefit_prefix = 'account-benefits-';
+		$benefit_name   = 'partner-offers';
 
 		$user_state = $this->user_info->get_user_access( '', 'support-partner-offers' )['state'];
 
+		$status = '';
+
 		// user is not eligible based on membership
 		if ( 'member_eligible' !== $user_state ) {
-			$offer_status_content['current_status'] = 'closed';
-			$offer_status_content['button_value']   = '';
-			$offer_status_content['button_class']   = ' a-button-disabled';
-			$offer_status_content['button_attr']    = ' disabled="disabled"';
-			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_ineligible_membership_button', '' );
-			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_user_ineligible_membership_status_message', '' );
-			$offer_status_content['message_class']  = 'm-benefit-message-error';
-			return $offer_status_content;
+			$status = 'ineligible_user';
 		}
 
-		// user recently claimed an offer, but it wasn't this one
-		if ( ! empty( $user_claim ) && (int) $post->ID !== (int) $user_claim->ID ) {
-			$how_often  = get_option( $this->option_prefix . $benefit_name . '_claim_frequency', '' );
-			$now        = current_time( get_option( 'date_format' ) );
-			$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
-			$next_claim = date_i18n( get_option( 'date_format' ), $next_claim );
-
-			if ( $next_claim > $now ) {
-				$offer_status_content['current_status'] = 'closed';
-				$offer_status_content['button_value']   = '';
-				$offer_status_content['button_class']   = ' a-button-disabled';
-				$offer_status_content['button_attr']    = ' disabled="disabled"';
-				$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_claimed_recently_button', '' );
-				$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_user_claimed_recently_status_message', '' );
-				$offer_status_content['message_class']  = 'm-benefit-message-info';
-				return $offer_status_content;
+		// user recently claimed an offer
+		if ( ! empty( $user_claim ) ) {
+			$post_id  = (int) $post->ID;
+			$claim_id = (int) $user_claim->ID;
+			// it wasn't this one
+			if ( $post_id !== $claim_id ) {
+				$how_often  = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
+				$now        = current_time( get_option( 'date_format' ) );
+				$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
+				$next_claim = date_i18n( get_option( 'date_format' ), $next_claim );
+				if ( $next_claim > $now ) {
+					$status = 'user_claimed_recently';
+				}
+			} elseif ( $post_id === $claim_id ) {
+				// it was this one
+				$claimed = isset( $_GET['claimed'] ) ? (int) filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING ) : 0;
+				if ( $post_id === $claimed ) {
+					$status = 'user_just_claimed';
+				} else {
+					$status = 'user_previously_claimed';
+				}
 			}
-		}
-
-		// one of the currently active offers was claimed by this user
-		if ( ! empty( $user_claim ) && (int) $post->ID === (int) $user_claim->ID ) {
-			$offer_status_content['current_status'] = 'closed';
-			$offer_status_content['button_value']   = 'claimed';
-			$offer_status_content['button_class']   = ' a-button-disabled';
-			$offer_status_content['button_attr']    = ' disabled="disabled"';
-			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_claimed_button', '' );
-			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_claimed_status_message', '' );
-			$offer_status_content['message_class']  = 'm-benefit-message-success';
-			return $offer_status_content;
 		}
 
 		// the offer is not claimable yet
 		if ( true !== filter_var( $post->claimable, FILTER_VALIDATE_BOOLEAN ) ) {
-			$offer_status_content['current_status'] = 'closed';
-			$offer_status_content['button_value']   = '';
-			$offer_status_content['button_class']   = ' a-button-disabled';
-			$offer_status_content['button_attr']    = ' disabled="disabled"';
-			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_not_claimable_yet_button', '' );
-			$offer_status_content['message']        = get_option( $this->option_prefix . $benefit_name . '_not_claimable_yet_status_message', '' );
-			$offer_status_content['message']        = str_replace( '$date', date_i18n( get_option( 'date_format' ), $post->claimable_start_date ), $offer_status_content['message'] );
-			$offer_status_content['message']        = str_replace( '$time', date_i18n( get_option( 'time_format' ), $post->claimable_start_date ), $offer_status_content['message'] );
-			$offer_status_content['message_class']  = 'm-benefit-message-future';
-			return $offer_status_content;
+			$status = 'not_claimable_yet';
+			$data   = array(
+				'claimable_start_date' => $post->claimable_start_date,
+			);
+
+			$offer_status_content = array_merge(
+				$this->get_result_message( $status, $benefit_name, $data ),
+				$this->get_button_values( $status, $benefit_name )
+			);
 		}
 
-		// regardless of what the user did, something will display for these things
-		if ( 0 < $post->unclaimed_instance_count ) {
-			$offer_status_content['current_status'] = 'open';
-			$offer_status_content['button_value']   = get_the_ID();
-			$offer_status_content['button_label']   = get_option( $this->option_prefix . $benefit_name . '_user_is_eligible_button', '' );
-		} else {
-			$offer_status_content['button_value'] = 'claimed';
-			$offer_status_content['button_class'] = ' a-button-disabled';
-			$offer_status_content['button_attr']  = ' disabled="disabled"';
-			$offer_status_content['button_label'] = get_option( $this->option_prefix . $benefit_name . '_all_claimed_button', '' );
+		// if the offer is claimable and user has not already been filtered, check to see how many instances it has
+		if ( '' === $status ) {
+			if ( 0 < $post->unclaimed_instance_count ) {
+				$status = 'user_is_eligible';
+			} else {
+				$status = 'all_claimed';
+			}
 		}
 
+		if ( ! isset( $offer_status_content ) ) {
+			$offer_status_content = array_merge(
+				$this->get_result_message( $status, $benefit_name ),
+				$this->get_button_values( $status, $benefit_name )
+			);
+		}
 		return $offer_status_content;
 	}
 
 	/**
-	 * Get result message based on the current page status for display
-	 * @return string $message
+	 * Finds and returns button attributes for the given status code.
 	 *
+	 * @param string $param        The status parameter to look up.
+	 * @param string $benefit_name The benefit name
+	 * @param array $data     This should be user data, either provided by a form or a hook
+	 *
+	 * @return array               Button attributes
 	 */
-	public function get_benefit_message() {
-		$message = '';
-		if ( isset( $_GET['claimed'] ) ) {
-			$claimed = filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING );
-			if ( get_the_ID() === (int) $_GET['claimed'] ) {
-				$message = $this->get_result_message( 'claimed' );
-				return $message;
-			} // if the ids don't match, it's not the offer the user claimed
+	public function get_button_values( $param, $benefit_name = '', $data = array() ) {
+		$param         = filter_var( $param, FILTER_SANITIZE_STRING );
+		$custom_button = apply_filters( 'minnpost_membership_custom_button', '', $param, $data );
+		if ( '' !== $custom_button ) {
+			return $custom_button;
 		}
-		if ( isset( $_GET['not-claimed'] ) ) {
-			$message = 'count is ' . $unclaimed_instance_count;
+		// example to change the button
+		/*
+		add_filter( 'minnpost_membership_custom_button', 'button', 10, 3 );
+		function button( $button, $param, $data ) {
+			$button = array(
+				'button_value' => 'whatever',
+				'button_class' => 'whatever',
+				'button_attr'  => 'whatever',
+				'button_label' => 'whatever',
+			);
+			return $button;
 		}
-		return $message;
+		*/
+		$benefit_name = 'account-benefits-' . $benefit_name;
+
+		$button = array(
+			'button_value' => '',
+			'button_class' => '',
+			'button_attr'  => '',
+			'button_label' => get_option( $this->option_prefix . $benefit_name . '_' . $param . '_button', '' ),
+		);
+
+		switch ( $param ) {
+			case 'ineligible_user':
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled="disabled"';
+				return $button;
+			case 'user_claimed_recently':
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled="disabled"';
+				return $button;
+			case 'user_previously_claimed':
+				$button['button_value'] = 'claimed';
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled="disabled"';
+				return $button;
+			case 'user_just_claimed':
+				$button['button_value'] = 'claimed';
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled="disabled"';
+				return $button;
+			case 'not_claimable_yet':
+				$button['button_value'] = '';
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled="disabled"';
+				return $button;
+			case 'user_is_eligible':
+				$button['button_value'] = get_the_ID();
+				return $button;
+			case 'all_claimed':
+				$button['button_value'] = 'claimed';
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled="disabled"';
+				return $button;
+			default:
+				return $button;
+		}
 	}
 
 	/**
 	 * Finds and returns a matching result message for the given status code.
 	 *
-	 * @param string $param   The status parameter to look up.
+	 * @param string $param        The status parameter to look up.
+	 * @param string $benefit_name The benefit name
 	 * @param array $data     This should be user data, either provided by a form or a hook
 	 *
-	 * @return string               A user-facing result message.
+	 * @return array               Message attributes
 	 */
-	public function get_result_message( $param, $data = array() ) {
+	public function get_result_message( $param, $benefit_name = '', $data = array() ) {
 		$param          = filter_var( $param, FILTER_SANITIZE_STRING );
 		$custom_message = apply_filters( 'minnpost_membership_custom_error_message', '', $param, $data );
-		if ( '' !== $custom_message ) {
+		if ( ! empty( $custom_message ) ) {
 			return $custom_message;
 		}
 		// example to change the result message
@@ -1136,17 +1173,34 @@ class MinnPost_Membership_Front_End {
 			return $message;
 		}
 		*/
+		$benefit_name = 'account-benefits-' . $benefit_name;
+
+		$message = array(
+			'message'       => get_option( $this->option_prefix . $benefit_name . '_' . $param . '_status_message', '' ),
+			'message_class' => '',
+		);
+
 		switch ( $param ) {
 			case 'ineligible_user':
-				$message = __( 'You are not eligible to claim a partner offer.', 'minnpost-membership' );
+				$message['message_class'] = 'm-benefit-message-error';
 				return $message;
-			case 'claimed':
-				$message = __( 'You have successfully claimed this offer. You will receive an email with further details shortly.', 'minnpost-membership' );
+			case 'user_claimed_recently':
+				$message['message_class'] = 'm-benefit-message-info';
+				return $message;
+			case 'user_previously_claimed':
+				$message['message_class'] = 'm-benefit-message-success';
+				return $message;
+			case 'user_just_claimed':
+				$message['message_class'] = 'm-benefit-message-success';
+				return $message;
+			case 'not_claimable_yet':
+				$message['message']       = str_replace( '$date', date_i18n( get_option( 'date_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$time', date_i18n( get_option( 'time_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message_class'] = 'm-benefit-message-future';
 				return $message;
 			default:
-				return __( 'Our system was unable to claim this partner offer for you. Try again.', 'minnpost-membership' );
+				return $message;
 		}
-		return __( 'An error we don\'t know about has occurred. Please try again.', 'minnpost-membership' );
 	}
 
 }
