@@ -18,7 +18,7 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 			<section class="m-entry-content m-partner-offers">
 				<?php
 				$offers     = $minnpost_membership->content_items->get_partner_offers();
-				$user_claim = $minnpost_membership->content_items->get_user_offer_claims()[0];
+				$user_claim = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
 				?>
 				<?php if ( $offers ) : ?>
 					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-benefit m-form-membership-partner-offers">
