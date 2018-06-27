@@ -198,7 +198,7 @@ class MinnPost_Membership_Front_End {
 			$params['post_id'] = filter_var( $data['post_id'], FILTER_SANITIZE_NUMBER_INT );
 			if ( isset( $data[ 'instance-id-' . $data['post_id'] ] ) ) {
 				$params['instance_id'] = filter_var( $data[ 'instance-id-' . $data['post_id'] ], FILTER_SANITIZE_NUMBER_INT );
-			} elseif ( $data['instance_id'] ) {
+			} elseif ( isset( $data['instance_id'] ) ) {
 				$params['instance_id'] = filter_var( $data['instance_id'], FILTER_SANITIZE_NUMBER_INT );
 			}
 		}
