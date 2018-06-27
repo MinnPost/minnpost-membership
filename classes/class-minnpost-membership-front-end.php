@@ -367,8 +367,6 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						//$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
-
 						$data                 = get_post( $params['post_id'], 'ARRAY_A' );
 						$offer_status_content = array_merge(
 							$this->get_result_message( $error_data['param'], $benefit_name, $data ),
@@ -425,8 +423,6 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						//$error_data['message'] = $this->get_result_message( $error_data['param'] );
-
 						$data                 = get_post( $params['post_id'], 'ARRAY_A' );
 						$offer_status_content = array_merge(
 							$this->get_result_message( $error_data['param'], $benefit_name, $data ),
