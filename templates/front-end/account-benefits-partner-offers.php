@@ -56,9 +56,9 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 														<?php endif; ?>
 													<?php endforeach; ?>
 
-											<?php endif; ?>
+													<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
 
-											<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
+											<?php endif; ?>
 											<div class="m-benefit-claim">
 												<?php
 												$message_class = $offer_status_content['message_class'];
