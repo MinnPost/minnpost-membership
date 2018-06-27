@@ -8,7 +8,9 @@
 			var $status  = $( '.m-benefit-message', $( this ).parent() );
 			var settings = minnpost_membership_settings;
 			// reset the message for current status
-			$( '.m-benefit-message' ).removeClass( 'm-benefit-message-visible m-benefit-message-error m-benefit-message-info m-benefit-message-success' );
+			if ( ! '.m-benefit-message-success' ) {
+				$( '.m-benefit-message' ).removeClass( 'm-benefit-message-visible m-benefit-message-error m-benefit-message-info' );
+			}
 			// set button to processing
 			$button.text( 'Processing' ).addClass( 'a-button-disabled' );
 			// set ajax data
@@ -31,7 +33,12 @@
 				    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 				    } else {
 				    	//console.dir(response);
-				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+				    	if ( '' !== response.data.button_label ) {
+				    		$button.show();
+				    		$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+				    	} else {
+				    		$button.hide();
+				    	}
 				    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 				    }
 
