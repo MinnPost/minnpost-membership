@@ -377,7 +377,24 @@ class MinnPost_Membership_Front_End {
 					}
 				}
 
+				if ( true === $is_ajax ) {
+					// check if user recently claimed an offer
+					$status = $this->get_user_claim_status( 'account-benefits-', $benefit_name, $params['post_id'], '' );
+
+					// user has recently claimed
+					if ( '' !== $status ) {
+						$data = get_post( $params['post_id'], 'ARRAY_A' );
+
+						$offer_status_content = array_merge(
+							$this->get_result_message( $status, $benefit_name, $data ),
+							$this->get_button_values( $status, $benefit_name )
+						);
+						wp_send_json_error( $offer_status_content );
+					}
+				}
+
 				// at this point, the user is ok, so handle the form submission
+				// we do need to make sure they didn't already claim something.
 				if ( 'partner-offers' === $benefit_name ) {
 					$claim_result = $this->claim_partner_offer_instance( $params, $error_data );
 
@@ -395,7 +412,6 @@ class MinnPost_Membership_Front_End {
 								$this->get_result_message( $claim_result['param'], $benefit_name, $data ),
 								$this->get_button_values( $claim_result['param'], $benefit_name )
 							);
-
 							wp_send_json_error( $offer_status_content );
 						}
 					} elseif ( 'success' === $claim_result['status'] ) {
@@ -455,7 +471,7 @@ class MinnPost_Membership_Front_End {
 		if ( ! isset( $params['instance_id'] ) ) {
 			$claim_result = array(
 				'status'      => 'error',
-				'param'       => 'missing_instance',
+				'param'       => 'user_tried_but_all_claimed',
 				'not-claimed' => $params['post_id'],
 			);
 			return $claim_result;
@@ -1070,29 +1086,8 @@ class MinnPost_Membership_Front_End {
 			$status = 'ineligible_user';
 		}
 
-		// user recently claimed an offer
-		if ( ! empty( $user_claim ) ) {
-			$post_id  = (int) $post->ID;
-			$claim_id = (int) $user_claim->ID;
-			// it wasn't this one
-			if ( $post_id !== $claim_id ) {
-				$how_often  = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
-				$now        = current_time( get_option( 'date_format' ) );
-				$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
-				$next_claim = date_i18n( get_option( 'date_format' ), $next_claim );
-				if ( $next_claim > $now ) {
-					$status = 'user_claimed_recently';
-				}
-			} elseif ( $post_id === $claim_id ) {
-				// it was this one
-				$claimed = isset( $_GET['claimed'] ) ? (int) filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING ) : 0;
-				if ( $post_id === $claimed ) {
-					$status = 'user_just_claimed';
-				} else {
-					$status = 'user_previously_claimed';
-				}
-			}
-		}
+		// check if user recently claimed an offer
+		$status = $this->get_user_claim_status( $benefit_prefix, $benefit_name, $post->ID, $user_claim );
 
 		$errors = isset( $_GET['errors'] ) ? filter_var( $_GET['errors'], FILTER_SANITIZE_STRING ) : '';
 		if ( '' !== $errors ) {
@@ -1132,6 +1127,49 @@ class MinnPost_Membership_Front_End {
 			);
 		}
 		return $offer_status_content;
+	}
+
+	/**
+	* Get content for partner offer that changes based on its claim/availability/etc status
+	* @param string $benefit_prefix
+	* @param string $benefit_name
+	* @param int $post_id
+	* @param object $user_claim
+	* @return string $user_claim_status
+	*
+	*/
+	public function get_user_claim_status( $benefit_prefix, $benefit_name, $post_id, $user_claim = null ) {
+		$user_claim_status = '';
+
+		$user_claim = isset( $this->content_items->get_user_offer_claims()[0] ) ? $this->content_items->get_user_offer_claims()[0] : null;
+
+		// user has not recently claimed an offer
+		if ( null === $user_claim ) {
+			return $user_claim_status;
+		}
+
+		// user recently claimed an offer
+		$post_id  = (int) $post_id;
+		$claim_id = isset( $user_claim->ID ) ? (int) $user_claim->ID : 0;
+		// it wasn't this one
+		if ( $post_id !== $claim_id ) {
+			$how_often  = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
+			$now        = current_time( get_option( 'date_format' ) );
+			$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
+			$next_claim = date_i18n( get_option( 'date_format' ), $next_claim );
+			if ( $next_claim > $now ) {
+				$user_claim_status = 'user_claimed_recently';
+			}
+		} elseif ( $post_id === $claim_id ) {
+			// it was this one
+			$claimed = isset( $_GET['claimed'] ) ? (int) filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING ) : 0;
+			if ( $post_id === $claimed ) {
+				$user_claim_status = 'user_just_claimed';
+			} else {
+				$user_claim_status = 'user_previously_claimed';
+			}
+		}
+		return $user_claim_status;
 	}
 
 	/**
@@ -1181,12 +1219,12 @@ class MinnPost_Membership_Front_End {
 				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_previously_claimed':
-				$button['button_value'] = 'claimed';
+				$button['button_value'] = get_the_ID();
 				$button['button_class'] = 'a-button-disabled';
 				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_just_claimed':
-				$button['button_value'] = 'claimed';
+				$button['button_value'] = get_the_ID();
 				$button['button_class'] = 'a-button-claimed';
 				$button['button_attr']  = 'disabled';
 				return $button;
@@ -1199,12 +1237,12 @@ class MinnPost_Membership_Front_End {
 				$button['button_value'] = get_the_ID();
 				return $button;
 			case 'all_claimed':
-				$button['button_value'] = 'claimed';
+				$button['button_value'] = get_the_ID();
 				$button['button_class'] = 'a-button-disabled';
 				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_tried_but_all_claimed':
-				$button['button_value'] = 'claimed';
+				$button['button_value'] = get_the_ID();
 				$button['button_class'] = 'a-button-disabled';
 				$button['button_attr']  = 'disabled';
 				return $button;
