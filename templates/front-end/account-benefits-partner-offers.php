@@ -61,7 +61,7 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 											<?php endif; ?>
 											<div class="m-benefit-claim">
 												<?php
-												$message_class = $offer_status_content['message_class'];
+												$message_class = ' ' . $offer_status_content['message_class'];
 												$message       = $offer_status_content['message'];
 												if ( '' !== $message ) {
 													$message_class = ' m-benefit-message-visible' . $message_class;
