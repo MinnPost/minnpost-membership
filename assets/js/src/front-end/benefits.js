@@ -5,6 +5,7 @@
 		$( '.a-benefit-button' ).click( function( event ) {
 			event.preventDefault();
 			var $button  = $( this );
+			var $status  = $( '.m-benefit-message', $( this ).parent() );
 			var settings = minnpost_membership_settings;
 			// reset the message for current status
 			$( '.m-benefit-message' ).removeClass( 'm-benefit-message-visible m-benefit-message-error m-benefit-message-info m-benefit-message-success' );
@@ -29,16 +30,13 @@
 				    };
 				    $.post( settings.ajaxurl, data, function( response ) {
 					    if ( true === response.success ) {
-					    	console.log( 'woooo' );
-					    	$button.text( 'Claimed' ).removeClass( 'a-button-disabled' ).addClass( 'a-button-claimed' ).prop( 'disabled', true );
-					        // remove button and textarea
-					        //$button.remove();
-					        //$( '.report-a-bug-message' ).remove();
-
-					        // display success message
-					        //$( '.report-a-bug-response' ).html( response.data );
+					    	//console.dir(response);
+					    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+					    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 					    } else {
-					    	$button.removeClass( 'a-button-disabled' );
+					    	//console.dir(response);
+					    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+					    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 					    }
 
 					});
