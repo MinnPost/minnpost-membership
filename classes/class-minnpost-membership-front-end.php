@@ -327,8 +327,14 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
-						wp_send_json_error( $error_data );
+						//$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
+						$data                 = get_post( $params['post_id'], 'ARRAY_A' );
+						$offer_status_content = array_merge(
+							$this->get_result_message( $error_data['param'], $benefit_name, $data ),
+							$this->get_button_values( $error_data['param'], $benefit_name )
+						);
+
+						wp_send_json_error( $offer_status_content );
 					}
 				}
 
@@ -361,14 +367,22 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
-						wp_send_json_error( $error_data );
+						//$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
+
+						$data                 = get_post( $params['post_id'], 'ARRAY_A' );
+						$offer_status_content = array_merge(
+							$this->get_result_message( $error_data['param'], $benefit_name, $data ),
+							$this->get_button_values( $error_data['param'], $benefit_name )
+						);
+
+						wp_send_json_error( $offer_status_content );
 					}
 				}
 
 				// at this point, the user is ok, so handle the form submission
 				if ( 'partner-offers' === $benefit_name ) {
 					$claim_result = $this->claim_partner_offer_instance( $params, $error_data );
+
 					if ( 'error' === $claim_result['status'] ) {
 						if ( false === $is_ajax ) {
 							$error_url = add_query_arg( 'errors', $claim_result['param'], $error_url );
@@ -378,8 +392,13 @@ class MinnPost_Membership_Front_End {
 							wp_safe_redirect( site_url( $error_url ) );
 							exit;
 						} else {
-							$claim_result['message'] = $this->get_result_message( $claim_result['param'], $benefit_name );
-							wp_send_json_error( $claim_result );
+							$data                 = get_post( $params['post_id'], 'ARRAY_A' );
+							$offer_status_content = array_merge(
+								$this->get_result_message( $claim_result['param'], $benefit_name, $data ),
+								$this->get_button_values( $claim_result['param'], $benefit_name )
+							);
+
+							wp_send_json_error( $offer_status_content );
 						}
 					} elseif ( 'success' === $claim_result['status'] ) {
 						if ( false === $is_ajax ) {
@@ -387,7 +406,12 @@ class MinnPost_Membership_Front_End {
 							wp_safe_redirect( $redirect_url );
 							exit;
 						} else {
-							wp_send_json_success( $claim_result );
+							$data                 = get_post( $params['post_id'], 'ARRAY_A' );
+							$offer_status_content = array_merge(
+								$this->get_result_message( $claim_result['param'], $benefit_name, $data ),
+								$this->get_button_values( $claim_result['param'], $benefit_name )
+							);
+							wp_send_json_success( $offer_status_content );
 						}
 					}
 				}
@@ -401,7 +425,14 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						$error_data['message'] = $this->get_result_message( $error_data['param'] );
+						//$error_data['message'] = $this->get_result_message( $error_data['param'] );
+
+						$data                 = get_post( $params['post_id'], 'ARRAY_A' );
+						$offer_status_content = array_merge(
+							$this->get_result_message( $error_data['param'], $benefit_name, $data ),
+							$this->get_button_values( $error_data['param'], $benefit_name )
+						);
+
 						wp_send_json_error();
 					}
 				}
@@ -438,10 +469,32 @@ class MinnPost_Membership_Front_End {
 
 		if ( is_array( $instances ) ) {
 			$this_instance = $instances[ $params['instance_id'] ];
+			if ( isset( $this_instance['_mp_partner_offer_claimed_date'] ) && '' !== $this_instance['_mp_partner_offer_claimed_date'] ) {
+				$instance_key = '';
+				foreach ( $instances as $key => $instance ) {
+					if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) {
+						$instance_key = $key;
+						break;
+					}
+				}
+				if ( '' !== $instance_key ) {
+					$this_instance = $instances[ $instance_key ];
+				} else {
+					$claim_result = array(
+						'status'      => 'error',
+						'param'       => 'user_tried_but_all_claimed',
+						'not-claimed' => $params['post_id'],
+					);
+					return $claim_result;
+				}
+			} else {
+				$instance_key  = $params['instance_id'];
+				$this_instance = $instances[ $instance_key ];
+			}
 		} else {
 			$claim_result = array(
 				'status'      => 'error',
-				'param'       => 'no_instances',
+				'param'       => 'user_tried_but_all_claimed',
 				'not-claimed' => $params['post_id'],
 			);
 			return $claim_result;
@@ -457,16 +510,16 @@ class MinnPost_Membership_Front_End {
 			'id'   => get_current_user_id(),
 		);
 
-		$instances[ $params['instance_id'] ] = $this_instance;
+		$instances[ $instance_key ] = $this_instance;
 
 		$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
 
 		if ( true === $update_instance ) {
 			$claim_result = array(
 				'status'      => 'success',
-				'message'     => __( 'Thanks for claiming!', 'minnpost-membership' ),
+				'param'       => 'user_just_claimed',
 				'post_id'     => $params['post_id'],
-				'instance_id' => $params['instance_id'],
+				'instance_id' => $instance_key,
 			);
 			return $claim_result;
 		}
@@ -1045,6 +1098,15 @@ class MinnPost_Membership_Front_End {
 			}
 		}
 
+		$errors = isset( $_GET['errors'] ) ? filter_var( $_GET['errors'], FILTER_SANITIZE_STRING ) : '';
+		if ( '' !== $errors ) {
+			$post_id     = (int) $post->ID;
+			$not_claimed = isset( $_GET['not-claimed'] ) ? (int) filter_var( $_GET['not-claimed'], FILTER_SANITIZE_STRING ) : 0;
+			if ( $post_id === $not_claimed ) {
+				$status = $errors;
+			}
+		}
+
 		// the offer is not claimable yet
 		if ( true !== filter_var( $post->claimable, FILTER_VALIDATE_BOOLEAN ) ) {
 			$status = 'not_claimable_yet';
@@ -1116,26 +1178,26 @@ class MinnPost_Membership_Front_End {
 		switch ( $param ) {
 			case 'ineligible_user':
 				$button['button_class'] = 'a-button-disabled';
-				$button['button_attr']  = 'disabled="disabled"';
+				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_claimed_recently':
 				$button['button_class'] = 'a-button-disabled';
-				$button['button_attr']  = 'disabled="disabled"';
+				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_previously_claimed':
 				$button['button_value'] = 'claimed';
 				$button['button_class'] = 'a-button-disabled';
-				$button['button_attr']  = 'disabled="disabled"';
+				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_just_claimed':
 				$button['button_value'] = 'claimed';
-				$button['button_class'] = 'a-button-disabled';
-				$button['button_attr']  = 'disabled="disabled"';
+				$button['button_class'] = 'a-button-claimed';
+				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'not_claimable_yet':
 				$button['button_value'] = '';
 				$button['button_class'] = 'a-button-disabled';
-				$button['button_attr']  = 'disabled="disabled"';
+				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_is_eligible':
 				$button['button_value'] = get_the_ID();
@@ -1143,7 +1205,12 @@ class MinnPost_Membership_Front_End {
 			case 'all_claimed':
 				$button['button_value'] = 'claimed';
 				$button['button_class'] = 'a-button-disabled';
-				$button['button_attr']  = 'disabled="disabled"';
+				$button['button_attr']  = 'disabled';
+				return $button;
+			case 'user_tried_but_all_claimed':
+				$button['button_value'] = 'claimed';
+				$button['button_class'] = 'a-button-disabled';
+				$button['button_attr']  = 'disabled';
 				return $button;
 			default:
 				return $button;
@@ -1197,6 +1264,9 @@ class MinnPost_Membership_Front_End {
 				$message['message']       = str_replace( '$date', date_i18n( get_option( 'date_format' ), $data['claimable_start_date'] ), $message['message'] );
 				$message['message']       = str_replace( '$time', date_i18n( get_option( 'time_format' ), $data['claimable_start_date'] ), $message['message'] );
 				$message['message_class'] = 'm-benefit-message-future';
+				return $message;
+			case 'user_tried_but_all_claimed':
+				$message['message_class'] = 'm-benefit-message-error';
 				return $message;
 			default:
 				return $message;
