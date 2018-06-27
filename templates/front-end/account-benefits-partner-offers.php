@@ -64,7 +64,17 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 												$message_class = $offer_status_content['message_class'];
 												$message       = $offer_status_content['message'];
 												if ( '' !== $message ) {
-													$message_class = ' m-benefit-message-visible ' . $message_class;
+													$message_class = ' m-benefit-message-visible' . $message_class;
+												}
+												if ( '' !== $offer_status_content['button_class'] ) {
+													$button_class = ' ' . $offer_status_content['button_class'];
+												} else {
+													$button_class = '';
+												}
+												if ( '' !== $offer_status_content['button_attr'] ) {
+													$button_attr = ' ' . $offer_status_content['button_attr'];
+												} else {
+													$button_attr = '';
 												}
 												?>
 												<div class="m-benefit-message<?php echo $message_class; ?>">
@@ -73,7 +83,7 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 													<?php endif; ?>
 												</div>
 												<?php if ( '' !== $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
-													<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $offer_status_content['button_class']; ?>"<?php echo $offer_status_content['button_attr']; ?>><?php echo $offer_status_content['button_label']; ?></button>
+													<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $button_class; ?>"<?php echo $button_attr; ?>><?php echo $offer_status_content['button_label']; ?></button>
 												<?php endif; ?>
 											</div>
 										<?php endif; ?>

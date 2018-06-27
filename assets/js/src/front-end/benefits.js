@@ -9,39 +9,34 @@
 			var settings = minnpost_membership_settings;
 			// reset the message for current status
 			$( '.m-benefit-message' ).removeClass( 'm-benefit-message-visible m-benefit-message-error m-benefit-message-info m-benefit-message-success' );
-			if ( $( $button ).hasClass( 'a-button-disabled' ) ) {
-				//thisMessage.html( thisMessage.data( 'message-all-claimed' ) );
-				//thisMessage.fadeIn( 'slow' );
-			} else {
-				// set button to processing
-				$button.text( 'Processing' ).addClass( 'a-button-disabled' );
-				// set ajax data
-				var data = {};
-				var benefitType = $( 'input[name="benefit-name"]' ).val();
-				if ( 'partner-offers' === benefitType ) {
-				    data = {
-				        'action' : 'benefit_form_submit',
-				        'minnpost_membership_benefit_form_nonce' : $button.data( 'benefit-nonce' ),
-				        'current_url' : $( 'input[name="current_url"]').val(),
-				        'benefit-name': $( 'input[name="benefit-name"]').val(),
-				        'instance_id' : $( 'input[name="instance-id-' + $button.val() + '"]' ).val(),
-				        'post_id' : $button.val(),
-				        'is_ajax' : '1',
-				    };
-				    $.post( settings.ajaxurl, data, function( response ) {
-					    if ( true === response.success ) {
-					    	//console.dir(response);
-					    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
-					    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
-					    } else {
-					    	//console.dir(response);
-					    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
-					    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
-					    }
+			// set button to processing
+			$button.text( 'Processing' ).addClass( 'a-button-disabled' );
+			// set ajax data
+			var data = {};
+			var benefitType = $( 'input[name="benefit-name"]' ).val();
+			if ( 'partner-offers' === benefitType ) {
+			    data = {
+			        'action' : 'benefit_form_submit',
+			        'minnpost_membership_benefit_form_nonce' : $button.data( 'benefit-nonce' ),
+			        'current_url' : $( 'input[name="current_url"]').val(),
+			        'benefit-name': $( 'input[name="benefit-name"]').val(),
+			        'instance_id' : $( 'input[name="instance-id-' + $button.val() + '"]' ).val(),
+			        'post_id' : $button.val(),
+			        'is_ajax' : '1',
+			    };
+			    $.post( settings.ajaxurl, data, function( response ) {
+				    if ( true === response.success ) {
+				    	//console.dir(response);
+				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+				    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
+				    } else {
+				    	//console.dir(response);
+				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+				    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
+				    }
 
-					});
-			    }
-			}
+				});
+		    }
 		});
 	}
 
