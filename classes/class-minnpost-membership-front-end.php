@@ -109,7 +109,7 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function cortex_routes() {
 		if ( ! class_exists( 'Brain\Cortex' ) ) {
-			require_once( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' );
+			require_once( plugin_dir_path( __FILE__ ) . '../vendor/autoload.php' );
 		}
 		Brain\Cortex::boot();
 		add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
