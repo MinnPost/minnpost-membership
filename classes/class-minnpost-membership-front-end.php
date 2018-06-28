@@ -525,8 +525,8 @@ class MinnPost_Membership_Front_End {
 
 		$instances[ $instance_key ] = $this_instance;
 
-		//$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
-		$update_instance = true;
+		$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
+		//$update_instance = true;
 
 		if ( true === $update_instance ) {
 
