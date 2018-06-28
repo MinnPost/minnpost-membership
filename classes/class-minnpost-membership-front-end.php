@@ -477,7 +477,8 @@ class MinnPost_Membership_Front_End {
 			return $claim_result;
 		}
 
-		$instances = $this->content_items->get_partner_offers( $params['post_id'] )->instances;
+		$partner_offer = $this->content_items->get_partner_offers( $params['post_id'] );
+		$instances     = $partner_offer->instances;
 
 		if ( is_array( $instances ) ) {
 			$this_instance = $instances[ $params['instance_id'] ];
@@ -524,9 +525,17 @@ class MinnPost_Membership_Front_End {
 
 		$instances[ $instance_key ] = $this_instance;
 
-		$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
+		//$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
+		$update_instance = true;
 
 		if ( true === $update_instance ) {
+
+			$params['partner_offer']            = $partner_offer;
+			$params['partner_offer']->instances = $instances;
+
+			// send emails, if applicable
+			$send_emails = $this->send_benefit_emails( 'account-benefits-partner-offers', $params, $current_user );
+
 			$claim_result = array(
 				'status'      => 'success',
 				'param'       => 'user_just_claimed',
@@ -1051,7 +1060,7 @@ class MinnPost_Membership_Front_End {
 		if ( file_exists( get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php' ) ) {
 			$file = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php';
 		} else {
-			$file = plugin_dir_path( __FILE__ ) . 'templates/' . $location . $template_name . '.php';
+			$file = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name . '.php';
 		}
 
 		require( $file );
@@ -1305,6 +1314,46 @@ class MinnPost_Membership_Front_End {
 			default:
 				return $message;
 		}
+	}
+
+	/**
+	 * Sending emails when a claim successfully happens
+	 *
+	 * @param string $benefit_name    The full benefit path name
+	 * @param array  $params          The submitted parameters
+	 * @param object $current_user    The currently logged in user
+	 *
+	 * @return array $result
+	 */
+	private function send_benefit_emails( $benefit_name, $params, $current_user ) {
+		$result = array();
+
+		$send_admin_alert = get_option( $this->option_prefix . $benefit_name . '_send_email_alert_email', false );
+		$send_claim_email = get_option( $this->option_prefix . $benefit_name . '_send_email_to_claiming_user_email', false );
+
+		$from_email = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
+		$from_name  = get_option( $this->option_prefix . $benefit_name . '_email_sending_name_email', '' );
+
+		if ( '' !== $from_email ) {
+			$headers[] = 'From: ' . $from_name . '<' . $from_email . '>';
+		}
+
+		if ( true === filter_var( $send_admin_alert, FILTER_VALIDATE_BOOLEAN ) ) {
+			// send admin email
+			$to = get_option( $this->option_prefix . $benefit_name . '_alert_email_address_email', '' );
+			if ( 'account-benefits-partner-offers' === $benefit_name ) {
+				$subject = 'Partner Offer Claim Alert';
+				$message = $this->get_template_html( 'claim-partner-offer-for-admins', 'email', $params );
+			}
+			$mail = wp_mail( $to, $subject, $message, $headers );
+		}
+
+		if ( true === filter_var( $send_claim_email, FILTER_VALIDATE_BOOLEAN ) ) {
+			// send email to claiming user
+			//wp_mail( $to, $subject, $message, $headers );
+		}
+
+		return $result;
 	}
 
 }

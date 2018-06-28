@@ -1662,6 +1662,72 @@ class MinnPost_Membership_Admin {
 						'type'     => 'text',
 					),
 				);
+			} else {
+				$settings[ $this_section . '_send_email_alert_' . $display_item['id']  ] = array(
+					'title'    => __( 'Send us an email alert when an offer is claimed?', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'checkbox',
+					),
+				);
+
+				$settings[ $this_section . '_alert_email_address_' . $display_item['id']  ] = array(
+					'title'    => __( 'Where to send email alerts', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[ $this_section . '_send_email_to_claiming_user_' . $display_item['id']  ] = array(
+					'title'    => __( 'Send email to claiming user', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'checkbox',
+					),
+				);
+
+				$settings[ $this_section . '_email_sending_address_' . $display_item['id']  ] = array(
+					'title'    => __( 'Email sending address', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[ $this_section . '_email_sending_name_' . $display_item['id']  ] = array(
+					'title'    => __( 'Email sending name', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
 			}
 		}
 
