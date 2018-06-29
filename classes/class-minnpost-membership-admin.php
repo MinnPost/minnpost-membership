@@ -1561,106 +1561,99 @@ class MinnPost_Membership_Admin {
 		foreach ( $display_items as $display_item ) {
 			// email settings need to be different
 			if ( 'email' !== $display_item['id'] ) {
+
+				$text_field_args = array(
+					'constant' => '',
+					'type'     => 'text',
+				);
+				$text_field_type = $callbacks['text'];
+
+				if ( 'status_message' === $display_item['id'] ) {
+					$text_field_type = $callbacks['textarea'];
+					$text_field_args['rows'] = 5;
+					$text_field_args['cols'] = 50;
+				}
+
+				$text_field_args['desc'] = 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.';
+				if ( 'status_message' === $display_item['id'] ) {
+					$text_field_args['desc'] .= ' The $date and $time values will be replaced by the claimable start date and time.';
+				}
 				$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ] = array(
 					'title'    => __( 'Instances not claimable yet', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
-
-				if ( 'status_message' === $display_item['id'] ) {
-					$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ]['args']['desc'] .= ' The $date and $time values will be replaced by the claimable start date and time.';
-				}
 
 				$settings[ $this_section . '_user_is_eligible_' . $display_item['id'] ]           = array(
 					'title'    => __( 'User is eligible', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed for each offer if the current user is eligible to claim it.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
+
+				$text_field_args['desc'] = 'This is displayed for each offer if the current user does not have the required status.';
 				$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ]            = array(
 					'title'    => __( 'User is ineligible', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed for each offer if the current user does not have the required status.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
+
+				$text_field_args['desc'] = 'This is displayed for each offer if the current user claimed an offer too recently.';
 				$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
 					'title'    => __( 'User claimed too recently', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed for each offer if the current user claimed an offer too recently.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
+
+				$text_field_args['desc'] = 'This is displayed if an offer has no available instances.';
 				$settings[ $this_section . '_all_claimed_' . $display_item['id'] ]                = array(
 					'title'    => __( 'Offer is all claimed', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed if an offer has no available instances.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
+
+				$text_field_args['desc'] = 'This is displayed if an offer has no available instances, but a user has tried to claim it. This is useful for possibly accidental button clicks or when other claims made it in sooner.';
 				$settings[ $this_section . '_user_tried_but_all_claimed_' . $display_item['id'] ] = array(
 					'title'    => __( 'User tried to claim offer that is all claimed', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed if an offer has no available instances, but a user has tried to claim it. This is useful for possibly accidental button clicks or when other claims made it in sooner.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
+
+				$text_field_args['desc'] = 'This is displayed on an offer a user has previously claimed, they return to the page.';
 				$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ]    = array(
 					'title'    => __( 'Previous claim', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed on an offer a user has previously claimed, they return to the page.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
+
+				$text_field_args['desc'] = 'This is displayed on an offer a user has just claimed.';
 				$settings[ $this_section . '_user_just_claimed_' . $display_item['id'] ]          = array(
 					'title'    => __( 'Claim success message', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
+					'callback' => $text_field_type,
 					'page'     => $this_section,
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'This is displayed on an offer a user has just claimed.',
-						'constant' => '',
-						'type'     => 'text',
-					),
+					'args'     => $text_field_args,
 				);
 			} else {
 				$settings[ $this_section . '_send_email_alert_' . $display_item['id']  ] = array(
