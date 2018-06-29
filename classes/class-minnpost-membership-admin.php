@@ -1728,6 +1728,34 @@ class MinnPost_Membership_Admin {
 					),
 				);
 
+				$settings[ $this_section . '_subject_' . $display_item['id']  ] = array(
+					'title'    => __( 'Email subject', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'The subject of the email sent to claiming users.',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[ $this_section . '_body_' . $display_item['id']  ] = array(
+					'title'    => __( 'Email body', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => array(
+						'desc'     => 'The body of the email sent to claiming users.',
+						'constant' => '',
+						'type'     => 'text',
+						'rows'          => '5',
+						'media_buttons' => false,
+					),
+				);
+
 			}
 		}
 

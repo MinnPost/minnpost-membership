@@ -525,8 +525,8 @@ class MinnPost_Membership_Front_End {
 
 		$instances[ $instance_key ] = $this_instance;
 
-		$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
-		//$update_instance = true;
+		//$update_instance = update_post_meta( $params['post_id'], '_mp_partner_offer_instance', $instances );
+		$update_instance = true;
 
 		if ( true === $update_instance ) {
 
@@ -1350,7 +1350,25 @@ class MinnPost_Membership_Front_End {
 
 		if ( true === filter_var( $send_claim_email, FILTER_VALIDATE_BOOLEAN ) ) {
 			// send email to claiming user
-			//wp_mail( $to, $subject, $message, $headers );
+			if ( 'account-benefits-partner-offers' === $benefit_name ) {
+				$claiming_user_id = $params['partner_offer']->instances[ $params['instance_id'] ]['_mp_partner_offer_claim_user']['id'];
+				$claiming_user    = get_userdata( $claiming_user_id );
+
+				$to      = $claiming_user->user_email;
+				$subject = get_option( $this->option_prefix . $benefit_name . '_subject_email', '' );
+
+				// replace variables here
+
+				// handle wordpress formatting and make it email friendly
+				$body = wpautop( get_option( $this->option_prefix . $benefit_name . '_body_email', '' ) );
+				$body = str_replace( '<a href="', '<a style="color: #801019; text-decoration: none;" href="', $body );
+				$body = str_replace( '<p>', '<p style="font-family: Georgia, \'Times New Roman\', Times, serif; font-size: 16px; line-height: 20.787px; margin: 0 0 15px; padding: 0;">', $body );
+
+
+				$params['body'] = $body;
+				$message        = $this->get_template_html( 'claim-partner-offer-for-users', 'email', $params );
+			}
+			$mail = wp_mail( $to, $subject, $message, $headers );
 		}
 
 		return $result;
