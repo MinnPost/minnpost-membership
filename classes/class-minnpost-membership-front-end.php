@@ -1090,6 +1090,16 @@ class MinnPost_Membership_Front_End {
 
 		$status = '';
 
+		// no logged in user
+		if ( 'not_logged_in' === $user_state ) {
+			$status = $user_state;
+			$offer_status_content = array_merge(
+				$this->get_result_message( $status, $benefit_name ),
+				$this->get_button_values( $status, $benefit_name )
+			);
+			return $offer_status_content;
+		}
+
 		// user is not eligible based on membership
 		if ( 'member_eligible' !== $user_state ) {
 			$status = 'ineligible_user';
@@ -1219,6 +1229,9 @@ class MinnPost_Membership_Front_End {
 		);
 
 		switch ( $param ) {
+			case 'not_logged_in':
+				$button['button_value']  = wp_login_url( $_SERVER['REQUEST_URI'] );
+				return $button;
 			case 'ineligible_user':
 				$button['button_class'] = 'a-button-disabled';
 				$button['button_attr']  = 'disabled';
@@ -1291,6 +1304,9 @@ class MinnPost_Membership_Front_End {
 		);
 
 		switch ( $param ) {
+			case 'not_logged_in':
+				$message['message_class']  = 'm-benefit-message-info';
+				return $message;
 			case 'ineligible_user':
 				$message['message_class'] = 'm-benefit-message-error';
 				return $message;

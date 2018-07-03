@@ -82,8 +82,10 @@ $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
 														<?php echo $message; ?>
 													<?php endif; ?>
 												</div>
-												<?php if ( '' !== $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
+												<?php if ( wp_login_url( $_SERVER['REQUEST_URI'] ) !== $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
 													<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $button_class; ?>"<?php echo $button_attr; ?>><?php echo $offer_status_content['button_label']; ?></button>
+												<?php elseif ( wp_login_url( $_SERVER['REQUEST_URI'] ) === $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
+													<a href="<?php echo $offer_status_content['button_value']; ?>" class="a-button<?php echo $button_class; ?>"<?php echo $button_attr; ?>><?php echo $offer_status_content['button_label']; ?></a>
 												<?php endif; ?>
 											</div>
 										<?php endif; ?>

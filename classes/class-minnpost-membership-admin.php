@@ -1591,10 +1591,24 @@ class MinnPost_Membership_Admin {
 				$text_field_type = $callbacks['text'];
 
 				if ( 'status_message' === $display_item['id'] ) {
-					$text_field_type = $callbacks['textarea'];
+					$text_field_type = $callbacks['editor'];
 					$text_field_args['rows'] = 5;
 					$text_field_args['cols'] = 50;
+					$text_field_args['media_buttons'] = false;
 				}
+
+				$text_field_args['desc'] = 'This is displayed for each offer if the current user is not logged in.';
+				if ( 'button' === $display_item['id'] ) {
+					$text_field_args['desc'] .= ' Clicking the button will send the user to the login page and return them to this page if they log in.';
+				}
+				$settings[ $this_section . '_not_logged_in_' . $display_item['id'] ]           = array(
+					'title'    => __( 'User is not logged in', 'minnpost-membership' ),
+					'callback' => $text_field_type,
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'args'     => $text_field_args,
+				);
 
 				$text_field_args['desc'] = 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.';
 				if ( 'status_message' === $display_item['id'] ) {
