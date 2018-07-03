@@ -129,7 +129,7 @@ class MinnPost_Membership_Admin {
 				'title'    => __( 'Benefit Results', 'minnpost-membership' ),
 				'sections' => array(
 					'partner-offer-claims' => __( 'Partner offer claims', 'minnpost-membership' ),
-					'fan-club-votes'       => __( 'FAN Club results', 'minnpost-membership' ),
+					'fan-club-votes'       => __( 'FAN Club votes', 'minnpost-membership' ),
 				),
 				'use_tabs' => true,
 			),
@@ -218,6 +218,27 @@ class MinnPost_Membership_Admin {
 						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
 					}
 					break;
+				case $this->slug . '-benefit-results':
+					if ( ! isset( $tab ) ) {
+						$tab = 'partner-offer-claims';
+					}
+					$offers = $this->content_items->get_partner_offers();
+					foreach ( $offers as $key => $offer ) {
+						foreach ( $offer->instances as $i_key => $instance ) {
+							if ( isset( $instance['_mp_partner_offer_claim_user'] ) ) {
+								$offers[ $key ]->instances[ $i_key ]['user'] = get_userdata( $instance['_mp_partner_offer_claim_user']['id'] );
+								$offers[ $key ]->instances[ $i_key ]['user_meta'] = get_user_meta( $instance['_mp_partner_offer_claim_user']['id'] );
+							}
+							if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) {
+								unset( $offers[ $key ]->instances[ $i_key ]);
+							}
+						}
+						if ( empty( $offer->instances ) ) {
+							unset( $offers[ $key ] );
+						}
+					}
+					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/benefit-results-' . $tab . '.php' );
+					break;
 				default:
 					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
 					break;
@@ -291,6 +312,7 @@ class MinnPost_Membership_Admin {
 		$this->campaign_settings( $page, $all_field_callbacks );
 		$this->explain_benefits( $page, $all_field_callbacks );
 		$this->use_benefits( $page, $all_field_callbacks );
+		$this->benefit_results( $page, $all_field_callbacks );
 		$this->premium_content( $page, $all_field_callbacks );
 
 	}
@@ -1741,7 +1763,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 					'args'     => array(
-						'desc'     => 'The body of the email sent to claiming users.',
+						'desc'     => 'The body of the email sent to claiming users. $quantity $type, and $offer will be replaced with the actual values.',
 						'constant' => '',
 						'type'     => 'text',
 						'rows'          => '5',
@@ -1944,6 +1966,30 @@ class MinnPost_Membership_Admin {
 			add_settings_field( $id, $title, $callback, $page, $section, $args );
 			register_setting( $section, $id );
 		}
+	}
+
+	/**
+	* Fields for the Benefit Results page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function benefit_results( $page, $callbacks ) {
+		$sections = $this->get_admin_pages()[ $page ]['sections'];
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $key => $value ) {
+				$section = $key;
+				$title   = $value;
+				$page    = $section;
+				add_settings_section( $section, $title, null, $page );
+			}
+		} else {
+			$section = $page;
+			$title   = $this->get_admin_pages()[ $page ]['title'];
+			add_settings_section( $section, $title, null, $page );
+		}
+
 	}
 
 	/**
