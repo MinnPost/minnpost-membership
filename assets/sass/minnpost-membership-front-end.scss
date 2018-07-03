@@ -54,7 +54,7 @@ $vertical-space: 1em;
 		padding: 0.35em 0;
 		border: 1px solid #ccc;
 	}
-	input#amount, select, button, input.a-button {
+	input#amount, select, button, input.a-button, a.a-button {
 		padding: 0.25em 0;
 		text-align: center;
 		vertical-align: top;
@@ -269,6 +269,9 @@ $vertical-space: 1em;
 			.a-button {
 				margin: 0.25em 0;
 				display: block;
+			}
+			a.a-button {
+				display: inline-block;
 			}
 			.a-partner-offer-learn-more {
 				display: block;
