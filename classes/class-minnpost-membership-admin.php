@@ -1777,7 +1777,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 					'args'     => array(
-						'desc'     => 'The body of the email sent to claiming users. $quantity $type, and $offer will be replaced with the actual values.',
+						'desc'     => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
 						'constant' => '',
 						'type'     => 'text',
 						'rows'          => '5',

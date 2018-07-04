@@ -30,7 +30,7 @@
 				    if ( true === response.success ) {
 				    	//console.dir(response);
 				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
-				    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
+				    	$status.html( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 				    } else {
 				    	//console.dir(response);
 				    	if ( '' !== response.data.button_label ) {
@@ -39,7 +39,7 @@
 				    	} else {
 				    		$button.hide();
 				    	}
-				    	$status.text( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
+				    	$status.html( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 				    }
 
 				});
