@@ -1643,6 +1643,9 @@ class MinnPost_Membership_Admin {
 				);
 
 				$text_field_args['desc'] = 'This is displayed for each offer if the current user claimed an offer too recently.';
+				if ( 'status_message' === $display_item['id'] ) {
+					$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
+				}
 				$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
 					'title'    => __( 'User claimed too recently', 'minnpost-membership' ),
 					'callback' => $text_field_type,
@@ -1673,6 +1676,9 @@ class MinnPost_Membership_Admin {
 				);
 
 				$text_field_args['desc'] = 'This is displayed on an offer a user has previously claimed, they return to the page.';
+				if ( 'status_message' === $display_item['id'] ) {
+					$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
+				}
 				$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ]    = array(
 					'title'    => __( 'Previous claim', 'minnpost-membership' ),
 					'callback' => $text_field_type,

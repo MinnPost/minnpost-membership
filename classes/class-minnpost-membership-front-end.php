@@ -1316,9 +1316,19 @@ class MinnPost_Membership_Front_End {
 				return $message;
 			case 'user_claimed_recently':
 				$message['message_class'] = 'm-benefit-message-info';
+				$message['message']       = str_replace( '$quantity', $data->quantity, $message['message'] );
+				$message['message']       = str_replace( '$type', $data->offer_type, $message['message'] );
+				$message['message']       = str_replace( '$offer', $data->post_title, $message['message'] );
+				$message['message']       = str_replace( '$next_claim_eligibility_date', $params['next_claim_eligibility_date'], $message['message'] );
+				$message['message']       = str_replace( '$claimed_date', date_i18n( get_option( 'date_format' ), $params['claimed_date'] ), $message['message'] );
 				return $message;
 			case 'user_previously_claimed':
 				$message['message_class'] = 'm-benefit-message-success';
+				$message['message']       = str_replace( '$quantity', $data->quantity, $message['message'] );
+				$message['message']       = str_replace( '$type', $data->offer_type, $message['message'] );
+				$message['message']       = str_replace( '$offer', $data->post_title, $message['message'] );
+				$message['message']       = str_replace( '$next_claim_eligibility_date', $params['next_claim_eligibility_date'], $message['message'] );
+				$message['message']       = str_replace( '$claimed_date', date_i18n( get_option( 'date_format' ), $params['claimed_date'] ), $message['message'] );
 				return $message;
 			case 'user_just_claimed':
 				$message['message_class'] = 'm-benefit-message-success';
