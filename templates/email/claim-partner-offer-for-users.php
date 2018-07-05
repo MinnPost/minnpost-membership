@@ -6,6 +6,6 @@
 
 // formatting is done in the wysiwyg, and variable replacement is done in class-minnpost-membership-front-end.php
 $msg = '';
-$msg .= $attributes['body'];
+$msg .= $attributes['user_body'];
 
 echo $msg;

@@ -1354,39 +1354,41 @@ class MinnPost_Membership_Front_End {
 		$from_email = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
 		$from_name  = get_option( $this->option_prefix . $benefit_name . '_email_sending_name_email', '' );
 
-		if ( true === filter_var( $send_admin_alert, FILTER_VALIDATE_BOOLEAN ) ) {
-			// send admin email
-			$to = get_option( $this->option_prefix . $benefit_name . '_alert_email_address_email', '' );
-			if ( 'account-benefits-partner-offers' === $benefit_name ) {
-				$subject = 'Partner Offer Claim Alert';
-				$message = $this->get_template_html( 'claim-partner-offer-for-admins', 'email', $params );
-			}
-			$mail = wp_mail( $to, $subject, $message );
-		}
-
 		if ( true === filter_var( $send_claim_email, FILTER_VALIDATE_BOOLEAN ) ) {
 			// send email to claiming user
 			if ( 'account-benefits-partner-offers' === $benefit_name ) {
 				$claiming_user_id = $params['partner_offer']->instances[ $params['instance_id'] ]['_mp_partner_offer_claim_user']['id'];
 				$claiming_user    = get_userdata( $claiming_user_id );
 
-				$to      = $claiming_user->user_email;
-				$subject = get_option( $this->option_prefix . $benefit_name . '_subject_email', '' );
+				$user_to      = $claiming_user->user_email;
+				$user_subject = get_option( $this->option_prefix . $benefit_name . '_subject_email', '' );
 
 				// handle wordpress formatting and make it email friendly
-				$body = wpautop( get_option( $this->option_prefix . $benefit_name . '_body_email', '' ) );
-				$body = str_replace( '<a href="', '<a style="color: #801019; text-decoration: none;" href="', $body );
-				$body = str_replace( '<p>', '<p style="font-family: Georgia, \'Times New Roman\', Times, serif; font-size: 16px; line-height: 20.787px; margin: 0 0 15px; padding: 0;">', $body );
+				$user_body = wpautop( get_option( $this->option_prefix . $benefit_name . '_body_email', '' ) );
+				$user_body = str_replace( '<a href="', '<a style="color: #801019; text-decoration: none;" href="', $user_body );
+				$user_body = str_replace( '<p>', '<p style="font-family: Georgia, \'Times New Roman\', Times, serif; font-size: 16px; line-height: 20.787px; margin: 0 0 15px; padding: 0;">', $user_body );
 
 				// replace variables here
-				$body = str_replace( '$quantity', $params['partner_offer']->quantity, $body );
-				$body = str_replace( '$type', $params['partner_offer']->offer_type, $body );
-				$body = str_replace( '$offer', $params['partner_offer']->post_title, $body );
+				$user_body = str_replace( '$quantity', $params['partner_offer']->quantity, $user_body );
+				$user_body = str_replace( '$type', $params['partner_offer']->offer_type, $user_body );
+				$user_body = str_replace( '$offer', $params['partner_offer']->post_title, $user_body );
 
-				$params['body'] = $body;
-				$message        = $this->get_template_html( 'claim-partner-offer-for-users', 'email', $params );
+				$params['user_body'] = $user_body;
+				$user_message   = $this->get_template_html( 'claim-partner-offer-for-users', 'email', $params );
 			}
-			$mail = wp_mail( $to, $subject, $message );
+			$user_mail = wp_mail( $user_to, $user_subject, $user_message );
+			$result['user'] = $user_mail;
+		}
+
+		if ( true === filter_var( $send_admin_alert, FILTER_VALIDATE_BOOLEAN ) ) {
+			// send admin email
+			$admin_to = get_option( $this->option_prefix . $benefit_name . '_alert_email_address_email', '' );
+			if ( 'account-benefits-partner-offers' === $benefit_name ) {
+				$admin_subject = 'Partner Offer Claim Alert';
+				$admin_message = $this->get_template_html( 'claim-partner-offer-for-admins', 'email', $params );
+			}
+			$admin_mail = wp_mail( $admin_to, $admin_subject, $admin_message );
+			$result['admin'] = $admin_mail;
 		}
 
 		return $result;
@@ -1404,7 +1406,6 @@ class MinnPost_Membership_Front_End {
 		if ( in_array( $current_url, $this->allowed_urls ) ) {
 			$benefit_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $current_url, '/' ) );
 			$from_email = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
-			error_log( 'we did change it' );
 		}
 		return $from_email;
 	}
