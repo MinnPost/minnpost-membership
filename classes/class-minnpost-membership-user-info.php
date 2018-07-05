@@ -237,14 +237,11 @@ class MinnPost_Membership_User_Info {
 			}
 		}
 
-		$date_eligible = $this->user_redeem_date_eligible( $benefit_name, $user_id );
-
 		$user_access = array(
 			'state'          => $user_state,
 			'can_redeem'     => $can_redeem,
 			'super_user'     => false,
 			'benefit_access' => $benefit_access,
-			'date_eligible'  => $date_eligible,
 		);
 
 		return $user_access;
@@ -493,60 +490,6 @@ class MinnPost_Membership_User_Info {
 		}
 
 		return $can_redeem;
-	}
-
-	/**
-	* Determine whether a user can redeem a benefit, based on the offer's eligible date, and the date the user can next redeem, or the date they last redeemed
-	*
-	* @param int $user_id
-	* @param string $benefit_name
-	*
-	* @return bool $date_eligible
-	*/
-	public function user_redeem_date_eligible( $benefit_name, $user_id = '' ) {
-		$date_eligible = false;
-
-		if ( '' === $user_id ) {
-			$user_id = get_current_user_id();
-		}
-
-		// if the user id is not a user, the date doesn't matter
-		if ( 0 === $user_id ) {
-			return $date_eligible;
-		}
-
-		// if both dates are empty, user can claim
-		$user_next_claim_date = get_user_meta( $user_id, '_next_partner_claim_date', true );
-		$user_last_claim_date = get_user_meta( $user_id, '_last_partner_claim_date', true );
-		if ( '' === $user_next_claim_date && '' === $user_last_claim_date ) {
-			$date_eligible = true;
-			return $date_eligible;
-		}
-
-		$now = new DateTime();
-
-		// check next date eligible first - "now" should be greater than the user's next claim date
-		if ( '' !== $user_next_claim_date ) {
-			// this date format is the default one for WordPress - F j, Y or %M %e, %Y in mysql
-			$user_next_claim_date = DateTime::createFromFormat( 'F j, Y', $user_next_claim_date );
-			$date_eligible        = $now >= $user_next_claim_date;
-			return $date_eligible;
-		} else {
-			$user_last_claim_date = DateTime::createFromFormat( 'F j, Y', $user_last_claim_date );
-			// otherwise, "now" should be greater than the user's last claim date plus the timeframe from the plugin settings
-			$claim_frequency = get_option( $this->option_prefix . 'account-benefits-' . $benefit_name . '_claim_frequency', '' );
-
-			if ( '' !== $claim_frequency ) {
-				$next_date_eligible = $user_last_claim_date->modify( '+' . $claim_frequency );
-			} else {
-				$next_date_eligible = $user_last_claim_date;
-			}
-
-			$date_eligible = $now >= $next_date_eligible;
-			return $date_eligible;
-
-		}
-		return $date_eligible;
 	}
 
 }

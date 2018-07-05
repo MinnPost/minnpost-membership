@@ -331,7 +331,6 @@ class MinnPost_Membership_Front_End {
 						wp_safe_redirect( site_url( $error_url ) );
 						exit;
 					} else {
-						//$error_data['message'] = $this->get_result_message( $error_data['param'], $benefit_name );
 						$data                 = get_post( $params['post_id'], 'ARRAY_A' );
 						$offer_status_content = array_merge(
 							$this->get_result_message( $error_data['param'], $benefit_name, $data ),
@@ -352,14 +351,14 @@ class MinnPost_Membership_Front_End {
 				}
 
 				// if there are not can redeem and date eligible fields, exit
-				if ( ! isset( $benefit_info['current_user']['can_redeem'] ) || ! isset( $benefit_info['current_user']['date_eligible'] ) ) {
+				if ( ! isset( $benefit_info['current_user']['can_redeem'] ) ) {
 					$error_data = array(
 						'param' => 'ineligible_user',
 					);
 				}
 
 				// if the can redeem or date eligible fields are not true, exit
-				if ( true !== filter_var( $benefit_info['current_user']['can_redeem'], FILTER_VALIDATE_BOOLEAN ) || true !== filter_var( $benefit_info['current_user']['date_eligible'], FILTER_VALIDATE_BOOLEAN ) ) {
+				if ( true !== filter_var( $benefit_info['current_user']['can_redeem'], FILTER_VALIDATE_BOOLEAN ) ) {
 					$error_data = array(
 						'param' => 'ineligible_user',
 					);
@@ -995,12 +994,10 @@ class MinnPost_Membership_Front_End {
 		$user_access_data = $this->user_info->get_user_benefit_eligibility( $benefit_name, $user_id );
 
 		$benefit_access = $user_access_data['benefit_access'];
-		$date_eligible  = $user_access_data['date_eligible'];
 		$can_redeem     = $user_access_data['can_redeem'];
 		$current_user   = $this->user_info->user_membership_info( $user_id );
 
 		$current_user['can_redeem']    = $can_redeem;
-		$current_user['date_eligible'] = $date_eligible;
 
 		$user_membership_info = array(
 			'member_level_prefix'  => $this->member_levels->member_level_prefix,
@@ -1153,43 +1150,53 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Get content for partner offer that changes based on its claim/availability/etc status
+	* Get content for benefit that changes based on its claim/availability/etc status
 	* @param string $benefit_prefix
 	* @param string $benefit_name
 	* @param int $post_id
 	* @param object $user_claim
-	* @return string $user_claim_status
+	* @return array $user_claim_status
 	*
 	*/
-	public function get_user_claim_status( $benefit_prefix, $benefit_name, $post_id, $user_claim = null ) {
-		$user_claim_status = '';
+	public function get_user_claim_status( $benefit_prefix, $benefit_name, $post_id = 0, $user_claim = null ) {
+		$user_claim_status = array();
 
 		$user_claim = isset( $this->content_items->get_user_offer_claims()[0] ) ? $this->content_items->get_user_offer_claims()[0] : null;
 
-		// user has not recently claimed an offer
+		// user has not claimed an offer
 		if ( null === $user_claim ) {
+			$user_claim_status['status'] = 'user_is_eligible';
 			return $user_claim_status;
 		}
 
-		// user recently claimed an offer
+		// user has claimed an offer
 		$post_id  = (int) $post_id;
 		$claim_id = isset( $user_claim->ID ) ? (int) $user_claim->ID : 0;
-		// it wasn't this one
-		if ( $post_id !== $claim_id ) {
-			$how_often  = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
-			$now        = current_time( get_option( 'date_format' ) );
-			$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
+
+		// here we check to see if the user is eligible to claim this offer based on date of most recent previous claim
+		$how_often  = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
+		$next_claim = strtotime( '+1 ' . $how_often, $user_claim->user_claimed );
 			$next_claim = date_i18n( get_option( 'date_format' ), $next_claim );
+
+		// it wasn't this one
+		if ( ( $post_id !== $claim_id ) && ( 0 !== $claim_id ) ) {
+			$now = current_time( get_option( 'date_format' ) );
 			if ( $next_claim > $now ) {
-				$user_claim_status = 'user_claimed_recently';
+				$user_claim_status['status']                      = 'user_claimed_recently';
+				$user_claim_status['next_claim_eligibility_date'] = $next_claim;
+				$user_claim_status['claimed_date']                = $user_claim->user_claimed;
+			} else {
+				$user_claim_status['status'] = 'user_is_eligible';
 			}
 		} elseif ( $post_id === $claim_id ) {
 			// it was this one
 			$claimed = isset( $_GET['claimed'] ) ? (int) filter_var( $_GET['claimed'], FILTER_SANITIZE_STRING ) : 0;
 			if ( $post_id === $claimed ) {
-				$user_claim_status = 'user_just_claimed';
+				$user_claim_status['status'] = 'user_just_claimed';
 			} else {
-				$user_claim_status = 'user_previously_claimed';
+				$user_claim_status['status'] = 'user_previously_claimed';
+				$user_claim_status['next_claim_eligibility_date'] = $next_claim;
+				$user_claim_status['claimed_date']                = $user_claim->user_claimed;
 			}
 		}
 		return $user_claim_status;
