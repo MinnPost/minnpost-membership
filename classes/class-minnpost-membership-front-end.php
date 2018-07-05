@@ -77,6 +77,10 @@ class MinnPost_Membership_Front_End {
 		// this could be used for any other template as well, but we are sticking with single by default.
 		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
 		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
+
+		// handle the emails sent from this class
+		add_filter( 'wp_mail_from', array( $this, 'mail_from' ) );
+		add_filter( 'wp_mail_from_name', array( $this, 'mail_from_name' ) );
 	}
 
 	/**
@@ -1350,10 +1354,6 @@ class MinnPost_Membership_Front_End {
 		$from_email = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
 		$from_name  = get_option( $this->option_prefix . $benefit_name . '_email_sending_name_email', '' );
 
-		if ( '' !== $from_email ) {
-			$headers[] = 'From: ' . $from_name . '<' . $from_email . '>';
-		}
-
 		if ( true === filter_var( $send_admin_alert, FILTER_VALIDATE_BOOLEAN ) ) {
 			// send admin email
 			$to = get_option( $this->option_prefix . $benefit_name . '_alert_email_address_email', '' );
@@ -1361,7 +1361,7 @@ class MinnPost_Membership_Front_End {
 				$subject = 'Partner Offer Claim Alert';
 				$message = $this->get_template_html( 'claim-partner-offer-for-admins', 'email', $params );
 			}
-			$mail = wp_mail( $to, $subject, $message, $headers );
+			$mail = wp_mail( $to, $subject, $message );
 		}
 
 		if ( true === filter_var( $send_claim_email, FILTER_VALIDATE_BOOLEAN ) ) {
@@ -1373,21 +1373,56 @@ class MinnPost_Membership_Front_End {
 				$to      = $claiming_user->user_email;
 				$subject = get_option( $this->option_prefix . $benefit_name . '_subject_email', '' );
 
-				// replace variables here
-
 				// handle wordpress formatting and make it email friendly
 				$body = wpautop( get_option( $this->option_prefix . $benefit_name . '_body_email', '' ) );
 				$body = str_replace( '<a href="', '<a style="color: #801019; text-decoration: none;" href="', $body );
 				$body = str_replace( '<p>', '<p style="font-family: Georgia, \'Times New Roman\', Times, serif; font-size: 16px; line-height: 20.787px; margin: 0 0 15px; padding: 0;">', $body );
 
+				// replace variables here
+				$body = str_replace( '$quantity', $params['partner_offer']->quantity, $body );
+				$body = str_replace( '$type', $params['partner_offer']->offer_type, $body );
+				$body = str_replace( '$offer', $params['partner_offer']->post_title, $body );
 
 				$params['body'] = $body;
 				$message        = $this->get_template_html( 'claim-partner-offer-for-users', 'email', $params );
 			}
-			$mail = wp_mail( $to, $subject, $message, $headers );
+			$mail = wp_mail( $to, $subject, $message );
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Sending email address
+	 *
+	 * @param string $from_email    The original address
+	 *
+	 * @return string $from_email
+	 */
+	public function mail_from( $from_email ) {
+		$current_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : $_SERVER['REQUEST_URI'];
+		if ( in_array( $current_url, $this->allowed_urls ) ) {
+			$benefit_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $current_url, '/' ) );
+			$from_email = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
+			error_log( 'we did change it' );
+		}
+		return $from_email;
+	}
+
+	/**
+	 * Sending email name
+	 *
+	 * @param string $from_name    The original name
+	 *
+	 * @return string $from_name
+	 */
+	public function mail_from_name( $from_name ) {
+		$current_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : $_SERVER['REQUEST_URI'];
+		if ( in_array( $current_url, $this->allowed_urls ) ) {
+			$benefit_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $current_url, '/' ) );
+			$from_name = get_option( $this->option_prefix . $benefit_name . '_email_sending_name_email', '' );
+		}
+		return $from_name;
 	}
 
 }
