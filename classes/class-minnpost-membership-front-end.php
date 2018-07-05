@@ -1084,6 +1084,7 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function get_partner_offer_status_content( $post, $instances, $user_claim ) {
 
+		$data           = array();
 		$benefit_prefix = 'account-benefits-';
 		$benefit_name   = 'partner-offers';
 
@@ -1132,7 +1133,7 @@ class MinnPost_Membership_Front_End {
 		}
 
 		// if the offer is claimable and user has not already been filtered, check to see how many instances it has
-		if ( '' === $status ) {
+		if ( '' === $status || empty( $status ) ) {
 			if ( 0 < $post->unclaimed_instance_count ) {
 				$status = 'user_is_eligible';
 			} else {
@@ -1140,10 +1141,14 @@ class MinnPost_Membership_Front_End {
 			}
 		}
 
+		if ( empty( $data ) && ! empty( $user_claim ) ) {
+			$data = $user_claim;
+		}
+
 		if ( ! isset( $offer_status_content ) ) {
 			$offer_status_content = array_merge(
-				$this->get_result_message( $status, $benefit_name ),
-				$this->get_button_values( $status, $benefit_name )
+				$this->get_result_message( $status, $benefit_name, $data ),
+				$this->get_button_values( $status, $benefit_name, $data )
 			);
 		}
 		return $offer_status_content;
@@ -1205,22 +1210,29 @@ class MinnPost_Membership_Front_End {
 	/**
 	 * Finds and returns button attributes for the given status code.
 	 *
-	 * @param string $param        The status parameter to look up.
+	 * @param array|string $param        The status parameter to look up and any other values it comes with
 	 * @param string $benefit_name The benefit name
 	 * @param array $data     This should be user data, either provided by a form or a hook
 	 *
 	 * @return array               Button attributes
 	 */
-	public function get_button_values( $param, $benefit_name = '', $data = array() ) {
-		$param         = filter_var( $param, FILTER_SANITIZE_STRING );
-		$custom_button = apply_filters( 'minnpost_membership_custom_button', '', $param, $data );
+	public function get_button_values( $params, $benefit_name = '', $data = array() ) {
+		if ( is_array( $params ) && ! empty( $params ) ) {
+			$params = filter_var_array( $params, FILTER_SANITIZE_STRING );
+			if ( isset( $params['status'] ) ) {
+				$param = $params['status'];
+			}
+		} else {
+			$param = filter_var( $params, FILTER_SANITIZE_STRING );
+		}
+		$custom_button = apply_filters( 'minnpost_membership_custom_button', '', $params, $data );
 		if ( '' !== $custom_button ) {
 			return $custom_button;
 		}
 		// example to change the button
 		/*
 		add_filter( 'minnpost_membership_custom_button', 'button', 10, 3 );
-		function button( $button, $param, $data ) {
+		function button( $button, $params, $data ) {
 			$button = array(
 				'button_value' => 'whatever',
 				'button_class' => 'whatever',
@@ -1287,22 +1299,29 @@ class MinnPost_Membership_Front_End {
 	/**
 	 * Finds and returns a matching result message for the given status code.
 	 *
-	 * @param string $param        The status parameter to look up.
+	 * @param string|array $params        The status parameter to look up and any other values it comes with
 	 * @param string $benefit_name The benefit name
 	 * @param array $data     This should be user data, either provided by a form or a hook
 	 *
 	 * @return array               Message attributes
 	 */
-	public function get_result_message( $param, $benefit_name = '', $data = array() ) {
-		$param          = filter_var( $param, FILTER_SANITIZE_STRING );
-		$custom_message = apply_filters( 'minnpost_membership_custom_error_message', '', $param, $data );
+	public function get_result_message( $params, $benefit_name = '', $data = array() ) {
+		if ( is_array( $params ) && ! empty( $params ) ) {
+			$params = filter_var_array( $params, FILTER_SANITIZE_STRING );
+			if ( isset( $params['status'] ) ) {
+				$param = $params['status'];
+			}
+		} else {
+			$param = filter_var( $params, FILTER_SANITIZE_STRING );
+		}
+		$custom_message = apply_filters( 'minnpost_membership_custom_error_message', '', $params, $data );
 		if ( ! empty( $custom_message ) ) {
 			return $custom_message;
 		}
 		// example to change the result message
 		/*
 		add_filter( 'minnpost_membership_custom_result_message', 'result_message', 10, 3 );
-		function result_message( $message, $param, $data ) {
+		function result_message( $message, $params, $data ) {
 			$message = 'this is my error';
 			return $message;
 		}
