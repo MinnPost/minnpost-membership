@@ -8,18 +8,26 @@ get_header(); ?>
 global $minnpost_membership;
 $user_state    = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
 $benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
-?>
+$offers        = $minnpost_membership->content_items->get_partner_offers();
+$user_claim    = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
 
+$check_value = true;
+$open_offers = array_filter(
+    $offers,
+    function ( $offer ) use ( $check_value ) {
+        return filter_var( $offer->claimable, FILTER_VALIDATE_BOOLEAN ) === $check_value;
+    }
+);
+?>
 	<div id="primary" class="m-layout-membership o-fan-club m-page">
 		<main id="main" class="site-main" role="main">
 			<header class="m-entry-header m-entry-header-singular">
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'account-benefits-partner-offers_title', '' ); ?></h1>
+				<?php if ( 0 === count( $open_offers ) ) : ?>
+					<p class="a-intro">Our next round of partner offers becomes available at <strong><?php echo date_i18n( get_option( 'time_format' ), $offers[0]->claimable_start_date ); ?> on <?php echo date_i18n( get_option( 'date_format' ), $offers[0]->claimable_start_date ); ?></strong>. Right now the minnpost.com time is <strong><?php echo date_i18n( get_option( 'time_format' ), current_time( 'timestamp' ) ); ?> on <?php echo date_i18n( get_option( 'date_format' ), current_time( 'timestamp' ) ); ?></strong>. You can <a href="#" class="a-refresh-page">refresh this page</a> anytime.</p>
+				<?php endif; ?>
 			</header>
 			<section class="m-entry-content m-partner-offers">
-				<?php
-				$offers     = $minnpost_membership->content_items->get_partner_offers();
-				$user_claim = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
-				?>
 				<?php if ( $offers ) : ?>
 					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-benefit m-form-membership-partner-offers">
 						<input type="hidden" name="action" value="benefit_form_submit">
