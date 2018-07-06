@@ -1107,9 +1107,7 @@ class MinnPost_Membership_Front_End {
 			$status = 'ineligible_user';
 		}
 
-		// check if user recently claimed an offer
-		$status = $this->get_user_claim_status( $benefit_prefix, $benefit_name, $post->ID, $user_claim );
-
+		// the url indicates errors
 		$errors = isset( $_GET['errors'] ) ? filter_var( $_GET['errors'], FILTER_SANITIZE_STRING ) : '';
 		if ( '' !== $errors ) {
 			$post_id     = (int) $post->ID;
@@ -1132,10 +1130,14 @@ class MinnPost_Membership_Front_End {
 			);
 		}
 
-		// if the offer is claimable and user has not already been filtered, check to see how many instances it has
+		// if the offer is claimable and user has not already been filtered out, check to see how many instances the offer has remaining
 		if ( '' === $status || empty( $status ) ) {
-			if ( 0 < $post->unclaimed_instance_count ) {
-				$status = 'user_is_eligible';
+			// if the user is eligible to claim, check to see if they have claimed too recently
+			$user_status = $this->get_user_claim_status( $benefit_prefix, $benefit_name, $post->ID, $user_claim );
+			// if there are remaining instances, OR if this offer has been claimed by this user, use their user status
+			$user_claimed_statuses = array( 'user_previously_claimed', 'user_claimed_recently', 'user_just_claimed' );
+			if ( 0 < $post->unclaimed_instance_count || in_array( $user_status['status'], $user_claimed_statuses ) ) {
+				$status = $user_status;
 			} else {
 				$status = 'all_claimed';
 			}
