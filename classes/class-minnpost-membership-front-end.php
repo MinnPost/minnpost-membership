@@ -55,6 +55,12 @@ class MinnPost_Membership_Front_End {
 
 		$this->blocked_template_suffix = '-' . get_option( $this->option_prefix . 'post_access_single_template_suffix', '' );
 
+		$this->user_claimed_statuses = array(
+			'user_previously_claimed',
+			'user_claimed_recently',
+			'user_just_claimed',
+		);
+
 	}
 
 	/**
@@ -325,6 +331,7 @@ class MinnPost_Membership_Front_End {
 					);
 				}
 
+				// there is error data from somewhere
 				if ( ! empty( $error_data ) ) {
 					if ( false === $is_ajax ) {
 						$error_url = add_query_arg( 'errors', $error_data['param'], $error_url );
@@ -364,6 +371,7 @@ class MinnPost_Membership_Front_End {
 					);
 				}
 
+				// there is error data from somewhere
 				if ( ! empty( $error_data ) ) {
 					if ( false === $is_ajax ) {
 						$error_url = add_query_arg( 'errors', $error_data['param'], $error_url );
@@ -382,15 +390,19 @@ class MinnPost_Membership_Front_End {
 
 				if ( true === $is_ajax ) {
 					// check if user recently claimed an offer
-					$status = $this->get_user_claim_status( 'account-benefits-', $benefit_name, $params['post_id'], '' );
+					$user_status = $this->get_user_claim_status( 'account-benefits-', $benefit_name, $params['post_id'], '' );
+					if ( isset( $user_status['status'] ) ) {
+						$user_status_string = $user_status['status'];
+					} else {
+						$user_status_string = $user_status;
+					}
 
-					// user has recently claimed
-					if ( '' !== $status ) {
-						$data = get_post( $params['post_id'], 'ARRAY_A' );
-
+					// user has recently claimed. show that error message.
+					if ( '' !== $user_status_string && in_array( $user_status_string, $this->user_claimed_statuses ) ) {
+						$user_claim = isset( $this->content_items->get_user_offer_claims()[0] ) ? $this->content_items->get_user_offer_claims()[0] : null;
 						$offer_status_content = array_merge(
-							$this->get_result_message( $status, $benefit_name, $data ),
-							$this->get_button_values( $status, $benefit_name )
+							$this->get_result_message( $user_status, $benefit_name, $user_claim ),
+							$this->get_button_values( $user_status, $benefit_name )
 						);
 						wp_send_json_error( $offer_status_content );
 					}
@@ -1135,8 +1147,7 @@ class MinnPost_Membership_Front_End {
 			// if the user is eligible to claim, check to see if they have claimed too recently
 			$user_status = $this->get_user_claim_status( $benefit_prefix, $benefit_name, $post->ID, $user_claim );
 			// if there are remaining instances, OR if this offer has been claimed by this user, use their user status
-			$user_claimed_statuses = array( 'user_previously_claimed', 'user_claimed_recently', 'user_just_claimed' );
-			if ( 0 < $post->unclaimed_instance_count || in_array( $user_status['status'], $user_claimed_statuses ) ) {
+			if ( 0 < $post->unclaimed_instance_count || in_array( $user_status['status'], $this->user_claimed_statuses ) ) {
 				$status = $user_status;
 			} else {
 				$status = 'all_claimed';

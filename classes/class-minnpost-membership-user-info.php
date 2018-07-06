@@ -204,14 +204,17 @@ class MinnPost_Membership_User_Info {
 	public function get_user_benefit_eligibility( $benefit_name, $user_id = '' ) {
 		$benefit_access = $this->get_benefit_access( $benefit_name );
 		$super_user     = false;
+		$can_redeem     = false;
 
 		if ( '' === $user_id ) {
 			$user_id = get_current_user_id();
 		}
 
-		$can_redeem = $this->user_can_redeem( $benefit_name, $user_id );
+		if ( 0 === $user_id ) {
+			$user_state = 'not_logged_in';
+		} else {
+			$can_redeem = $this->user_can_redeem( $benefit_name, $user_id );
 
-		if ( 0 !== $user_id ) {
 			if ( true === $can_redeem ) {
 				$user_state = 'member_eligible';
 			} else {
@@ -233,14 +236,19 @@ class MinnPost_Membership_User_Info {
 			if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
 				$can_redeem = true;
 				$user_state = 'member_eligible';
-				$super_user = true;
+				// if debug is on, act like a normal user instead of a super user
+				if ( true === filter_var( WP_DEBUG, FILTER_VALIDATE_BOOLEAN ) ) {
+					$super_user = false;
+				} else {
+					$super_user = true;
+				}
 			}
 		}
 
 		$user_access = array(
 			'state'          => $user_state,
 			'can_redeem'     => $can_redeem,
-			'super_user'     => false,
+			'super_user'     => $super_user,
 			'benefit_access' => $benefit_access,
 		);
 
