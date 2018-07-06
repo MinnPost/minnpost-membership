@@ -13,6 +13,10 @@
 			}
 			// set button to processing
 			$button.text( 'Processing' ).addClass( 'a-button-disabled' );
+
+			// disable all the other buttons
+			$( '.a-benefit-button' ).addClass( 'a-button-disabled' );
+
 			// set ajax data
 			var data = {};
 			var benefitType = $( 'input[name="benefit-name"]' ).val();
@@ -27,11 +31,13 @@
 			        'is_ajax' : '1',
 			    };
 			    $.post( settings.ajaxurl, data, function( response ) {
+			    	// success
 				    if ( true === response.success ) {
 				    	//console.dir(response);
 				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
 				    	$status.html( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 				    } else {
+				    	// error
 				    	//console.dir(response);
 				    	if ( '' !== response.data.button_label ) {
 				    		$button.show();
@@ -39,6 +45,8 @@
 				    	} else {
 				    		$button.hide();
 				    	}
+				    	// re-enable all the other buttons
+						$( '.a-benefit-button' ).not( $button ).removeClass( 'a-button-disabled' );
 				    	$status.html( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
 				    }
 
