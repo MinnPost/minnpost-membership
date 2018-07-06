@@ -1129,11 +1129,12 @@ class MinnPost_Membership_Front_End {
 			}
 		}
 
-		// the offer is not claimable yet
+		// the offer is not claimable right now
 		if ( true !== filter_var( $post->claimable, FILTER_VALIDATE_BOOLEAN ) ) {
 			$status = 'not_claimable_yet';
 			$data   = array(
 				'claimable_start_date' => $post->claimable_start_date,
+				'claimable_end_date' => $post->claimable_end_date,
 			);
 
 			$offer_status_content = array_merge(
@@ -1373,8 +1374,10 @@ class MinnPost_Membership_Front_End {
 				$message['message_class'] = 'm-benefit-message-success';
 				return $message;
 			case 'not_claimable_yet':
-				$message['message']       = str_replace( '$date', date_i18n( get_option( 'date_format' ), $data['claimable_start_date'] ), $message['message'] );
-				$message['message']       = str_replace( '$time', date_i18n( get_option( 'time_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$start_date', date_i18n( get_option( 'date_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$start_time', date_i18n( get_option( 'time_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$end_date', date_i18n( get_option( 'date_format' ), $data['claimable_end_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$end_time', date_i18n( get_option( 'time_format' ), $data['claimable_end_date'] ), $message['message'] );
 				$message['message_class'] = 'm-benefit-message-future';
 				return $message;
 			case 'user_tried_but_all_claimed':

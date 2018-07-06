@@ -1612,7 +1612,7 @@ class MinnPost_Membership_Admin {
 
 				$text_field_args['desc'] = 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.';
 				if ( 'status_message' === $display_item['id'] ) {
-					$text_field_args['desc'] .= ' The $date and $time values will be replaced by the claimable start date and time.';
+					$text_field_args['desc'] .= ' The $start_date, $start_time, $end_date, and $end_time values will be replaced by the claimable start date and time.';
 				}
 				$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ] = array(
 					'title'    => __( 'Instances not claimable yet', 'minnpost-membership' ),
