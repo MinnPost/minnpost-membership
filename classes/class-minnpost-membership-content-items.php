@@ -691,7 +691,11 @@ class MinnPost_Membership_Content_Items {
 		$partner_offers = $this->get_partner_offers();
 		foreach ( $partner_offers as $partner_offer ) {
 			foreach ( $partner_offer->instances as $instance ) {
-				if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] || get_current_user_id() !== (int) $instance['_mp_partner_offer_claim_user']['id'] ) {
+				$how_often = get_option( $this->option_prefix . 'account-benefits-partner-offers_claim_frequency', '' );
+				$oldest_eligible_date = strtotime( '-' . $how_often, current_time( 'timestamp' ) );
+				if ( isset( $instance['_mp_partner_offer_claimed_date'] ) && $instance['_mp_partner_offer_claimed_date'] < $oldest_eligible_date ) {
+					continue;
+				} elseif ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] || get_current_user_id() !== (int) $instance['_mp_partner_offer_claim_user']['id'] ) {
 					continue;
 				} else {
 					$partner_offer->user_claimed = $instance['_mp_partner_offer_claimed_date'];
