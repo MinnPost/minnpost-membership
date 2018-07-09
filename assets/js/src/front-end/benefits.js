@@ -1,6 +1,9 @@
 ( function( $ ) {
 
 	function benefitForm() {
+		if ( 2 === performance.navigation.type ) {
+		   location.reload( true );
+		}
 		$( '.a-benefit-button.a-button-disabled' ).removeAttr( 'disabled' );
 		$( '.a-benefit-button' ).click( function( event ) {
 			event.preventDefault();
@@ -36,6 +39,7 @@
 				    	//console.dir(response);
 				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
 				    	$status.html( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
+				    	$( '.a-benefit-button' ).not( $button ).val( response.data.button_value ).attr( 'disabled', true );
 				    } else {
 				    	// error
 				    	//console.dir(response);
