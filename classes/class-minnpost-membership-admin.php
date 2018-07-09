@@ -336,119 +336,121 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function general_settings( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				//if ( $key === $page ) {
-				//	$title = $value;
-				//}
-				//$section = $key;
-				//echo 'section is ' . $section;
-				$section = $key;
-				$title   = $value;
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					//if ( $key === $page ) {
+					//	$title = $value;
+					//}
+					//$section = $key;
+					//echo 'section is ' . $section;
+					$section = $key;
+					$title   = $value;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
 				add_settings_section( $section, $title, null, $page );
 			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
-		}
 
-		$settings = array(
-			'use_member_levels'  => array(
-				'title'    => __( 'Use member levels?', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $page,
-				'section'  => 'member-levels',
-				'args'     => array(
-					'type'     => 'checkbox',
-					'desc'     => '',
-					'constant' => '',
+			$settings = array(
+				'use_member_levels'  => array(
+					'title'    => __( 'Use member levels?', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => 'member-levels',
+					'args'     => array(
+						'type'     => 'checkbox',
+						'desc'     => '',
+						'constant' => '',
+					),
 				),
-			),
-			'frequency_options'  => array(
-				'title'    => __( 'Frequency options', 'minnpost-membership' ),
-				'callback' => $callbacks['checkboxes'],
-				'page'     => $page,
-				'section'  => 'member-levels',
-				'args'     => array(
-					'type'     => 'select',
-					'desc'     => '',
-					'constant' => '',
-					'items'    => $this->member_levels->get_frequency_options(),
+				'frequency_options'  => array(
+					'title'    => __( 'Frequency options', 'minnpost-membership' ),
+					'callback' => $callbacks['checkboxes'],
+					'page'     => $page,
+					'section'  => 'member-levels',
+					'args'     => array(
+						'type'     => 'select',
+						'desc'     => '',
+						'constant' => '',
+						'items'    => $this->member_levels->get_frequency_options(),
+					),
 				),
-			),
-			'disable_javascript' => array(
-				'title'    => __( 'Disable plugin JavaScript?', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $page,
-				'section'  => 'more-settings',
-				'args'     => array(
-					'type'     => 'checkbox',
-					'desc'     => 'Checking this will keep the plugin from adding its JavaScript to the front end interface.',
-					'constant' => '',
+				'disable_javascript' => array(
+					'title'    => __( 'Disable plugin JavaScript?', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => 'more-settings',
+					'args'     => array(
+						'type'     => 'checkbox',
+						'desc'     => 'Checking this will keep the plugin from adding its JavaScript to the front end interface.',
+						'constant' => '',
+					),
 				),
-			),
-			'disable_css'        => array(
-				'title'    => __( 'Disable plugin CSS?', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $page,
-				'section'  => 'more-settings',
-				'args'     => array(
-					'type'     => 'checkbox',
-					'desc'     => 'Checking this will keep the plugin from adding its stylesheet to the front end interface.',
-					'constant' => '',
-				),
-			),
-		);
-
-		$frequency_options = get_option( $this->option_prefix . 'frequency_options', array() );
-		if ( ! empty( $frequency_options ) ) {
-
-			$options = array();
-			foreach ( $frequency_options as $key ) {
-				$options[ $key ] = $this->member_levels->get_frequency_options( $key );
-			}
-
-			$settings['default_frequency'] = array(
-				'title'    => __( 'Default frequency', 'minnpost-membership' ),
-				'callback' => $callbacks['checkboxes'],
-				'page'     => $page,
-				'section'  => 'member-levels',
-				'args'     => array(
-					'type'     => 'radio',
-					'desc'     => '',
-					'constant' => '',
-					'items'    => $options,
+				'disable_css'        => array(
+					'title'    => __( 'Disable plugin CSS?', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => 'more-settings',
+					'args'     => array(
+						'type'     => 'checkbox',
+						'desc'     => 'Checking this will keep the plugin from adding its stylesheet to the front end interface.',
+						'constant' => '',
+					),
 				),
 			);
-		}
 
-		foreach ( $settings as $key => $attributes ) {
-			$id       = $this->option_prefix . $key;
-			$name     = $this->option_prefix . $key;
-			$title    = $attributes['title'];
-			$callback = $attributes['callback'];
-			$page     = $attributes['page'];
-			$section  = $attributes['section'];
-			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
-			$args     = array_merge(
-				$attributes['args'],
-				array(
-					'title'     => $title,
-					'id'        => $id,
-					'label_for' => $id,
-					'name'      => $name,
-					'class'     => $class,
-				)
-			);
+			$frequency_options = get_option( $this->option_prefix . 'frequency_options', array() );
+			if ( ! empty( $frequency_options ) ) {
 
-			// if there is a constant and it is defined, don't run a validate function if there is one
-			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
-				$validate = '';
+				$options = array();
+				foreach ( $frequency_options as $key ) {
+					$options[ $key ] = $this->member_levels->get_frequency_options( $key );
+				}
+
+				$settings['default_frequency'] = array(
+					'title'    => __( 'Default frequency', 'minnpost-membership' ),
+					'callback' => $callbacks['checkboxes'],
+					'page'     => $page,
+					'section'  => 'member-levels',
+					'args'     => array(
+						'type'     => 'radio',
+						'desc'     => '',
+						'constant' => '',
+						'items'    => $options,
+					),
+				);
 			}
-			add_settings_field( $id, $title, $callback, $page, $section, $args );
-			register_setting( $section, $id );
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
+			}
 		}
 	}
 
@@ -460,484 +462,486 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function taking_payments( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
 				add_settings_section( $section, $title, null, $page );
 			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
-		}
 
-		$settings = array(
-			'payment_urls'          => array(
-				'title'    => __( 'Payment URLs', 'minnpost-membership' ),
-				'callback' => $callbacks['textarea'],
-				'page'     => 'payment_pages',
-				'section'  => 'payment_pages',
+			$settings = array(
+				'payment_urls'          => array(
+					'title'    => __( 'Payment URLs', 'minnpost-membership' ),
+					'callback' => $callbacks['textarea'],
+					'page'     => 'payment_pages',
+					'section'  => 'payment_pages',
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'rows'     => 5,
+						'cols'     => '',
+					),
+				),
+				'payment_processor_url' => array(
+					'title'    => __( 'Payment processor URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'payment_pages',
+					'section'  => 'payment_pages',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => '',
+						'constant' => 'PAYMENT_PROCESSOR_URL',
+					),
+				),
+			);
+
+			$payment_sections = $this->setup_payment_page_sections();
+			if ( ! empty( $payment_sections ) ) {
+				foreach ( $payment_sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			}
+
+			// /support page options
+			$this_section                         = 'support';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_summary' ] = array(
+				'title'    => __( 'Summary', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => '',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+
+			$settings[ $this_section . '_pre_form_text' ] = array(
+				'title'    => __( 'Pre form text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'This is the text before, and on the same line as, the form fields',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_start_value' ] = array(
+				'title'    => __( 'Start value', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_nonmembers' ] = array(
+				'title'    => __( 'Post form text - non-members', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'constant' => '',
+					'type'     => 'text',
+					'rows'     => 3,
+					'cols'     => '',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_link_url' ] = array(
+				'title'    => __( 'Post form link URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'If present, this URL will wrap the above (or below) text value.',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_change_for_members' ] = array(
+				'title'    => __( 'Change post-form text for members?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_nochange' ] = array(
+				'title'    => __( 'Post form text - no change', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+					'constant' => '',
+					'type'     => 'text',
 					'rows'     => 5,
 					'cols'     => '',
 				),
-			),
-			'payment_processor_url' => array(
-				'title'    => __( 'Payment processor URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => 'payment_pages',
-				'section'  => 'payment_pages',
-				'args'     => array(
-					'type'     => 'text',
-					'desc'     => '',
-					'constant' => 'PAYMENT_PROCESSOR_URL',
-				),
-			),
-		);
-
-		$payment_sections = $this->setup_payment_page_sections();
-		if ( ! empty( $payment_sections ) ) {
-			foreach ( $payment_sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
-				add_settings_section( $section, $title, null, $page );
-			}
-		}
-
-		// /support page options
-		$this_section                         = 'support';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_summary' ] = array(
-			'title'    => __( 'Summary', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'          => '',
-				'constant'      => '',
-				'type'          => 'text',
-				'rows'          => '5',
-				'media_buttons' => false,
-			),
-		);
-
-		$settings[ $this_section . '_pre_form_text' ] = array(
-			'title'    => __( 'Pre form text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'This is the text before, and on the same line as, the form fields',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_start_value' ] = array(
-			'title'    => __( 'Start value', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_nonmembers' ] = array(
-			'title'    => __( 'Post form text - non-members', 'minnpost-membership' ),
-			'callback' => $callbacks['textarea'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level',
-				'constant' => '',
-				'type'     => 'text',
-				'rows'     => 3,
-				'cols'     => '',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_link_url' ] = array(
-			'title'    => __( 'Post form link URL', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'If present, this URL will wrap the above (or below) text value.',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_change_for_members' ] = array(
-			'title'    => __( 'Change post-form text for members?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_nochange' ] = array(
-			'title'    => __( 'Post form text - no change', 'minnpost-membership' ),
-			'callback' => $callbacks['textarea'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
-				'constant' => '',
-				'type'     => 'text',
-				'rows'     => 5,
-				'cols'     => '',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_change' ] = array(
-			'title'    => __( 'Post form text - change', 'minnpost-membership' ),
-			'callback' => $callbacks['textarea'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
-				'constant' => '',
-				'type'     => 'text',
-				'rows'     => 5,
-				'cols'     => '',
-			),
-		);
-
-		$settings[ $this_section . '_button_text' ] = array(
-			'title'    => __( 'Button text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_link_text_next_to_button' ] = array(
-			'title'    => __( 'Link text next to button', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_link_url_next_to_button' ] = array(
-			'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body' ] = array(
-			'title'    => __( 'Post body content', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'          => 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.',
-				'constant'      => '',
-				'type'          => 'text',
-				'rows'          => '5',
-				'media_buttons' => false,
-			),
-		);
-
-		$settings[ $this_section . '_post_body_text_link' ] = array(
-			'title'    => __( 'Post body text link', 'minnpost-membership' ),
-			'callback' => $callbacks['textarea'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-				'rows'     => 3,
-				'cols'     => '',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_url' ] = array(
-			'title'    => __( 'Post body link URL', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_fragment' ] = array(
-			'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_class' ] = array(
-			'title'    => __( 'Post body link class', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_text' ] = array(
-			'title'    => __( 'Post body link text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
-			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		// /support/member-benefits page options
-		$this_section                         = 'support-member-benefits';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_pre_form_text' ] = array(
-			'title'    => __( 'Pre-form text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		/*$settings[ $this_section . '_post_form_text' ] = array(
-			'title'    => __( 'Post-form text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_form_text_link' ] = array(
-			'title'    => __( 'Post-form text link', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);*/
-
-		$settings[ $this_section . '_default_level' ] = array(
-			'title'    => __( 'Default level', 'minnpost-membership' ),
-			'callback' => $callbacks['select'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'type'     => 'select',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $this->get_member_level_options(),
-			),
-		);
-
-		$settings[ $this_section . '_level_button_text' ] = array(
-			'title'    => __( 'Level button text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_give_button_text' ] = array(
-			'title'    => __( 'Give button text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_text_link' ] = array(
-			'title'    => __( 'Post body text link', 'minnpost-membership' ),
-			'callback' => $callbacks['textarea'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-				'rows'     => 5,
-				'cols'     => '',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_url' ] = array(
-			'title'    => __( 'Post body link URL', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_fragment' ] = array(
-			'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_class' ] = array(
-			'title'    => __( 'Post body link class', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_link_text' ] = array(
-			'title'    => __( 'Post body link text', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
-			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		foreach ( $settings as $key => $attributes ) {
-			$id       = $this->option_prefix . $key;
-			$name     = $this->option_prefix . $key;
-			$title    = $attributes['title'];
-			$callback = $attributes['callback'];
-			$page     = $attributes['page'];
-			$section  = $attributes['section'];
-			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
-			$args     = array_merge(
-				$attributes['args'],
-				array(
-					'title'     => $title,
-					'id'        => $id,
-					'label_for' => $id,
-					'name'      => $name,
-					'class'     => $class,
-				)
 			);
 
-			// if there is a constant and it is defined, don't run a validate function if there is one
-			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
-				$validate = '';
+			$settings[ $this_section . '_post_form_change' ] = array(
+				'title'    => __( 'Post form text - change', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+					'constant' => '',
+					'type'     => 'text',
+					'rows'     => 5,
+					'cols'     => '',
+				),
+			);
+
+			$settings[ $this_section . '_button_text' ] = array(
+				'title'    => __( 'Button text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_link_text_next_to_button' ] = array(
+				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_link_url_next_to_button' ] = array(
+				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body' ] = array(
+				'title'    => __( 'Post body content', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+
+			$settings[ $this_section . '_post_body_text_link' ] = array(
+				'title'    => __( 'Post body text link', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+					'rows'     => 3,
+					'cols'     => '',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_url' ] = array(
+				'title'    => __( 'Post body link URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_fragment' ] = array(
+				'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_class' ] = array(
+				'title'    => __( 'Post body link class', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_text' ] = array(
+				'title'    => __( 'Post body link text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
+				'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
+			// /support/member-benefits page options
+			$this_section                         = 'support-member-benefits';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_pre_form_text' ] = array(
+				'title'    => __( 'Pre-form text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			/*$settings[ $this_section . '_post_form_text' ] = array(
+				'title'    => __( 'Post-form text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_form_text_link' ] = array(
+				'title'    => __( 'Post-form text link', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);*/
+
+			$settings[ $this_section . '_default_level' ] = array(
+				'title'    => __( 'Default level', 'minnpost-membership' ),
+				'callback' => $callbacks['select'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $this->get_member_level_options(),
+				),
+			);
+
+			$settings[ $this_section . '_level_button_text' ] = array(
+				'title'    => __( 'Level button text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_give_button_text' ] = array(
+				'title'    => __( 'Give button text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_text_link' ] = array(
+				'title'    => __( 'Post body text link', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+					'rows'     => 5,
+					'cols'     => '',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_url' ] = array(
+				'title'    => __( 'Post body link URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_fragment' ] = array(
+				'title'    => __( 'Post body link fragment', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_class' ] = array(
+				'title'    => __( 'Post body link class', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_link_text' ] = array(
+				'title'    => __( 'Post body link text', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
+				'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
 			}
-			add_settings_field( $id, $title, $callback, $page, $section, $args );
-			register_setting( $section, $id );
 		}
 	}
 
@@ -949,100 +953,102 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function campaign_settings( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
-				add_settings_section( $section, $title, null, $page );
-			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
-		}
-
-		$settings = array(
-			'campaign_ids' => array(
-				'title'    => __( 'Campaign IDs', 'minnpost-membership' ),
-				'callback' => $callbacks['textarea'],
-				'page'     => 'campaigns',
-				'section'  => 'campaigns',
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'rows'     => 5,
-					'cols'     => '',
-				),
-			),
-		);
-
-		$campaign_sections = $this->setup_campaign_sections();
-		if ( ! empty( $campaign_sections ) ) {
-			foreach ( $campaign_sections as $key => $value ) {
-				$section = $key;
-				$title   = 'Campaign: ' . $value;
-				$page    = $section;
-				add_settings_section( $section, $title, null, $page );
-
-				if ( 'campaigns' !== $key ) {
-					// campaign specific settings
-					$settings[ 'support_title_' . $value ] = array(
-						'title'    => __( 'Page title', 'minnpost-membership' ),
-						'callback' => $callbacks['text'],
-						'page'     => $key,
-						'section'  => $key,
-						'args'     => array(
-							'desc'     => '',
-							'constant' => '',
-							'type'     => 'text',
-						),
-					);
-
-					$settings[ 'support_summary_' . $value ] = array(
-						'title'    => __( 'Summary', 'minnpost-membership' ),
-						'callback' => $callbacks['editor'],
-						'page'     => $key,
-						'section'  => $key,
-						'args'     => array(
-							'desc'          => '',
-							'constant'      => '',
-							'type'          => 'text',
-							'rows'          => '5',
-							'media_buttons' => false,
-						),
-					);
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
 				}
-
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
+				add_settings_section( $section, $title, null, $page );
 			}
-		}
 
-		foreach ( $settings as $key => $attributes ) {
-			$id       = $this->option_prefix . $key;
-			$name     = $this->option_prefix . $key;
-			$title    = $attributes['title'];
-			$callback = $attributes['callback'];
-			$page     = $attributes['page'];
-			$section  = $attributes['section'];
-			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
-			$args     = array_merge(
-				$attributes['args'],
-				array(
-					'title'     => $title,
-					'id'        => $id,
-					'label_for' => $id,
-					'name'      => $name,
-					'class'     => $class,
-				)
+			$settings = array(
+				'campaign_ids' => array(
+					'title'    => __( 'Campaign IDs', 'minnpost-membership' ),
+					'callback' => $callbacks['textarea'],
+					'page'     => 'campaigns',
+					'section'  => 'campaigns',
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'rows'     => 5,
+						'cols'     => '',
+					),
+				),
 			);
 
-			// if there is a constant and it is defined, don't run a validate function if there is one
-			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
-				$validate = '';
+			$campaign_sections = $this->setup_campaign_sections();
+			if ( ! empty( $campaign_sections ) ) {
+				foreach ( $campaign_sections as $key => $value ) {
+					$section = $key;
+					$title   = 'Campaign: ' . $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+
+					if ( 'campaigns' !== $key ) {
+						// campaign specific settings
+						$settings[ 'support_title_' . $value ] = array(
+							'title'    => __( 'Page title', 'minnpost-membership' ),
+							'callback' => $callbacks['text'],
+							'page'     => $key,
+							'section'  => $key,
+							'args'     => array(
+								'desc'     => '',
+								'constant' => '',
+								'type'     => 'text',
+							),
+						);
+
+						$settings[ 'support_summary_' . $value ] = array(
+							'title'    => __( 'Summary', 'minnpost-membership' ),
+							'callback' => $callbacks['editor'],
+							'page'     => $key,
+							'section'  => $key,
+							'args'     => array(
+								'desc'          => '',
+								'constant'      => '',
+								'type'          => 'text',
+								'rows'          => '5',
+								'media_buttons' => false,
+							),
+						);
+					}
+
+				}
 			}
-			add_settings_field( $id, $title, $callback, $page, $section, $args );
-			register_setting( $section, $id );
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
+			}
 		}
 	}
 
@@ -1054,438 +1060,440 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function explain_benefits( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
 				add_settings_section( $section, $title, null, $page );
 			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
-		}
 
-		$settings = array(
-			'explain_member_benefit_urls' => array(
-				'title'    => __( 'Member benefit URLs', 'minnpost-membership' ),
-				'callback' => $callbacks['textarea'],
-				'page'     => 'explain_benefit_pages',
-				'section'  => 'explain_benefit_pages',
+			$settings = array(
+				'explain_member_benefit_urls' => array(
+					'title'    => __( 'Member benefit URLs', 'minnpost-membership' ),
+					'callback' => $callbacks['textarea'],
+					'page'     => 'explain_benefit_pages',
+					'section'  => 'explain_benefit_pages',
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'rows'     => 5,
+						'cols'     => '',
+					),
+				),
+			);
+
+			$benefit_sections = $this->setup_explain_benefit_page_sections();
+			if ( ! empty( $benefit_sections ) ) {
+				foreach ( $benefit_sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			}
+
+			// /support/partner-offers options
+			$this_section                         = 'support-partner-offers';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_body' ] = array(
+				'title'    => __( 'Page body', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_eligible_levels' ] = array(
+				'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $this->get_member_level_options(),
+				),
+			);
+
+			$eligibility_states = $this->get_user_eligibility_states();
+
+			$settings[ $this_section . '-user_state' ] = array(
+				'title'    => __( 'Switch user state', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
+				'args'     => array(
+					'type'     => 'radio',
+					'label'    => 'parallel',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $eligibility_states,
+				),
+			);
+
+			// action boxes for partner offers
+			foreach ( $eligibility_states as $eligibility_state ) {
+				$settings[  $this_section . '_action_title_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Action title', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_action_body_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Action body', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '5',
+						'media_buttons' => false,
+					),
+				);
+
+				$settings[  $this_section . '_post_body_button_text_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_post_body_button_url_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Button URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+			}
+
+			$settings[ $this_section . '_list_all_partners' ] = array(
+				'title'    => __( 'List all partners?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
+			$settings[ $this_section . '_partner_list_heading' ] = array(
+				'title'    => __( 'Partner list heading', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
+				'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
+			// /support/fan-club options
+			$this_section                         = 'support-fan-club';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_body' ] = array(
+				'title'    => __( 'Page body', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_eligible_levels' ] = array(
+				'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $this->get_member_level_options(),
+				),
+			);
+
+			$eligibility_states = $this->get_user_eligibility_states();
+
+			$settings[ $this_section . '-user_state' ] = array(
+				'title'    => __( 'Switch user state', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
+				'args'     => array(
+					'type'     => 'radio',
+					'label'    => 'parallel',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $eligibility_states,
+				),
+			);
+
+			// action boxes for fan club
+			foreach ( $eligibility_states as $eligibility_state ) {
+				$settings[  $this_section . '_action_title_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Action title', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_action_body_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Action body', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '5',
+						'media_buttons' => false,
+					),
+				);
+
+				$settings[  $this_section . '_post_body_button_text_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_post_body_button_url_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Button URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[  $this_section . '_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+			}
+
+			$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
+				'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
+			// /support/member-benefit-details options
+			$this_section                         = 'support-member-benefit-details';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_body' ] = array(
+				'title'    => __( 'Page body', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_link_from_other_pages' ] = array(
+				'title'    => __( 'Link from other pages', 'minnpost-membership' ),
+				'callback' => $callbacks['textarea'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
 					'rows'     => 5,
 					'cols'     => '',
 				),
-			),
-		);
+			);
 
-		$benefit_sections = $this->setup_explain_benefit_page_sections();
-		if ( ! empty( $benefit_sections ) ) {
-			foreach ( $benefit_sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
-				add_settings_section( $section, $title, null, $page );
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
 			}
-		}
-
-		// /support/partner-offers options
-		$this_section                         = 'support-partner-offers';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_body' ] = array(
-			'title'    => __( 'Page body', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_eligible_levels' ] = array(
-			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'type'     => 'select',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $this->get_member_level_options(),
-			),
-		);
-
-		$eligibility_states = $this->get_user_eligibility_states();
-
-		$settings[ $this_section . '-user_state' ] = array(
-			'title'    => __( 'Switch user state', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
-			'args'     => array(
-				'type'     => 'radio',
-				'label'    => 'parallel',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $eligibility_states,
-			),
-		);
-
-		// action boxes for partner offers
-		foreach ( $eligibility_states as $eligibility_state ) {
-			$settings[  $this_section . '_action_title_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Action title', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_action_body_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Action body', 'minnpost-membership' ),
-				'callback' => $callbacks['editor'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
-					'constant'      => '',
-					'type'          => 'text',
-					'rows'          => '5',
-					'media_buttons' => false,
-				),
-			);
-
-			$settings[  $this_section . '_post_body_button_text_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Button text', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_post_body_button_url_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Button URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-		}
-
-		$settings[ $this_section . '_list_all_partners' ] = array(
-			'title'    => __( 'List all partners?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		$settings[ $this_section . '_partner_list_heading' ] = array(
-			'title'    => __( 'Partner list heading', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
-			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		// /support/fan-club options
-		$this_section                         = 'support-fan-club';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_body' ] = array(
-			'title'    => __( 'Page body', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_eligible_levels' ] = array(
-			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'type'     => 'select',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $this->get_member_level_options(),
-			),
-		);
-
-		$eligibility_states = $this->get_user_eligibility_states();
-
-		$settings[ $this_section . '-user_state' ] = array(
-			'title'    => __( 'Switch user state', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
-			'args'     => array(
-				'type'     => 'radio',
-				'label'    => 'parallel',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $eligibility_states,
-			),
-		);
-
-		// action boxes for fan club
-		foreach ( $eligibility_states as $eligibility_state ) {
-			$settings[  $this_section . '_action_title_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Action title', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_action_body_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Action body', 'minnpost-membership' ),
-				'callback' => $callbacks['editor'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
-					'constant'      => '',
-					'type'          => 'text',
-					'rows'          => '5',
-					'media_buttons' => false,
-				),
-			);
-
-			$settings[  $this_section . '_post_body_button_text_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Button text', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_post_body_button_url_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Button URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[  $this_section . '_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-		}
-
-		$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
-			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		// /support/member-benefit-details options
-		$this_section                         = 'support-member-benefit-details';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_body' ] = array(
-			'title'    => __( 'Page body', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_link_from_other_pages' ] = array(
-			'title'    => __( 'Link from other pages', 'minnpost-membership' ),
-			'callback' => $callbacks['textarea'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-				'rows'     => 5,
-				'cols'     => '',
-			),
-		);
-
-		foreach ( $settings as $key => $attributes ) {
-			$id       = $this->option_prefix . $key;
-			$name     = $this->option_prefix . $key;
-			$title    = $attributes['title'];
-			$callback = $attributes['callback'];
-			$page     = $attributes['page'];
-			$section  = $attributes['section'];
-			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
-			$args     = array_merge(
-				$attributes['args'],
-				array(
-					'title'     => $title,
-					'id'        => $id,
-					'label_for' => $id,
-					'name'      => $name,
-					'class'     => $class,
-				)
-			);
-
-			// if there is a constant and it is defined, don't run a validate function if there is one
-			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
-				$validate = '';
-			}
-			add_settings_field( $id, $title, $callback, $page, $section, $args );
-			register_setting( $section, $id );
 		}
 	}
 
@@ -1497,226 +1505,382 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function use_benefits( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
 				add_settings_section( $section, $title, null, $page );
 			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
-		}
 
-		$settings = array(
-			'use_member_benefit_urls' => array(
-				'title'    => __( 'Member benefit URLs', 'minnpost-membership' ),
-				'callback' => $callbacks['textarea'],
-				'page'     => 'use_benefit_pages',
-				'section'  => 'use_benefit_pages',
+			$settings = array(
+				'use_member_benefit_urls' => array(
+					'title'    => __( 'Member benefit URLs', 'minnpost-membership' ),
+					'callback' => $callbacks['textarea'],
+					'page'     => 'use_benefit_pages',
+					'section'  => 'use_benefit_pages',
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'rows'     => 5,
+						'cols'     => '',
+					),
+				),
+			);
+
+			$benefit_sections = $this->setup_use_benefit_page_sections();
+			if ( ! empty( $benefit_sections ) ) {
+				foreach ( $benefit_sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			}
+
+			// /account/benefits/partner-offers options
+			$this_section                         = 'account-benefits-partner-offers';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
-					'rows'     => 5,
-					'cols'     => '',
+					'type'     => 'text',
 				),
-			),
-		);
+			);
 
-		$benefit_sections = $this->setup_use_benefit_page_sections();
-		if ( ! empty( $benefit_sections ) ) {
-			foreach ( $benefit_sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
-				add_settings_section( $section, $title, null, $page );
-			}
-		}
-
-		// /account/benefits/partner-offers options
-		$this_section                         = 'account-benefits-partner-offers';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_claim_frequency' ] = array(
-			'title'    => __( 'How often users can claim', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => 'Time period users have to wait between claiming offers.',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$display_items = $this->get_benefit_display_items( $this_section );
-
-		$settings[ $this_section . '-display_item' ] = array(
-			'title'    => __( 'Switch display item', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-display-item-toggle',
-			'args'     => array(
-				'type'     => 'radio',
-				'label'    => 'parallel',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $display_items,
-			),
-		);
-
-		// settings for status messages and buttons on partner offers
-		foreach ( $display_items as $display_item ) {
-			// email settings need to be different
-			if ( 'email' !== $display_item['id'] ) {
-
-				$text_field_args = array(
+			$settings[ $this_section . '_claim_frequency' ] = array(
+				'title'    => __( 'How often users can claim', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => 'Time period users have to wait between claiming offers.',
 					'constant' => '',
 					'type'     => 'text',
-				);
-				$text_field_type = $callbacks['text'];
+				),
+			);
 
-				if ( 'status_message' === $display_item['id'] ) {
-					$text_field_type = $callbacks['editor'];
-					$text_field_args['rows'] = 5;
-					$text_field_args['cols'] = 50;
-					$text_field_args['media_buttons'] = false;
-				}
+			$display_items = $this->get_benefit_display_items( $this_section );
 
-				$text_field_args['desc'] = 'This is displayed for each offer if the current user is not logged in.';
-				if ( 'button' === $display_item['id'] ) {
-					$text_field_args['desc'] .= ' Clicking the button will send the user to the login page and return them to this page if they log in.';
-				}
-				$settings[ $this_section . '_not_logged_in_' . $display_item['id'] ]           = array(
-					'title'    => __( 'User is not logged in', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
+			$settings[ $this_section . '-display_item' ] = array(
+				'title'    => __( 'Switch display item', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-display-item-toggle',
+				'args'     => array(
+					'type'     => 'radio',
+					'label'    => 'parallel',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $display_items,
+				),
+			);
 
-				$text_field_args['desc'] = 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.';
-				if ( 'status_message' === $display_item['id'] ) {
-					$text_field_args['desc'] .= ' The $start_date, $start_time, $end_date, and $end_time values will be replaced by the claimable start date and time.';
-				}
-				$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ] = array(
-					'title'    => __( 'Instances not claimable yet', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
+			// settings for status messages and buttons on partner offers
+			foreach ( $display_items as $display_item ) {
+				// email settings need to be different
+				if ( 'email' !== $display_item['id'] ) {
 
-				$settings[ $this_section . '_user_is_eligible_' . $display_item['id'] ]           = array(
-					'title'    => __( 'User is eligible', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-
-				$text_field_args['desc'] = 'This is displayed for each offer if the current user does not have the required status.';
-				$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ]            = array(
-					'title'    => __( 'User is ineligible', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-
-				$text_field_args['desc'] = 'This is displayed for each offer if the current user claimed an offer too recently.';
-				if ( 'status_message' === $display_item['id'] ) {
-					$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
-				}
-				$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
-					'title'    => __( 'User claimed too recently', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-
-				$text_field_args['desc'] = 'This is displayed if an offer has no available instances.';
-				$settings[ $this_section . '_all_claimed_' . $display_item['id'] ]                = array(
-					'title'    => __( 'Offer is all claimed', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-
-				$text_field_args['desc'] = 'This is displayed if an offer has no available instances, but a user has tried to claim it. This is useful for possibly accidental button clicks or when other claims made it in sooner.';
-				$settings[ $this_section . '_user_tried_but_all_claimed_' . $display_item['id'] ] = array(
-					'title'    => __( 'User tried to claim offer that is all claimed', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-
-				$text_field_args['desc'] = 'This is displayed on an offer a user has previously claimed, they return to the page.';
-				if ( 'status_message' === $display_item['id'] ) {
-					$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
-				}
-				$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ]    = array(
-					'title'    => __( 'Previous claim', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-
-				$text_field_args['desc'] = 'This is displayed on an offer a user has just claimed.';
-				$settings[ $this_section . '_user_just_claimed_' . $display_item['id'] ]          = array(
-					'title'    => __( 'Claim success message', 'minnpost-membership' ),
-					'callback' => $text_field_type,
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => $text_field_args,
-				);
-			} else {
-				$settings[ $this_section . '_send_email_alert_' . $display_item['id']  ] = array(
-					'title'    => __( 'Send us an email alert when an offer is claimed?', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => '',
+					$text_field_args = array(
 						'constant' => '',
-						'type'     => 'checkbox',
-					),
-				);
+						'type'     => 'text',
+					);
+					$text_field_type = $callbacks['text'];
 
-				$settings[ $this_section . '_alert_email_address_' . $display_item['id']  ] = array(
-					'title'    => __( 'Where to send email alerts', 'minnpost-membership' ),
+					if ( 'status_message' === $display_item['id'] ) {
+						$text_field_type = $callbacks['editor'];
+						$text_field_args['rows'] = 5;
+						$text_field_args['cols'] = 50;
+						$text_field_args['media_buttons'] = false;
+					}
+
+					$text_field_args['desc'] = 'This is displayed for each offer if the current user is not logged in.';
+					if ( 'button' === $display_item['id'] ) {
+						$text_field_args['desc'] .= ' Clicking the button will send the user to the login page and return them to this page if they log in.';
+					}
+					$settings[ $this_section . '_not_logged_in_' . $display_item['id'] ]           = array(
+						'title'    => __( 'User is not logged in', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed for each offer if the current date is not in the range of claimable dates for that offer.';
+					if ( 'status_message' === $display_item['id'] ) {
+						$text_field_args['desc'] .= ' The $start_date, $start_time, $end_date, and $end_time values will be replaced by the claimable start date and time.';
+					}
+					$settings[ $this_section . '_not_claimable_yet_' . $display_item['id'] ] = array(
+						'title'    => __( 'Instances not claimable yet', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$settings[ $this_section . '_user_is_eligible_' . $display_item['id'] ]           = array(
+						'title'    => __( 'User is eligible', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed for each offer if the current user does not have the required status.';
+					$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ]            = array(
+						'title'    => __( 'User is ineligible', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed for each offer if the current user claimed an offer too recently.';
+					if ( 'status_message' === $display_item['id'] ) {
+						$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
+					}
+					$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
+						'title'    => __( 'User claimed too recently', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed if an offer has no available instances.';
+					$settings[ $this_section . '_all_claimed_' . $display_item['id'] ]                = array(
+						'title'    => __( 'Offer is all claimed', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed if an offer has no available instances, but a user has tried to claim it. This is useful for possibly accidental button clicks or when other claims made it in sooner.';
+					$settings[ $this_section . '_user_tried_but_all_claimed_' . $display_item['id'] ] = array(
+						'title'    => __( 'User tried to claim offer that is all claimed', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed on an offer a user has previously claimed, they return to the page.';
+					if ( 'status_message' === $display_item['id'] ) {
+						$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
+					}
+					$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ]    = array(
+						'title'    => __( 'Previous claim', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
+					$text_field_args['desc'] = 'This is displayed on an offer a user has just claimed.';
+					$settings[ $this_section . '_user_just_claimed_' . $display_item['id'] ]          = array(
+						'title'    => __( 'Claim success message', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+				} else {
+					$settings[ $this_section . '_send_email_alert_' . $display_item['id']  ] = array(
+						'title'    => __( 'Send us an email alert when an offer is claimed?', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => '',
+							'constant' => '',
+							'type'     => 'checkbox',
+						),
+					);
+
+					$settings[ $this_section . '_alert_email_address_' . $display_item['id']  ] = array(
+						'title'    => __( 'Where to send email alerts', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => '',
+							'constant' => '',
+							'type'     => 'text',
+						),
+					);
+
+					$settings[ $this_section . '_send_email_to_claiming_user_' . $display_item['id']  ] = array(
+						'title'    => __( 'Send email to claiming user', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => '',
+							'constant' => '',
+							'type'     => 'checkbox',
+						),
+					);
+
+					$settings[ $this_section . '_email_sending_address_' . $display_item['id']  ] = array(
+						'title'    => __( 'Email sending address', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => '',
+							'constant' => '',
+							'type'     => 'text',
+						),
+					);
+
+					$settings[ $this_section . '_email_sending_name_' . $display_item['id']  ] = array(
+						'title'    => __( 'Email sending name', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => '',
+							'constant' => '',
+							'type'     => 'text',
+						),
+					);
+
+					$settings[ $this_section . '_subject_' . $display_item['id']  ] = array(
+						'title'    => __( 'Email subject', 'minnpost-membership' ),
+						'callback' => $callbacks['text'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => 'The subject of the email sent to claiming users.',
+							'constant' => '',
+							'type'     => 'text',
+						),
+					);
+
+					$settings[ $this_section . '_body_' . $display_item['id']  ] = array(
+						'title'    => __( 'Email body', 'minnpost-membership' ),
+						'callback' => $callbacks['editor'],
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => array(
+							'desc'     => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
+							'constant' => '',
+							'type'     => 'text',
+							'rows'          => '5',
+							'media_buttons' => false,
+						),
+					);
+
+				}
+			}
+
+			$settings[ $this_section . '_no_offers' ] = array(
+				'title'    => __( 'No published offers', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => '',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '3',
+					'media_buttons' => false,
+				),
+			);
+
+			// /account/benefits/fan-club options
+			$this_section                         = 'account-benefits-fan-club';
+			$settings[ $this_section . '_title' ] = array(
+				'title'    => __( 'Page title', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_intro' ] = array(
+				'title'    => __( 'Page intro', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$settings[ $this_section . '_eligible_levels' ] = array(
+				'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $this->get_member_level_options(),
+				),
+			);
+
+			$eligibility_states = $this->get_user_eligibility_states();
+
+			$settings[ $this_section . '-user_state' ] = array(
+				'title'    => __( 'Switch user state', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
+				'args'     => array(
+					'type'     => 'radio',
+					'label'    => 'parallel',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $eligibility_states,
+				),
+			);
+
+			// action boxes for fan club
+			foreach ( $eligibility_states as $eligibility_state ) {
+				$settings[ $this_section . '_action_title_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Action title', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $this_section,
 					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
 						'desc'     => '',
 						'constant' => '',
@@ -1724,267 +1888,113 @@ class MinnPost_Membership_Admin {
 					),
 				);
 
-				$settings[ $this_section . '_send_email_to_claiming_user_' . $display_item['id']  ] = array(
-					'title'    => __( 'Send email to claiming user', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => '',
-						'constant' => '',
-						'type'     => 'checkbox',
-					),
-				);
-
-				$settings[ $this_section . '_email_sending_address_' . $display_item['id']  ] = array(
-					'title'    => __( 'Email sending address', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => '',
-						'constant' => '',
-						'type'     => 'text',
-					),
-				);
-
-				$settings[ $this_section . '_email_sending_name_' . $display_item['id']  ] = array(
-					'title'    => __( 'Email sending name', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => '',
-						'constant' => '',
-						'type'     => 'text',
-					),
-				);
-
-				$settings[ $this_section . '_subject_' . $display_item['id']  ] = array(
-					'title'    => __( 'Email subject', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => $this_section,
-					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
-					'args'     => array(
-						'desc'     => 'The subject of the email sent to claiming users.',
-						'constant' => '',
-						'type'     => 'text',
-					),
-				);
-
-				$settings[ $this_section . '_body_' . $display_item['id']  ] = array(
-					'title'    => __( 'Email body', 'minnpost-membership' ),
+				$settings[ $this_section . '_action_body_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Action body', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => $this_section,
 					'section'  => $this_section,
-					'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'     => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
-						'constant' => '',
-						'type'     => 'text',
+						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'constant'      => '',
+						'type'          => 'text',
 						'rows'          => '5',
 						'media_buttons' => false,
 					),
 				);
 
+				$settings[ $this_section . '_post_body_button_text_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[ $this_section . '_post_body_button_url_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Button URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[ $this_section . '_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Link text next to button', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
+				$settings[ $this_section . '_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $this_section,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
+					),
+				);
+
 			}
-		}
 
-		$settings[ $this_section . '_no_offers' ] = array(
-			'title'    => __( 'No published offers', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'          => '',
-				'constant'      => '',
-				'type'          => 'text',
-				'rows'          => '3',
-				'media_buttons' => false,
-			),
-		);
-
-		// /account/benefits/fan-club options
-		$this_section                         = 'account-benefits-fan-club';
-		$settings[ $this_section . '_title' ] = array(
-			'title'    => __( 'Page title', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_intro' ] = array(
-			'title'    => __( 'Page intro', 'minnpost-membership' ),
-			'callback' => $callbacks['editor'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'text',
-			),
-		);
-
-		$settings[ $this_section . '_eligible_levels' ] = array(
-			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'type'     => 'select',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $this->get_member_level_options(),
-			),
-		);
-
-		$eligibility_states = $this->get_user_eligibility_states();
-
-		$settings[ $this_section . '-user_state' ] = array(
-			'title'    => __( 'Switch user state', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
-			'args'     => array(
-				'type'     => 'radio',
-				'label'    => 'parallel',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $eligibility_states,
-			),
-		);
-
-		// action boxes for fan club
-		foreach ( $eligibility_states as $eligibility_state ) {
-			$settings[ $this_section . '_action_title_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Action title', 'minnpost-membership' ),
+			$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
+				'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
-					'type'     => 'text',
+					'type'     => 'checkbox',
 				),
 			);
 
-			$settings[ $this_section . '_action_body_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Action body', 'minnpost-membership' ),
-				'callback' => $callbacks['editor'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
-					'constant'      => '',
-					'type'          => 'text',
-					'rows'          => '5',
-					'media_buttons' => false,
-				),
-			);
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
 
-			$settings[ $this_section . '_post_body_button_text_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Button text', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[ $this_section . '_post_body_button_url_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Button URL', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[ $this_section . '_post_body_link_text_next_to_button_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Link text next to button', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-			$settings[ $this_section . '_post_body_link_url_next_to_button_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Link URL next to button', 'minnpost-membership' ),
-				'callback' => $callbacks['text'],
-				'page'     => $this_section,
-				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
-				'args'     => array(
-					'desc'     => '',
-					'constant' => '',
-					'type'     => 'text',
-				),
-			);
-
-		}
-
-		$settings[ $this_section . '_post_body_show_member_details_link' ] = array(
-			'title'    => __( 'Show link to member benefit details page?', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $this_section,
-			'section'  => $this_section,
-			'args'     => array(
-				'desc'     => '',
-				'constant' => '',
-				'type'     => 'checkbox',
-			),
-		);
-
-		foreach ( $settings as $key => $attributes ) {
-			$id       = $this->option_prefix . $key;
-			$name     = $this->option_prefix . $key;
-			$title    = $attributes['title'];
-			$callback = $attributes['callback'];
-			$page     = $attributes['page'];
-			$section  = $attributes['section'];
-			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
-			$args     = array_merge(
-				$attributes['args'],
-				array(
-					'title'     => $title,
-					'id'        => $id,
-					'label_for' => $id,
-					'name'      => $name,
-					'class'     => $class,
-				)
-			);
-
-			// if there is a constant and it is defined, don't run a validate function if there is one
-			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
-				$validate = '';
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
 			}
-			add_settings_field( $id, $title, $callback, $page, $section, $args );
-			register_setting( $section, $id );
 		}
 	}
 
@@ -1996,18 +2006,20 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function benefit_results( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
-				$page    = $section;
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
 				add_settings_section( $section, $title, null, $page );
 			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
 		}
 
 	}
@@ -2020,118 +2032,120 @@ class MinnPost_Membership_Admin {
 	* @param array $callbacks
 	*/
 	private function premium_content( $page, $callbacks ) {
-		$sections = $this->get_admin_pages()[ $page ]['sections'];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $key => $value ) {
-				$section = $key;
-				$title   = $value;
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
 				add_settings_section( $section, $title, null, $page );
 			}
-		} else {
-			$section = $page;
-			$title   = $this->get_admin_pages()[ $page ]['title'];
-			add_settings_section( $section, $title, null, $page );
-		}
 
-		$this_section = 'access_settings';
-		$settings     = array(
-			'post_access_meta_key' => array(
-				'title'    => __( 'Post access meta key', 'minnpost-membership' ),
+			$this_section = 'access_settings';
+			$settings     = array(
+				'post_access_meta_key' => array(
+					'title'    => __( 'Post access meta key', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => '',
+						'constant' => '',
+					),
+				),
+			);
+
+			$settings['post_access_eligible_levels'] = array(
+				'title'    => __( 'Eligible levels', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
+				'page'     => $page,
+				'section'  => $this_section,
+				'args'     => array(
+					'type'     => 'select',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $this->get_member_level_options(),
+				),
+			);
+
+			$settings['post_access_single_template_suffix'] = array(
+				'title'    => __( 'Blocked single template suffix', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $page,
 				'section'  => $this_section,
+				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 				'args'     => array(
 					'type'     => 'text',
-					'desc'     => '',
+					'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
 					'constant' => '',
 				),
-			),
-		);
+			);
 
-		$settings['post_access_eligible_levels'] = array(
-			'title'    => __( 'Eligible levels', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $page,
-			'section'  => $this_section,
-			'args'     => array(
-				'type'     => 'select',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $this->get_member_level_options(),
-			),
-		);
+			$eligibility_states = $this->get_user_eligibility_states( true ); // this is a use screen
 
-		$settings['post_access_single_template_suffix'] = array(
-			'title'    => __( 'Blocked single template suffix', 'minnpost-membership' ),
-			'callback' => $callbacks['text'],
-			'page'     => $page,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
-			'args'     => array(
-				'type'     => 'text',
-				'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
-				'constant' => '',
-			),
-		);
-
-		$eligibility_states = $this->get_user_eligibility_states( true ); // this is a use screen
-
-		$settings['post_access_user_state'] = array(
-			'title'    => __( 'Switch user state', 'minnpost-membership' ),
-			'callback' => $callbacks['checkboxes'],
-			'page'     => $page,
-			'section'  => $this_section,
-			'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
-			'args'     => array(
-				'type'     => 'radio',
-				'desc'     => '',
-				'constant' => '',
-				'items'    => $eligibility_states,
-			),
-		);
-		// action boxes for benefit content
-		foreach ( $eligibility_states as $eligibility_state ) {
-			$settings[ 'post_access_blocked_message_' . $eligibility_state['id'] ] = array(
-				'title'    => __( 'Message', 'minnpost-membership' ),
-				'callback' => $callbacks['editor'],
+			$settings['post_access_user_state'] = array(
+				'title'    => __( 'Switch user state', 'minnpost-membership' ),
+				'callback' => $callbacks['checkboxes'],
 				'page'     => $page,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 				'args'     => array(
-					'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
-					'constant'      => '',
-					'type'          => 'text',
-					'rows'          => '5',
-					'media_buttons' => false,
+					'type'     => 'radio',
+					'desc'     => '',
+					'constant' => '',
+					'items'    => $eligibility_states,
 				),
 			);
-		}
-
-		foreach ( $settings as $key => $attributes ) {
-			$id       = $this->option_prefix . $key;
-			$name     = $this->option_prefix . $key;
-			$title    = $attributes['title'];
-			$callback = $attributes['callback'];
-			$page     = $attributes['page'];
-			$section  = $attributes['section'];
-			$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
-			$args     = array_merge(
-				$attributes['args'],
-				array(
-					'title'     => $title,
-					'id'        => $id,
-					'label_for' => $id,
-					'name'      => $name,
-					'class'     => $class,
-				)
-			);
-
-			// if there is a constant and it is defined, don't run a validate function if there is one
-			if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
-				$validate = '';
+			// action boxes for benefit content
+			foreach ( $eligibility_states as $eligibility_state ) {
+				$settings[ 'post_access_blocked_message_' . $eligibility_state['id'] ] = array(
+					'title'    => __( 'Message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
+					'args'     => array(
+						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '5',
+						'media_buttons' => false,
+					),
+				);
 			}
-			add_settings_field( $id, $title, $callback, $page, $section, $args );
-			register_setting( $section, $id );
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
+			}
 		}
 	}
 
