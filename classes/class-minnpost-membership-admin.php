@@ -2097,6 +2097,7 @@ class MinnPost_Membership_Admin {
 				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 				'args'     => array(
 					'type'     => 'radio',
+					'label'    => 'parallel',
 					'desc'     => '',
 					'constant' => '',
 					'items'    => $eligibility_states,
@@ -2114,7 +2115,7 @@ class MinnPost_Membership_Admin {
 						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
 						'constant'      => '',
 						'type'          => 'text',
-						'rows'          => '5',
+						'rows'          => '10',
 						'media_buttons' => false,
 					),
 				);
