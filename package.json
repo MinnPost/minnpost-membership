@@ -13,10 +13,10 @@
   },
   "homepage": "https://github.com/MinnPost/minnpost-membership#readme",
   "dependencies": {
-    "autoprefixer": "^8.5.1",
+    "autoprefixer": "^8.6.5",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "browser-sync": "^2.24.4",
+    "babel-loader": "^7.1.5",
+    "browser-sync": "^2.24.5",
     "css-mqpacker": "^6.0.2",
     "del": "^3.0.0",
     "eslint-config-wordpress": "^2.0.0",
@@ -28,7 +28,7 @@
     "gulp-css-globbing": "^0.2.2",
     "gulp-csslint": "^1.0.1",
     "gulp-cssnano": "~2",
-    "gulp-eslint": "^4.0.2",
+    "gulp-eslint": "^5.0.0",
     "gulp-imagemin": "^4.1.0",
     "gulp-notify": "~3",
     "gulp-plumber": "~1",
@@ -45,7 +45,7 @@
     "gulp-wp-pot": "^2.3.1",
     "npm": "^6.1.0",
     "npm-check-updates": "^2.14.2",
-    "webpack": "^4.8.3"
+    "webpack": "^4.15.1"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0"
