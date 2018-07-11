@@ -175,10 +175,11 @@ class MinnPost_Membership_Content_Items {
 	*
 	*/
 	public function create_sub_menus() {
-		$partner = 'edit.php?post_type=partner';
-		add_submenu_page( $this->slug, 'Partners', 'Partners', 'manage_options', $partner );
+		$partner    = 'edit.php?post_type=partner';
+		$capability = 'manage_minnpost_membership_options';
+		add_submenu_page( $this->slug, 'Partners', 'Partners', $capability, $partner );
 		$partner_offer = 'edit.php?post_type=partner_offer';
-		add_submenu_page( $this->slug, 'Partner Offers', 'Partner Offers', 'manage_options', $partner_offer );
+		add_submenu_page( $this->slug, 'Partner Offers', 'Partner Offers', $capability, $partner_offer );
 	}
 
 	/**
