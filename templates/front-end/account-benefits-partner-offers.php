@@ -57,21 +57,14 @@ $open_offers = array_filter(
 
 											<?php if ( 0 < $post->unclaimed_instance_count ) : ?>
 												<?php $key = 0; ?>
-												<?php if ( 0 < $post->dated_instance_count ) : ?>
-													<select id="instance-id-<?php the_ID(); ?>" name="instance-id-<?php the_ID(); ?>">
-														<option value="">Select an option</option>
-												<?php endif; ?>
+
 												<?php foreach ( $post->instances as $key => $instance ) : ?>
-													<?php if ( 0 < $post->dated_instance_count && ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) ) : ?>
-														<option value="<?php echo $key; ?>"><?php echo date_i18n( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo date_i18n( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ) ?></option>
-													<?php elseif ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
+													<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
 														<?php break; ?>
 													<?php endif; ?>
 												<?php endforeach; ?>
 
-												<?php if ( 0 < $post->dated_instance_count ) : ?>
-													</select>
-												<?php else : ?>
+												<?php if ( 0 === $post->dated_instance_count ) : ?>
 													<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
 												<?php endif; ?>
 
@@ -99,6 +92,18 @@ $open_offers = array_filter(
 														<?php echo $message; ?>
 													<?php endif; ?>
 												</div>
+
+												<?php if ( 0 < $post->dated_instance_count ) : ?>
+													<select id="instance-id-<?php the_ID(); ?>" name="instance-id-<?php the_ID(); ?>">
+														<option value="">Select an option</option>
+		 												<?php foreach ( $post->instances as $key => $instance ) : ?>
+		 													<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
+		 														<option value="<?php echo $key; ?>"><?php echo date_i18n( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo date_i18n( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ) ?></option>
+		 													<?php endif; ?>
+		 												<?php endforeach; ?>
+													</select>
+												<?php endif; ?>
+
 												<?php if ( wp_login_url( $_SERVER['REQUEST_URI'] ) !== $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
 													<button type="submit" data-benefit-nonce="<?php echo $benefit_nonce; ?>" value="<?php echo $offer_status_content['button_value']; ?>" name="post_id" class="a-button a-benefit-button<?php echo $button_class; ?>"<?php echo $button_attr; ?>><?php echo $offer_status_content['button_label']; ?></button>
 												<?php elseif ( wp_login_url( $_SERVER['REQUEST_URI'] ) === $offer_status_content['button_value'] && '' !== $offer_status_content['button_label'] ) : ?>
