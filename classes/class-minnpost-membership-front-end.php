@@ -431,7 +431,7 @@ class MinnPost_Membership_Front_End {
 							}
 							$offer_status_content = array_merge(
 								$this->get_result_message( $claim_result['param'], $benefit_name, $data ),
-								$this->get_button_values( $claim_result['param'], $benefit_name )
+								$this->get_button_values( $claim_result['param'], $benefit_name, $data )
 							);
 							if ( isset( $claim_result['not-claimed-instance'] ) ) {
 								$offer_status_content['remove_instance_value'] = $claim_result['not-claimed-instance'];
@@ -1334,7 +1334,7 @@ class MinnPost_Membership_Front_End {
 				$button['button_attr']  = 'disabled';
 				return $button;
 			case 'user_tried_but_this_instance_claimed':
-				$button['button_value'] = get_the_ID();
+				$button['button_value'] = $data['ID'];
 				return $button;
 			default:
 				return $button;
