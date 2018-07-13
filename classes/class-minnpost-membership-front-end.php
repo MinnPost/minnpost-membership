@@ -509,7 +509,7 @@ class MinnPost_Membership_Front_End {
 			$this_instance = $instances[ $params['instance_id'] ];
 
 			// if this instance has a specific date that it can be used, don't give the user the next one automatically if it is already claimed
-			if ( isset( $this_instance['_mp_partner_offer_instance_date'] ) && isset( $this_instance['_mp_partner_offer_claimed_date'] ) && '' !== $this_instance['_mp_partner_offer_claimed_date'] ) {
+			if ( isset( $this_instance['_mp_partner_offer_instance_date'] ) && '' !== $this_instance['_mp_partner_offer_instance_date'] && isset( $this_instance['_mp_partner_offer_claimed_date'] ) && '' !== $this_instance['_mp_partner_offer_claimed_date'] ) {
 				$claim_result = array(
 					'status'               => 'error',
 					'param'                => 'user_tried_but_this_instance_claimed',
