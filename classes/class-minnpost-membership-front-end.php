@@ -425,7 +425,10 @@ class MinnPost_Membership_Front_End {
 							wp_safe_redirect( site_url( $error_url ) );
 							exit;
 						} else {
-							$data                 = get_post( $params['post_id'], 'ARRAY_A' );
+							$data = get_post( $params['post_id'], 'ARRAY_A' );
+							if ( isset( $claim_result['not-claimed-instance'] ) ) {
+								$data['not-claimed-instance'] = get_post_meta( $params['post_id'], '_mp_partner_offer_instance', true )[ $claim_result['not-claimed-instance'] ];
+							}
 							$offer_status_content = array_merge(
 								$this->get_result_message( $claim_result['param'], $benefit_name, $data ),
 								$this->get_button_values( $claim_result['param'], $benefit_name )
