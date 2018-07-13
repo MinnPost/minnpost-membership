@@ -433,6 +433,9 @@ class MinnPost_Membership_Front_End {
 								$this->get_result_message( $claim_result['param'], $benefit_name, $data ),
 								$this->get_button_values( $claim_result['param'], $benefit_name )
 							);
+							if ( isset( $claim_result['not-claimed-instance'] ) ) {
+								$offer_status_content['remove_instance_value'] = $claim_result['not-claimed-instance'];
+							}
 							wp_send_json_error( $offer_status_content );
 						}
 					} elseif ( 'success' === $claim_result['status'] ) {

@@ -9,6 +9,7 @@
 			event.preventDefault();
 			var $button  = $( this );
 			var $status  = $( '.m-benefit-message', $( this ).parent() );
+			var $select  = $( 'select', $( this ).parent() );
 			var settings = minnpost_membership_settings;
 			// reset the message for current status
 			if ( ! '.m-benefit-message-success' ) {
@@ -29,7 +30,7 @@
 			        'minnpost_membership_benefit_form_nonce' : $button.data( 'benefit-nonce' ),
 			        'current_url' : $( 'input[name="current_url"]').val(),
 			        'benefit-name': $( 'input[name="benefit-name"]').val(),
-			        'instance_id' : $( 'input[name="instance-id-' + $button.val() + '"]' ).val(),
+			        'instance_id' : $( '[name="instance-id-' + $button.val() + '"]' ).val(),
 			        'post_id' : $button.val(),
 			        'is_ajax' : '1',
 			    };
@@ -48,6 +49,14 @@
 				    		$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
 				    	} else {
 				    		$button.hide();
+				    	}
+				    	if ( 0 < response.data.remove_instance_value.length ) {
+				    		$( 'option', $select ).each( function( i ) {
+				    			if ( $( this ).val() === response.data.remove_instance_value ) {
+				    				$( this ).remove();
+				    			}
+
+				    		});
 				    	}
 				    	// re-enable all the other buttons
 						$( '.a-benefit-button' ).not( $button ).removeClass( 'a-button-disabled' );
