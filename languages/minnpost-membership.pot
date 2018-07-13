@@ -104,7 +104,7 @@ msgstr ""
 msgid "Payment processor URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:519, classes/class-minnpost-membership-admin.php:761, classes/class-minnpost-membership-admin.php:997, classes/class-minnpost-membership-admin.php:1106, classes/class-minnpost-membership-admin.php:1282, classes/class-minnpost-membership-admin.php:1434, classes/class-minnpost-membership-admin.php:1551, classes/class-minnpost-membership-admin.php:1823
+#: classes/class-minnpost-membership-admin.php:519, classes/class-minnpost-membership-admin.php:761, classes/class-minnpost-membership-admin.php:997, classes/class-minnpost-membership-admin.php:1106, classes/class-minnpost-membership-admin.php:1282, classes/class-minnpost-membership-admin.php:1434, classes/class-minnpost-membership-admin.php:1551, classes/class-minnpost-membership-admin.php:1836
 msgid "Page title"
 msgstr ""
 
@@ -140,15 +140,15 @@ msgstr ""
 msgid "Post form text - change"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:635, classes/class-minnpost-membership-admin.php:1190, classes/class-minnpost-membership-admin.php:1366, classes/class-minnpost-membership-admin.php:1907
+#: classes/class-minnpost-membership-admin.php:635, classes/class-minnpost-membership-admin.php:1190, classes/class-minnpost-membership-admin.php:1366, classes/class-minnpost-membership-admin.php:1920
 msgid "Button text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:647, classes/class-minnpost-membership-admin.php:1216, classes/class-minnpost-membership-admin.php:1392, classes/class-minnpost-membership-admin.php:1933
+#: classes/class-minnpost-membership-admin.php:647, classes/class-minnpost-membership-admin.php:1216, classes/class-minnpost-membership-admin.php:1392, classes/class-minnpost-membership-admin.php:1946
 msgid "Link text next to button"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:659, classes/class-minnpost-membership-admin.php:1229, classes/class-minnpost-membership-admin.php:1405, classes/class-minnpost-membership-admin.php:1946
+#: classes/class-minnpost-membership-admin.php:659, classes/class-minnpost-membership-admin.php:1229, classes/class-minnpost-membership-admin.php:1405, classes/class-minnpost-membership-admin.php:1959
 msgid "Link URL next to button"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgstr ""
 msgid "Post body link text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:747, classes/class-minnpost-membership-admin.php:908, classes/class-minnpost-membership-admin.php:1268, classes/class-minnpost-membership-admin.php:1420, classes/class-minnpost-membership-admin.php:1961
+#: classes/class-minnpost-membership-admin.php:747, classes/class-minnpost-membership-admin.php:908, classes/class-minnpost-membership-admin.php:1268, classes/class-minnpost-membership-admin.php:1420, classes/class-minnpost-membership-admin.php:1974
 msgid "Show link to member benefit details page?"
 msgstr ""
 
@@ -208,23 +208,23 @@ msgstr ""
 msgid "Page body"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1130, classes/class-minnpost-membership-admin.php:1306, classes/class-minnpost-membership-admin.php:1847, classes/class-minnpost-membership-admin.php:2065
+#: classes/class-minnpost-membership-admin.php:1130, classes/class-minnpost-membership-admin.php:1306, classes/class-minnpost-membership-admin.php:1860, classes/class-minnpost-membership-admin.php:2078
 msgid "Eligible levels"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1145, classes/class-minnpost-membership-admin.php:1321, classes/class-minnpost-membership-admin.php:1862, classes/class-minnpost-membership-admin.php:2093
+#: classes/class-minnpost-membership-admin.php:1145, classes/class-minnpost-membership-admin.php:1321, classes/class-minnpost-membership-admin.php:1875, classes/class-minnpost-membership-admin.php:2106
 msgid "Switch user state"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1162, classes/class-minnpost-membership-admin.php:1338, classes/class-minnpost-membership-admin.php:1879
+#: classes/class-minnpost-membership-admin.php:1162, classes/class-minnpost-membership-admin.php:1338, classes/class-minnpost-membership-admin.php:1892
 msgid "Action title"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1175, classes/class-minnpost-membership-admin.php:1351, classes/class-minnpost-membership-admin.php:1892
+#: classes/class-minnpost-membership-admin.php:1175, classes/class-minnpost-membership-admin.php:1351, classes/class-minnpost-membership-admin.php:1905
 msgid "Action body"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1203, classes/class-minnpost-membership-admin.php:1379, classes/class-minnpost-membership-admin.php:1920
+#: classes/class-minnpost-membership-admin.php:1203, classes/class-minnpost-membership-admin.php:1379, classes/class-minnpost-membership-admin.php:1933
 msgid "Button URL"
 msgstr ""
 
@@ -260,91 +260,95 @@ msgstr ""
 msgid "User is eligible"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1646
-msgid "User is ineligible"
+#: classes/class-minnpost-membership-admin.php:1649
+msgid "Chosen instance was already claimed"
 msgstr ""
 
 #: classes/class-minnpost-membership-admin.php:1659
+msgid "User is ineligible"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:1672
 msgid "User claimed too recently"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1669
+#: classes/class-minnpost-membership-admin.php:1682
 msgid "Offer is all claimed"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1679
+#: classes/class-minnpost-membership-admin.php:1692
 msgid "User tried to claim offer that is all claimed"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1692
+#: classes/class-minnpost-membership-admin.php:1705
 msgid "Previous claim"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1702
+#: classes/class-minnpost-membership-admin.php:1715
 msgid "Claim success message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1711
+#: classes/class-minnpost-membership-admin.php:1724
 msgid "Send us an email alert when an offer is claimed?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1724
+#: classes/class-minnpost-membership-admin.php:1737
 msgid "Where to send email alerts"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1737
+#: classes/class-minnpost-membership-admin.php:1750
 msgid "Send email to claiming user"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1750
+#: classes/class-minnpost-membership-admin.php:1763
 msgid "Email sending address"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1763
+#: classes/class-minnpost-membership-admin.php:1776
 msgid "Email sending name"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1776
+#: classes/class-minnpost-membership-admin.php:1789
 msgid "Email subject"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1789
+#: classes/class-minnpost-membership-admin.php:1802
 msgid "Email body"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1807
+#: classes/class-minnpost-membership-admin.php:1820
 msgid "No published offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1835
+#: classes/class-minnpost-membership-admin.php:1848
 msgid "Page intro"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2052
+#: classes/class-minnpost-membership-admin.php:2065
 msgid "Post access meta key"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2078
+#: classes/class-minnpost-membership-admin.php:2091
 msgid "Blocked single template suffix"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2109
+#: classes/class-minnpost-membership-admin.php:2122
 msgid "Message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2161
+#: classes/class-minnpost-membership-admin.php:2174
 msgid "Payment Pages"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2178
+#: classes/class-minnpost-membership-admin.php:2191
 msgid "Campaigns"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2202, classes/class-minnpost-membership-admin.php:2219
+#: classes/class-minnpost-membership-admin.php:2215, classes/class-minnpost-membership-admin.php:2232
 msgid "Member Benefit Pages"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2542, classes/class-minnpost-membership-admin.php:2659, classes/class-minnpost-membership-admin.php:2709, classes/class-minnpost-membership-admin.php:2785
+#: classes/class-minnpost-membership-admin.php:2555, classes/class-minnpost-membership-admin.php:2672, classes/class-minnpost-membership-admin.php:2722, classes/class-minnpost-membership-admin.php:2798
 msgid "Defined in wp-config.php"
 msgstr ""
 
@@ -544,83 +548,83 @@ msgstr ""
 msgid "Filter partner offers list"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:194
+#: classes/class-minnpost-membership-content-items.php:195
 msgid "Enter partner name here"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:197
+#: classes/class-minnpost-membership-content-items.php:198
 msgid "Enter offer/event name here"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:213
+#: classes/class-minnpost-membership-content-items.php:214
 msgid "Partner Fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:217, templates/admin/partner-add-edit.php:24
+#: classes/class-minnpost-membership-content-items.php:218, templates/admin/partner-add-edit.php:24
 msgid "Link URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:223
+#: classes/class-minnpost-membership-content-items.php:224
 msgid "Logo Image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:224
+#: classes/class-minnpost-membership-content-items.php:225
 msgid "Upload an image or enter an URL."
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:276
+#: classes/class-minnpost-membership-content-items.php:277
 msgid "Choose Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:287
+#: classes/class-minnpost-membership-content-items.php:288
 msgid "Offer fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:293
+#: classes/class-minnpost-membership-content-items.php:294
 msgid "Quantity"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:301
+#: classes/class-minnpost-membership-content-items.php:302
 msgid "Type"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:309
+#: classes/class-minnpost-membership-content-items.php:310
 msgid "Restriction"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:337
+#: classes/class-minnpost-membership-content-items.php:338
 msgid "More info fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:343
+#: classes/class-minnpost-membership-content-items.php:344
 msgid "Text"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:351
+#: classes/class-minnpost-membership-content-items.php:352
 msgid "URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:361
+#: classes/class-minnpost-membership-content-items.php:362
 msgid "Claimable dates"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:395
+#: classes/class-minnpost-membership-content-items.php:396
 msgid "Instance {#}"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:396
+#: classes/class-minnpost-membership-content-items.php:397
 msgid "Add Another Instance"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:397
+#: classes/class-minnpost-membership-content-items.php:398
 msgid "Remove Instance"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:411
+#: classes/class-minnpost-membership-content-items.php:412
 msgid "Instance date"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:418
+#: classes/class-minnpost-membership-content-items.php:419
 msgid "Claimed date"
 msgstr ""
 
