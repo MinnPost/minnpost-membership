@@ -647,6 +647,7 @@ class MinnPost_Membership_Content_Items {
 	*/
 	private function store_partner_offer_instances( $partner_offer ) {
 		$unclaimed_instance_count = 0;
+		$dated_instance_count     = 0;
 
 		if ( null !== $partner_offer->instances ) {
 			$instances = maybe_unserialize( $partner_offer->instances );
@@ -660,13 +661,17 @@ class MinnPost_Membership_Content_Items {
 					}
 					$unclaimed_instance_count++;
 				}
+				foreach ( $instances as $key => $instance ) {
+					if ( ! isset( $instance['_mp_partner_offer_instance_date'] ) || '' === $instance['_mp_partner_offer_instance_date'] ) {
+						continue;
+					}
+					$dated_instance_count++;
+				}
 			}
-			$partner_offer->unclaimed_instance_count = $unclaimed_instance_count;
-		} else {
-			$partner_offer->unclaimed_instance_count = $unclaimed_instance_count;
 		}
-		$partner_offer->instances = $instances;
-
+		$partner_offer->unclaimed_instance_count = $unclaimed_instance_count;
+		$partner_offer->dated_instance_count     = $dated_instance_count;
+		$partner_offer->instances                = $instances;
 		return $partner_offer;
 	}
 
