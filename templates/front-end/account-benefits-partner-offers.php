@@ -57,14 +57,23 @@ $open_offers = array_filter(
 
 											<?php if ( 0 < $post->unclaimed_instance_count ) : ?>
 												<?php $key = 0; ?>
+												<?php if ( 0 < $post->dated_instance_count ) : ?>
+													<select id="instance-id-<?php the_ID(); ?>" name="instance-id-<?php the_ID(); ?>">
+														<option value="">Select an option</option>
+												<?php endif; ?>
+												<?php foreach ( $post->instances as $key => $instance ) : ?>
+													<?php if ( 0 < $post->dated_instance_count && ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) ) : ?>
+														<option value="<?php echo $key; ?>"><?php echo date_i18n( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo date_i18n( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ) ?></option>
+													<?php elseif ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
+														<?php break; ?>
+													<?php endif; ?>
+												<?php endforeach; ?>
 
-													<?php foreach ( $post->instances as $key => $instance ) : ?>
-														<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
-															<?php break; ?>
-														<?php endif; ?>
-													<?php endforeach; ?>
-
+												<?php if ( 0 < $post->dated_instance_count ) : ?>
+													</select>
+												<?php else : ?>
 													<input type="hidden" name="instance-id-<?php the_ID(); ?>" value="<?php echo $key; ?>">
+												<?php endif; ?>
 
 											<?php endif; ?>
 											<div class="m-benefit-claim">
