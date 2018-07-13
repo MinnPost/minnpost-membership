@@ -1641,6 +1641,19 @@ class MinnPost_Membership_Admin {
 						'args'     => $text_field_args,
 					);
 
+					$text_field_args['desc'] = 'This is displayed for each offer if the user tried to claim a date-specific instance, but there are other instances remaining.';
+					if ( 'status_message' === $display_item['id'] ) {
+						$text_field_args['desc'] .= ' The $date value will be replaced by the instance date value.';
+					}
+					$settings[ $this_section . '_user_tried_but_this_instance_claimed_' . $display_item['id'] ]            = array(
+						'title'    => __( 'Chosen instance was already claimed', 'minnpost-membership' ),
+						'callback' => $text_field_type,
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
+						'args'     => $text_field_args,
+					);
+
 					$text_field_args['desc'] = 'This is displayed for each offer if the current user does not have the required status.';
 					$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ]            = array(
 						'title'    => __( 'User is ineligible', 'minnpost-membership' ),
