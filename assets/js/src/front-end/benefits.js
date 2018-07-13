@@ -34,29 +34,39 @@
 			        'post_id' : $button.val(),
 			        'is_ajax' : '1',
 			    };
+
 			    $.post( settings.ajaxurl, data, function( response ) {
 			    	// success
 				    if ( true === response.success ) {
 				    	//console.dir(response);
 				    	$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
 				    	$status.html( response.data.message ).addClass( 'm-benefit-message-visible ' + response.data.message_class );
+				    	if ( 0 < $select.length ) {
+				    		$select.prop( 'disabled', true );
+				    	}
 				    	$( '.a-benefit-button' ).not( $button ).val( response.data.button_value ).attr( 'disabled', true );
 				    } else {
 				    	// error
 				    	//console.dir(response);
-				    	if ( '' !== response.data.button_label ) {
-				    		$button.show();
-				    		$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
-				    	} else {
-				    		$button.hide();
-				    	}
-				    	if ( 0 < response.data.remove_instance_value.length ) {
+				    	if ( 'undefined' === typeof response.data.remove_instance_value ) {
+					    	if ( '' !== response.data.button_label ) {
+					    		$button.show();
+					    		$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+					    	} else {
+					    		$button.hide();
+					    	}
+					    } else {
 				    		$( 'option', $select ).each( function( i ) {
 				    			if ( $( this ).val() === response.data.remove_instance_value ) {
 				    				$( this ).remove();
 				    			}
-
 				    		});
+				    		if ( '' !== response.data.button_label ) {
+					    		$button.show();
+					    		$button.val( response.data.button_value ).text( response.data.button_label ).removeClass( 'a-button-disabled' ).addClass( response.data.button_class ).prop( response.data.button_attr, true );
+					    	} else {
+					    		$button.hide();
+					    	}
 				    	}
 				    	// re-enable all the other buttons
 						$( '.a-benefit-button' ).not( $button ).removeClass( 'a-button-disabled' );
