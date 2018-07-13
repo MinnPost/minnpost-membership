@@ -226,11 +226,11 @@ class MinnPost_Membership_Admin {
 					foreach ( $offers as $key => $offer ) {
 						foreach ( $offer->instances as $i_key => $instance ) {
 							if ( isset( $instance['_mp_partner_offer_claim_user'] ) ) {
-								$offers[ $key ]->instances[ $i_key ]['user'] = get_userdata( $instance['_mp_partner_offer_claim_user']['id'] );
+								$offers[ $key ]->instances[ $i_key ]['user']      = get_userdata( $instance['_mp_partner_offer_claim_user']['id'] );
 								$offers[ $key ]->instances[ $i_key ]['user_meta'] = get_user_meta( $instance['_mp_partner_offer_claim_user']['id'] );
 							}
 							if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) {
-								unset( $offers[ $key ]->instances[ $i_key ]);
+								unset( $offers[ $key ]->instances[ $i_key ] );
 							}
 						}
 						if ( empty( $offer->instances ) ) {
@@ -1019,7 +1019,6 @@ class MinnPost_Membership_Admin {
 							),
 						);
 					}
-
 				}
 			}
 
@@ -1600,9 +1599,9 @@ class MinnPost_Membership_Admin {
 					$text_field_type = $callbacks['text'];
 
 					if ( 'status_message' === $display_item['id'] ) {
-						$text_field_type = $callbacks['editor'];
-						$text_field_args['rows'] = 5;
-						$text_field_args['cols'] = 50;
+						$text_field_type                  = $callbacks['editor'];
+						$text_field_args['rows']          = 5;
+						$text_field_args['cols']          = 50;
 						$text_field_args['media_buttons'] = false;
 					}
 
@@ -1610,7 +1609,7 @@ class MinnPost_Membership_Admin {
 					if ( 'button' === $display_item['id'] ) {
 						$text_field_args['desc'] .= ' Clicking the button will send the user to the login page and return them to this page if they log in.';
 					}
-					$settings[ $this_section . '_not_logged_in_' . $display_item['id'] ]           = array(
+					$settings[ $this_section . '_not_logged_in_' . $display_item['id'] ] = array(
 						'title'    => __( 'User is not logged in', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1632,7 +1631,7 @@ class MinnPost_Membership_Admin {
 						'args'     => $text_field_args,
 					);
 
-					$settings[ $this_section . '_user_is_eligible_' . $display_item['id'] ]           = array(
+					$settings[ $this_section . '_user_is_eligible_' . $display_item['id'] ] = array(
 						'title'    => __( 'User is eligible', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1645,7 +1644,7 @@ class MinnPost_Membership_Admin {
 					if ( 'status_message' === $display_item['id'] ) {
 						$text_field_args['desc'] .= ' The $date value will be replaced by the instance date value.';
 					}
-					$settings[ $this_section . '_user_tried_but_this_instance_claimed_' . $display_item['id'] ]            = array(
+					$settings[ $this_section . '_user_tried_but_this_instance_claimed_' . $display_item['id'] ] = array(
 						'title'    => __( 'Chosen instance was already claimed', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1655,7 +1654,7 @@ class MinnPost_Membership_Admin {
 					);
 
 					$text_field_args['desc'] = 'This is displayed for each offer if the current user does not have the required status.';
-					$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ]            = array(
+					$settings[ $this_section . '_ineligible_user_' . $display_item['id'] ] = array(
 						'title'    => __( 'User is ineligible', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1668,7 +1667,7 @@ class MinnPost_Membership_Admin {
 					if ( 'status_message' === $display_item['id'] ) {
 						$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
 					}
-					$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ]      = array(
+					$settings[ $this_section . '_user_claimed_recently_' . $display_item['id'] ] = array(
 						'title'    => __( 'User claimed too recently', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1678,7 +1677,7 @@ class MinnPost_Membership_Admin {
 					);
 
 					$text_field_args['desc'] = 'This is displayed if an offer has no available instances.';
-					$settings[ $this_section . '_all_claimed_' . $display_item['id'] ]                = array(
+					$settings[ $this_section . '_all_claimed_' . $display_item['id'] ] = array(
 						'title'    => __( 'Offer is all claimed', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1701,7 +1700,7 @@ class MinnPost_Membership_Admin {
 					if ( 'status_message' === $display_item['id'] ) {
 						$text_field_args['desc'] .= ' The $quantity, $type, $offer, $claimed_date, and $next_claim_eligibility_date values will be replaced with the actual values.';
 					}
-					$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ]    = array(
+					$settings[ $this_section . '_user_previously_claimed_' . $display_item['id'] ] = array(
 						'title'    => __( 'Previous claim', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1711,7 +1710,7 @@ class MinnPost_Membership_Admin {
 					);
 
 					$text_field_args['desc'] = 'This is displayed on an offer a user has just claimed.';
-					$settings[ $this_section . '_user_just_claimed_' . $display_item['id'] ]          = array(
+					$settings[ $this_section . '_user_just_claimed_' . $display_item['id'] ] = array(
 						'title'    => __( 'Claim success message', 'minnpost-membership' ),
 						'callback' => $text_field_type,
 						'page'     => $this_section,
@@ -1805,9 +1804,9 @@ class MinnPost_Membership_Admin {
 						'section'  => $this_section,
 						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 						'args'     => array(
-							'desc'     => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
-							'constant' => '',
-							'type'     => 'text',
+							'desc'          => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
+							'constant'      => '',
+							'type'          => 'text',
 							'rows'          => '5',
 							'media_buttons' => false,
 						),

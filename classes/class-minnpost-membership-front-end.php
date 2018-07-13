@@ -399,7 +399,7 @@ class MinnPost_Membership_Front_End {
 
 					// user has recently claimed. show that error message.
 					if ( '' !== $user_status_string && in_array( $user_status_string, $this->user_claimed_statuses ) ) {
-						$user_claim = isset( $this->content_items->get_user_offer_claims()[0] ) ? $this->content_items->get_user_offer_claims()[0] : null;
+						$user_claim           = isset( $this->content_items->get_user_offer_claims()[0] ) ? $this->content_items->get_user_offer_claims()[0] : null;
 						$offer_status_content = array_merge(
 							$this->get_result_message( $user_status, $benefit_name, $user_claim ),
 							$this->get_button_values( $user_status, $benefit_name )
@@ -1033,7 +1033,7 @@ class MinnPost_Membership_Front_End {
 		$can_redeem     = $user_access_data['can_redeem'];
 		$current_user   = $this->user_info->user_membership_info( $user_id );
 
-		$current_user['can_redeem']    = $can_redeem;
+		$current_user['can_redeem'] = $can_redeem;
 
 		$user_membership_info = array(
 			'member_level_prefix'  => $this->member_levels->member_level_prefix,
@@ -1130,7 +1130,7 @@ class MinnPost_Membership_Front_End {
 
 		// no logged in user
 		if ( 'not_logged_in' === $user_state ) {
-			$status = $user_state;
+			$status               = $user_state;
 			$offer_status_content = array_merge(
 				$this->get_result_message( $status, $benefit_name ),
 				$this->get_button_values( $status, $benefit_name )
@@ -1162,7 +1162,7 @@ class MinnPost_Membership_Front_End {
 			$status = 'not_claimable_yet';
 			$data   = array(
 				'claimable_start_date' => $post->claimable_start_date,
-				'claimable_end_date' => $post->claimable_end_date,
+				'claimable_end_date'   => $post->claimable_end_date,
 			);
 
 			$offer_status_content = array_merge(
@@ -1221,7 +1221,7 @@ class MinnPost_Membership_Front_End {
 		$claim_id = isset( $user_claim->ID ) ? (int) $user_claim->ID : 0;
 
 		// here we check to see if the user is eligible to claim this offer based on date of most recent previous claim
-		$how_often  = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
+		$how_often            = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
 		$next_claim           = strtotime( '+' . $how_often, $user_claim->user_claimed );
 		$next_claim_formatted = date_i18n( get_option( 'date_format' ), $next_claim );
 
@@ -1241,7 +1241,7 @@ class MinnPost_Membership_Front_End {
 			if ( $post_id === $claimed ) {
 				$user_claim_status['status'] = 'user_just_claimed';
 			} else {
-				$user_claim_status['status'] = 'user_previously_claimed';
+				$user_claim_status['status']                      = 'user_previously_claimed';
 				$user_claim_status['next_claim_eligibility_date'] = $next_claim_formatted;
 				$user_claim_status['claimed_date']                = $user_claim->user_claimed;
 			}
@@ -1295,7 +1295,7 @@ class MinnPost_Membership_Front_End {
 
 		switch ( $param ) {
 			case 'not_logged_in':
-				$button['button_value']  = wp_login_url( $_SERVER['REQUEST_URI'] );
+				$button['button_value'] = wp_login_url( $_SERVER['REQUEST_URI'] );
 				return $button;
 			case 'ineligible_user':
 				$button['button_class'] = 'a-button-disabled';
@@ -1380,7 +1380,7 @@ class MinnPost_Membership_Front_End {
 
 		switch ( $param ) {
 			case 'not_logged_in':
-				$message['message_class']  = 'm-benefit-message-info';
+				$message['message_class'] = 'm-benefit-message-info';
 				return $message;
 			case 'ineligible_user':
 				$message['message_class'] = 'm-benefit-message-error';
@@ -1451,7 +1451,7 @@ class MinnPost_Membership_Front_End {
 				$user_to      = $claiming_user->user_email;
 				$user_subject = get_option( $this->option_prefix . $benefit_name . '_subject_email', '' );
 
-				// handle wordpress formatting and make it email friendly
+				// handle WordPress formatting and make it email friendly
 				$user_body = wpautop( get_option( $this->option_prefix . $benefit_name . '_body_email', '' ) );
 				$user_body = str_replace( '<a href="', '<a style="color: #801019; text-decoration: none;" href="', $user_body );
 				$user_body = str_replace( '<p>', '<p style="font-family: Georgia, \'Times New Roman\', Times, serif; font-size: 16px; line-height: 20.787px; margin: 0 0 15px; padding: 0;">', $user_body );
@@ -1462,9 +1462,9 @@ class MinnPost_Membership_Front_End {
 				$user_body = str_replace( '$offer', $params['partner_offer']->post_title, $user_body );
 
 				$params['user_body'] = $user_body;
-				$user_message   = $this->get_template_html( 'claim-partner-offer-for-users', 'email', $params );
+				$user_message        = $this->get_template_html( 'claim-partner-offer-for-users', 'email', $params );
 			}
-			$user_mail = wp_mail( $user_to, $user_subject, $user_message );
+			$user_mail      = wp_mail( $user_to, $user_subject, $user_message );
 			$result['user'] = $user_mail;
 		}
 
@@ -1475,7 +1475,7 @@ class MinnPost_Membership_Front_End {
 				$admin_subject = 'Partner Offer Claim Alert';
 				$admin_message = $this->get_template_html( 'claim-partner-offer-for-admins', 'email', $params );
 			}
-			$admin_mail = wp_mail( $admin_to, $admin_subject, $admin_message );
+			$admin_mail      = wp_mail( $admin_to, $admin_subject, $admin_message );
 			$result['admin'] = $admin_mail;
 		}
 
@@ -1493,7 +1493,7 @@ class MinnPost_Membership_Front_End {
 		$current_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : $_SERVER['REQUEST_URI'];
 		if ( in_array( $current_url, $this->allowed_urls ) ) {
 			$benefit_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $current_url, '/' ) );
-			$from_email = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
+			$from_email   = get_option( $this->option_prefix . $benefit_name . '_email_sending_address_email', '' );
 		}
 		return $from_email;
 	}
@@ -1509,7 +1509,7 @@ class MinnPost_Membership_Front_End {
 		$current_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : $_SERVER['REQUEST_URI'];
 		if ( in_array( $current_url, $this->allowed_urls ) ) {
 			$benefit_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $current_url, '/' ) );
-			$from_name = get_option( $this->option_prefix . $benefit_name . '_email_sending_name_email', '' );
+			$from_name    = get_option( $this->option_prefix . $benefit_name . '_email_sending_name_email', '' );
 		}
 		return $from_name;
 	}
