@@ -93,7 +93,7 @@ $open_offers = array_filter(
 													<?php endif; ?>
 												</div>
 
-												<?php if ( 0 < $post->dated_instance_count ) : ?>
+												<?php if ( 0 < $post->unclaimed_instance_count  && 0 < $post->dated_instance_count ) : ?>
 													<select id="instance-id-<?php the_ID(); ?>" name="instance-id-<?php the_ID(); ?>">
 														<option value="">Select an option</option>
 		 												<?php foreach ( $post->instances as $key => $instance ) : ?>

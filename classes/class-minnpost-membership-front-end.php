@@ -419,6 +419,9 @@ class MinnPost_Membership_Front_End {
 							if ( isset( $claim_result['not-claimed'] ) ) {
 								$error_url = add_query_arg( 'not-claimed', $claim_result['not-claimed'], $error_url );
 							}
+							if ( isset( $claim_result['not-claimed-instance'] ) ) {
+								$error_url = add_query_arg( 'not-claimed-instance', $claim_result['not-claimed-instance'], $error_url );
+							}
 							wp_safe_redirect( site_url( $error_url ) );
 							exit;
 						} else {
@@ -496,9 +499,24 @@ class MinnPost_Membership_Front_End {
 		$instances     = $partner_offer->instances;
 
 		if ( is_array( $instances ) ) {
+			// check the selected instance for the user's claim
 			$this_instance = $instances[ $params['instance_id'] ];
+
+			// if this instance has a specific date that it can be used, don't give the user the next one automatically if it is already claimed
+			if ( isset( $this_instance['_mp_partner_offer_instance_date'] ) && isset( $this_instance['_mp_partner_offer_claimed_date'] ) && '' !== $this_instance['_mp_partner_offer_claimed_date'] ) {
+				$claim_result = array(
+					'status'               => 'error',
+					'param'                => 'user_tried_but_this_instance_claimed',
+					'not-claimed'          => $params['post_id'],
+					'not-claimed-instance' => $params['instance_id'],
+				);
+				return $claim_result;
+			}
+
+			// if the instance is already claimed, try to give the user the next instance
 			if ( isset( $this_instance['_mp_partner_offer_claimed_date'] ) && '' !== $this_instance['_mp_partner_offer_claimed_date'] ) {
 				$instance_key = '';
+				// and this is how. check all the instances until/unless there is an unclaimed one, and give the user that one
 				foreach ( $instances as $key => $instance ) {
 					if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) {
 						$instance_key = $key;
@@ -1122,10 +1140,14 @@ class MinnPost_Membership_Front_End {
 		// the url indicates errors
 		$errors = isset( $_GET['errors'] ) ? filter_var( $_GET['errors'], FILTER_SANITIZE_STRING ) : '';
 		if ( '' !== $errors ) {
-			$post_id     = (int) $post->ID;
-			$not_claimed = isset( $_GET['not-claimed'] ) ? (int) filter_var( $_GET['not-claimed'], FILTER_SANITIZE_STRING ) : 0;
+			$post_id              = (int) $post->ID;
+			$not_claimed          = isset( $_GET['not-claimed'] ) ? (int) filter_var( $_GET['not-claimed'], FILTER_SANITIZE_STRING ) : 0;
+			$not_claimed_instance = isset( $_GET['not-claimed-instance'] ) ? (int) filter_var( $_GET['not-claimed-instance'], FILTER_SANITIZE_STRING ) : '';
 			if ( $post_id === $not_claimed ) {
 				$status = $errors;
+			}
+			if ( '' !== $not_claimed_instance ) {
+				$data['not-claimed-instance'] = $instances[ $not_claimed_instance ];
 			}
 		}
 
@@ -1305,6 +1327,9 @@ class MinnPost_Membership_Front_End {
 				$button['button_class'] = 'a-button-disabled';
 				$button['button_attr']  = 'disabled';
 				return $button;
+			case 'user_tried_but_this_instance_claimed':
+				$button['button_value'] = get_the_ID();
+				return $button;
 			default:
 				return $button;
 		}
@@ -1382,6 +1407,11 @@ class MinnPost_Membership_Front_End {
 				return $message;
 			case 'user_tried_but_all_claimed':
 				$message['message_class'] = 'm-benefit-message-error';
+				return $message;
+			case 'user_tried_but_this_instance_claimed':
+				$message['message_class'] = 'm-benefit-message-error';
+				$instance_date            = date_i18n( get_option( 'date_format' ), $data['not-claimed-instance']['_mp_partner_offer_instance_date'] ) . ' @ ' . date_i18n( get_option( 'time_format' ), $data['not-claimed-instance']['_mp_partner_offer_instance_date'] );
+				$message['message']       = str_replace( '$date', $instance_date, $message['message'] );
 				return $message;
 			default:
 				return $message;
