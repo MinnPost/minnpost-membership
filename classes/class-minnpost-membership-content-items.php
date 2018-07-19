@@ -57,6 +57,7 @@ class MinnPost_Membership_Content_Items {
 		add_action( 'admin_menu', array( $this, 'create_sub_menus' ), 20 );
 		add_filter( 'enter_title_here', array( $this, 'title_placeholders' ), 10, 1 );
 		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
+		add_action( 'admin_menu', array( $this, 'remove_partner_offer_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
 	}
 
@@ -240,6 +241,16 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
+	* Remove unneeded default partner offer fields
+	*
+	*/
+	public function remove_partner_offer_fields() {
+		$object_type = 'partner_offer';
+		// cmb2 replaces this
+		remove_meta_box( 'pageparentdiv', $object_type, 'normal' );
+	}
+
+	/**
 	* Create the partner offer fields with CMB2
 	*
 	*/
@@ -248,7 +259,6 @@ class MinnPost_Membership_Content_Items {
 		$prefix      = '_mp_partner_offer_';
 
 		// set partner for the partner offer
-		remove_meta_box( 'pageparentdiv', $object_type, 'normal' );
 		$partner_box = new_cmb2_box( array(
 			'id'           => $prefix . 'parent',
 			'title'        => 'Partner',
