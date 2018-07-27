@@ -975,10 +975,10 @@ class MinnPost_Membership_Admin {
 					'page'     => 'campaigns',
 					'section'  => 'campaigns',
 					'args'     => array(
-						'desc'     => '',
+						'desc'     => 'Enter each campaign ID that needs its own settings on a separate line.',
 						'constant' => '',
-						'rows'     => 5,
-						'cols'     => '',
+						'rows'     => 10,
+						'cols'     => 30,
 					),
 				),
 			);
@@ -998,6 +998,7 @@ class MinnPost_Membership_Admin {
 							'callback' => $callbacks['text'],
 							'page'     => $key,
 							'section'  => $key,
+							'class'    => 'minnpost-membership-campaign-title',
 							'args'     => array(
 								'desc'     => '',
 								'constant' => '',
@@ -1014,7 +1015,7 @@ class MinnPost_Membership_Admin {
 								'desc'          => '',
 								'constant'      => '',
 								'type'          => 'text',
-								'rows'          => '5',
+								'rows'          => '8',
 								'media_buttons' => false,
 							),
 						);

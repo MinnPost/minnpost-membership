@@ -63,6 +63,14 @@ $vertical-space: 15px;
 	background: #f1f1f1;
 }
 
+.minnpost-membership-campaign-title {
+	td {
+		input[type="text"] {
+			width: 100%;
+		}
+	}
+}
+
 .minnpost-member-field-user-state-toggle, .minnpost-member-field-display-item-toggle {
 	th {
 		display: none;
