@@ -337,17 +337,11 @@ class MinnPost_Membership_Admin {
 	*/
 	private function general_settings( $page, $callbacks ) {
 		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+
 			$sections = $this->get_admin_pages()[ $page ]['sections'];
 			if ( ! empty( $sections ) ) {
 				foreach ( $sections as $key => $value ) {
-					//if ( $key === $page ) {
-					//	$title = $value;
-					//}
-					//$section = $key;
-					//echo 'section is ' . $section;
-					$section = $key;
-					$title   = $value;
-					add_settings_section( $section, $title, null, $page );
+					add_settings_section( $key, $value, null, $page );
 				}
 			} else {
 				$section = $page;
