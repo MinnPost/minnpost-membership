@@ -199,6 +199,8 @@ class MinnPost_Membership_Admin {
 							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '' );
 						}
 
+						$benefits = '';
+
 						if ( isset( $member_level ) && is_array( $member_level ) ) {
 							$name                   = $member_level['name'];
 							$is_nonmember           = isset( $member_level['is_nonmember'] ) ? intval( $member_level['is_nonmember'] ) : '';

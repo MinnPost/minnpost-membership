@@ -16,7 +16,7 @@
 			<h3><?php echo esc_html__( 'Current member levels', 'minnpost-membership' ); ?> <a class="page-title-action" href="<?php echo esc_url( get_admin_url( null, 'admin.php?page=' . $page . '&method=add-member-level' ) ); ?>"><?php echo esc_html__( 'Add New', 'minnpost-membership' ); ?></a></h3>
 
 			<?php
-			$all_member_levels = $this->member_levels->get_member_levels( '', true );
+			$all_member_levels = $this->member_levels->get_member_levels( '', true, 'id', true );
 			if ( ! empty( $all_member_levels ) ) :
 			?>
 				<?php foreach ( $all_member_levels as $key => $record ) : ?>
@@ -26,7 +26,11 @@
 							<h4><?php echo esc_html( $record['name'] ); ?></h4>
 
 							<?php
-							$default_frequency = get_option( $this->option_prefix . 'default_frequency', '' )[0];
+							if ( '' !== get_option( $this->option_prefix . 'default_frequency', '' ) ) {
+								$default_frequency = get_option( $this->option_prefix . 'default_frequency', '' )[0];
+							} else {
+								$default_frequency = '';
+							}
 							$default_amount    = $record['starting_value'];
 
 							?>

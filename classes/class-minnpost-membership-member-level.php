@@ -174,9 +174,11 @@ class MinnPost_Membership_Member_Level {
 	*
 	*/
 	public function calculate_ranges( $record = '' ) {
+		if ( '' === get_option( $this->option_prefix . 'default_frequency', '' ) ) {
+			return;
+		}
 		$default_frequency = $this->get_frequency_values( get_option( $this->option_prefix . 'default_frequency', '' )[0] );
-
-		if ( 1 === $record['minimum_monthly_amount'] ) {
+		if ( 1 === $record['minimum_monthly_amount'] && '' !== $record['maximum_monthly_amount'] ) {
 			$record['maximum_monthly_amount'] = $record['maximum_monthly_amount'] + 1;
 		}
 
