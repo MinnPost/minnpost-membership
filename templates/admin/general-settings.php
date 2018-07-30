@@ -1,7 +1,12 @@
 <div id="main" class="minnpost-membership-general-settings">
 	<form method="post" action="options.php">
 		<?php
-		settings_fields( 'member_levels' ) . settings_fields( 'more_settings' ) . do_settings_sections( $this->slug . '-settings' );
+		if ( ! empty( $tabs ) && true === $this->pages[ $page ]['use_tabs'] ) {
+			settings_fields( $tab ) . do_settings_sections( $tab );
+		} else {
+			settings_fields( $page );
+			do_settings_sections( $page );
+		}
 		?>
 		<?php submit_button( __( 'Save settings', 'minnpost-membership' ) ); ?>
 	</form>
