@@ -297,7 +297,7 @@ class MinnPost_Membership_User_Info {
 
 		// by default, we should assume the user is a non member
 		$highest_user_role_key = array_search( '1', array_column( $this->all_member_levels, 'is_nonmember' ) );
-		if ( '' === $highest_user_role_key ) {
+		if ( empty( $this->all_member_levels ) ) {
 			return;
 		}
 		$user_member_level = $this->all_member_levels[ $highest_user_role_key ];
