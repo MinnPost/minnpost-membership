@@ -516,6 +516,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -758,6 +759,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -994,7 +996,7 @@ class MinnPost_Membership_Admin {
 							'callback' => $callbacks['text'],
 							'page'     => $key,
 							'section'  => $key,
-							'class'    => 'minnpost-membership-campaign-title',
+							'class'    => 'minnpost-membership-title-field',
 							'args'     => array(
 								'desc'     => '',
 								'constant' => '',
@@ -1103,6 +1105,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1279,6 +1282,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1431,6 +1435,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1548,6 +1553,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
@@ -1833,6 +1839,7 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
 				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
 				'args'     => array(
 					'desc'     => '',
 					'constant' => '',
