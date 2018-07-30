@@ -2095,7 +2095,6 @@ class MinnPost_Membership_Admin {
 				'callback' => $callbacks['text'],
 				'page'     => $page,
 				'section'  => $this_section,
-				'class'    => 'minnpost-member-field minnpost-member-field-user-state-toggle',
 				'args'     => array(
 					'type'     => 'text',
 					'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
