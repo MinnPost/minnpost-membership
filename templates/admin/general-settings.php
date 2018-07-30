@@ -1,4 +1,4 @@
-<div class="minnpost-membership-general-settings">
+<div id="main" class="minnpost-membership-general-settings">
 	<form method="post" action="options.php">
 		<?php
 		settings_fields( 'member_levels' ) . settings_fields( 'more_settings' ) . do_settings_sections( $this->slug . '-settings' );
