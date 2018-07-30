@@ -2270,7 +2270,7 @@ class MinnPost_Membership_Admin {
 	*
 	*/
 	private function get_member_level_options() {
-		$member_levels = $this->member_levels->get_member_levels();
+		$member_levels = $this->member_levels->get_member_levels( '', false, 'id', true );
 		$options       = array();
 		foreach ( $member_levels as $member_level ) {
 			$options[] = array(
