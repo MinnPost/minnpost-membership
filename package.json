@@ -1,6 +1,6 @@
 {
   "name": "minnpost-membership",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Handle membership UX for MinnPost",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/MinnPost/minnpost-membership#readme",
   "dependencies": {
-    "autoprefixer": "^9.0.1",
+    "autoprefixer": "^9.1.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "browser-sync": "^2.24.6",
@@ -32,7 +32,7 @@
     "gulp-imagemin": "^4.1.0",
     "gulp-notify": "~3",
     "gulp-plumber": "~1",
-    "gulp-postcss": "~7",
+    "gulp-postcss": "~8",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "~4",
     "gulp-sass-lint": "^1.4.0",
@@ -43,9 +43,9 @@
     "gulp-uglify": "^3.0.1",
     "gulp-util": "~3",
     "gulp-wp-pot": "^2.3.2",
-    "npm": "^6.2.0",
+    "npm": "^6.3.0",
     "npm-check-updates": "^2.14.2",
-    "webpack": "^4.16.2"
+    "webpack": "^4.16.5"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0"
