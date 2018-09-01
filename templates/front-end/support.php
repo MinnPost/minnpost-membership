@@ -50,7 +50,7 @@ $user_id    = get_current_user_id();
 
 					<?php if ( ! empty( $_GET['errors'] ) ) : ?>
 						<div class="m-form-message m-form-message-error">
-							<p><?php echo $minnpost_membership->front_end->get_error_message( $_GET['errors'] ); ?></p>
+							<p><?php echo $minnpost_membership->front_end->get_result_message( $_GET['errors'] ); ?></p>
 						</div>
 					<?php endif; ?>
 
