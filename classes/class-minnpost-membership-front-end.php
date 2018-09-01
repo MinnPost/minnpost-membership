@@ -1371,14 +1371,19 @@ class MinnPost_Membership_Front_End {
 			return $message;
 		}
 		*/
-		$benefit_name = 'account-benefits-' . $benefit_name;
+		if ( '' !== $benefit_name ) {
+			$benefit_name = 'account-benefits-' . $benefit_name . '_';
+		}
 
 		$message = array(
-			'message'       => get_option( $this->option_prefix . $benefit_name . '_' . $param . '_status_message', '' ),
+			'message'       => get_option( $this->option_prefix . $benefit_name . $param . '_status_message', '' ),
 			'message_class' => '',
 		);
 
 		switch ( $param ) {
+			case 'empty_amount':
+				$message['message_class'] = 'm-benefit-message-error';
+				return $message;
 			case 'not_logged_in':
 				$message['message_class'] = 'm-benefit-message-info';
 				return $message;

@@ -57,7 +57,7 @@ global $minnpost_membership;
 								<section class="o-membership-member-levels">
 									<?php if ( ! empty( $_GET['errors'] ) ) : ?>
 									<div class="m-form-message m-form-message-error">
-										<p><?php echo $minnpost_membership->front_end->get_result_message( $_GET['errors'] ); ?></p>
+										<p><?php echo $minnpost_membership->front_end->get_result_message( $_GET['errors'] )['message']; ?></p>
 									</div>
 								<?php endif; ?>
 									<?php foreach ( $all_member_levels as $key => $record ) : ?>

@@ -474,7 +474,7 @@ class MinnPost_Membership_Admin {
 			}
 
 			$settings = array(
-				'payment_urls'          => array(
+				'payment_urls'                => array(
 					'title'    => __( 'Payment URLs', 'minnpost-membership' ),
 					'callback' => $callbacks['textarea'],
 					'page'     => 'payment_pages',
@@ -486,7 +486,7 @@ class MinnPost_Membership_Admin {
 						'cols'     => '',
 					),
 				),
-				'payment_processor_url' => array(
+				'payment_processor_url'       => array(
 					'title'    => __( 'Payment processor URL', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'payment_pages',
@@ -495,6 +495,17 @@ class MinnPost_Membership_Admin {
 						'type'     => 'text',
 						'desc'     => '',
 						'constant' => 'PAYMENT_PROCESSOR_URL',
+					),
+				),
+				'empty_amount_status_message' => array(
+					'title'    => __( 'Error message for missing amount', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'payment_pages',
+					'section'  => 'payment_pages',
+					'args'     => array(
+						'desc'     => '',
+						'constant' => '',
+						'type'     => 'text',
 					),
 				),
 			);
