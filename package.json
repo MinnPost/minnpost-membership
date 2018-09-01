@@ -1,6 +1,6 @@
 {
   "name": "minnpost-membership",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Handle membership UX for MinnPost",
   "repository": {
     "type": "git",
@@ -49,8 +49,5 @@
     "npm": "^6.4.0",
     "npm-check-updates": "^2.14.2",
     "webpack": "^4.17.1"
-  },
-  "devDependencies": {
-    "babel-preset-env": "^1.7.0"
   }
 }
