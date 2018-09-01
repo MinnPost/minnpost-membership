@@ -110,6 +110,7 @@ class MinnPost_Membership_Front_End {
 			$query->set( 'is_archive', false );
 			$query->set( 'is_category', false );
 			$query->set( 'is_home', false );
+			$query->is_home = false;
 		}
 	}
 
