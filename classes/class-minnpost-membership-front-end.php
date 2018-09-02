@@ -246,6 +246,7 @@ class MinnPost_Membership_Front_End {
 			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 			if ( '' !== $redirect_url ) {
 
+				$params = array();
 				// do we already know who this user is?
 				$user = wp_get_current_user();
 				if ( isset( $user->first_name ) && '' !== $user->first_name ) {
