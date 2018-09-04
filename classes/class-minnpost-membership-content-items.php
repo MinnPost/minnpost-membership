@@ -59,6 +59,7 @@ class MinnPost_Membership_Content_Items {
 		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
 		add_action( 'admin_menu', array( $this, 'remove_partner_offer_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
+		add_filter( 'pre_get_posts', array( $this, 'membership_content_default_order' ), 10, 1 );
 	}
 
 	/**
@@ -114,6 +115,23 @@ class MinnPost_Membership_Content_Items {
 			'capability_type'     => 'page',
 		);
 		register_post_type( 'partner', $args );
+	}
+
+	/**
+	* Set the admin sort order for custom post types created by this plugin
+	*
+	* @param object $query
+	* @return object $query
+	*
+	*/
+	public function membership_content_default_order( $query ) {
+		if ( $query->is_admin ) {
+			if ( 'partner_offer' === $query->get( 'post_type' ) || 'partner' === $query->get( 'post_type' ) ) {
+				$query->set( 'orderby', 'date' );
+				$query->set( 'order', 'DESC' );
+			}
+		}
+		return $query;
 	}
 
 	/**
