@@ -600,7 +600,7 @@ class MinnPost_Membership_Content_Items {
 
 		global $wpdb;
 
-		$now = current_time( 'timestamp', 1 );
+		$now = current_time( 'timestamp' );
 		//$now = date( 'Y-m-d', strtotime( '-1 month' ) );
 		//$now = date( 'Y-m-d', strtotime( '+1 month' ) );
 
@@ -729,7 +729,9 @@ class MinnPost_Membership_Content_Items {
 				$oldest_eligible_date = strtotime( '-' . $how_often, current_time( 'timestamp' ) );
 				if ( isset( $instance['_mp_partner_offer_claimed_date'] ) && $instance['_mp_partner_offer_claimed_date'] < $oldest_eligible_date ) {
 					continue;
-				} elseif ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] || get_current_user_id() !== (int) $instance['_mp_partner_offer_claim_user']['id'] ) {
+				} elseif ( ! isset( $instance['_mp_partner_offer_claim_user'] ) ) {
+					continue;
+				} elseif ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] || ( get_current_user_id() !== (int) $instance['_mp_partner_offer_claim_user']['id'] ) ) {
 					continue;
 				} else {
 					$partner_offer->user_claimed = $instance['_mp_partner_offer_claimed_date'];
