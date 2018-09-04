@@ -600,7 +600,7 @@ class MinnPost_Membership_Content_Items {
 
 		global $wpdb;
 
-		$now = current_time( 'mysql' );
+		$now = current_time( 'timestamp', 1 );
 		//$now = date( 'Y-m-d', strtotime( '-1 month' ) );
 		//$now = date( 'Y-m-d', strtotime( '+1 month' ) );
 
@@ -620,7 +620,7 @@ class MinnPost_Membership_Content_Items {
 
 			instance.meta_value as instances,
 
-			IF(%s BETWEEN FROM_UNIXTIME(claimable_start_date.meta_value) AND FROM_UNIXTIME(claimable_end_date.meta_value), true, false) as claimable
+			IF(%s BETWEEN claimable_start_date.meta_value AND claimable_end_date.meta_value, true, false) as claimable
 
 			FROM {$wpdb->prefix}posts offer
 
