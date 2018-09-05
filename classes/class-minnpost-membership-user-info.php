@@ -50,6 +50,9 @@ class MinnPost_Membership_User_Info {
 		$can_see_blocked_content       = array( 'administrator', 'editor', 'business' );
 		$this->can_see_blocked_content = apply_filters( 'minnpost_membership_can_see_blocked_content', $can_see_blocked_content );
 
+		$capability_blocked_content       = 'access_blocked_content';
+		$this->capability_blocked_content = apply_filters( 'minnpost_membership_capability_blocked_content', $capability_blocked_content );
+
 		// eligibility possibilities. we can hardcode these.
 		$this->eligibility_states = $this->get_eligibility_states();
 		// include the non member level for this purpose
@@ -176,7 +179,7 @@ class MinnPost_Membership_User_Info {
 			$all_user_roles = $user_info->roles;
 
 			$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
-			if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
+			if ( ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) || user_can( $user_id, $this->capability_blocked_content ) ) {
 				$can_access = true;
 				$user_state = 'member_eligible';
 				$super_user = true;
@@ -233,7 +236,7 @@ class MinnPost_Membership_User_Info {
 			$all_user_roles = $user_info->roles;
 
 			$can_user_see_everything = array_intersect( $this->can_see_blocked_content, $all_user_roles );
-			if ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) {
+			if ( ( is_array( $can_user_see_everything ) && ! empty( $can_user_see_everything ) ) || user_can( $user_id, $this->capability_blocked_content ) ) {
 				$can_redeem = true;
 				$user_state = 'member_eligible';
 				// if debug is on, act like a normal user instead of a super user
