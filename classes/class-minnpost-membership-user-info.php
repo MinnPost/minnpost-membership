@@ -314,11 +314,12 @@ class MinnPost_Membership_User_Info {
 		$user_roles = $user_info->roles;
 
 		if ( is_array( $user_roles ) && ! empty( $user_roles ) ) {
-			$role_intersect         = array_intersect( array_column( $this->all_member_levels, 'slug' ), $user_roles );
-			$highest_user_role_name = max( $role_intersect );
-			$highest_user_role_key  = max( array_keys( $role_intersect ) );
-
-			$user_member_level           = $this->all_member_levels[ $highest_user_role_key ];
+			$role_intersect = array_intersect( array_column( $this->all_member_levels, 'slug' ), $user_roles );
+			if ( ! empty( $role_intersect ) ) {
+				$highest_user_role_name = max( $role_intersect );
+				$highest_user_role_key  = max( array_keys( $role_intersect ) );
+				$user_member_level      = $this->all_member_levels[ $highest_user_role_key ];
+			}
 			$user_member_level['number'] = $highest_user_role_key;
 		}
 
