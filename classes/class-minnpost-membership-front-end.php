@@ -230,7 +230,7 @@ class MinnPost_Membership_Front_End {
 			$title_path   = preg_replace( '/[\W\s\/]+/', '-', ltrim( $path, '/' ) );
 			$title_option = get_option( $this->option_prefix . $title_path . '_title', '' );
 			if ( '' !== $title_option ) {
-				$title['title'] = $title_option . ' | ' . get_bloginfo( 'name' );
+				$title['title'] = $title_option;
 			}
 		}
 		return $title;
