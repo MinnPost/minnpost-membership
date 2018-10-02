@@ -981,6 +981,9 @@ class MinnPost_Membership_Front_End {
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_settings', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			) );
+			if ( ! wp_script_is( 'jquery', 'done' ) ) {
+				wp_enqueue_script( 'jquery' );
+			}
 			wp_add_inline_script( $this->slug . '-front-end', "
 				jQuery(document).ready(function ($) {
 					$('.m-form-membership').minnpostMembership();
