@@ -274,8 +274,8 @@ class MinnPost_Membership_User_Info {
 
 		$user_info = get_userdata( $user_id );
 
-		$user_membership_info['member_level']        = $this->user_member_level( $user_id )['slug'];
-		$user_membership_info['member_level_number'] = $this->user_member_level( $user_id )['number'];
+		$user_membership_info['member_level']        = isset( $this->user_member_level( $user_id )['slug'] ) ? $this->user_member_level( $user_id )['slug'] : '';
+		$user_membership_info['member_level_number'] = isset( $this->user_member_level( $user_id )['number'] ) ? $this->user_member_level( $user_id )['number'] : 0;
 
 		// i do not think these are the ideal fields, but for now we'll keep them
 		$user_membership_info['previous_amount'] = array(
