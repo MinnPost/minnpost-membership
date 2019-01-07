@@ -13,7 +13,7 @@
     },
     "autoload"    : {
       "files": [
-        "vendor/webdevstudios/cmb2/init.php"
+        "vendor/cmb2/cmb2/init.php"
       ]
     },
     "extra": {
