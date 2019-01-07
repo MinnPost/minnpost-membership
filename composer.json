@@ -9,7 +9,7 @@
     ],
     "require": {
         "brain/cortex": "~1.0.0",
-        "webdevstudios/cmb2": "^2.4.2"
+        "cmb2/cmb2": "^2.5.1"
     },
     "autoload"    : {
       "files": [
@@ -18,7 +18,7 @@
     },
     "extra": {
       "installer-paths": {
-        "vendor/webdevstudios/cmb2": ["webdevstudios/cmb2"]
+        "vendor/cmb2/cmb2": ["cmb2/cmb2"]
       }
     },
     "minimum-stability": "dev"
