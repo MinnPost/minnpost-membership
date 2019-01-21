@@ -107,10 +107,12 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function set_query_properties( $query ) {
 		if ( ! is_admin() && isset( $query->query['is_membership'] ) && true === $query->query['is_membership'] ) {
-			$query->set( 'is_archive', false );
-			$query->set( 'is_category', false );
-			$query->set( 'is_home', false );
-			$query->is_home = false;
+			if ( $query->is_main_query() ) {
+				$query->set( 'is_archive', false );
+				$query->set( 'is_category', false );
+				$query->set( 'is_home', false );
+				$query->is_home = false;
+			}
 		}
 	}
 
@@ -124,22 +126,24 @@ class MinnPost_Membership_Front_End {
 		}
 		Brain\Cortex::boot();
 		add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
-			foreach ( $this->allowed_urls as $url ) {
-				$routes->addRoute( new QueryRoute(
-					$url,
-					function ( array $matches, $this_url ) {
-						// send this object to the template so it can be called
-						global $minnpost_membership;
-						$minnpost_membership = MinnPost_Membership::get_instance();
-						// set a query var so we can filter it
-						$query = array(
-							'is_membership'  => true,
-							'membership_url' => implode( '-', $this_url->chunks() ),
-						);
-						return $query;
-					},
-					[ 'template' => $this->get_template_for_url( $url ) ]
-				));
+			if ( '' !== $this->allowed_urls ) {
+				foreach ( $this->allowed_urls as $url ) {
+					$routes->addRoute( new QueryRoute(
+						$url,
+						function ( array $matches, $this_url ) {
+							// send this object to the template so it can be called
+							global $minnpost_membership;
+							$minnpost_membership = MinnPost_Membership::get_instance();
+							// set a query var so we can filter it
+							$query = array(
+								'is_membership'  => true,
+								'membership_url' => implode( '-', $this_url->chunks() ),
+							);
+							return $query;
+						},
+						[ 'template' => $this->get_template_for_url( $url ) ]
+					));
+				}
 			}
 		});
 	}
@@ -225,7 +229,7 @@ class MinnPost_Membership_Front_End {
 	*
 	*/
 	public function set_wp_title( $title ) {
-		$path = rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' );
+		$path = rtrim( wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' );
 		if ( in_array( $path, $this->allowed_urls ) ) {
 			$title_path   = preg_replace( '/[\W\s\/]+/', '-', ltrim( $path, '/' ) );
 			$title_option = get_option( $this->option_prefix . $title_path . '_title', '' );

@@ -1,4 +1,4 @@
-# Copyright (C) 2018 minnpost-membership
+# Copyright (C) 2019 minnpost-membership
 # This file is distributed under the same license as the minnpost-membership package.
 msgid ""
 msgstr ""
@@ -356,279 +356,279 @@ msgstr ""
 msgid "Defined in wp-config.php"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:71
+#: classes/class-minnpost-membership-content-items.php:72
 msgctxt "Post Type General Name"
 msgid "Partners"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:72
+#: classes/class-minnpost-membership-content-items.php:73
 msgctxt "Post Type Singular Name"
 msgid "Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:73, templates/admin/benefit-content-partner-offers.php:3
+#: classes/class-minnpost-membership-content-items.php:74, templates/admin/benefit-content-partner-offers.php:3
 msgid "Partners"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:74, classes/class-minnpost-membership-content-items.php:100
+#: classes/class-minnpost-membership-content-items.php:75, classes/class-minnpost-membership-content-items.php:101
 msgid "Partner"
-msgstr ""
-
-#: classes/class-minnpost-membership-content-items.php:75
-msgid "Partner Archives"
 msgstr ""
 
 #: classes/class-minnpost-membership-content-items.php:76
-msgid "Partner Attributes"
+msgid "Partner Archives"
 msgstr ""
 
 #: classes/class-minnpost-membership-content-items.php:77
-msgid "Parent Partner:"
+msgid "Partner Attributes"
 msgstr ""
 
 #: classes/class-minnpost-membership-content-items.php:78
+msgid "Parent Partner:"
+msgstr ""
+
+#: classes/class-minnpost-membership-content-items.php:79
 msgid "All Partners"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:79, templates/admin/benefit-content-partner-offers.php:3
+#: classes/class-minnpost-membership-content-items.php:80, templates/admin/benefit-content-partner-offers.php:3
 msgid "Add New Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:80, classes/class-minnpost-membership-content-items.php:135, templates/admin/general-settings.php:16
+#: classes/class-minnpost-membership-content-items.php:81, classes/class-minnpost-membership-content-items.php:153, templates/admin/general-settings.php:16
 msgid "Add New"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:81
+#: classes/class-minnpost-membership-content-items.php:82
 msgid "New Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:82
+#: classes/class-minnpost-membership-content-items.php:83
 msgid "Edit Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:83
+#: classes/class-minnpost-membership-content-items.php:84
 msgid "Update Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:84
+#: classes/class-minnpost-membership-content-items.php:85
 msgid "View Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:85
+#: classes/class-minnpost-membership-content-items.php:86
 msgid "View Partners"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:86
+#: classes/class-minnpost-membership-content-items.php:87
 msgid "Search Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:87, classes/class-minnpost-membership-content-items.php:142
+#: classes/class-minnpost-membership-content-items.php:88, classes/class-minnpost-membership-content-items.php:160
 msgid "Not found"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:88, classes/class-minnpost-membership-content-items.php:143
+#: classes/class-minnpost-membership-content-items.php:89, classes/class-minnpost-membership-content-items.php:161
 msgid "Not found in Trash"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:89, classes/class-minnpost-membership-content-items.php:144
+#: classes/class-minnpost-membership-content-items.php:90, classes/class-minnpost-membership-content-items.php:162
 msgid "Featured Image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:90, classes/class-minnpost-membership-content-items.php:145
+#: classes/class-minnpost-membership-content-items.php:91, classes/class-minnpost-membership-content-items.php:163
 msgid "Set featured image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:91, classes/class-minnpost-membership-content-items.php:146
+#: classes/class-minnpost-membership-content-items.php:92, classes/class-minnpost-membership-content-items.php:164
 msgid "Remove featured image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:92, classes/class-minnpost-membership-content-items.php:147
+#: classes/class-minnpost-membership-content-items.php:93, classes/class-minnpost-membership-content-items.php:165
 msgid "Use as featured image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:93
+#: classes/class-minnpost-membership-content-items.php:94
 msgid "Insert into partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:94
+#: classes/class-minnpost-membership-content-items.php:95
 msgid "Uploaded to this partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:95
+#: classes/class-minnpost-membership-content-items.php:96
 msgid "Partners list"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:96
+#: classes/class-minnpost-membership-content-items.php:97
 msgid "Partners list navigation"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:97
+#: classes/class-minnpost-membership-content-items.php:98
 msgid "Filter partners list"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:101
+#: classes/class-minnpost-membership-content-items.php:102
 msgid "Partner organizations that can provide offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:126
+#: classes/class-minnpost-membership-content-items.php:144
 msgctxt "Post Type General Name"
 msgid "Partner Offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:127
+#: classes/class-minnpost-membership-content-items.php:145
 msgctxt "Post Type Singular Name"
 msgid "Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:128
+#: classes/class-minnpost-membership-content-items.php:146
 msgid "Partner Offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:129
+#: classes/class-minnpost-membership-content-items.php:147
 msgid "Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:130
+#: classes/class-minnpost-membership-content-items.php:148
 msgid "Partner Offer Archives"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:131
+#: classes/class-minnpost-membership-content-items.php:149
 msgid "Partner Offer Attributes"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:132
+#: classes/class-minnpost-membership-content-items.php:150
 msgid "Parent Partner Offer:"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:133
+#: classes/class-minnpost-membership-content-items.php:151
 msgid "All Partner Offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:134
+#: classes/class-minnpost-membership-content-items.php:152
 msgid "Add New Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:136
+#: classes/class-minnpost-membership-content-items.php:154
 msgid "New Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:137
+#: classes/class-minnpost-membership-content-items.php:155
 msgid "Edit Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:138
+#: classes/class-minnpost-membership-content-items.php:156
 msgid "Update Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:139
+#: classes/class-minnpost-membership-content-items.php:157
 msgid "View Partner Offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:140
+#: classes/class-minnpost-membership-content-items.php:158
 msgid "View Partner Offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:141
+#: classes/class-minnpost-membership-content-items.php:159
 msgid "Search Partner Offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:148
+#: classes/class-minnpost-membership-content-items.php:166
 msgid "Insert into partner offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:149
+#: classes/class-minnpost-membership-content-items.php:167
 msgid "Uploaded to this partner offer"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:150
+#: classes/class-minnpost-membership-content-items.php:168
 msgid "Partner Offers list"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:151
+#: classes/class-minnpost-membership-content-items.php:169
 msgid "Partner Offers list navigation"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:152
+#: classes/class-minnpost-membership-content-items.php:170
 msgid "Filter partner offers list"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:196
+#: classes/class-minnpost-membership-content-items.php:214
 msgid "Enter partner name here"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:199
+#: classes/class-minnpost-membership-content-items.php:217
 msgid "Enter offer/event name here"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:215
+#: classes/class-minnpost-membership-content-items.php:233
 msgid "Partner Fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:219, templates/admin/partner-add-edit.php:24
+#: classes/class-minnpost-membership-content-items.php:237, templates/admin/partner-add-edit.php:24
 msgid "Link URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:225
+#: classes/class-minnpost-membership-content-items.php:243
 msgid "Logo Image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:226
+#: classes/class-minnpost-membership-content-items.php:244
 msgid "Upload an image or enter an URL."
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:287
+#: classes/class-minnpost-membership-content-items.php:305
 msgid "Choose Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:298
+#: classes/class-minnpost-membership-content-items.php:316
 msgid "Offer fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:304
+#: classes/class-minnpost-membership-content-items.php:322
 msgid "Quantity"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:312
+#: classes/class-minnpost-membership-content-items.php:330
 msgid "Type"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:320
+#: classes/class-minnpost-membership-content-items.php:338
 msgid "Restriction"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:348
+#: classes/class-minnpost-membership-content-items.php:366
 msgid "More info fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:354
+#: classes/class-minnpost-membership-content-items.php:372
 msgid "Text"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:362
+#: classes/class-minnpost-membership-content-items.php:380
 msgid "URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:372
+#: classes/class-minnpost-membership-content-items.php:390
 msgid "Claimable dates"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:406
+#: classes/class-minnpost-membership-content-items.php:424
 msgid "Instance {#}"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:407
+#: classes/class-minnpost-membership-content-items.php:425
 msgid "Add Another Instance"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:408
+#: classes/class-minnpost-membership-content-items.php:426
 msgid "Remove Instance"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:422
+#: classes/class-minnpost-membership-content-items.php:440
 msgid "Instance date"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:429
+#: classes/class-minnpost-membership-content-items.php:447
 msgid "Claimed date"
 msgstr ""
 
@@ -644,19 +644,19 @@ msgstr ""
 msgid "one-time"
 msgstr ""
 
-#: classes/class-minnpost-membership-user-info.php:80
+#: classes/class-minnpost-membership-user-info.php:83
 msgid "Not logged in"
 msgstr ""
 
-#: classes/class-minnpost-membership-user-info.php:81
+#: classes/class-minnpost-membership-user-info.php:84
 msgid "Logged in non-member"
 msgstr ""
 
-#: classes/class-minnpost-membership-user-info.php:82
+#: classes/class-minnpost-membership-user-info.php:85
 msgid "Member not eligible"
 msgstr ""
 
-#: classes/class-minnpost-membership-user-info.php:83
+#: classes/class-minnpost-membership-user-info.php:86
 msgid "Member eligible"
 msgstr ""
 
