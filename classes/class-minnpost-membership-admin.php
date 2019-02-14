@@ -97,7 +97,7 @@ class MinnPost_Membership_Admin {
 	*/
 	private function get_admin_pages() {
 		$pages = array(
-			$this->slug . '-settings'          => array(
+			$this->slug . '-settings'           => array(
 				'title'    => __( 'General Settings', 'minnpost-membership' ),
 				'sections' => array(
 					'member_levels' => __( 'Member levels', 'minnpost-membership' ),
@@ -105,27 +105,35 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
-			$this->slug . '-taking-payments'   => array(
+			$this->slug . '-taking-payments'    => array(
 				'title'    => __( 'Taking Payments', 'minnpost-membership' ),
 				'sections' => $this->setup_payment_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-campaign-settings' => array(
+			$this->slug . '-managing-donations' => array(
+				'title'    => __( 'Managing Donations', 'minnpost-membership' ),
+				'sections' => array(
+					'donations'        => __( 'Active/Pending Donations', 'minnpost-membership' ),
+					'donation_history' => __( 'Donation History', 'minnpost-membership' ),
+				),
+				'use_tabs' => true,
+			),
+			$this->slug . '-campaign-settings'  => array(
 				'title'    => __( 'Campaign Settings', 'minnpost-membership' ),
 				'sections' => $this->setup_campaign_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-explain-benefits'  => array(
+			$this->slug . '-explain-benefits'   => array(
 				'title'    => __( 'Explain Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_explain_benefit_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-use-benefits'      => array(
+			$this->slug . '-use-benefits'       => array(
 				'title'    => __( 'Use Benefits', 'minnpost-membership' ),
 				'sections' => $this->setup_use_benefit_page_sections(),
 				'use_tabs' => true,
 			),
-			$this->slug . '-benefit-results'   => array(
+			$this->slug . '-benefit-results'    => array(
 				'title'    => __( 'Benefit Results', 'minnpost-membership' ),
 				'sections' => array(
 					'partner-offer-claims' => __( 'Partner offer claims', 'minnpost-membership' ),
@@ -138,7 +146,7 @@ class MinnPost_Membership_Admin {
 				'sections' => array(),
 				'use_tabs' => false,
 			),*/
-			$this->slug . '-premium-content'   => array(
+			$this->slug . '-premium-content'    => array(
 				'title'    => __( 'Premium Content', 'minnpost-membership' ),
 				'sections' => array(
 					'access_settings' => __( 'Access settings', 'minnpost-membership' ),
@@ -151,6 +159,7 @@ class MinnPost_Membership_Admin {
 				'use_tabs' => false,
 			),*/
 		); // this creates the pages for the admin
+
 		return $pages;
 	}
 
@@ -311,6 +320,7 @@ class MinnPost_Membership_Admin {
 
 		$this->general_settings( $page, $all_field_callbacks );
 		$this->taking_payments( $page, $all_field_callbacks );
+		$this->managing_donations( $page, $all_field_callbacks );
 		$this->campaign_settings( $page, $all_field_callbacks );
 		$this->explain_benefits( $page, $all_field_callbacks );
 		$this->use_benefits( $page, $all_field_callbacks );
@@ -922,6 +932,116 @@ class MinnPost_Membership_Admin {
 					'desc'     => '',
 					'constant' => '',
 					'type'     => 'checkbox',
+				),
+			);
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
+			}
+		}
+	}
+
+	/**
+	* Fields for the Managing Donations page
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function managing_donations( $page, $callbacks ) {
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					$page    = $section;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
+				add_settings_section( $section, $title, null, $page );
+			}
+
+			$settings = array(
+				'donations_page_title'     => array(
+					'title'    => __( 'Page title', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => '',
+						'constant' => '',
+					),
+				),
+				'active_recurring_message' => array(
+					'title'    => __( 'Active Recurring Donation Message', 'minnpost-membership' ),
+					'callback' => $callbacks['textarea'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'desc'     => __( 'This message will replace $amount with the currency (ex $10), $frequency with the donation frequency (ex monthly, yearly), and $next_date with the next donation date (ex October 23, 2019).', 'minnpost-membership' ),
+						'rows'     => 10,
+						'cols'     => 30,
+					),
+				),
+				'edit_recurring_link'      => array(
+					'title'    => __( 'URL for editing recurring donations', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Enter the full URL. $recurring_donation_id will be replaced with the Salesforce Id value for the active recurring donation.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'cancel_recurring_link'    => array(
+					'title'    => __( 'URL for cancelling recurring donations', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Enter the full URL. $recurring_donation_id will be replaced with the Salesforce Id value for the active recurring donation.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donation_history_title'  => array(
+					'title'    => __( 'Page title', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => '',
+						'constant' => '',
+					),
 				),
 			);
 
