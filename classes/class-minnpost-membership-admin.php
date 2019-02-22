@@ -988,28 +988,6 @@ class MinnPost_Membership_Admin {
 			}
 
 			$settings = array(
-				'donations_page_title'     => array(
-					'title'    => __( 'Page title', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => '',
-						'constant' => '',
-					),
-				),
-				'active_recurring_message' => array(
-					'title'    => __( 'Active Recurring Donation Message', 'minnpost-membership' ),
-					'callback' => $callbacks['textarea'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'desc'     => __( 'This message will replace $amount with the currency (ex $10), $frequency with the donation frequency (ex monthly, yearly), and $next_date with the next donation date (ex October 23, 2019).', 'minnpost-membership' ),
-						'rows'     => 10,
-						'cols'     => 30,
-					),
-				),
 				'edit_recurring_link'      => array(
 					'title'    => __( 'URL for editing recurring donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
@@ -1018,7 +996,7 @@ class MinnPost_Membership_Admin {
 					'args'     => array(
 						'type'     => 'text',
 						'desc'     => __( 'Enter the full URL. $recurring_donation_id will be replaced with the Salesforce Id value for the active recurring donation.', 'minnpost-membership' ),
-						'constant' => '',
+						'constant' => 'RECURRING_DONATION_EDIT_URL',
 					),
 				),
 				'cancel_recurring_link'    => array(
@@ -1029,6 +1007,28 @@ class MinnPost_Membership_Admin {
 					'args'     => array(
 						'type'     => 'text',
 						'desc'     => __( 'Enter the full URL. $recurring_donation_id will be replaced with the Salesforce Id value for the active recurring donation.', 'minnpost-membership' ),
+						'constant' => 'RECURRING_DONATION_CANCEL_URL',
+					),
+				),
+				'active_status_field'      => array(
+					'title'    => __( 'Active status field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that determines if a recurring donation is active. Use the API Name value for the field.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'active_status_value'      => array(
+					'title'    => __( 'Active status value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for the active status field if the donation is active.', 'minnpost-membership' ),
 						'constant' => '',
 					),
 				),
