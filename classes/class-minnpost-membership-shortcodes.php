@@ -163,13 +163,14 @@ class MinnPost_Membership_Shortcodes {
 					';
 				//$message .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</td><td><a href="#">Edit</a> | <a href="#">Cancel</a></td></tr>';
 			}
-			//$message .= '</table>';
 		}
 
 		if ( ! empty( $messages ) ) {
 			foreach ( $messages as $donation_message ) {
 				$message .= '<article class="m-donation-message">' . $donation_message . '</article>';
 			}
+		} else {
+			$message = '<article class="m-no-donation-message">' . wp_kses_post( get_option( $this->option_prefix . 'no_donation_message', '' ) ) . '</article>';
 		}
 
 		return $message;

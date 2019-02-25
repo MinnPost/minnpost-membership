@@ -1131,6 +1131,19 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
+				'no_donation_message'          => array(
+					'title'    => __( 'No donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'desc'          => 'Message to display if the user has no pending or active donations.',
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
+					),
+				),
 				'donation_history_title'      => array(
 					'title'    => __( 'Page title', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
