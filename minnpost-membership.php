@@ -67,6 +67,12 @@ class MinnPost_Membership {
 	public $front_end;
 
 	/**
+	* @var object
+	* Load and initialize the MinnPost_Membership_Shortcodes class
+	*/
+	public $shortcodes;
+
+	/**
 	 * @var object
 	 * Static property to hold an instance of the class; this seems to make it reusable
 	 *
@@ -110,6 +116,8 @@ class MinnPost_Membership {
 		$this->admin = $this->admin();
 		// front end settings
 		$this->front_end = $this->front_end();
+		// shortcode settings
+		$this->shortcodes = $this->shortcodes();
 
 		$this->add_actions();
 
@@ -190,6 +198,17 @@ class MinnPost_Membership {
 		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-front-end.php' );
 		$front_end = new MinnPost_Membership_Front_End( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->content_items, $this->cache );
 		return $front_end;
+	}
+
+	/**
+	 * Plugin shortcodes
+	 *
+	 * @return object $shortcodes
+	 */
+	public function shortcodes() {
+		require_once( plugin_dir_path( __FILE__ ) . 'classes/class-minnpost-membership-shortcodes.php' );
+		$shortcodes = new MinnPost_Membership_Shortcodes( $this->option_prefix, $this->version, $this->slug, $this->member_levels, $this->user_info, $this->content_items, $this->cache );
+		return $shortcodes;
 	}
 
 	/**
