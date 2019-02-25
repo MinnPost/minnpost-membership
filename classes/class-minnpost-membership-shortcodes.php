@@ -173,6 +173,10 @@ class MinnPost_Membership_Shortcodes {
 			$message = '<article class="m-no-donation-message">' . wp_kses_post( get_option( $this->option_prefix . 'no_donation_message', '' ) ) . '</article>';
 		}
 
+		$message .= sprintf( wp_kses_post( __( '<h2 class="a-donation-history-heading">You can also view your <a href="%1$s">full donation history</a>. If you have transactions that failed to process, they will be listed there.</h2>', 'minnpost-membership' ) ),
+				esc_url( '/user/donation-history/' )
+			);
+
 		return $message;
 	}
 
