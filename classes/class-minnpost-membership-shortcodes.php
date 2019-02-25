@@ -88,34 +88,77 @@ class MinnPost_Membership_Shortcodes {
 
 		$user_id = get_current_user_id();
 		if ( 0 !== $user_id ) {
-			$active_field_name          = get_option( $this->option_prefix . 'active_status_field', '' );
-			$active_field_value          = get_option( $this->option_prefix . 'active_status_value', '' );
-			$active_recurring_donations = apply_filters( $this->option_prefix . 'get_active_recurring_donations', $user_id, $active_field_name, $active_field_value );
+			//query fields
+			$active_field_name                  = get_option( $this->option_prefix . 'active_status_field', '' );
+			$active_field_value                 = get_option( $this->option_prefix . 'active_status_value', '' );
+			$recurrence_field_name              = get_option( $this->option_prefix . 'onetime_field', '' );
+			$recurrence_field_value             = get_option( $this->option_prefix . 'onetime_value', '' );
+			$contact_id_field_name              = get_option( $this->option_prefix . 'opp_contact_field', '' );
+			$recurring_payment_type_field_name  = get_option( $this->option_prefix . 'recurring_payment_type_field', '' );
+			$recurring_payment_type_field_value = get_option( $this->option_prefix . 'recurring_payment_type_value', '' );
+			$opp_payment_type_field_name        = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
+			$opp_payment_type_field_value       = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+
+			// urls for editing/cancelling
+			$edit_recurring_url   = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
+			$cancel_recurring_url = defined( 'RECURRING_DONATION_CANCEL_URL' ) ? RECURRING_DONATION_CANCEL_URL : get_option( $this->option_prefix . 'cancel_recurring_link', '' );
+			$edit_onetime_url     = defined( 'OPPORTUNITY_EDIT_URL' ) ? OPPORTUNITY_EDIT_URL : get_option( $this->option_prefix . 'edit_opportunity_link', '' );
+			$cancel_onetime_url   = defined( 'OPPORTUNITY_CANCEL_URL' ) ? OPPORTUNITY_CANCEL_URL : get_option( $this->option_prefix . 'cancel_opportunity_link', '' );
+			
+			// arrays of donations
+			$active_recurring_donations = apply_filters( $this->option_prefix . 'get_active_recurring_donations', $user_id, $active_field_name, $active_field_value, $recurring_payment_type_field_name, $recurring_payment_type_field_value );
+			$pledged_opportunities      = apply_filters( $this->option_prefix . 'get_pledged_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
+
+			// merged, sorted array of donations
+			$all_donations = array_merge( $active_recurring_donations, $pledged_opportunities );
+			usort( $all_donations, function ( $item1, $item2 ) {
+				return $item1['next_date'] <=> $item2['next_date'];
+			});
+
 			//$message = '<table><thead><th>Amount</th><th>Next Date</th><th colspan="2">Modify</th></thead>';
-			foreach ( $active_recurring_donations as $donation ) {
-				$edit_url      = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
-				$edit_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_url );
-				$cancel_url    = defined( 'RECURRING_DONATION_CANCEL_URL' ) ? RECURRING_DONATION_CANCEL_URL : get_option( $this->option_prefix . 'cancel_recurring_link', '' );
-				$cancel_url    = str_replace( '$recurring_donation_id', $donation['id'], $cancel_url );
-				$member_level  = str_replace( 'member_', '', $this->member_levels->calculate_level( absint( $donation['amount'] ), strtolower( $donation['frequency'] ) ) );
+			foreach ( $all_donations as $donation ) {
+				// this is a onetime donation; it has no frequency
+				if ( ! isset( $donation['frequency'] ) ) {
+					$donation['frequency'] = __( 'One-time', 'minnpost-membership' );
+					$donation_type         = $donation['frequency'];
+					$donation_date_heading = __( 'Transaction Date', 'minnpost-membership' );
+					$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
+					$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
+				} else {
+					// this is a recurring donation
+					$donation_type = __( 'recurring', 'minnpost-membership' );
+					$donation_date_heading = __( 'Next Transaction Date', 'minnpost-membership' );
+					$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
+					$donation_cancel_url    = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
+				}
+
+				$donation_type_heading   = sprintf( 'Your %1$s Donation',
+					ucfirst( $donation_type )
+				);
+				$modify_donation_heading = __( 'Modify Your Donation', 'minnpost-membership' );
+				$update_payment_button   = __( 'Update Payment Method', 'minnpost-membership' );
+				$change_amount_button    = __( 'Change Amount', 'minnpost-membership' );
+				$stop_button             = __( 'Stop', 'minnpost-membership' );
+				$caption_review          = __( 'You will be able to review and confirm these actions in the final step.', 'minnpost-membership' );
+
 				$messages[] = '
-					<section class="m-donation m-donation-' . $member_level . '">
-						<h4 class="a-donation-heading a-your-membership">Your ' . ucfirst( $member_level ) . ' Membership</h4>
+					<section class="m-donation m-donation-' . $donation_type . '">
+						<h4 class="a-donation-heading a-your-donation">' . $donation_type_heading . '</h4>
 						<h2 class="a-donation-amount">$' . $donation['amount'] . '</h2>
 						<h3 class="a-donation-frequency">' . strtolower( $donation['frequency'] ) . '</h3>
 					</section>
 					<section class="m-next-donation">
-						<h4 class="a-donation-heading a-next-transaction">Next Transaction Date</h4>
+						<h4 class="a-donation-heading a-next-transaction">' . $donation_date_heading . '</h4>
 						<div class="a-next-transaction-date">' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</div>
 					</section>
 					<section class="m-donation-actions">
-						<h4 class="a-donation-heading a-modify-donation">Modify Your Donation</h4>
-						<a href="' . $edit_url . '" class="a-button a-button-update-payment">Update Payment Method</a>
+						<h4 class="a-donation-heading a-modify-donation">' . $modify_donation_heading. '</h4>
+						<a href="' . $donation_update_url . '" class="a-button a-button-update-payment">' . $update_payment_button . '</a>
 						<div class="a-donation-actions a-button-sentence">
-							<a href="' . $edit_url . '" class="a-button a-button-secondary">Change Amount</a>
-							<a href="' . $cancel_url . '" class="a-button a-button-secondary">Stop</a>
+							<a href="' . $donation_update_url . '" class="a-button a-button-secondary">' . $change_amount_button . '</a>
+							<a href="' . $donation_cancel_url . '" class="a-button a-button-secondary">' . $stop_button . '</a>
 						</div>
-						<small class="a-form-caption">You will be able to review and confirm these actions in the final step.</small>
+						<small class="a-form-caption">' . $caption_review . '</small>
 					</section>
 					';
 				//$message .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</td><td><a href="#">Edit</a> | <a href="#">Cancel</a></td></tr>';
