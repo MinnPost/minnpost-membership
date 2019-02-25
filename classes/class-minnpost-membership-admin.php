@@ -988,7 +988,7 @@ class MinnPost_Membership_Admin {
 			}
 
 			$settings = array(
-				'edit_recurring_link'      => array(
+				'edit_recurring_link'          => array(
 					'title'    => __( 'URL for editing recurring donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donations',
@@ -999,7 +999,7 @@ class MinnPost_Membership_Admin {
 						'constant' => 'RECURRING_DONATION_EDIT_URL',
 					),
 				),
-				'cancel_recurring_link'    => array(
+				'cancel_recurring_link'        => array(
 					'title'    => __( 'URL for cancelling recurring donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donations',
@@ -1010,7 +1010,7 @@ class MinnPost_Membership_Admin {
 						'constant' => 'RECURRING_DONATION_CANCEL_URL',
 					),
 				),
-				'active_status_field'      => array(
+				'active_status_field'          => array(
 					'title'    => __( 'Active status field', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donations',
@@ -1021,7 +1021,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'active_status_value'      => array(
+				'active_status_value'          => array(
 					'title'    => __( 'Active status value', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donations',
@@ -1032,7 +1032,106 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'donation_history_title'  => array(
+				'recurring_payment_type_field' => array(
+					'title'    => __( 'Payment type field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that determines payment type for recurring donations.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'recurring_payment_type_value' => array(
+					'title'    => __( 'Payment type value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for payment type on recurring donations. If both these fields are present, only matching recurring donations will be queried.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'edit_opportunity_link'        => array(
+					'title'    => __( 'URL for editing opportunities', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity.', 'minnpost-membership' ),
+						'constant' => 'OPPORTUNITY_EDIT_URL',
+					),
+				),
+				'cancel_opportunity_link'      => array(
+					'title'    => __( 'URL for cancelling opportunities', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity.', 'minnpost-membership' ),
+						'constant' => 'OPPORTUNITY_CANCEL_URL',
+					),
+				),
+				'onetime_field'                => array(
+					'title'    => __( 'Onetime recurrence field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that ensures an opportunity is one-time only.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'onetime_value'                => array(
+					'title'    => __( 'Onetime recurrence value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for the onetime recurrence field if an opportunity is one-time only.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'opp_contact_field'            => array(
+					'title'    => __( 'Opportunity Contact ID field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that contains the Contact ID for this opportunity.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'opp_payment_type_field'       => array(
+					'title'    => __( 'Payment type field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that determines payment type for opportunities.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'opp_payment_type_value'       => array(
+					'title'    => __( 'Payment type value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for payment type on opportunities. If both these fields are present, only matching opportunities will be queried.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donation_history_title'      => array(
 					'title'    => __( 'Page title', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
