@@ -1144,6 +1144,19 @@ class MinnPost_Membership_Admin {
 						'media_buttons' => false,
 					),
 				),
+				'donation_history_message'     => array(
+					'title'    => __( 'Donation history message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'desc'          => 'Message to display to send the user to the donation history page. This will only show if the user actually has previous donations.',
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
+					),
+				),
 				'donation_history_title'      => array(
 					'title'    => __( 'Page title', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],

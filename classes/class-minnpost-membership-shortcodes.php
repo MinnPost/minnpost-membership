@@ -116,52 +116,54 @@ class MinnPost_Membership_Shortcodes {
 			});
 
 			//$message = '<table><thead><th>Amount</th><th>Next Date</th><th colspan="2">Modify</th></thead>';
-			foreach ( $all_donations as $donation ) {
-				// this is a onetime donation; it has no frequency
-				if ( ! isset( $donation['frequency'] ) ) {
-					$donation['frequency'] = __( 'One-time', 'minnpost-membership' );
-					$donation_type         = $donation['frequency'];
-					$donation_date_heading = __( 'Transaction Date', 'minnpost-membership' );
-					$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
-					$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
-				} else {
-					// this is a recurring donation
-					$donation_type = __( 'recurring', 'minnpost-membership' );
-					$donation_date_heading = __( 'Next Transaction Date', 'minnpost-membership' );
-					$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
-					$donation_cancel_url    = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
+			if ( ! empty( $all_donations ) ) {
+				foreach ( $all_donations as $donation ) {
+					// this is a onetime donation; it has no frequency
+					if ( ! isset( $donation['frequency'] ) ) {
+						$donation['frequency'] = __( 'One-time', 'minnpost-membership' );
+						$donation_type         = $donation['frequency'];
+						$donation_date_heading = __( 'Transaction Date', 'minnpost-membership' );
+						$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
+						$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
+					} else {
+						// this is a recurring donation
+						$donation_type = __( 'recurring', 'minnpost-membership' );
+						$donation_date_heading = __( 'Next Transaction Date', 'minnpost-membership' );
+						$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
+						$donation_cancel_url    = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
+					}
+
+					$donation_type_heading   = sprintf( 'Your %1$s Donation',
+						ucfirst( $donation_type )
+					);
+					$modify_donation_heading = __( 'Modify Your Donation', 'minnpost-membership' );
+					$update_payment_button   = __( 'Update Payment Method', 'minnpost-membership' );
+					$change_amount_button    = __( 'Change Amount', 'minnpost-membership' );
+					$stop_button             = __( 'Stop', 'minnpost-membership' );
+					$caption_review          = __( 'You will be able to review and confirm these actions in the final step.', 'minnpost-membership' );
+
+					$messages[] = '
+						<section class="m-donation m-donation-' . $donation_type . '">
+							<h4 class="a-donation-heading a-your-donation">' . $donation_type_heading . '</h4>
+							<h2 class="a-donation-amount">$' . $donation['amount'] . '</h2>
+							<h3 class="a-donation-frequency">' . strtolower( $donation['frequency'] ) . '</h3>
+						</section>
+						<section class="m-next-donation">
+							<h4 class="a-donation-heading a-next-transaction">' . $donation_date_heading . '</h4>
+							<div class="a-next-transaction-date">' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</div>
+						</section>
+						<section class="m-donation-actions">
+							<h4 class="a-donation-heading a-modify-donation">' . $modify_donation_heading. '</h4>
+							<a href="' . $donation_update_url . '" class="a-button a-button-update-payment">' . $update_payment_button . '</a>
+							<div class="a-donation-actions a-button-sentence">
+								<a href="' . $donation_update_url . '" class="a-button a-button-secondary">' . $change_amount_button . '</a>
+								<a href="' . $donation_cancel_url . '" class="a-button a-button-secondary">' . $stop_button . '</a>
+							</div>
+							<small class="a-form-caption">' . $caption_review . '</small>
+						</section>
+						';
+					//$message .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</td><td><a href="#">Edit</a> | <a href="#">Cancel</a></td></tr>';
 				}
-
-				$donation_type_heading   = sprintf( 'Your %1$s Donation',
-					ucfirst( $donation_type )
-				);
-				$modify_donation_heading = __( 'Modify Your Donation', 'minnpost-membership' );
-				$update_payment_button   = __( 'Update Payment Method', 'minnpost-membership' );
-				$change_amount_button    = __( 'Change Amount', 'minnpost-membership' );
-				$stop_button             = __( 'Stop', 'minnpost-membership' );
-				$caption_review          = __( 'You will be able to review and confirm these actions in the final step.', 'minnpost-membership' );
-
-				$messages[] = '
-					<section class="m-donation m-donation-' . $donation_type . '">
-						<h4 class="a-donation-heading a-your-donation">' . $donation_type_heading . '</h4>
-						<h2 class="a-donation-amount">$' . $donation['amount'] . '</h2>
-						<h3 class="a-donation-frequency">' . strtolower( $donation['frequency'] ) . '</h3>
-					</section>
-					<section class="m-next-donation">
-						<h4 class="a-donation-heading a-next-transaction">' . $donation_date_heading . '</h4>
-						<div class="a-next-transaction-date">' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</div>
-					</section>
-					<section class="m-donation-actions">
-						<h4 class="a-donation-heading a-modify-donation">' . $modify_donation_heading. '</h4>
-						<a href="' . $donation_update_url . '" class="a-button a-button-update-payment">' . $update_payment_button . '</a>
-						<div class="a-donation-actions a-button-sentence">
-							<a href="' . $donation_update_url . '" class="a-button a-button-secondary">' . $change_amount_button . '</a>
-							<a href="' . $donation_cancel_url . '" class="a-button a-button-secondary">' . $stop_button . '</a>
-						</div>
-						<small class="a-form-caption">' . $caption_review . '</small>
-					</section>
-					';
-				//$message .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</td><td><a href="#">Edit</a> | <a href="#">Cancel</a></td></tr>';
 			}
 		}
 
@@ -173,11 +175,55 @@ class MinnPost_Membership_Shortcodes {
 			$message = '<article class="m-no-donation-message">' . wp_kses_post( get_option( $this->option_prefix . 'no_donation_message', '' ) ) . '</article>';
 		}
 
-		$message .= sprintf( wp_kses_post( __( '<h2 class="a-donation-history-heading">You can also view your <a href="%1$s">full donation history</a>. If you have transactions that failed to process, they will be listed there.</h2>', 'minnpost-membership' ) ),
-				esc_url( '/user/donation-history/' )
-			);
+		$donation_history_link = get_option( $this->option_prefix . 'donation_history_message', '' );
+		if ( '' !== $donation_history_link ) {
+			$previous_opportunities = apply_filters( $this->option_prefix . 'get_previous_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
+			if ( ! empty( $previous_opportunities ) ) {
+				$message               .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
+			}
+		}
 
 		return $message;
+	}
+
+	/**
+	 * A shortcode for rendering the donation history page
+	 *
+	 * @param  array   $attributes  Shortcode attributes.
+	 * @param  string  $content     The text content for shortcode. Not used.
+	 *
+	 * @return string  The shortcode output
+	 */
+	public function donation_history( $attributes, $content = null ) {
+
+		$attributes = shortcode_atts(
+			array(),
+			$attributes,
+			'donations'
+		);
+
+		if ( ! is_array( $attributes ) ) {
+			$attributes = array();
+		}
+
+		$history  = '';
+
+		$user_id = get_current_user_id();
+		if ( 0 !== $user_id ) {
+			$previous_opportunities = apply_filters( $this->option_prefix . 'get_previous_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
+			if ( ! empty( $previous_opportunities ) ) {
+				// this is where the list starts
+			}
+		}
+
+		if ( ! empty( $history ) ) {
+				$message .= '<article class="m-donation-history">' . $history . '</article>';
+		} else {
+			$message = '<article class="m-no-donation-history">' . wp_kses_post( get_option( $this->option_prefix . 'no_donation_history', '' ) ) . '</article>';
+		}
+
+		return $message;
+
 	}
 
 }
