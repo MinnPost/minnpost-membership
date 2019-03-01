@@ -197,6 +197,7 @@ class MinnPost_Membership_Shortcodes {
 			$failed_payment_type_field = get_option( $this->option_prefix . 'failed_payment_type_field', '' );
 			$failed_payment_type_value = get_option( $this->option_prefix . 'failed_payment_type_value', '' );
 			$history_failed_value      = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value      = get_option( $this->option_prefix . 'history_success_value', '' );
 			$history_days_for_failed   = get_option( $this->option_prefix . 'history_days_for_failed', '' );
 
 			// failed donations need to load the recurring donation id if they are not onetime only
@@ -217,6 +218,13 @@ class MinnPost_Membership_Shortcodes {
 				$failed_recurring_id_field
 			);
 
+			$successful_opportunities = apply_filters(
+				$this->option_prefix . 'get_successful_opportunities',
+				$user_id,
+				$history_opp_contact_field,
+				$history_success_value
+			);
+			if ( ! empty( $failed_opportunities ) || ! empty( $successful_opportunities ) ) {
 				$message               .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
 			}
 		}
@@ -255,6 +263,7 @@ class MinnPost_Membership_Shortcodes {
 			$failed_payment_type_field = get_option( $this->option_prefix . 'failed_payment_type_field', '' );
 			$failed_payment_type_value = get_option( $this->option_prefix . 'failed_payment_type_value', '' );
 			$history_failed_value      = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value      = get_option( $this->option_prefix . 'history_success_value', '' );
 			$history_days_for_failed   = get_option( $this->option_prefix . 'history_days_for_failed', '' );
 
 			// failed donations need to load the recurring donation id if they are not onetime only
@@ -274,7 +283,18 @@ class MinnPost_Membership_Shortcodes {
 				$failed_recurring_id_field
 			);
 
+			$successful_opportunities = apply_filters(
+				$this->option_prefix . 'get_successful_opportunities',
+				$user_id,
+				$history_opp_contact_field,
+				$history_success_value
+			);
+
 			usort( $failed_opportunities, function ( $item1, $item2 ) {
+				return $item2['close_date'] <=> $item1['close_date'];
+			});
+
+			usort( $successful_opportunities, function ( $item1, $item2 ) {
 				return $item2['close_date'] <=> $item1['close_date'];
 			});
 
@@ -290,7 +310,14 @@ class MinnPost_Membership_Shortcodes {
 				$history .= '</table>';
 			}
 
+			if ( ! empty( $successful_opportunities ) ) {
+				$history .= '<table><caption>Successful</caption><thead><th>Amount</th><th colspan-"2">Charged Date</th><th>
+				&nbsp;</th></thead>';
 				// this is where the list starts
+				foreach ( $successful_opportunities as $donation ) {
+					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
+				}
+				$history .= '</table>';
 			}
 		}
 
