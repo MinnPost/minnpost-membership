@@ -190,8 +190,33 @@ class MinnPost_Membership_Shortcodes {
 
 		$donation_history_link = get_option( $this->option_prefix . 'donation_history_message', '' );
 		if ( '' !== $donation_history_link ) {
-			$previous_opportunities = apply_filters( $this->option_prefix . 'get_previous_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
-			if ( ! empty( $previous_opportunities ) ) {
+			// past donations are tied to the contact
+			$history_opp_contact_field = get_option( $this->option_prefix . 'history_opp_contact_field', '' );
+			
+			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
+			$failed_payment_type_field = get_option( $this->option_prefix . 'failed_payment_type_field', '' );
+			$failed_payment_type_value = get_option( $this->option_prefix . 'failed_payment_type_value', '' );
+			$history_failed_value      = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_days_for_failed   = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+
+			// failed donations need to load the recurring donation id if they are not onetime only
+			$failed_onetime_field      = get_option( $this->option_prefix . 'failed_onetime_field', '' );
+			$failed_onetime_value      = get_option( $this->option_prefix . 'failed_onetime_value', '' );
+			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
+
+			$failed_opportunities = apply_filters(
+				$this->option_prefix . 'get_failed_opportunities',
+				$user_id,
+				$history_opp_contact_field,
+				$failed_payment_type_field,
+				$failed_payment_type_value,
+				$history_failed_value,
+				$history_days_for_failed,
+				$failed_onetime_field,
+				$failed_onetime_value,
+				$failed_recurring_id_field
+			);
+
 				$message               .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
 			}
 		}
@@ -223,8 +248,48 @@ class MinnPost_Membership_Shortcodes {
 
 		$user_id = get_current_user_id();
 		if ( 0 !== $user_id ) {
-			$previous_opportunities = apply_filters( $this->option_prefix . 'get_previous_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
-			if ( ! empty( $previous_opportunities ) ) {
+			// past donations are tied to the contact
+			$history_opp_contact_field = get_option( $this->option_prefix . 'history_opp_contact_field', '' );
+			
+			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
+			$failed_payment_type_field = get_option( $this->option_prefix . 'failed_payment_type_field', '' );
+			$failed_payment_type_value = get_option( $this->option_prefix . 'failed_payment_type_value', '' );
+			$history_failed_value      = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_days_for_failed   = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+
+			// failed donations need to load the recurring donation id if they are not onetime only
+			$failed_onetime_field      = get_option( $this->option_prefix . 'failed_onetime_field', '' );
+			$failed_onetime_value      = get_option( $this->option_prefix . 'failed_onetime_value', '' );
+			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
+			$failed_opportunities = apply_filters(
+				$this->option_prefix . 'get_failed_opportunities',
+				$user_id,
+				$history_opp_contact_field,
+				$failed_payment_type_field,
+				$failed_payment_type_value,
+				$history_failed_value,
+				$history_days_for_failed,
+				$failed_onetime_field,
+				$failed_onetime_value,
+				$failed_recurring_id_field
+			);
+
+			usort( $failed_opportunities, function ( $item1, $item2 ) {
+				return $item2['close_date'] <=> $item1['close_date'];
+			});
+
+			$history = '';
+
+			if ( ! empty( $failed_opportunities ) ) {
+				$history .= '<table><caption>Failed</caption><thead><th>Amount</th><th>Attempted Date</th><th>
+				&nbsp;</th></thead>';
+				// this is where the list starts
+				foreach ( $failed_opportunities as $donation ) {
+					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="#">Resubmit</a></td></tr>';
+				}
+				$history .= '</table>';
+			}
+
 				// this is where the list starts
 			}
 		}
