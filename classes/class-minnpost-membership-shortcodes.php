@@ -106,8 +106,23 @@ class MinnPost_Membership_Shortcodes {
 			$cancel_onetime_url   = defined( 'OPPORTUNITY_CANCEL_URL' ) ? OPPORTUNITY_CANCEL_URL : get_option( $this->option_prefix . 'cancel_opportunity_link', '' );
 			
 			// arrays of donations
-			$active_recurring_donations = apply_filters( $this->option_prefix . 'get_active_recurring_donations', $user_id, $active_field_name, $active_field_value, $recurring_payment_type_field_name, $recurring_payment_type_field_value );
-			$pledged_opportunities      = apply_filters( $this->option_prefix . 'get_pledged_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
+			$active_recurring_donations = apply_filters(
+				$this->option_prefix . 'get_active_recurring_donations',
+				$user_id,
+				$active_field_name,
+				$active_field_value,
+				$recurring_payment_type_field_name,
+				$recurring_payment_type_field_value
+			);
+			$pledged_opportunities      = apply_filters(
+				$this->option_prefix . 'get_pledged_opportunities',
+				$user_id,
+				$recurrence_field_name,
+				$recurrence_field_value,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value
+			);
 
 			// merged, sorted array of donations
 			$all_donations = array_merge( $active_recurring_donations, $pledged_opportunities );
@@ -115,7 +130,6 @@ class MinnPost_Membership_Shortcodes {
 				return $item1['next_date'] <=> $item2['next_date'];
 			});
 
-			//$message = '<table><thead><th>Amount</th><th>Next Date</th><th colspan="2">Modify</th></thead>';
 			if ( ! empty( $all_donations ) ) {
 				foreach ( $all_donations as $donation ) {
 					// this is a onetime donation; it has no frequency
@@ -162,7 +176,6 @@ class MinnPost_Membership_Shortcodes {
 							<small class="a-form-caption">' . $caption_review . '</small>
 						</section>
 						';
-					//$message .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</td><td><a href="#">Edit</a> | <a href="#">Cancel</a></td></tr>';
 				}
 			}
 		}
