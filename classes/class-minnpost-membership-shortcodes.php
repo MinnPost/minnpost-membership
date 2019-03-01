@@ -301,7 +301,7 @@ class MinnPost_Membership_Shortcodes {
 			$history = '';
 
 			if ( ! empty( $failed_opportunities ) ) {
-				$history .= '<section class="m-donation-history"><table><caption>Failed</caption><thead><th>Amount</th><th>Attempted Date</th><th>
+				$history .= '<section class="m-donation-history"><h2>Failed</h2><table><thead><th>Amount</th><th>Attempted Date</th><th>
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $failed_opportunities as $donation ) {
@@ -311,7 +311,7 @@ class MinnPost_Membership_Shortcodes {
 			}
 
 			if ( ! empty( $successful_opportunities ) ) {
-				$history .= '<section class="m-donation-history"><table><caption>Successful</caption><thead><th>Amount</th><th colspan-"2">Charged Date</th><th>
+				$history .= '<section class="m-donation-history"><h2>Successful</h2><table><thead><th>Amount</th><th colspan-"2">Charged Date</th><th>
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $successful_opportunities as $donation ) {
