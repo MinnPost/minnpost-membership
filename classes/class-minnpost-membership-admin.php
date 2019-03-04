@@ -393,7 +393,7 @@ class MinnPost_Membership_Admin {
 					'section'  => 'more_settings',
 					'args'     => array(
 						'type'     => 'checkbox',
-						'desc'     => 'Checking this will keep the plugin from adding its JavaScript to the front end interface.',
+						'desc'     => __( 'Checking this will keep the plugin from adding its JavaScript to the front end interface.', 'minnpost-membership' ),
 						'constant' => '',
 					),
 				),
@@ -404,7 +404,7 @@ class MinnPost_Membership_Admin {
 					'section'  => 'more_settings',
 					'args'     => array(
 						'type'     => 'checkbox',
-						'desc'     => 'Checking this will keep the plugin from adding its stylesheet to the front end interface.',
+						'desc'     => __( 'Checking this will keep the plugin from adding its stylesheet to the front end interface.', 'minnpost-membership' ),
 						'constant' => '',
 					),
 				),
@@ -566,7 +566,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This is the text before, and on the same line as, the form fields',
+					'desc'     => __( 'This is the text before, and on the same line as, the form fields', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 				),
@@ -590,7 +590,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'desc'     => __( 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 3,
@@ -604,7 +604,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'If present, this URL will wrap the above (or below) text value.',
+					'desc'     => __( 'If present, this URL will wrap the above (or below) text value.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 				),
@@ -616,7 +616,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.',
+					'desc'     => __( 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'checkbox',
 				),
@@ -628,7 +628,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+					'desc'     => __( 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -642,7 +642,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+					'desc'     => __( 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -692,7 +692,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'          => 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.',
+					'desc'          => __( 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.', 'minnpost-membership' ),
 					'constant'      => '',
 					'type'          => 'text',
 					'rows'          => '5',
@@ -1274,7 +1274,7 @@ class MinnPost_Membership_Admin {
 					'page'     => 'campaigns',
 					'section'  => 'campaigns',
 					'args'     => array(
-						'desc'     => 'Enter each campaign ID that needs its own settings on a separate line.',
+						'desc'     => __( 'Enter each campaign ID that needs its own settings on a separate line.', 'minnpost-membership' ),
 						'constant' => '',
 						'rows'     => 10,
 						'cols'     => 30,
@@ -1478,7 +1478,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -1655,7 +1655,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -1868,7 +1868,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'Time period users have to wait between claiming offers.',
+					'desc'     => __( 'Time period users have to wait between claiming offers.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 				),
@@ -2095,7 +2095,7 @@ class MinnPost_Membership_Admin {
 						'section'  => $this_section,
 						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 						'args'     => array(
-							'desc'     => 'The subject of the email sent to claiming users.',
+							'desc'     => __( 'The subject of the email sent to claiming users.', 'minnpost-membership' ),
 							'constant' => '',
 							'type'     => 'text',
 						),
@@ -2108,7 +2108,7 @@ class MinnPost_Membership_Admin {
 						'section'  => $this_section,
 						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 						'args'     => array(
-							'desc'          => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
+							'desc'          => __( 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.', 'minnpost-membership' ),
 							'constant'      => '',
 							'type'          => 'text',
 							'rows'          => '5',
@@ -2212,7 +2212,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -2398,7 +2398,7 @@ class MinnPost_Membership_Admin {
 				'section'  => $this_section,
 				'args'     => array(
 					'type'     => 'text',
-					'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
+					'desc'     => __( 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.', 'minnpost-membership' ),
 					'constant' => '',
 				),
 			);
@@ -2428,7 +2428,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '10',
