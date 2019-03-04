@@ -106,8 +106,23 @@ class MinnPost_Membership_Shortcodes {
 			$cancel_onetime_url   = defined( 'OPPORTUNITY_CANCEL_URL' ) ? OPPORTUNITY_CANCEL_URL : get_option( $this->option_prefix . 'cancel_opportunity_link', '' );
 			
 			// arrays of donations
-			$active_recurring_donations = apply_filters( $this->option_prefix . 'get_active_recurring_donations', $user_id, $active_field_name, $active_field_value, $recurring_payment_type_field_name, $recurring_payment_type_field_value );
-			$pledged_opportunities      = apply_filters( $this->option_prefix . 'get_pledged_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
+			$active_recurring_donations = apply_filters(
+				$this->option_prefix . 'get_active_recurring_donations',
+				$user_id,
+				$active_field_name,
+				$active_field_value,
+				$recurring_payment_type_field_name,
+				$recurring_payment_type_field_value
+			);
+			$pledged_opportunities      = apply_filters(
+				$this->option_prefix . 'get_pledged_opportunities',
+				$user_id,
+				$recurrence_field_name,
+				$recurrence_field_value,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value
+			);
 
 			// merged, sorted array of donations
 			$all_donations = array_merge( $active_recurring_donations, $pledged_opportunities );
@@ -115,7 +130,6 @@ class MinnPost_Membership_Shortcodes {
 				return $item1['next_date'] <=> $item2['next_date'];
 			});
 
-			//$message = '<table><thead><th>Amount</th><th>Next Date</th><th colspan="2">Modify</th></thead>';
 			if ( ! empty( $all_donations ) ) {
 				foreach ( $all_donations as $donation ) {
 					// this is a onetime donation; it has no frequency
@@ -162,7 +176,6 @@ class MinnPost_Membership_Shortcodes {
 							<small class="a-form-caption">' . $caption_review . '</small>
 						</section>
 						';
-					//$message .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</td><td><a href="#">Edit</a> | <a href="#">Cancel</a></td></tr>';
 				}
 			}
 		}
@@ -177,8 +190,42 @@ class MinnPost_Membership_Shortcodes {
 
 		$donation_history_link = get_option( $this->option_prefix . 'donation_history_message', '' );
 		if ( '' !== $donation_history_link ) {
-			$previous_opportunities = apply_filters( $this->option_prefix . 'get_previous_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
-			if ( ! empty( $previous_opportunities ) ) {
+			// past donations are tied to the contact
+			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
+			
+			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
+			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
+			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value        = get_option( $this->option_prefix . 'history_success_value', '' );
+			$history_days_for_failed      = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+
+			// failed donations need to load the recurring donation id if they are not onetime only
+			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
+			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
+			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
+
+			// arrays of donations
+			$failed_opportunities = apply_filters(
+				$this->option_prefix . 'get_failed_opportunities',
+				$user_id,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value,
+				$history_failed_value,
+				$history_days_for_failed,
+				$recurrence_field_name,
+				$recurrence_field_value,
+				$failed_recurring_id_field
+			);
+
+			$successful_opportunities = apply_filters(
+				$this->option_prefix . 'get_successful_opportunities',
+				$user_id,
+				$contact_id_field_name,
+				$history_success_value
+			);
+			if ( ! empty( $failed_opportunities ) || ! empty( $successful_opportunities ) ) {
 				$message               .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
 			}
 		}
@@ -210,9 +257,97 @@ class MinnPost_Membership_Shortcodes {
 
 		$user_id = get_current_user_id();
 		if ( 0 !== $user_id ) {
-			$previous_opportunities = apply_filters( $this->option_prefix . 'get_previous_opportunities', $user_id, $recurrence_field_name, $recurrence_field_value, $contact_id_field_name, $opp_payment_type_field_name, $opp_payment_type_field_value );
-			if ( ! empty( $previous_opportunities ) ) {
+			// past donations are tied to the contact
+			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
+			
+			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
+			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
+			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value        = get_option( $this->option_prefix . 'history_success_value', '' );
+			$history_days_for_failed      = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+
+			// failed donations need to load the recurring donation id if they are not onetime only
+			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
+			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
+			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
+
+			// url for resubmitting
+			$edit_recurring_url   = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
+			$edit_onetime_url     = defined( 'OPPORTUNITY_EDIT_URL' ) ? OPPORTUNITY_EDIT_URL : get_option( $this->option_prefix . 'edit_opportunity_link', '' );
+
+			// arrays of donations
+			$failed_opportunities      = apply_filters(
+				$this->option_prefix . 'get_failed_opportunities',
+				$user_id,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value,
+				$history_failed_value,
+				$history_days_for_failed,
+				$recurrence_field_name,
+				$recurrence_field_value,
+				$failed_recurring_id_field
+			);
+
+			$successful_opportunities = apply_filters(
+				$this->option_prefix . 'get_successful_opportunities',
+				$user_id,
+				$contact_id_field_name,
+				$history_success_value
+			);
+
+			usort( $failed_opportunities, function ( $item1, $item2 ) {
+				return $item2['close_date'] <=> $item1['close_date'];
+			});
+
+			usort( $successful_opportunities, function ( $item1, $item2 ) {
+				return $item2['close_date'] <=> $item1['close_date'];
+			});
+
+			$history = '';
+
+			if ( ! empty( $failed_opportunities ) ) {
+				$failed_heading    = get_option( $this->option_prefix . 'history_failed_heading', '' );
+				$failed_message    = get_option( $this->option_prefix . 'history_failed_message', '' );
+				$amount_heading    = __( 'Amount', 'minnpost-membership' );
+				$attempted_heading = __( 'Attempted Date', 'minnpost-membership' );
+				$retry_button      = __( 'Edit and retry', 'minnpost-membership' );
+				if ( '' !== $failed_message ) {
+					$failed_message = wp_kses_post( wpautop( $failed_message ) );
+				}
+				$history .= '<section class="m-donation-history"><h2>' . $failed_heading . '</h2>' . $failed_message . '<table><thead><th>' . $amount_heading . '</th><th>' . $attempted_heading . '</th><th>
+				&nbsp;</th></thead>';
 				// this is where the list starts
+				foreach ( $failed_opportunities as $donation ) {
+					// this is a onetime donation; it has no frequency
+					if ( ! isset( $donation['frequency'] ) ) {
+						$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
+						$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
+					} else {
+						// this is a recurring donation
+						$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
+					}
+					$history            .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="' . $donation_update_url . '" class="a-button">' . $retry_button . '</a></td></tr>';
+				}
+				$history .= '</table></section>';
+			}
+
+			if ( ! empty( $successful_opportunities ) ) {
+				$succeeded_heading = get_option( $this->option_prefix . 'history_success_heading', '' );
+				$succeeded_message = get_option( $this->option_prefix . 'history_success_message', '' );
+				$amount_heading    = __( 'Amount', 'minnpost-membership' );
+				$charged_heading   = __( 'Charged Date', 'minnpost-membership' );
+				if ( '' !== $succeeded_message ) {
+					$succeeded_message = wp_kses_post( wpautop( $succeeded_message ) );
+				}
+				$history .= '<section class="m-donation-history"><h2>' . $succeeded_heading . '</h2>' . $succeeded_message . '<table><thead><th>' . $amount_heading . '</th><th colspan-"2">' . $charged_heading . '</th><th>
+				&nbsp;</th></thead>';
+				// this is where the list starts
+				foreach ( $successful_opportunities as $donation ) {
+					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
+				}
+				$history .= '</table></section>';
 			}
 		}
 

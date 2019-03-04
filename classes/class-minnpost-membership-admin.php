@@ -113,6 +113,7 @@ class MinnPost_Membership_Admin {
 			$this->slug . '-managing-donations' => array(
 				'title'    => __( 'Managing Donations', 'minnpost-membership' ),
 				'sections' => array(
+					'shared_fields'    => __( 'Shared Fields', 'minnpost-membership' ),
 					'donations'        => __( 'Active/Pending Donations', 'minnpost-membership' ),
 					'donation_history' => __( 'Donation History', 'minnpost-membership' ),
 				),
@@ -392,7 +393,7 @@ class MinnPost_Membership_Admin {
 					'section'  => 'more_settings',
 					'args'     => array(
 						'type'     => 'checkbox',
-						'desc'     => 'Checking this will keep the plugin from adding its JavaScript to the front end interface.',
+						'desc'     => __( 'Checking this will keep the plugin from adding its JavaScript to the front end interface.', 'minnpost-membership' ),
 						'constant' => '',
 					),
 				),
@@ -403,7 +404,7 @@ class MinnPost_Membership_Admin {
 					'section'  => 'more_settings',
 					'args'     => array(
 						'type'     => 'checkbox',
-						'desc'     => 'Checking this will keep the plugin from adding its stylesheet to the front end interface.',
+						'desc'     => __( 'Checking this will keep the plugin from adding its stylesheet to the front end interface.', 'minnpost-membership' ),
 						'constant' => '',
 					),
 				),
@@ -565,7 +566,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This is the text before, and on the same line as, the form fields',
+					'desc'     => __( 'This is the text before, and on the same line as, the form fields', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 				),
@@ -589,7 +590,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level',
+					'desc'     => __( 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 3,
@@ -603,7 +604,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'If present, this URL will wrap the above (or below) text value.',
+					'desc'     => __( 'If present, this URL will wrap the above (or below) text value.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 				),
@@ -615,7 +616,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.',
+					'desc'     => __( 'If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'checkbox',
 				),
@@ -627,7 +628,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+					'desc'     => __( 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -641,7 +642,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.',
+					'desc'     => __( 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -691,7 +692,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'          => 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.',
+					'desc'          => __( 'You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure.', 'minnpost-membership' ),
 					'constant'      => '',
 					'type'          => 'text',
 					'rows'          => '5',
@@ -988,6 +989,85 @@ class MinnPost_Membership_Admin {
 			}
 
 			$settings = array(
+				'edit_opportunity_link'        => array(
+					'title'    => __( 'URL for editing opportunities', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity.', 'minnpost-membership' ),
+						'constant' => 'OPPORTUNITY_EDIT_URL',
+					),
+				),
+				'opp_contact_field'            => array(
+					'title'    => __( 'Opportunity Contact ID field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that contains the Contact ID for an opportunity.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'opp_payment_type_field'       => array(
+					'title'    => __( 'Payment type field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that determines payment type for opportunities.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'opp_payment_type_value'       => array(
+					'title'    => __( 'Payment type value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for payment type on opportunities. If both these fields are present, only matching opportunities will be queried.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'onetime_field'                => array(
+					'title'    => __( 'Onetime recurrence field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Salesforce field that ensures an opportunity is one-time only.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'onetime_value'                => array(
+					'title'    => __( 'Onetime recurrence value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for the onetime recurrence field if an opportunity is one-time only.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'no_donation_message'          => array(
+					'title'    => __( 'No donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'desc'          => __( 'Message to display if the user has no donations. This will appear on both the donation and donation history pages.', 'minnpost-membership' ),
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
+					),
+				),
 				'edit_recurring_link'          => array(
 					'title'    => __( 'URL for editing recurring donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
@@ -1008,6 +1088,17 @@ class MinnPost_Membership_Admin {
 						'type'     => 'text',
 						'desc'     => __( 'Enter the full URL. $recurring_donation_id will be replaced with the Salesforce Id value for the active recurring donation.', 'minnpost-membership' ),
 						'constant' => 'RECURRING_DONATION_CANCEL_URL',
+					),
+				),
+				'cancel_opportunity_link'      => array(
+					'title'    => __( 'URL for cancelling opportunities', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donations',
+					'section'  => 'donations',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity.', 'minnpost-membership' ),
+						'constant' => 'OPPORTUNITY_CANCEL_URL',
 					),
 				),
 				'active_status_field'          => array(
@@ -1054,118 +1145,109 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'edit_opportunity_link'        => array(
-					'title'    => __( 'URL for editing opportunities', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity.', 'minnpost-membership' ),
-						'constant' => 'OPPORTUNITY_EDIT_URL',
-					),
-				),
-				'cancel_opportunity_link'      => array(
-					'title'    => __( 'URL for cancelling opportunities', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity.', 'minnpost-membership' ),
-						'constant' => 'OPPORTUNITY_CANCEL_URL',
-					),
-				),
-				'onetime_field'                => array(
-					'title'    => __( 'Onetime recurrence field', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Salesforce field that ensures an opportunity is one-time only.', 'minnpost-membership' ),
-						'constant' => '',
-					),
-				),
-				'onetime_value'                => array(
-					'title'    => __( 'Onetime recurrence value', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Expected value for the onetime recurrence field if an opportunity is one-time only.', 'minnpost-membership' ),
-						'constant' => '',
-					),
-				),
-				'opp_contact_field'            => array(
-					'title'    => __( 'Opportunity Contact ID field', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Salesforce field that contains the Contact ID for this opportunity.', 'minnpost-membership' ),
-						'constant' => '',
-					),
-				),
-				'opp_payment_type_field'       => array(
-					'title'    => __( 'Payment type field', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Salesforce field that determines payment type for opportunities.', 'minnpost-membership' ),
-						'constant' => '',
-					),
-				),
-				'opp_payment_type_value'       => array(
-					'title'    => __( 'Payment type value', 'minnpost-membership' ),
-					'callback' => $callbacks['text'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'type'     => 'text',
-						'desc'     => __( 'Expected value for payment type on opportunities. If both these fields are present, only matching opportunities will be queried.', 'minnpost-membership' ),
-						'constant' => '',
-					),
-				),
-				'no_donation_message'          => array(
-					'title'    => __( 'No donation message', 'minnpost-membership' ),
-					'callback' => $callbacks['editor'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'desc'          => 'Message to display if the user has no pending or active donations.',
-						'constant'      => '',
-						'type'          => 'text',
-						'rows'          => '8',
-						'media_buttons' => false,
-					),
-				),
 				'donation_history_message'     => array(
 					'title'    => __( 'Donation history message', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => 'donations',
 					'section'  => 'donations',
 					'args'     => array(
-						'desc'          => 'Message to display to send the user to the donation history page. This will only show if the user actually has previous donations.',
+						'desc'          => __( 'Message to display to send the user to the donation history page. This will only show if the user actually has previous donations.', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '8',
 						'media_buttons' => false,
 					),
 				),
-				'donation_history_title'      => array(
-					'title'    => __( 'Page title', 'minnpost-membership' ),
+				'history_failed_value'        => array(
+					'title'    => __( 'Failed donation value', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
 					'section'  => 'donation_history',
 					'args'     => array(
 						'type'     => 'text',
-						'desc'     => '',
+						'desc'     => __( 'Expected value for StageName field when a donation has failed.', 'minnpost-membership' ),
 						'constant' => '',
+					),
+				),
+				'history_success_value'       => array(
+					'title'    => __( 'Successful donation value', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Expected value for StageName field when a donation has succeeded.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'history_days_for_failed'     => array(
+					'title'    => __( 'Days back for failed donations', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'The list of failed donations will go back this many days from today. Ex: 30 means all donations failed within the last 30 days will be listed.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'failed_recurring_id_field'   => array(
+					'title'    => __( 'Recurring donation ID field name', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'If a failed opportunity is part of a recurring donation, the value of this field will be used to get the ID for that recurring donation.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'history_failed_heading'      => array(
+					'title'    => __( 'Heading for failed donations', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Heading for failed donation table', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'history_failed_message'      => array(
+					'title'    => __( 'Failed donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'desc'          => __( 'Message to display before the table of failed donations, if there are any.', 'minnpost-membership' ),
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
+					),
+				),
+				'history_success_heading'     => array(
+					'title'    => __( 'Heading for successful donations', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Heading for successful donation table', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'history_success_message'     => array(
+					'title'    => __( 'Successful donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'desc'          => __( 'Message to display before the list of successful donations, if there are any.', 'minnpost-membership' ),
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
 					),
 				),
 			);
@@ -1229,7 +1311,7 @@ class MinnPost_Membership_Admin {
 					'page'     => 'campaigns',
 					'section'  => 'campaigns',
 					'args'     => array(
-						'desc'     => 'Enter each campaign ID that needs its own settings on a separate line.',
+						'desc'     => __( 'Enter each campaign ID that needs its own settings on a separate line.', 'minnpost-membership' ),
 						'constant' => '',
 						'rows'     => 10,
 						'cols'     => 30,
@@ -1433,7 +1515,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -1610,7 +1692,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -1823,7 +1905,7 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => 'Time period users have to wait between claiming offers.',
+					'desc'     => __( 'Time period users have to wait between claiming offers.', 'minnpost-membership' ),
 					'constant' => '',
 					'type'     => 'text',
 				),
@@ -2050,7 +2132,7 @@ class MinnPost_Membership_Admin {
 						'section'  => $this_section,
 						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 						'args'     => array(
-							'desc'     => 'The subject of the email sent to claiming users.',
+							'desc'     => __( 'The subject of the email sent to claiming users.', 'minnpost-membership' ),
 							'constant' => '',
 							'type'     => 'text',
 						),
@@ -2063,7 +2145,7 @@ class MinnPost_Membership_Admin {
 						'section'  => $this_section,
 						'class'    => 'minnpost-member-field minnpost-member-field-' . $display_item['id'],
 						'args'     => array(
-							'desc'          => 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.',
+							'desc'          => __( 'The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values.', 'minnpost-membership' ),
 							'constant'      => '',
 							'type'          => 'text',
 							'rows'          => '5',
@@ -2167,7 +2249,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -2353,7 +2435,7 @@ class MinnPost_Membership_Admin {
 				'section'  => $this_section,
 				'args'     => array(
 					'type'     => 'text',
-					'desc'     => 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.',
+					'desc'     => __( 'Ex: if you put "blocked" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables.', 'minnpost-membership' ),
 					'constant' => '',
 				),
 			);
@@ -2383,7 +2465,7 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user',
+						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '10',
