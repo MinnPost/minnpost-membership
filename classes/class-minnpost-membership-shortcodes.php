@@ -191,37 +191,37 @@ class MinnPost_Membership_Shortcodes {
 		$donation_history_link = get_option( $this->option_prefix . 'donation_history_message', '' );
 		if ( '' !== $donation_history_link ) {
 			// past donations are tied to the contact
-			$history_opp_contact_field = get_option( $this->option_prefix . 'history_opp_contact_field', '' );
+			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
 			
 			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
-			$failed_payment_type_field = get_option( $this->option_prefix . 'failed_payment_type_field', '' );
-			$failed_payment_type_value = get_option( $this->option_prefix . 'failed_payment_type_value', '' );
-			$history_failed_value      = get_option( $this->option_prefix . 'history_failed_value', '' );
-			$history_success_value      = get_option( $this->option_prefix . 'history_success_value', '' );
-			$history_days_for_failed   = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
+			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value        = get_option( $this->option_prefix . 'history_success_value', '' );
+			$history_days_for_failed      = get_option( $this->option_prefix . 'history_days_for_failed', '' );
 
 			// failed donations need to load the recurring donation id if they are not onetime only
-			$failed_onetime_field      = get_option( $this->option_prefix . 'failed_onetime_field', '' );
-			$failed_onetime_value      = get_option( $this->option_prefix . 'failed_onetime_value', '' );
+			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
+			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
 			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
 
 			$failed_opportunities = apply_filters(
 				$this->option_prefix . 'get_failed_opportunities',
 				$user_id,
-				$history_opp_contact_field,
-				$failed_payment_type_field,
-				$failed_payment_type_value,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value,
 				$history_failed_value,
 				$history_days_for_failed,
-				$failed_onetime_field,
-				$failed_onetime_value,
+				$recurrence_field_name,
+				$recurrence_field_value,
 				$failed_recurring_id_field
 			);
 
 			$successful_opportunities = apply_filters(
 				$this->option_prefix . 'get_successful_opportunities',
 				$user_id,
-				$history_opp_contact_field,
+				$contact_id_field_name,
 				$history_success_value
 			);
 			if ( ! empty( $failed_opportunities ) || ! empty( $successful_opportunities ) ) {
@@ -257,36 +257,36 @@ class MinnPost_Membership_Shortcodes {
 		$user_id = get_current_user_id();
 		if ( 0 !== $user_id ) {
 			// past donations are tied to the contact
-			$history_opp_contact_field = get_option( $this->option_prefix . 'history_opp_contact_field', '' );
+			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
 			
 			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
-			$failed_payment_type_field = get_option( $this->option_prefix . 'failed_payment_type_field', '' );
-			$failed_payment_type_value = get_option( $this->option_prefix . 'failed_payment_type_value', '' );
-			$history_failed_value      = get_option( $this->option_prefix . 'history_failed_value', '' );
-			$history_success_value      = get_option( $this->option_prefix . 'history_success_value', '' );
-			$history_days_for_failed   = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
+			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value        = get_option( $this->option_prefix . 'history_success_value', '' );
+			$history_days_for_failed      = get_option( $this->option_prefix . 'history_days_for_failed', '' );
 
 			// failed donations need to load the recurring donation id if they are not onetime only
-			$failed_onetime_field      = get_option( $this->option_prefix . 'failed_onetime_field', '' );
-			$failed_onetime_value      = get_option( $this->option_prefix . 'failed_onetime_value', '' );
+			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
+			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
 			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
-			$failed_opportunities = apply_filters(
+			$failed_opportunities      = apply_filters(
 				$this->option_prefix . 'get_failed_opportunities',
 				$user_id,
-				$history_opp_contact_field,
-				$failed_payment_type_field,
-				$failed_payment_type_value,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value,
 				$history_failed_value,
 				$history_days_for_failed,
-				$failed_onetime_field,
-				$failed_onetime_value,
+				$recurrence_field_name,
+				$recurrence_field_value,
 				$failed_recurring_id_field
 			);
 
 			$successful_opportunities = apply_filters(
 				$this->option_prefix . 'get_successful_opportunities',
 				$user_id,
-				$history_opp_contact_field,
+				$contact_id_field_name,
 				$history_success_value
 			);
 
@@ -301,7 +301,10 @@ class MinnPost_Membership_Shortcodes {
 			$history = '';
 
 			if ( ! empty( $failed_opportunities ) ) {
-				$history .= '<section class="m-donation-history"><h2>Failed</h2><table><thead><th>Amount</th><th>Attempted Date</th><th>
+				$failed_heading    = __( 'Failed', 'minnpost-membership' );
+				$amount_heading    = __( 'Amount', 'minnpost-membership' );
+				$attempted_heading = __( 'Attempted Date', 'minnpost-membership' );
+				$history .= '<section class="m-donation-history"><h2>' . $failed_heading . '</h2><table><thead><th>' . $amount_heading . '</th><th>' . $attempted_heading . '</th><th>
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $failed_opportunities as $donation ) {
@@ -311,7 +314,10 @@ class MinnPost_Membership_Shortcodes {
 			}
 
 			if ( ! empty( $successful_opportunities ) ) {
-				$history .= '<section class="m-donation-history"><h2>Successful</h2><table><thead><th>Amount</th><th colspan-"2">Charged Date</th><th>
+				$succeeded_heading = __( 'Successful', 'minnpost-membership' );
+				$amount_heading    = __( 'Amount', 'minnpost-membership' );
+				$charged_heading   = __( 'Charged Date', 'minnpost-membership' );
+				$history .= '<section class="m-donation-history"><h2>' . $succeeded_heading . '</h2><table><thead><th>' . $amount_heading . '</th><th colspan-"2">' . $charged_heading . '</th><th>
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $successful_opportunities as $donation ) {
