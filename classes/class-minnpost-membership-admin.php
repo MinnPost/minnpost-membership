@@ -1055,6 +1055,19 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
+				'no_donation_message'          => array(
+					'title'    => __( 'No donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'desc'          => __( 'Message to display if the user has no donations. This will appear on both the donation and donation history pages.', 'minnpost-membership' ),
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
+					),
+				),
 				'edit_recurring_link'          => array(
 					'title'    => __( 'URL for editing recurring donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
@@ -1132,26 +1145,13 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'no_donation_message'          => array(
-					'title'    => __( 'No donation message', 'minnpost-membership' ),
-					'callback' => $callbacks['editor'],
-					'page'     => 'donations',
-					'section'  => 'donations',
-					'args'     => array(
-						'desc'          => 'Message to display if the user has no pending or active donations.',
-						'constant'      => '',
-						'type'          => 'text',
-						'rows'          => '8',
-						'media_buttons' => false,
-					),
-				),
 				'donation_history_message'     => array(
 					'title'    => __( 'Donation history message', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => 'donations',
 					'section'  => 'donations',
 					'args'     => array(
-						'desc'          => 'Message to display to send the user to the donation history page. This will only show if the user actually has previous donations.',
+						'desc'          => __( 'Message to display to send the user to the donation history page. This will only show if the user actually has previous donations.', 'minnpost-membership' ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '8',
@@ -1202,15 +1202,52 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_success_value'       => array(
-					'title'    => __( 'Successful donation value', 'minnpost-membership' ),
+				'history_failed_heading'      => array(
+					'title'    => __( 'Heading for failed donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
 					'section'  => 'donation_history',
 					'args'     => array(
 						'type'     => 'text',
-						'desc'     => __( 'Expected value for StageName field when a donation has succeeded.', 'minnpost-membership' ),
+						'desc'     => __( 'Heading for failed donation table', 'minnpost-membership' ),
 						'constant' => '',
+					),
+				),
+				'history_failed_message'      => array(
+					'title'    => __( 'Failed donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'desc'          => __( 'Message to display before the table of failed donations, if there are any.', 'minnpost-membership' ),
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
+					),
+				),
+				'history_success_heading'     => array(
+					'title'    => __( 'Heading for successful donations', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Heading for successful donation table', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'history_success_message'     => array(
+					'title'    => __( 'Successful donation message', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => 'donation_history',
+					'section'  => 'donation_history',
+					'args'     => array(
+						'desc'          => __( 'Message to display before the list of successful donations, if there are any.', 'minnpost-membership' ),
+						'constant'      => '',
+						'type'          => 'text',
+						'rows'          => '8',
+						'media_buttons' => false,
 					),
 				),
 			);

@@ -205,6 +205,7 @@ class MinnPost_Membership_Shortcodes {
 			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
 			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
 
+			// arrays of donations
 			$failed_opportunities = apply_filters(
 				$this->option_prefix . 'get_failed_opportunities',
 				$user_id,
@@ -270,6 +271,12 @@ class MinnPost_Membership_Shortcodes {
 			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
 			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
 			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
+
+			// url for resubmitting
+			$edit_recurring_url   = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
+			$edit_onetime_url     = defined( 'OPPORTUNITY_EDIT_URL' ) ? OPPORTUNITY_EDIT_URL : get_option( $this->option_prefix . 'edit_opportunity_link', '' );
+
+			// arrays of donations
 			$failed_opportunities      = apply_filters(
 				$this->option_prefix . 'get_failed_opportunities',
 				$user_id,
@@ -301,23 +308,40 @@ class MinnPost_Membership_Shortcodes {
 			$history = '';
 
 			if ( ! empty( $failed_opportunities ) ) {
-				$failed_heading    = __( 'Failed', 'minnpost-membership' );
+				$failed_heading    = get_option( $this->option_prefix . 'history_failed_heading', '' );
+				$failed_message    = get_option( $this->option_prefix . 'history_failed_message', '' );
 				$amount_heading    = __( 'Amount', 'minnpost-membership' );
 				$attempted_heading = __( 'Attempted Date', 'minnpost-membership' );
-				$history .= '<section class="m-donation-history"><h2>' . $failed_heading . '</h2><table><thead><th>' . $amount_heading . '</th><th>' . $attempted_heading . '</th><th>
+				$retry_button      = __( 'Edit and retry', 'minnpost-membership' );
+				if ( '' !== $failed_message ) {
+					$failed_message = wp_kses_post( wpautop( $failed_message ) );
+				}
+				$history .= '<section class="m-donation-history"><h2>' . $failed_heading . '</h2>' . $failed_message . '<table><thead><th>' . $amount_heading . '</th><th>' . $attempted_heading . '</th><th>
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $failed_opportunities as $donation ) {
-					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="#">Resubmit</a></td></tr>';
+					// this is a onetime donation; it has no frequency
+					if ( ! isset( $donation['frequency'] ) ) {
+						$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
+						$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
+					} else {
+						// this is a recurring donation
+						$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
+					}
+					$history            .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="' . $donation_update_url . '" class="a-button">' . $retry_button . '</a></td></tr>';
 				}
 				$history .= '</table></section>';
 			}
 
 			if ( ! empty( $successful_opportunities ) ) {
-				$succeeded_heading = __( 'Successful', 'minnpost-membership' );
+				$succeeded_heading = get_option( $this->option_prefix . 'history_success_heading', '' );
+				$succeeded_message = get_option( $this->option_prefix . 'history_success_message', '' );
 				$amount_heading    = __( 'Amount', 'minnpost-membership' );
 				$charged_heading   = __( 'Charged Date', 'minnpost-membership' );
-				$history .= '<section class="m-donation-history"><h2>' . $succeeded_heading . '</h2><table><thead><th>' . $amount_heading . '</th><th colspan-"2">' . $charged_heading . '</th><th>
+				if ( '' !== $succeeded_message ) {
+					$succeeded_message = wp_kses_post( wpautop( $succeeded_message ) );
+				}
+				$history .= '<section class="m-donation-history"><h2>' . $succeeded_heading . '</h2>' . $succeeded_message . '<table><thead><th>' . $amount_heading . '</th><th colspan-"2">' . $charged_heading . '</th><th>
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $successful_opportunities as $donation ) {
