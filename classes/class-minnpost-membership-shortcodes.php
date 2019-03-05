@@ -185,7 +185,7 @@ class MinnPost_Membership_Shortcodes {
 				$message .= '<article class="m-donation-message">' . $donation_message . '</article>';
 			}
 		} else {
-			$message = '<article class="m-no-donation-message">' . wp_kses_post( get_option( $this->option_prefix . 'no_donation_message', '' ) ) . '</article>';
+			$message = '<article class="m-no-donation-message">' . wp_kses_post( wpautop( get_option( $this->option_prefix . 'no_donation_message', '' ) ) ) . '</article>';
 		}
 
 		$donation_history_link = get_option( $this->option_prefix . 'donation_history_message', '' );
@@ -354,7 +354,7 @@ class MinnPost_Membership_Shortcodes {
 		if ( ! empty( $history ) ) {
 				$message .= '<article class="m-donation-history">' . $history . '</article>';
 		} else {
-			$message = '<article class="m-no-donation-history">' . wp_kses_post( get_option( $this->option_prefix . 'no_donation_history', '' ) ) . '</article>';
+			$message = '<article class="m-no-donation-history">' . wp_kses_post( wpautop( get_option( $this->option_prefix . 'no_donation_message', '' ) ) ) . '</article>';
 		}
 
 		return $message;
