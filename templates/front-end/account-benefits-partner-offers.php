@@ -39,7 +39,7 @@ $open_offers = array_filter(
 							<?php foreach ( $offers as $post ) : ?>
 								<article id="partner-offer-<?php the_ID(); ?>" <?php post_class( 'm-partner-offer' ); ?>>
 									<?php setup_postdata( $post ); ?>
-									<?php $minnpost_membership->content_items->partner_offer_image( $post->post_parent ); ?>
+									<?php $minnpost_membership->content_items->partner_offer_image( $post->post_parent, true ); ?>
 									<div class="m-partner-offer-content">
 										<header class="m-entry-header m-partner-offer-header">
 											<?php the_title( '<h1 class="a-entry-title">', '</h1>' ); ?>

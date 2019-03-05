@@ -38,7 +38,7 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 						<?php $content = $minnpost_membership->content_items->get_partners(); ?>
 						<?php while ( $content->have_posts() ) : $content->the_post(); ?>
 							<li>
-								<?php $minnpost_membership->content_items->partner_figure(); ?>
+								<?php $minnpost_membership->content_items->partner_figure( '', 'partner-logo', true, false, true ); ?>
 							</li>
 						<?php endwhile; ?>
 					</ol>

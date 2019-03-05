@@ -498,10 +498,11 @@ class MinnPost_Membership_Content_Items {
 	* @param string $size
 	* @param bool $include_link
 	* @param bool $include_name
+	* @param bool $lazy_load
 	*
 	*/
-	public function partner_figure( $partner_id = '', $size = 'partner-logo', $include_link = true, $include_name = false ) {
-		$output = $this->get_partner_figure( $partner_id, $size, $include_link, $include_name );
+	public function partner_figure( $partner_id = '', $size = 'partner-logo', $include_link = true, $include_name = false, $lazy_load = false ) {
+		$output = $this->get_partner_figure( $partner_id, $size, $include_link, $include_name, $lazy_load );
 		echo $output;
 	}
 
@@ -511,15 +512,16 @@ class MinnPost_Membership_Content_Items {
 	* @param string $size
 	* @param bool $include_link
 	* @param bool $include_name
+	* @param bool $lazy_load
 	*
 	*/
-	public function get_partner_figure( $partner_id = '', $size = 'partner-logo', $include_link = true, $include_name = false ) {
+	public function get_partner_figure( $partner_id = '', $size = 'partner-logo', $include_link = true, $include_name = false, $lazy_load = false ) {
 
 		if ( '' === $partner_id ) {
 			$partner_id = get_the_ID();
 		}
 
-		$image_data = $this->get_partner_image( $partner_id, $size );
+		$image_data = $this->get_partner_image( $partner_id, $size, $lazy_load );
 		if ( '' !== $image_data ) {
 			$image_id  = $image_data['image_id'];
 			$image_url = $image_data['image_url'];
@@ -560,9 +562,10 @@ class MinnPost_Membership_Content_Items {
 	* Get the image for the partner
 	* @param int $partner_id
 	* @param string $size
+	* @param bool $lazy_load
 	*
 	*/
-	public function get_partner_image( $partner_id, $size = 'partner-logo' ) {
+	public function get_partner_image( $partner_id, $size = 'partner-logo', $lazy_load = false ) {
 		$image_url = get_post_meta( $partner_id, '_mp_partner_logo_image', true );
 		if ( 'partner-logo' !== $size ) {
 			$image_url = get_post_meta( $partner_id, '_mp_partner_logo_image' . $size, true );
@@ -580,7 +583,10 @@ class MinnPost_Membership_Content_Items {
 			$image = '<img src="' . $image_url . '" alt="' . $alt . '">';
 		}
 
-		$image = apply_filters( 'easy_lazy_loader_html', $image );
+		if ( true === $lazy_load ) {
+			$params = array( 'html_tag' => 'img' );
+			$image  = apply_filters( 'wp_lozad_lazyload_convert_html', $image, $params );
+		}
 
 		$image_data = array(
 			'image_id'  => $image_id,
@@ -765,7 +771,8 @@ class MinnPost_Membership_Content_Items {
 		}
 
 		if ( true === $lazy_load ) {
-			$image = apply_filters( 'easy_lazy_loader_html', $image );
+			$params = array( 'html_tag' => 'img' );
+			$image  = apply_filters( 'wp_lozad_lazyload_convert_html', $image, $params );
 		}
 
 		$caption = wp_get_attachment_caption( $image_id );
@@ -820,7 +827,8 @@ class MinnPost_Membership_Content_Items {
 		}
 
 		if ( true === $lazy_load ) {
-			$image = apply_filters( 'easy_lazy_loader_html', $image );
+			$params = array( 'html_tag' => 'img' );
+			$image  = apply_filters( 'wp_lozad_lazyload_convert_html', $image, $params );
 		}
 
 		$image_data = array(
