@@ -104,6 +104,18 @@ class MinnPost_Membership_Shortcodes {
 			$cancel_recurring_url = defined( 'RECURRING_DONATION_CANCEL_URL' ) ? RECURRING_DONATION_CANCEL_URL : get_option( $this->option_prefix . 'cancel_recurring_link', '' );
 			$edit_onetime_url     = defined( 'OPPORTUNITY_EDIT_URL' ) ? OPPORTUNITY_EDIT_URL : get_option( $this->option_prefix . 'edit_opportunity_link', '' );
 			$cancel_onetime_url   = defined( 'OPPORTUNITY_CANCEL_URL' ) ? OPPORTUNITY_CANCEL_URL : get_option( $this->option_prefix . 'cancel_opportunity_link', '' );
+
+			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
+			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
+			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
+			$history_success_value        = get_option( $this->option_prefix . 'history_success_value', '' );
+			$history_days_for_failed      = get_option( $this->option_prefix . 'history_days_for_failed', '' );
+
+			// failed donations need to load the recurring donation id if they are not onetime only
+			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
+			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
+			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
 			
 			// arrays of donations
 			$active_recurring_donations = apply_filters(
@@ -122,6 +134,25 @@ class MinnPost_Membership_Shortcodes {
 				$contact_id_field_name,
 				$opp_payment_type_field_name,
 				$opp_payment_type_field_value
+			);
+			// arrays of historical donations
+			$failed_opportunities       = apply_filters(
+				$this->option_prefix . 'get_failed_opportunities',
+				$user_id,
+				$contact_id_field_name,
+				$opp_payment_type_field_name,
+				$opp_payment_type_field_value,
+				$history_failed_value,
+				$history_days_for_failed,
+				$recurrence_field_name,
+				$recurrence_field_value,
+				$failed_recurring_id_field
+			);
+			$successful_opportunities   = apply_filters(
+				$this->option_prefix . 'get_successful_opportunities',
+				$user_id,
+				$contact_id_field_name,
+				$history_success_value
 			);
 
 			// merged, sorted array of donations
@@ -177,6 +208,9 @@ class MinnPost_Membership_Shortcodes {
 						</section>
 						';
 				}
+			} else {
+				$nonmember_level_name = get_option( 'salesforce_api_nonmember_level_name', 'Non-member' );
+				$member_level_name    = apply_filters( $this->option_prefix . 'get_member_level', $user_id );
 			}
 		}
 
@@ -184,47 +218,14 @@ class MinnPost_Membership_Shortcodes {
 			foreach ( $messages as $donation_message ) {
 				$message .= '<article class="m-donation-message">' . $donation_message . '</article>';
 			}
-		} else {
+		} elseif ( empty( $successful_opportunities ) || ( '' !== $member_level_name && $member_level_name === $nonmember_level_name ) ) {
+			// show this if there are no successful donations ever, OR if the user is a lapsed member
 			$message = '<article class="m-no-donation-message">' . wp_kses_post( wpautop( get_option( $this->option_prefix . 'no_donation_message', '' ) ) ) . '</article>';
 		}
 
 		$donation_history_link = get_option( $this->option_prefix . 'donation_history_message', '' );
 		if ( '' !== $donation_history_link ) {
-			// past donations are tied to the contact
-			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
-			
-			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
-			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
-			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
-			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
-			$history_success_value        = get_option( $this->option_prefix . 'history_success_value', '' );
-			$history_days_for_failed      = get_option( $this->option_prefix . 'history_days_for_failed', '' );
 
-			// failed donations need to load the recurring donation id if they are not onetime only
-			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
-			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
-			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
-
-			// arrays of donations
-			$failed_opportunities = apply_filters(
-				$this->option_prefix . 'get_failed_opportunities',
-				$user_id,
-				$contact_id_field_name,
-				$opp_payment_type_field_name,
-				$opp_payment_type_field_value,
-				$history_failed_value,
-				$history_days_for_failed,
-				$recurrence_field_name,
-				$recurrence_field_value,
-				$failed_recurring_id_field
-			);
-
-			$successful_opportunities = apply_filters(
-				$this->option_prefix . 'get_successful_opportunities',
-				$user_id,
-				$contact_id_field_name,
-				$history_success_value
-			);
 			if ( ! empty( $failed_opportunities ) || ! empty( $successful_opportunities ) ) {
 				$message               .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
 			}
