@@ -98,6 +98,7 @@ class MinnPost_Membership_Shortcodes {
 			$recurring_payment_type_field_value = get_option( $this->option_prefix . 'recurring_payment_type_value', '' );
 			$opp_payment_type_field_name        = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
 			$opp_payment_type_field_value       = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
+			$opportunity_type_value             = get_option( $this->option_prefix . 'opportunity_type_value', '' );
 
 			// urls for editing/cancelling
 			$edit_recurring_url   = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
@@ -133,7 +134,8 @@ class MinnPost_Membership_Shortcodes {
 				$recurrence_field_value,
 				$contact_id_field_name,
 				$opp_payment_type_field_name,
-				$opp_payment_type_field_value
+				$opp_payment_type_field_value,
+				$opportunity_type_value
 			);
 			// arrays of historical donations
 			$failed_opportunities       = apply_filters(
@@ -146,13 +148,15 @@ class MinnPost_Membership_Shortcodes {
 				$history_days_for_failed,
 				$recurrence_field_name,
 				$recurrence_field_value,
-				$failed_recurring_id_field
+				$failed_recurring_id_field,
+				$opportunity_type_value
 			);
 			$successful_opportunities   = apply_filters(
 				$this->option_prefix . 'get_successful_opportunities',
 				$user_id,
 				$contact_id_field_name,
-				$history_success_value
+				$history_success_value,
+				$opportunity_type_value
 			);
 
 			// merged, sorted array of donations
@@ -262,6 +266,7 @@ class MinnPost_Membership_Shortcodes {
 			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
 			
 			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
+			$opportunity_type_value       = get_option( $this->option_prefix . 'opportunity_type_value', '' );
 			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
 			$opp_payment_type_field_value = get_option( $this->option_prefix . 'opp_payment_type_value', '' );
 			$history_failed_value         = get_option( $this->option_prefix . 'history_failed_value', '' );
@@ -288,14 +293,16 @@ class MinnPost_Membership_Shortcodes {
 				$history_days_for_failed,
 				$recurrence_field_name,
 				$recurrence_field_value,
-				$failed_recurring_id_field
+				$failed_recurring_id_field,
+				$opportunity_type_value
 			);
 
 			$successful_opportunities = apply_filters(
 				$this->option_prefix . 'get_successful_opportunities',
 				$user_id,
 				$contact_id_field_name,
-				$history_success_value
+				$history_success_value,
+				$opportunity_type_value
 			);
 
 			usort( $failed_opportunities, function ( $item1, $item2 ) {

@@ -1000,6 +1000,17 @@ class MinnPost_Membership_Admin {
 						'constant' => 'OPPORTUNITY_EDIT_URL',
 					),
 				),
+				'opportunity_type_value'       => array(
+					'title'    => __( 'Opportunity type field', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => 'shared_fields',
+					'section'  => 'shared_fields',
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Value expected for the Type field on a Salesforce opportunity.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
 				'opp_contact_field'            => array(
 					'title'    => __( 'Opportunity Contact ID field', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
