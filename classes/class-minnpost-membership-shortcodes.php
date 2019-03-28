@@ -9,11 +9,8 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
 	die();
 }
 
-use Brain\Cortex\Route\RouteCollectionInterface;
-use Brain\Cortex\Route\QueryRoute;
-
 /**
- * Create default WordPress front end functionality
+ * Create default WordPress shortcodes functionality
  */
 class MinnPost_Membership_Shortcodes {
 
@@ -26,7 +23,7 @@ class MinnPost_Membership_Shortcodes {
 	protected $cache;
 
 	/**
-	* Constructor which sets up front end
+	* Constructor which sets up shortcodes
 	*
 	* @param string $option_prefix
 	* @param string $version
@@ -117,7 +114,7 @@ class MinnPost_Membership_Shortcodes {
 			$recurrence_field_name     = get_option( $this->option_prefix . 'onetime_field', '' );
 			$recurrence_field_value    = get_option( $this->option_prefix . 'onetime_value', '' );
 			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
-			
+
 			// arrays of donations
 			$active_recurring_donations = apply_filters(
 				$this->option_prefix . 'get_active_recurring_donations',
@@ -138,7 +135,7 @@ class MinnPost_Membership_Shortcodes {
 				$opportunity_type_value
 			);
 			// arrays of historical donations
-			$failed_opportunities       = apply_filters(
+			$failed_opportunities     = apply_filters(
 				$this->option_prefix . 'get_failed_opportunities',
 				$user_id,
 				$contact_id_field_name,
@@ -151,7 +148,7 @@ class MinnPost_Membership_Shortcodes {
 				$failed_recurring_id_field,
 				$opportunity_type_value
 			);
-			$successful_opportunities   = apply_filters(
+			$successful_opportunities = apply_filters(
 				$this->option_prefix . 'get_successful_opportunities',
 				$user_id,
 				$contact_id_field_name,
@@ -172,14 +169,14 @@ class MinnPost_Membership_Shortcodes {
 						$donation['frequency'] = __( 'One-time', 'minnpost-membership' );
 						$donation_type         = $donation['frequency'];
 						$donation_date_heading = __( 'Transaction Date', 'minnpost-membership' );
-						$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
-						$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
+						$donation_update_url   = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
+						$donation_cancel_url   = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
 					} else {
 						// this is a recurring donation
-						$donation_type = __( 'recurring', 'minnpost-membership' );
+						$donation_type         = __( 'recurring', 'minnpost-membership' );
 						$donation_date_heading = __( 'Next Transaction Date', 'minnpost-membership' );
-						$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
-						$donation_cancel_url    = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
+						$donation_update_url   = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
+						$donation_cancel_url   = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
 					}
 
 					$donation_type_heading   = sprintf( 'Your %1$s Donation',
@@ -202,7 +199,7 @@ class MinnPost_Membership_Shortcodes {
 							<div class="a-next-transaction-date">' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</div>
 						</section>
 						<section class="m-donation-actions">
-							<h4 class="a-donation-heading a-modify-donation">' . $modify_donation_heading. '</h4>
+							<h4 class="a-donation-heading a-modify-donation">' . $modify_donation_heading . '</h4>
 							<a href="' . $donation_update_url . '" class="a-button a-button-update-payment">' . $update_payment_button . '</a>
 							<div class="a-donation-actions a-button-sentence">
 								<a href="' . $donation_update_url . '" class="a-button a-button-secondary">' . $change_amount_button . '</a>
@@ -231,7 +228,7 @@ class MinnPost_Membership_Shortcodes {
 		if ( '' !== $donation_history_link ) {
 
 			if ( ! empty( $failed_opportunities ) || ! empty( $successful_opportunities ) ) {
-				$message               .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
+				$message .= '<h2 class="a-donation-history-heading">' . wp_kses_post( $donation_history_link ) . '</h2>';
 			}
 		}
 
@@ -258,13 +255,13 @@ class MinnPost_Membership_Shortcodes {
 			$attributes = array();
 		}
 
-		$history  = '';
+		$history = '';
 
 		$user_id = get_current_user_id();
 		if ( 0 !== $user_id ) {
 			// past donations are tied to the contact
 			$contact_id_field_name = get_option( $this->option_prefix . 'opp_contact_field', '' );
-			
+
 			// failed donations are tied to the payment type, if it exists, as well as a timeframe and StageName value
 			$opportunity_type_value       = get_option( $this->option_prefix . 'opportunity_type_value', '' );
 			$opp_payment_type_field_name  = get_option( $this->option_prefix . 'opp_payment_type_field', '' );
@@ -279,11 +276,11 @@ class MinnPost_Membership_Shortcodes {
 			$failed_recurring_id_field = get_option( $this->option_prefix . 'failed_recurring_id_field', '' );
 
 			// url for resubmitting
-			$edit_recurring_url   = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
-			$edit_onetime_url     = defined( 'OPPORTUNITY_EDIT_URL' ) ? OPPORTUNITY_EDIT_URL : get_option( $this->option_prefix . 'edit_opportunity_link', '' );
+			$edit_recurring_url = defined( 'RECURRING_DONATION_EDIT_URL' ) ? RECURRING_DONATION_EDIT_URL : get_option( $this->option_prefix . 'edit_recurring_link', '' );
+			$edit_onetime_url   = defined( 'OPPORTUNITY_EDIT_URL' ) ? OPPORTUNITY_EDIT_URL : get_option( $this->option_prefix . 'edit_opportunity_link', '' );
 
 			// arrays of donations
-			$failed_opportunities      = apply_filters(
+			$failed_opportunities = apply_filters(
 				$this->option_prefix . 'get_failed_opportunities',
 				$user_id,
 				$contact_id_field_name,
@@ -330,13 +327,13 @@ class MinnPost_Membership_Shortcodes {
 				foreach ( $failed_opportunities as $donation ) {
 					// this is a onetime donation; it has no frequency
 					if ( ! isset( $donation['frequency'] ) ) {
-						$donation_update_url      = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
-						$donation_cancel_url    = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
+						$donation_update_url = str_replace( '$opportunity_id', $donation['id'], $edit_onetime_url );
+						$donation_cancel_url = str_replace( '$opportunity_id', $donation['id'], $cancel_onetime_url );
 					} else {
 						// this is a recurring donation
-						$donation_update_url      = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
+						$donation_update_url = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
 					}
-					$history            .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="' . $donation_update_url . '" class="a-button">' . $retry_button . '</a></td></tr>';
+					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="' . $donation_update_url . '" class="a-button">' . $retry_button . '</a></td></tr>';
 				}
 				$history .= '</table></section>';
 			}
