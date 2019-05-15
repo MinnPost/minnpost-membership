@@ -687,36 +687,34 @@ class MinnPost_Membership_Front_End {
 	private function get_post_form_text( $page_amount, $frequency, $amount_this_year, $user_id = 0 ) {
 		$post_form_text_display = '';
 
-		if ( 0 === $user_id ) {
-			return $post_form_text_display;
-		}
-
-		$user_member_level = $this->user_info->user_member_level( $user_id );
-
 		$page_level_slug = $this->member_levels->calculate_level( $page_amount, $frequency['value'], 'value', $amount_this_year );
 		$page_level      = $this->member_levels->get_member_levels( $page_level_slug, true, 'slug' );
 
 		$post_form_text_default = get_option( $this->option_prefix . 'support_post_form_nonmembers', '' );
 		$post_form_text_default = str_replace( '$level', '<strong>' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text_default );
 
-		$change_for_members = $this->user_info->change_for_members;
+		$post_form_text = $post_form_text_default;
 
-		$post_form_text_changed = get_option( $this->option_prefix . 'support_post_form_change', '' );
-		$post_form_text_changed = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text_changed );
-		$post_form_text_changed = str_replace( '$new_level', '<strong class="a-new-level">' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text_changed );
-		$post_form_text_changed = str_replace( '$level', '<strong>' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text_changed );
+		if ( 0 !== $user_id ) {
+			$user_member_level  = $this->user_info->user_member_level( $user_id );
+			$change_for_members = $this->user_info->change_for_members;
 
-		$post_form_text_not_changed = get_option( $this->option_prefix . 'support_post_form_nochange', '' );
-		$post_form_text_not_changed = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text_not_changed );
+			$post_form_text_changed = get_option( $this->option_prefix . 'support_post_form_change', '' );
+			$post_form_text_changed = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text_changed );
+			$post_form_text_changed = str_replace( '$new_level', '<strong class="a-new-level">' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text_changed );
+			$post_form_text_changed = str_replace( '$level', '<strong>' . get_bloginfo( 'name' ) . ' <span class="a-level">' . $page_level['name'] . '</span></strong>', $post_form_text_changed );
 
-		if ( true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
-			if ( $page_level['name'] !== $user_member_level['name'] ) {
-				$post_form_text = $post_form_text_changed;
+			$post_form_text_not_changed = get_option( $this->option_prefix . 'support_post_form_nochange', '' );
+			$post_form_text_not_changed = str_replace( '$current_level', '<strong class="a-current-level">' . get_bloginfo( 'name' ) . ' ' . $user_member_level['name'] . '</strong>', $post_form_text_not_changed );
+			if ( true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
+				if ( $page_level['name'] !== $user_member_level['name'] ) {
+					$post_form_text = $post_form_text_changed;
+				} else {
+					$post_form_text = $post_form_text_not_changed;
+				}
 			} else {
-				$post_form_text = $post_form_text_not_changed;
+				$post_form_text = $post_form_text_default;
 			}
-		} else {
-			$post_form_text = $post_form_text_default;
 		}
 
 		if ( '' === $post_form_text ) {
