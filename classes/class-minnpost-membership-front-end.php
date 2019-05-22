@@ -977,19 +977,25 @@ class MinnPost_Membership_Front_End {
 		$disable_javascript = get_option( $this->option_prefix . 'disable_javascript', false );
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( true !== filter_var( $disable_javascript, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), $this->version );
+			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.min.js' ) );
 			$minnpost_membership_data = $this->get_user_membership_info();
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
-			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_settings', array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			) );
+			wp_localize_script(
+				$this->slug . '-front-end',
+				'minnpost_membership_settings',
+				array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				)
+			);
 			if ( ! wp_script_is( 'jquery', 'done' ) ) {
 				wp_enqueue_script( 'jquery' );
 			}
-			wp_add_inline_script( $this->slug . '-front-end', "
-				jQuery(document).ready(function ($) {
+			wp_add_inline_script(
+				$this->slug . '-front-end',
+				"jQuery(document).ready(function ($) {
 					$('.m-form-membership').minnpostMembership();
-				});" );
+				});"
+			);
 		}
 		if ( true !== filter_var( $disable_css, FILTER_VALIDATE_BOOLEAN ) ) {
 			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( __FILE__ ) . '../assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );

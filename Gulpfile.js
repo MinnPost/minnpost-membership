@@ -167,6 +167,7 @@ exports.adminstyles     = adminstyles;
 exports.frontendstyles  = frontendstyles;
 exports.adminscripts    = adminscripts;
 exports.frontendscripts = frontendscripts;
+exports.uglifyscripts   = uglifyscripts;
 exports.translate       = translate;
 exports.watch           = watch;
 
