@@ -3,7 +3,7 @@
  * The template for displaying support pages
  *
  */
-get_header(); ?>
+get_header( 'support' ); ?>
 <?php
 global $minnpost_membership;
 $url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' );
