@@ -992,7 +992,7 @@ class MinnPost_Membership_Front_End {
 				});" );
 		}
 		if ( true !== filter_var( $disable_css, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), $this->version, 'all' );
+			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( __FILE__ ) . '../assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );
 		}
 	}
 
