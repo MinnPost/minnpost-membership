@@ -49,9 +49,6 @@ function adminstyles() {
     .pipe(sass()) // Compile
     .on('error', sass.logError) // Error reporting
     .pipe(postcss([
-      autoprefixer( {
-        'browsers': [ 'last 2 version' ]
-      } ),
       cssnano() // Minify
     ]))
     .pipe(rename({ // Rename to .min.css
@@ -69,9 +66,6 @@ function frontendstyles() {
     .pipe(sass()) // Compile
     .on('error', sass.logError) // Error reporting
     .pipe(postcss([
-      autoprefixer( {
-        'browsers': [ 'last 2 version' ]
-      } ),
       cssnano() // Minify
     ]))
     .pipe(rename({ // Rename to .min.css
