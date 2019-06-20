@@ -105,6 +105,13 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
+			$this->slug . '-site-header'        => array(
+				'title'    => __( 'Site Header', 'minnpost-membership' ),
+				'sections' => array(
+					'display' => __( 'Display', 'minnpost-membership' ),
+				),
+				'use_tabs' => false,
+			),
 			$this->slug . '-taking-payments'    => array(
 				'title'    => __( 'Taking Payments', 'minnpost-membership' ),
 				'sections' => $this->setup_payment_page_sections(),
@@ -320,6 +327,7 @@ class MinnPost_Membership_Admin {
 		);
 
 		$this->general_settings( $page, $all_field_callbacks );
+		$this->site_header( $page, $all_field_callbacks );
 		$this->taking_payments( $page, $all_field_callbacks );
 		$this->managing_donations( $page, $all_field_callbacks );
 		$this->campaign_settings( $page, $all_field_callbacks );
@@ -457,6 +465,121 @@ class MinnPost_Membership_Admin {
 				}
 				add_settings_field( $id, $title, $callback, $page, $section, $args );
 				register_setting( $page, $id );
+			}
+		}
+	}
+
+	/**
+	* Fields for the support header at the top of the site
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	function site_header( $page, $callbacks ) {
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
+				add_settings_section( $section, $title, null, $page );
+			}
+
+			$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
+			if ( '' !== $payment_urls ) {
+				$payment_urls = explode( "\r\n", $payment_urls );
+				$payment_url  = $payment_urls[0];
+			} else {
+				$payment_url = '';
+			}
+
+			$this_section = 'display';
+			$settings     = array(
+				'tagline_text' => array(
+					'title'    => __( 'Tagline text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => sprintf(
+							// translators: %1 is the site description
+							__( 'This value will be used for the tagline. If you do not add a value, the site will use the value for the site tagline from the WordPress general settings: %1$s', 'minnpost-membership' ),
+							get_bloginfo( 'description' )
+						),
+						'constant' => '',
+					),
+				),
+				'button_text'  => array(
+					'title'    => __( 'Button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'This value will be used for the button text. If you do not add a value, the value will be Donate.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'button_class' => array(
+					'title'    => __( 'Button CSS class', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Add any CSS classes for styling, scripting, etc. Separate multiple classes with spaces.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'button_url'   => array(
+					'title'    => __( 'Button URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => sprintf(
+							// translators: %1 is the first payment URL
+							__( 'When a user clicks the button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the first payment URL: %1$s', 'minnpost-membership' ),
+							$payment_url
+						),
+						'constant' => '',
+					),
+				),
+			);
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
 			}
 		}
 	}
