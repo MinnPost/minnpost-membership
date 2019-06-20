@@ -71,6 +71,10 @@ class MinnPost_Membership_Front_End {
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
+
+		// this can be called with do_action in a theme or other template
+		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ) );
+
 		add_filter( 'allowed_redirect_hosts', array( $this, 'allowed_redirect_hosts' ), 10 );
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
@@ -87,6 +91,43 @@ class MinnPost_Membership_Front_End {
 		// handle the emails sent from this class
 		add_filter( 'wp_mail_from', array( $this, 'mail_from' ) );
 		add_filter( 'wp_mail_from_name', array( $this, 'mail_from_name' ) );
+	}
+
+	/**
+	* Setup site header content for membership
+	*
+	*/
+	public function site_header() {
+		$params = array();
+
+		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
+		if ( '' !== $payment_urls ) {
+			$payment_urls = explode( "\r\n", $payment_urls );
+			$default_url  = $payment_urls[0];
+		} else {
+			$default_url = '';
+		}
+		$button_url = get_option( $this->option_prefix . 'button_url', $default_url );
+		$parsed     = parse_url( $button_url );
+		if ( empty( $parsed['scheme'] ) ) {
+			$button_url = site_url( $button_url );
+		}
+
+		$button_text  = get_option( 'minnpost_membership_button_text', __( 'Give', 'minnpost-largo' ) );
+		$button_class = get_option( 'minnpost_membership_button_class', '' );
+		if ( '' !== $button_class ) {
+			$button_class = ' ' . $button_class;
+		}
+
+		$tagline_text = get_option( 'minnpost_membership_tagline_text', get_bloginfo( 'description' ) );
+
+		$params['button_url']   = $button_url;
+		$params['button_text']  = $button_text;
+		$params['button_class'] = $button_class;
+		$params['tagline_text'] = $tagline_text;
+
+		$site_header = $this->get_template_html( 'header-support', 'template-parts', $params );
+		echo $site_header;
 	}
 
 	/**
