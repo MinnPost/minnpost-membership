@@ -1,7 +1,39 @@
 // variables
 $border-color-lighter: #e5e5e5;
 $border-color-darker: #cdcdd0;
+$cta-spacing: 8px;
 $vertical-space: 1em;
+
+.m-support-cta {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	margin-left: auto;
+	&.m-support-cta-top {
+		.a-support-button {
+			display: inline-block;
+			border-radius: $cta-spacing;
+			margin-left: $cta-spacing;
+			background: $border-color-lighter;
+			color: #000;
+			height: 34px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.5em;
+			&.a-support-button-with-heart {
+				width: 130px;
+				svg {
+					fill: currentColor;
+					max-height: 100%;
+					width: 20px;
+					display: inline-block;
+					margin-right: 8px;
+				}
+			}
+		}
+	}
+}
 
 .m-layout-membership {
 	width: 100%;
