@@ -119,10 +119,11 @@ class MinnPost_Membership_Front_End {
 			$button_class = ' ' . $button_class;
 		}
 
-		$button_include_heart = get_option( 'minnpost_membership_button_include_heart', true );
+		$button_include_heart = filter_var( get_option( 'minnpost_membership_button_include_heart', false ), FILTER_VALIDATE_BOOLEAN );
 		if ( true === $button_include_heart ) {
-			$svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" title="heart" class="icon icon-heart" viewBox="0 0 32 28" data-reactid="190"><path d="M16 5s-.516-1.531-1.49-2.51c-1.534-1.542-3.663-2.49-6.01-2.49s-4.472.951-6.01 2.49c-1.539 1.538-2.49 3.663-2.49 6.01s.951 4.472 2.49 6.01l13.51 13.49 13.51-13.49c1.539-1.538 2.49-3.663 2.49-6.01s-.951-4.472-2.49-6.01c-1.538-1.538-3.663-2.49-6.01-2.49s-4.476.948-6.01 2.49c-.974.979-1.49 2.51-1.49 2.51z" data-reactid="191"></path></svg>';
-			$button_text = $svg . $button_text;
+			$svg           = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" title="heart" class="icon icon-heart" viewBox="0 0 32 28" data-reactid="190"><path d="M16 5s-.516-1.531-1.49-2.51c-1.534-1.542-3.663-2.49-6.01-2.49s-4.472.951-6.01 2.49c-1.539 1.538-2.49 3.663-2.49 6.01s.951 4.472 2.49 6.01l13.51 13.49 13.51-13.49c1.539-1.538 2.49-3.663 2.49-6.01s-.951-4.472-2.49-6.01c-1.538-1.538-3.663-2.49-6.01-2.49s-4.476.948-6.01 2.49c-.974.979-1.49 2.51-1.49 2.51z" data-reactid="191"></path></svg>';
+			$button_text   = $svg . $button_text;
+			$button_class .= ' a-support-button-with-heart';
 		}
 
 		$tagline_text = get_option( 'minnpost_membership_tagline_text', get_bloginfo( 'description' ) );

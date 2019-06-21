@@ -501,7 +501,7 @@ class MinnPost_Membership_Admin {
 
 			$this_section = 'display';
 			$settings     = array(
-				'tagline_text' => array(
+				'tagline_text'         => array(
 					'title'    => __( 'Tagline text', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $page,
@@ -516,7 +516,18 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'button_text'  => array(
+				'button_include_heart' => array(
+					'title'    => __( 'Include the heart?', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'checkbox',
+						'desc'     => __( 'If checked, the button will include the heart in front of the text.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'button_text'          => array(
 					'title'    => __( 'Button text', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $page,
@@ -527,7 +538,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'button_class' => array(
+				'button_class'         => array(
 					'title'    => __( 'Button CSS class', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $page,
@@ -538,7 +549,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'button_url'   => array(
+				'button_url'           => array(
 					'title'    => __( 'Button URL', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => $page,
