@@ -126,6 +126,7 @@ class MinnPost_Membership_Front_End {
 		}
 
 		$tagline_text = get_option( 'minnpost_membership_tagline_text', get_bloginfo( 'description' ) );
+		$tagline_text = preg_replace( '|([^\s])\s+([^\s]+)\s*$|', '$1&nbsp;$2', $tagline_text );
 
 		$params['button_url']   = $button_url;
 		$params['button_text']  = $button_text;
