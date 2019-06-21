@@ -245,12 +245,13 @@ class MinnPost_Membership_Front_End {
 	*
 	*/
 	public function membership_form_submit() {
-		if ( wp_verify_nonce( $_POST['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
-			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
-			$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
-			if ( '' !== $redirect_url ) {
 
-				$params = array();
+		$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+		if ( '' !== $redirect_url ) {
+
+			$params = array();
+			if ( wp_verify_nonce( $_POST['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
 				// do we already know who this user is?
 				$user = wp_get_current_user();
 				if ( isset( $user->first_name ) && '' !== $user->first_name ) {
@@ -262,49 +263,46 @@ class MinnPost_Membership_Front_End {
 				if ( isset( $user->user_email ) && '' !== $user->user_email ) {
 					$params['email'] = $user->user_email;
 				}
+			}
 
-				// sanitize form data we accept
-				$post_params = $this->process_membership_parameters( 'post' );
-				$params      = array_merge( $params, $post_params );
+			// sanitize form data we accept
+			$post_params = $this->process_membership_parameters( 'post' );
+			$params      = array_merge( $params, $post_params );
 
-				// different buttons might have been clicked if it was a level picker
+			// different buttons might have been clicked if it was a level picker
 
-				$member_levels = $this->member_levels->get_member_levels();
-				foreach ( $member_levels as $key => $value ) {
-					$level_number = $key + 1;
-					if ( isset( $_POST[ 'membership-submit-' . $level_number ] ) ) {
-						$params['amount']    = filter_var( $_POST[ 'amount-level-' . $level_number ], FILTER_SANITIZE_NUMBER_INT );
-						$params['frequency'] = $this->process_frequency_value( $_POST[ 'membership-frequency-' . $level_number ] );
-						continue;
-					}
+			$member_levels = $this->member_levels->get_member_levels();
+			foreach ( $member_levels as $key => $value ) {
+				$level_number = $key + 1;
+				if ( isset( $_POST[ 'membership-submit-' . $level_number ] ) ) {
+					$params['amount']    = filter_var( $_POST[ 'amount-level-' . $level_number ], FILTER_SANITIZE_NUMBER_INT );
+					$params['frequency'] = $this->process_frequency_value( $_POST[ 'membership-frequency-' . $level_number ] );
+					continue;
 				}
+			}
 
-				// if we're on a page without a level picker, the frequency is one field
-				if ( isset( $_POST['frequencies'] ) ) {
-					$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
+			// if we're on a page without a level picker, the frequency is one field
+			if ( isset( $_POST['frequencies'] ) ) {
+				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
+			}
+
+			// send the valid form data to the payment processor as url parameters
+			foreach ( $params as $key => $value ) {
+				if ( false !== $value ) {
+					$redirect_url = add_query_arg( $key, $value, $redirect_url );
 				}
+			}
 
-				// send the valid form data to the payment processor as url parameters
-				foreach ( $params as $key => $value ) {
-					if ( false !== $value ) {
-						$redirect_url = add_query_arg( $key, $value, $redirect_url );
-					}
-				}
-
-				// amount is the only thing our processor requires in order to function
-				if ( ! isset( $params['amount'] ) ) {
-					$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
-					wp_safe_redirect( site_url( $error_url ) );
-					exit;
-				}
-
-				// this requires us to hook into the allowed url thing
-				wp_safe_redirect( $redirect_url );
-				exit;
-
-			} else {
+			// amount is the only thing our processor requires in order to function
+			if ( ! isset( $params['amount'] ) ) {
+				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
+				wp_safe_redirect( site_url( $error_url ) );
 				exit;
 			}
+
+			// this requires us to hook into the allowed url thing
+			wp_safe_redirect( $redirect_url );
+			exit;
 		}
 	}
 
