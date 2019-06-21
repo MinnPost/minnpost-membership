@@ -115,7 +115,7 @@ class MinnPost_Membership_Front_End {
 			$button_url = site_url( $button_url );
 		}
 
-		$button_text  = get_option( 'minnpost_membership_button_text', __( 'Give', 'minnpost-largo' ) );
+		$button_text  = get_option( 'minnpost_membership_button_text', __( 'Donate', 'minnpost-largo' ) );
 		$button_class = get_option( 'minnpost_membership_button_class', '' );
 		if ( '' !== $button_class ) {
 			$button_class = ' ' . $button_class;
