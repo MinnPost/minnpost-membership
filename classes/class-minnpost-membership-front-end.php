@@ -73,7 +73,7 @@ class MinnPost_Membership_Front_End {
 		}
 
 		// this can be called with do_action in a theme or other template
-		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ) );
+		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ), 10, 1 );
 
 		add_filter( 'allowed_redirect_hosts', array( $this, 'allowed_redirect_hosts' ), 10 );
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
@@ -95,9 +95,11 @@ class MinnPost_Membership_Front_End {
 
 	/**
 	* Setup site header content for membership
+	* @param bool $show_button
+	* do_action does not appear to have optional parameters, so we have to pass the value either way.
 	*
 	*/
-	public function site_header() {
+	public function site_header( $show_button ) {
 		$params = array();
 
 		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
@@ -133,6 +135,7 @@ class MinnPost_Membership_Front_End {
 		$params['button_text']  = $button_text;
 		$params['button_class'] = $button_class;
 		$params['tagline_text'] = $tagline_text;
+		$params['show_button']  = $show_button;
 
 		$site_header = $this->get_template_html( 'header-support', 'template-parts', $params );
 		echo $site_header;

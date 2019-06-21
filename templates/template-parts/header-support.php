@@ -11,5 +11,7 @@
 
 <div class="m-support-cta m-support-cta-top">
 	<h2 class="a-support-tagline"><?php echo $attributes['tagline_text']; ?></h2>
-	<a class="a-support-button<?php echo $attributes['button_class']; ?>" href="<?php echo $attributes['button_url']; ?>"><?php echo $attributes['button_text']; ?></a>
+	<?php if ( false !== $attributes['show_button'] ) : ?>
+		<a class="a-support-button<?php echo $attributes['button_class']; ?>" href="<?php echo $attributes['button_url']; ?>"><?php echo $attributes['button_text']; ?></a>
+	<?php endif; ?>
 </div>
