@@ -8,8 +8,8 @@ $vertical-space: 1em;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	margin-left: auto;
 	&.m-support-cta-top {
+		margin-left: auto;
 		.a-support-button {
 			display: inline-block;
 			border-radius: $cta-spacing;
