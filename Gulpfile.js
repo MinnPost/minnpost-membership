@@ -168,6 +168,18 @@ exports.watch           = watch;
 // What happens when we run gulp?
 gulp.task('default',
   gulp.series(
-    gulp.parallel(adminstyles, frontendstyles, adminscripts, frontendscripts, translate) // run these tasks asynchronously
+    gulp.parallel(adminstyles, frontendstyles, adminscripts, frontendscripts, uglifyscripts, translate) // run these tasks asynchronously
+  )
+);
+
+gulp.task('scripts',
+  gulp.series(
+    gulp.parallel(adminscripts, frontendscripts, uglifyscripts) // run these tasks asynchronously
+  )
+);
+
+gulp.task('styles',
+  gulp.series(
+    gulp.parallel(adminstyles, frontendstyles) // run these tasks asynchronously
   )
 );
