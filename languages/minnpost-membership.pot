@@ -907,6 +907,10 @@ msgstr ""
 msgid "Claimed date"
 msgstr ""
 
+#: classes/class-minnpost-membership-front-end.php:126
+msgid "Heart"
+msgstr ""
+
 #: classes/class-minnpost-membership-member-level.php:117
 msgid "per month"
 msgstr ""
