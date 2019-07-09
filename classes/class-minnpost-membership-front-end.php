@@ -72,8 +72,9 @@ class MinnPost_Membership_Front_End {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
 
-		// this can be called with do_action in a theme or other template
+		// these two can be called with do_action in a theme or other template
 		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ), 10, 1 );
+		add_action( $this->option_prefix . 'site_footer', array( $this, 'site_footer' ), 10, 1 );
 
 		add_filter( 'allowed_redirect_hosts', array( $this, 'allowed_redirect_hosts' ), 10 );
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
@@ -139,6 +140,20 @@ class MinnPost_Membership_Front_End {
 
 		$site_header = $this->get_template_html( 'header-support', 'template-parts', $params );
 		echo $site_header;
+	}
+
+	/**
+	* Setup site footer content for membership
+	* @param bool $show_button
+	* do_action does not appear to have optional parameters, so we have to pass the value either way.
+	*
+	*/
+	public function site_footer( $show_button ) {
+		$params         = array();
+		$params['this'] = $this;
+
+		$site_footer = $this->get_template_html( 'footer-support', 'template-parts', $params );
+		echo $site_footer;
 	}
 
 	/**

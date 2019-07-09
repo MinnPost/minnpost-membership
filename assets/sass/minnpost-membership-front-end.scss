@@ -7,6 +7,7 @@ $vertical-space: 1em;
 // media query sizes. see minnpost-largo for theme queries.
 $more-than-logo-screen: 500px;
 $medium-margins-too-small: 700px;
+$nav-breaks: 768px;
 $wrap-header: 830px;
 $level-widths-change: 890px;
 $nav-wrap-screen: 960px;
@@ -50,6 +51,9 @@ $nav-wrap-screen: 960px;
 				}
 			}
 		}
+	}
+	&.m-support-cta-bottom {
+		flex-wrap: wrap;
 	}
 }
 
@@ -427,6 +431,14 @@ $nav-wrap-screen: 960px;
 					width: 130px;
 				}
 			}
+		}
+	}
+}
+
+@media screen and (min-width: $nav-breaks) {
+	.m-support-cta {
+		&.m-support-cta-bottom {
+			max-width: 50%;
 		}
 	}
 }
