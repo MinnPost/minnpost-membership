@@ -3,6 +3,7 @@ $border-color-lighter: #e5e5e5;
 $border-color-darker: #cdcdd0;
 $cta-spacing: 8px;
 $vertical-space: 1em;
+$large-title-font-size: 215.4%;
 
 // media query sizes. see minnpost-largo for theme queries.
 $more-than-logo-screen: 500px;
@@ -54,6 +55,15 @@ $nav-wrap-screen: 960px;
 	}
 	&.m-support-cta-bottom {
 		flex-wrap: wrap;
+		h1 {
+			font-size: $large-title-font-size;
+		}
+		.m-membership-fast-select {
+			margin: 0;
+		}
+		.m-form-actions {
+			margin: 0.5em 0 0 0;
+		}
 	}
 }
 

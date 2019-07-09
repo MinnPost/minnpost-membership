@@ -149,8 +149,22 @@ class MinnPost_Membership_Front_End {
 	*
 	*/
 	public function site_footer( $show_button ) {
-		$params         = array();
-		$params['this'] = $this;
+		$params = array();
+
+		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
+		if ( '' !== $payment_urls ) {
+			$payment_urls = explode( "\r\n", $payment_urls );
+			$default_url  = $payment_urls[0];
+		} else {
+			$default_url = '';
+		}
+		$button_url = get_option( $this->option_prefix . 'button_url', $default_url );
+		$parsed     = parse_url( $button_url );
+		if ( empty( $parsed['scheme'] ) ) {
+			$button_url = site_url( $button_url );
+		}
+
+		$params['button_url'] = $button_url;
 
 		$site_footer = $this->get_template_html( 'footer-support', 'template-parts', $params );
 		echo $site_footer;
