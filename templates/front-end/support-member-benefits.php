@@ -164,4 +164,4 @@ global $minnpost_membership;
 	</div><!-- #primary -->
 
 <?php
-get_footer();
+get_footer( 'support' );
