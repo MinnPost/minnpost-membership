@@ -243,24 +243,27 @@
 				member_level_prefix = minnpost_membership_data.member_level_prefix;
 			}
 
-			$(options.level_viewer_container).prop( 'class', 'a-show-level a-show-level-' + level['name'].toLowerCase() );
+			if ( $( options.level_viewer_container ).length > 0 ) {
 
-			if ( $( options.user_current_level ).length > 0 && minnpost_membership_data.current_user.member_level.length > 0 ) {
+				$(options.level_viewer_container).prop( 'class', 'a-show-level a-show-level-' + level['name'].toLowerCase() );
 
-				if ( 'a', $( options.level_viewer_container ).length > 0 ) {
-					level_viewer_container_selector = options.level_viewer_container + ' a';
+				if ( $( options.user_current_level ).length > 0 && minnpost_membership_data.current_user.member_level.length > 0 ) {
+
+					if ( 'a', $( options.level_viewer_container ).length > 0 ) {
+						level_viewer_container_selector = options.level_viewer_container + ' a';
+					}
+
+					old_level = minnpost_membership_data.current_user.member_level.replace( member_level_prefix, '' );
+
+					if ( old_level !== level['name'].toLowerCase() ) {
+						$( level_viewer_container_selector ).html( decodeHtmlEntity( $( options.level_viewer_container ).data( 'changed' ) ) );
+					} else {
+						$( level_viewer_container_selector ).html( decodeHtmlEntity( $( options.level_viewer_container ).data( 'not-changed' ) ) );
+					}
 				}
 
-				old_level = minnpost_membership_data.current_user.member_level.replace( member_level_prefix, '' );
-
-				if ( old_level !== level['name'].toLowerCase() ) {
-					$( level_viewer_container_selector ).html( decodeHtmlEntity( $( options.level_viewer_container ).data( 'changed' ) ) );
-				} else {
-					$( level_viewer_container_selector ).html( decodeHtmlEntity( $( options.level_viewer_container ).data( 'not-changed' ) ) );
-				}
+				$(options.level_name, options.level_viewer_container).text( level['name'] );
 			}
-
-			$(options.level_name, options.level_viewer_container).text( level['name'] );
 
 		}, // end showNewLevel
 
