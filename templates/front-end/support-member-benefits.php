@@ -133,7 +133,7 @@ global $minnpost_membership;
 															<?php endforeach; ?>
 														</select>
 													</div>
-													<input class="a-button" name="membership-submit-<?php echo strtolower( $record['name'] ); ?>" value="<?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefits_give_button_text', '' ); ?>" type="submit">
+													<input class="a-button" name="membership-submit-<?php echo $key + 1; ?>" value="<?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefits_give_button_text', '' ); ?>" type="submit">
 												</div>
 											</section>
 											<section class="m-member-level-benefits">
