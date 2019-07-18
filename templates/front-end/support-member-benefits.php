@@ -25,7 +25,7 @@ global $minnpost_membership;
 				<?php $use_member_levels = get_option( $minnpost_membership->option_prefix . 'use_member_levels', false ); ?>
 				<?php if ( 1 === intval( $use_member_levels ) ) : ?>
 					<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-member-levels">
-						<input type="hidden" name="action" value="membership_form_submit">
+						<input type="hidden" name="action" value="benefit_choose_form_submit">
 						<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
 						<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
 						<?php $url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' ); ?>
