@@ -366,8 +366,15 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function benefit_choose_form_submit() {
 
-		$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
-		$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+		$payment_processor_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		$submit_url            = get_option( $this->option_prefix . 'support-member-benefits_submit_url', '' );
+		if ( '' !== $submit_url ) {
+			$redirect_url = $submit_url;
+		} else {
+			$redirect_url = $payment_processor_url;
+		}
+
+		$error_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 		if ( '' !== $redirect_url ) {
 
 			$params = array();
