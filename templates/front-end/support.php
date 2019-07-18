@@ -25,7 +25,7 @@ $user_id    = get_current_user_id();
 			<?php endif; ?>
 			<div class="m-entry-content">
 				<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
-					<input type="hidden" name="action" value="support_form_submit">
+					<input type="hidden" name="action" value="donate_choose_form_submit">
 					<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
 					<input type="hidden" name="current_url" value="<?php echo rtrim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ), '/' ); ?>">
 					<?php if ( ! empty( $url_params ) ) : ?>
