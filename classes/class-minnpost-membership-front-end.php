@@ -80,11 +80,19 @@ class MinnPost_Membership_Front_End {
 		add_action( 'pre_get_posts', array( $this, 'set_query_properties' ), 10 );
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
-		add_action( 'wp_ajax_membership_form_submit', array( $this, 'membership_form_submit' ) );
-		add_action( 'wp_ajax_nopriv_membership_form_submit', array( $this, 'membership_form_submit' ) );
-		// benefit form submits
+
+		// main donate form submit actions
+		add_action( 'wp_ajax_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
+		add_action( 'wp_ajax_nopriv_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
+
+		// benefit level chooser form submit actions
+		add_action( 'wp_ajax_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
+		add_action( 'wp_ajax_nopriv_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
+
+		// benefit redeem form submits
 		add_action( 'wp_ajax_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
+
 		// this could be used for any other template as well, but we are sticking with single by default.
 		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
 		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
@@ -311,36 +319,72 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Process membership form submission
+	* Process donate form submission
 	*
 	*/
-	public function membership_form_submit() {
+	public function donate_choose_form_submit() {
 
 		$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
 		$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 		if ( '' !== $redirect_url ) {
 
 			$params = array();
-			if ( wp_verify_nonce( $_POST['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
-				// do we already know who this user is?
-				$user = wp_get_current_user();
-				if ( isset( $user->first_name ) && '' !== $user->first_name ) {
-					$params['firstname'] = $user->first_name;
-				}
-				if ( isset( $user->last_name ) && '' !== $user->last_name ) {
-					$params['lastname'] = $user->last_name;
-				}
-				if ( isset( $user->user_email ) && '' !== $user->user_email ) {
-					$params['email'] = $user->user_email;
-				}
-			}
+			$params = $this->set_user_params( $_POST, $params );
 
 			// sanitize form data we accept
 			$post_params = $this->process_membership_parameters( 'post' );
 			$params      = array_merge( $params, $post_params );
 
-			// different buttons might have been clicked if it was a level picker
+			// this page does not have a picker for each level, so the frequency is one field
+			if ( isset( $_POST['frequencies'] ) ) {
+				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
+			}
 
+			// send the valid form data to the submit url as url parameters
+			foreach ( $params as $key => $value ) {
+				if ( false !== $value ) {
+					$redirect_url = add_query_arg( $key, $value, $redirect_url );
+				}
+			}
+
+			// amount is the only thing our processor requires in order to function
+			if ( ! isset( $params['amount'] ) ) {
+				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
+				wp_safe_redirect( site_url( $error_url ) );
+				exit;
+			}
+
+			// this requires us to hook into the allowed url thing
+			wp_safe_redirect( $redirect_url );
+			exit;
+		}
+	}
+
+	/**
+	* Process benefit level choose form submission
+	*
+	*/
+	public function benefit_choose_form_submit() {
+
+		$payment_processor_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		$submit_url            = get_option( $this->option_prefix . 'support-member-benefits_submit_url', '' );
+		if ( '' !== $submit_url ) {
+			$redirect_url = $submit_url;
+		} else {
+			$redirect_url = $payment_processor_url;
+		}
+
+		$error_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+		if ( '' !== $redirect_url ) {
+
+			$params = array();
+			$params = $this->set_user_params( $_POST, $params );
+
+			// sanitize form data we accept
+			$post_params = $this->process_membership_parameters( 'post' );
+			$params      = array_merge( $params, $post_params );
+
+			// because users can choose which level they want, this detects which submit button - and which benefit level - the user clicked
 			$member_levels = $this->member_levels->get_member_levels();
 			foreach ( $member_levels as $key => $value ) {
 				$level_number = $key + 1;
@@ -351,12 +395,7 @@ class MinnPost_Membership_Front_End {
 				}
 			}
 
-			// if we're on a page without a level picker, the frequency is one field
-			if ( isset( $_POST['frequencies'] ) ) {
-				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
-			}
-
-			// send the valid form data to the payment processor as url parameters
+			// send the valid form data to the submit url as url parameters
 			foreach ( $params as $key => $value ) {
 				if ( false !== $value ) {
 					$redirect_url = add_query_arg( $key, $value, $redirect_url );
@@ -548,6 +587,31 @@ class MinnPost_Membership_Front_End {
 				}
 			}
 		}
+	}
+
+	/**
+	* Set the user info parameters for form submission
+	*
+	* @param array $posted
+	* @param array $params
+	* @return array $params
+	*
+	*/
+	private function set_user_params( $posted, $params ) {
+		if ( wp_verify_nonce( $posted['minnpost_membership_form_nonce'], 'mem-form-nonce' ) ) {
+			// do we already know who this user is?
+			$user = wp_get_current_user();
+			if ( isset( $user->first_name ) && '' !== $user->first_name ) {
+				$params['firstname'] = $user->first_name;
+			}
+			if ( isset( $user->last_name ) && '' !== $user->last_name ) {
+				$params['lastname'] = $user->last_name;
+			}
+			if ( isset( $user->user_email ) && '' !== $user->user_email ) {
+				$params['email'] = $user->user_email;
+			}
+		}
+		return $params;
 	}
 
 	/**
