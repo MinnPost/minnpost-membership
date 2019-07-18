@@ -909,8 +909,20 @@ class MinnPost_Membership_Admin {
 			);
 
 			// /support/member-benefits page options
-			$this_section                         = 'support-member-benefits';
-			$settings[ $this_section . '_title' ] = array(
+			$this_section                              = 'support-member-benefits';
+			$settings[ $this_section . '_submit_url' ] = array(
+				'title'    => __( 'Submit URL', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'class'    => 'minnpost-membership-title-field',
+				'args'     => array(
+					'desc'     => __( 'Enter the URL users should be sent to after submitting the form. If you leave it blank, the site will use the default payment processor URL instead.', 'minnpost-membership' ),
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+			$settings[ $this_section . '_title' ]      = array(
 				'title'    => __( 'Page title', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
 				'page'     => $this_section,
