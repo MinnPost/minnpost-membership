@@ -239,13 +239,13 @@ class MinnPost_Membership_Admin {
 						}
 
 						if ( 'add-member-level' === $method || 'edit-member-level' === $method ) {
-							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
+							require_once( plugin_dir_path( $this->file ) . '/templates/admin/member-levels-add-edit.php' );
 						} elseif ( 'delete-member-level' === $method ) {
-							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
+							require_once( plugin_dir_path( $this->file ) . '/templates/admin/member-levels-delete.php' );
 						}
 					} else {
 						$member_levels = $this->member_levels->get_member_levels();
-						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
+						require_once( plugin_dir_path( $this->file ) . '/templates/admin/general-settings.php' );
 					}
 					break;
 				case $this->slug . '-benefit-results':
@@ -267,10 +267,10 @@ class MinnPost_Membership_Admin {
 							unset( $offers[ $key ] );
 						}
 					}
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/benefit-results-' . $tab . '.php' );
+					require_once( plugin_dir_path( $this->file ) . '/templates/admin/benefit-results-' . $tab . '.php' );
 					break;
 				default:
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
+					require_once( plugin_dir_path( $this->file ) . '/templates/admin/settings.php' );
 					break;
 			} // End switch().*/
 			?>
@@ -355,9 +355,9 @@ class MinnPost_Membership_Admin {
 	* @return void
 	*/
 	public function admin_scripts_and_styles() {
-		wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.min.js' ), true );
-		wp_enqueue_script( $this->slug . '-admin', plugins_url( 'assets/js/' . $this->slug . '-admin.min.js', dirname( __FILE__ ) ), array( 'jquery', $this->slug . '-front-end' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-admin.min.js' ), true );
-		wp_enqueue_style( $this->slug . '-admin', plugins_url( 'assets/css/' . $this->slug . '-admin.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( __FILE__ ) . '../assets/css/' . $this->slug . '-admin.min.css' ) );
+		wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-front-end.min.js' ), true );
+		wp_enqueue_script( $this->slug . '-admin', plugins_url( 'assets/js/' . $this->slug . '-admin.min.js', dirname( __FILE__ ) ), array( 'jquery', $this->slug . '-front-end' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-admin.min.js' ), true );
+		wp_enqueue_style( $this->slug . '-admin', plugins_url( 'assets/css/' . $this->slug . '-admin.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( $this->file ) . '/assets/css/' . $this->slug . '-admin.min.css' ) );
 	}
 
 	/**

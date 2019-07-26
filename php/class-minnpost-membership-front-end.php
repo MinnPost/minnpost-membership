@@ -194,7 +194,7 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function cortex_routes() {
 		if ( ! class_exists( 'Brain\Cortex' ) ) {
-			require_once( plugin_dir_path( __FILE__ ) . '../vendor/autoload.php' );
+			require_once( plugin_dir_path( $this->file ) . '/vendor/autoload.php' );
 		}
 		Brain\Cortex::boot();
 		add_action(
@@ -755,7 +755,7 @@ class MinnPost_Membership_Front_End {
 			if ( locate_template( $blocked_templates ) ) {
 				$template = locate_template( $blocked_templates );
 			} else {
-				$template = dirname( __FILE__ ) . '/../templates/blocked/single.php';
+				$template = dirname( $this->file ) . '/templates/blocked/single.php';
 			}
 			return $template;
 		}
@@ -1037,7 +1037,7 @@ class MinnPost_Membership_Front_End {
 		$template_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $url, '/' ) );
 
 		$theme_path  = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name;
-		$plugin_path = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name;
+		$plugin_path = plugin_dir_path( $this->file ) . '/templates/' . $location . $template_name;
 
 		if ( file_exists( $theme_path . '.php' ) ) {
 			return $theme_path;
@@ -1107,7 +1107,7 @@ class MinnPost_Membership_Front_End {
 		$disable_javascript = get_option( $this->option_prefix . 'disable_javascript', false );
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( true !== filter_var( $disable_javascript, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.min.js' ) );
+			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-front-end.min.js' ) );
 			$minnpost_membership_data = $this->get_user_membership_info();
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
 			wp_localize_script(
@@ -1128,7 +1128,7 @@ class MinnPost_Membership_Front_End {
 			);
 		}
 		if ( true !== filter_var( $disable_css, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( __FILE__ ) . '../assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );
+			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( $this->file ) . '/assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );
 		}
 	}
 
@@ -1240,7 +1240,7 @@ class MinnPost_Membership_Front_End {
 		if ( file_exists( get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php' ) ) {
 			$file = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php';
 		} else {
-			$file = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name . '.php';
+			$file = plugin_dir_path( $this->file ) . '/templates/' . $location . $template_name . '.php';
 		}
 
 		require( $file );
