@@ -5,18 +5,18 @@
  */
 get_header(); ?>
 <?php
-global $minnpost_membership;
-$user_state    = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
-$benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
-$offers        = $minnpost_membership->content_items->get_partner_offers();
-$user_claim    = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
+$minnpost_membership = minnpost_membership();
+$user_state          = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
+$benefit_nonce       = wp_create_nonce( 'mem-form-nonce' );
+$offers              = $minnpost_membership->content_items->get_partner_offers();
+$user_claim          = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
 
 $check_value = true;
 $open_offers = array_filter(
-    $offers,
-    function ( $offer ) use ( $check_value ) {
-        return filter_var( $offer->claimable, FILTER_VALIDATE_BOOLEAN ) === $check_value;
-    }
+	$offers,
+	function ( $offer ) use ( $check_value ) {
+		return filter_var( $offer->claimable, FILTER_VALIDATE_BOOLEAN ) === $check_value;
+	}
 );
 ?>
 	<div id="primary" class="m-layout-membership o-fan-club m-page">
@@ -93,14 +93,14 @@ $open_offers = array_filter(
 													<?php endif; ?>
 												</div>
 
-												<?php if ( 0 < $post->unclaimed_instance_count  && 0 < $post->dated_instance_count ) : ?>
+												<?php if ( 0 < $post->unclaimed_instance_count && 0 < $post->dated_instance_count ) : ?>
 													<select id="instance-id-<?php the_ID(); ?>" name="instance-id-<?php the_ID(); ?>">
 														<option value="">Select an option</option>
-		 												<?php foreach ( $post->instances as $key => $instance ) : ?>
-		 													<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
-		 														<option value="<?php echo $key; ?>"><?php echo date_i18n( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo date_i18n( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ) ?></option>
-		 													<?php endif; ?>
-		 												<?php endforeach; ?>
+														<?php foreach ( $post->instances as $key => $instance ) : ?>
+															<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
+																<option value="<?php echo $key; ?>"><?php echo date_i18n( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo date_i18n( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ); ?></option>
+															<?php endif; ?>
+														<?php endforeach; ?>
 													</select>
 												<?php endif; ?>
 

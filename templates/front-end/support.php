@@ -5,9 +5,9 @@
  */
 get_header( 'support' ); ?>
 <?php
-global $minnpost_membership;
-$url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' );
-$user_id    = get_current_user_id();
+$minnpost_membership = minnpost_membership();
+$url_params          = $minnpost_membership->front_end->process_membership_parameters( 'get' );
+$user_id             = get_current_user_id();
 ?>
 
 	<div id="primary" class="m-layout-membership o-support">
@@ -127,7 +127,8 @@ $user_id    = get_current_user_id();
 					<aside>
 						<?php
 						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link', '' ) ) {
-							echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
+							echo sprintf(
+								'<p class="member-benefit-details-link">%1$s</p>',
 								get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
 							);
 						}
