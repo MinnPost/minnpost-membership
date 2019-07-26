@@ -213,7 +213,7 @@ class MinnPost_Membership_Admin {
 							$id           = $member_level['id'];
 						} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
 							$id           = $get_data['id'];
-							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '', true );
+							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '', true, 'id', true );
 						}
 
 						$benefits = '';
