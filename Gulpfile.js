@@ -4,6 +4,7 @@ const babel = require('gulp-babel');
 const browserSync = require('browser-sync').create();
 const concat = require('gulp-concat');
 const cssnano = require('cssnano');
+const eslint = require('gulp-eslint');
 const fs = require('fs');
 const gulp = require('gulp');
 const packagejson = JSON.parse(fs.readFileSync('./package.json'));
@@ -14,6 +15,7 @@ const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
 const sort = require( 'gulp-sort' );
+const gulpStylelint = require('gulp-stylelint');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 const wpPot = require('gulp-wp-pot');
@@ -24,7 +26,8 @@ const config = {
     admin: 'assets/sass/' + packagejson.name + '-admin.scss',
     front_end: 'assets/sass/' + packagejson.name + '-front-end.scss',
     srcDir: 'assets/sass',
-    dest: 'assets/css'
+    dest: 'assets/css',
+    lint_dest: 'assets/sass/',
   },
   scripts: {
     admin: './assets/js/src/admin/**/*.js',
@@ -43,13 +46,18 @@ const config = {
 };
 
 function adminstyles() {
-  return gulp.src(config.styles.admin)
+  return gulp.src(config.styles.admin, { allowEmpty: true })
     .pipe(sourcemaps.init()) // Sourcemaps need to init before compilation
     .pipe(sassGlob()) // Allow for globbed @import statements in SCSS
     .pipe(sass()) // Compile
     .on('error', sass.logError) // Error reporting
     .pipe(postcss([
-      cssnano() // Minify
+      mqpacker( {
+        'sort': true
+      } ),
+      cssnano( {
+        'safe': true // Use safe optimizations.
+      } ) // Minify
     ]))
     .pipe(rename({ // Rename to .min.css
       suffix: '.min'
@@ -60,13 +68,18 @@ function adminstyles() {
 }
 
 function frontendstyles() {
-  return gulp.src(config.styles.front_end)
+  return gulp.src(config.styles.front_end, { allowEmpty: true } )
     .pipe(sourcemaps.init()) // Sourcemaps need to init before compilation
     .pipe(sassGlob()) // Allow for globbed @import statements in SCSS
     .pipe(sass()) // Compile
     .on('error', sass.logError) // Error reporting
     .pipe(postcss([
-      cssnano() // Minify
+      mqpacker( {
+        'sort': true
+      } ),
+      cssnano( {
+        'safe': true // Use safe optimizations.
+      } ) // Minify
     ]))
     .pipe(rename({ // Rename to .min.css
       suffix: '.min'
@@ -76,18 +89,23 @@ function frontendstyles() {
     .pipe(browserSync.stream());
 }
 
+function sasslint() {
+  return gulp.src(config.styles.srcDir)
+    .pipe(gulpStylelint({
+      fix: true
+    }))
+    .pipe(gulp.dest(config.styles.lint_dest));
+}
+
 function adminscripts() {
   return gulp.src(config.scripts.admin)
     .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/preset-env']
     }))
-    .pipe(concat('' + packagejson.name + '-admin.js')) // Concatenate
-    /*.pipe(uglify()) // Minify + compress
-    .pipe(rename({
-      suffix: '.min'
-    }))*/
+    .pipe(concat(packagejson.name + '-admin.js')) // Concatenate
     .pipe(sourcemaps.write())
+    .pipe(eslint())
     .pipe(gulp.dest(config.scripts.dest))
     .pipe(browserSync.stream());
 }
@@ -104,6 +122,7 @@ function frontendscripts() {
       suffix: '.min'
     }))*/
     .pipe(sourcemaps.write())
+    .pipe(eslint())
     .pipe(gulp.dest(config.scripts.dest))
     .pipe(browserSync.stream());
 }
@@ -156,30 +175,15 @@ function watch() {
   }
 }
 
+// define complex tasks
+const styles  = gulp.series(sasslint, adminstyles, frontendstyles);
+const scripts = gulp.series(adminscripts, frontendscripts, uglifyscripts);
+const build   = gulp.series(gulp.parallel(styles, scripts, translate));
+
 // export tasks
-exports.adminstyles     = adminstyles;
-exports.frontendstyles  = frontendstyles;
-exports.adminscripts    = adminscripts;
-exports.frontendscripts = frontendscripts;
-exports.uglifyscripts   = uglifyscripts;
-exports.translate       = translate;
-exports.watch           = watch;
-
-// What happens when we run gulp?
-gulp.task('default',
-  gulp.series(
-    gulp.parallel(adminstyles, frontendstyles, adminscripts, frontendscripts, uglifyscripts, translate) // run these tasks asynchronously
-  )
-);
-
-gulp.task('scripts',
-  gulp.series(
-    gulp.parallel(adminscripts, frontendscripts, uglifyscripts) // run these tasks asynchronously
-  )
-);
-
-gulp.task('styles',
-  gulp.series(
-    gulp.parallel(adminstyles, frontendstyles) // run these tasks asynchronously
-  )
-);
+exports.styles     = styles;
+exports.scripts    = scripts;
+exports.translate  = translate;
+exports.watch      = watch;
+exports.build      = build;
+exports.default    = build;
