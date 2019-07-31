@@ -11,6 +11,15 @@ $user_id    = get_current_user_id();
 ?>
 
 	<div id="primary" class="m-layout-membership o-support">
+
+        <section class="o-support-progress">
+            <ol>
+	            <li class="panel--review"><span class="active">Choose</span></li>
+                <li class="panel--pay"><span>Payment</span></li>
+	            <li class="panel--confirmation"><span>Thank You</span></li>
+            </ol>
+        </section>
+
 		<main id="main" class="site-main" role="main">
 			<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ) ) : ?>
 				<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>

@@ -4,6 +4,27 @@ $border-color-darker: #cdcdd0;
 $cta-spacing: 8px;
 $vertical-space: 1em;
 $large-title-font-size: 215.4%;
+$small-space: 0.8125em; // 13px
+
+// Heading sizes
+$h1-size:           2.5rem; // .alpha 44px
+$h2-size:           2rem; // .beta 32px
+$h3-size:           1.5rem; // .gamma 24px
+$h4-size:           1.25rem; // .delta 20px
+$h5-size:           1rem; // .epsilon 16px
+$h6-size:           0.875rem; // .zeta 14px
+
+// Colors
+$gray-lightest: #cdcdd0;
+$gray-light: #ababab;
+$gray-med: #7a7a7a;
+$gray-dark: #404040;
+$gray-darkest: #282828;
+
+// Fonts
+$helvetica: "Helvetica Neue", "Helvetica", "Roboto", "Arial", sans-serif;
+$nimbus: "Nimbus Sans Condensed", NimbusSanNovConD-Bol,Helvetica,Arial,Geneva,sans-serif;
+$nimbus-settings: "calt" off, "dlig" off, "ss01" off, "liga" off;
 
 // media query sizes. see minnpost-largo for theme queries.
 $more-than-logo-screen: 500px;
@@ -75,6 +96,81 @@ $nav-wrap-screen: 960px;
 		padding: 0;
 	}
 }
+
+.o-support-progress {
+	font-size: 16px;
+	line-height: 1.5em;
+	margin: 0.625rem 0;
+	clear: both;
+	ol {
+		list-style-type: none;
+                list-style-position: outside;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		background: $gray-med;
+		display: flex;
+		counter-reset: li;
+	}
+	li {
+		float: left;
+		flex: 1;
+		position: relative;
+	}
+	a, span {
+		color: white;
+		font-family: $helvetica;
+		display: block;
+		padding: $small-space;
+		text-decoration: none;
+		transition: background-color 0.1s linear;
+		border-right: 1px solid $gray-lightest;
+		font-size: $h5-size;
+	}
+	a:hover, a:focus, a:active, a.active, span.active {
+		background: $gray-dark;
+		color: white;
+                text-decoration: none;
+	}
+	a::before, span::before {
+		content: none;
+		counter-increment: li;
+		font-size: $h1-size;
+		top: 0;
+		left: 1rem;
+		position: absolute;
+		color: $gray-light;
+		font-family: $nimbus;
+		font-feature-settings: $nimbus-settings;
+	}
+}
+
+@media screen and (min-width: $more-than-logo-screen) {
+	.o-support-progress {
+		a, span {
+			font-size: $h6-size;
+			padding: $small-space 0 $small-space 3em;
+		}
+		a::before, span::before {
+			content: counter(li, decimal);
+			top: 0.3em;
+			font-size: $h1-size;
+		}
+	}
+}
+
+@media screen and (min-width: $medium-margins-too-small) {
+	.o-support-progress {
+		a, span {
+			font-size: $h5-size;
+			padding: $small-space 0 $small-space 3em;
+		}
+		a::before, span::before {
+		    font-size: $h1-size;
+		}
+	}
+}
+
 .m-membership-support-intro {
 	margin-bottom: $vertical-space;
 }
