@@ -1135,3 +1135,11 @@ msgstr ""
 #: templates/email/claim-partner-offer-for-admins.php:49
 msgid "- Claiming user edit link: %1$s"
 msgstr ""
+
+#: templates/front-end/support.php:31, templates/front-end/support.php:33
+msgid "Payment"
+msgstr ""
+
+#: templates/front-end/support.php:35
+msgid "Thank You"
+msgstr ""

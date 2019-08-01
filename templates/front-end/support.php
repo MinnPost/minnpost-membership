@@ -48,6 +48,18 @@ $user_id    = get_current_user_id();
 				</header>
 			<?php endif; ?>
 			<div class="m-entry-content">
+				<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
+						<section class="m-membership-summary">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+						</section>
+					<?php endif; ?>
+				<?php else : ?>
+					<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
+						<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
+					</section>
+				<?php endif; ?>
+
 				<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
 					<input type="hidden" name="action" value="donate_choose_form_submit">
 					<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
@@ -58,18 +70,6 @@ $user_id    = get_current_user_id();
 								<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
 							<?php endif; ?>
 						<?php endforeach; ?>
-					<?php endif; ?>
-
-					<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
-						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
-							<section class="m-membership-summary">
-								<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
-							</section>
-						<?php endif; ?>
-					<?php else : ?>
-						<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
-						</section>
 					<?php endif; ?>
 
 					<?php if ( ! empty( $_GET['errors'] ) ) : ?>
