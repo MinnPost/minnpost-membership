@@ -1,9 +1,17 @@
-// variables
+// variables. some of these match variables in minnpost-largo.
 $border-color-lighter: #e5e5e5;
 $border-color-darker: #cdcdd0;
+$color__gray-light: #ababab;
+$color__gray-dark: #404040;
+$color__gray-darkest: #282828;
+$_color-base-gray: #7a7a7a;
+$content-font-size: 1em;
 $cta-spacing: 8px;
+$progress-font-size-large: 2.5rem;
+$progress-font-size-small: 0.875rem;
 $vertical-space: 1em;
 $large-title-font-size: 215.4%;
+$small-space: 0.8125em; // 13px
 
 // media query sizes. see minnpost-largo for theme queries.
 $more-than-logo-screen: 500px;
@@ -75,6 +83,44 @@ $nav-wrap-screen: 960px;
 		padding: 0;
 	}
 }
+
+.m-support-progress {
+	margin: 0.625rem 0 0.625rem * 2 0;
+	ol {
+		list-style: none;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		background: $_color-base-gray;
+		display: flex;
+		counter-reset: li;
+	}
+	li {
+		flex: 1;
+		position: relative;
+	}
+	a, span {
+		display: block;
+		padding: $small-space;
+		text-decoration: none;
+		transition: background-color 0.1s linear;
+	}
+	a:hover, a:focus, a:active, a.active, span.active {
+		background: $color__gray-dark;
+		color: #fff;
+		text-decoration: none;
+	}
+	a:before, span:before {
+		content: none;
+		counter-increment: li;
+		top: 0;
+		left: 1rem;
+		position: absolute;
+		color: $color--gray-light;
+		font-size: $progress-font-size-large;
+	}
+}
+
 .m-membership-support-intro {
 	margin-bottom: $vertical-space;
 }
@@ -376,41 +422,6 @@ $nav-wrap-screen: 960px;
 
 
 // start media queries
-@media screen and (min-width: $medium-margins-too-small) {
-	.m-membership-member-level {
-		width: 46%;
-		margin-right: 2%;
-		float: left;
-	}
-	.m-partner-offers {
-		.m-partner-offer {
-			//clear: both;
-			display: flex;
-			.m-partner-offer-image {
-				margin: 0 1em 0 0;
-				//float: left;
-			}
-			.m-partner-offer-content {
-				//float: left;
-				//width: auto;
-				//max-width: 70%;
-			}
-		}
-	}
-}
-
-@media screen and (min-width: $level-widths-change) {
-	.m-membership-member-level {
-		width: 23%;
-	}
-	.m-all-partners {
-		.m-partner-list {
-			li {
-				width: 22%;
-			}
-		}
-	}
-}
 
 @media screen and (min-width: 400px) {
 	.m-support-cta {
@@ -443,6 +454,38 @@ $nav-wrap-screen: 960px;
 			}
 		}
 	}
+	.m-support-progress {
+		a, span {
+			font-size: $progress-font-size-small;
+			padding: $small-space 0 $small-space 3em;
+		}
+		a:before, span:before {
+			content: counter(li, decimal);
+			top: -0.15em;
+			font-size: $progress-font-size-large;
+		}
+	}
+}
+
+@media screen and (min-width: $medium-margins-too-small) {
+	.m-membership-member-level {
+		width: 46%;
+		margin-right: 2%;
+		float: left;
+	}
+	.m-partner-offers {
+		.m-partner-offer {
+			display: flex;
+			.m-partner-offer-image {
+				margin: 0 1em 0 0;
+			}
+		}
+	}
+	.m-support-progress {
+		a, span {
+			font-size: $content-font-size;
+		}
+	}
 }
 
 @media screen and (min-width: $nav-breaks) {
@@ -468,6 +511,19 @@ $nav-wrap-screen: 960px;
 		&.m-support-cta-top {
 			margin-left: auto;
 			margin-bottom: 0;
+		}
+	}
+}
+
+@media screen and (min-width: $level-widths-change) {
+	.m-membership-member-level {
+		width: 23%;
+	}
+	.m-all-partners {
+		.m-partner-list {
+			li {
+				width: 22%;
+			}
 		}
 	}
 }

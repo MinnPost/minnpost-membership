@@ -176,7 +176,7 @@ function watch() {
 }
 
 // define complex tasks
-const styles  = gulp.series(sasslint, adminstyles, frontendstyles);
+const styles  = gulp.series(adminstyles, frontendstyles);
 const scripts = gulp.series(adminscripts, frontendscripts, uglifyscripts);
 const build   = gulp.series(gulp.parallel(styles, scripts, translate));
 

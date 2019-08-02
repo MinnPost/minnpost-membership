@@ -920,15 +920,15 @@ msgid "Heart"
 msgstr ""
 
 #: classes/class-minnpost-membership-member-level.php:117
-msgid "per month"
+msgid "monthly"
 msgstr ""
 
 #: classes/class-minnpost-membership-member-level.php:124
-msgid "per year"
+msgid "yearly"
 msgstr ""
 
 #: classes/class-minnpost-membership-member-level.php:131
-msgid "one-time"
+msgid "one time"
 msgstr ""
 
 #: classes/class-minnpost-membership-shortcodes.php:169
