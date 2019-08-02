@@ -12,29 +12,29 @@ $user_id    = get_current_user_id();
 
 	<div id="primary" class="m-layout-membership o-support">
 
-		<main id="main" class="site-main" role="main">
+		<section class="m-support-progress" aria-label="progress">
+			<ol>
+				<?php $choose_url = site_url( '/support/' ); ?>
+				<?php if ( ! empty( $url_params ) ) : ?>
+						<?php $choose_url .= http_build_query( $url_params ); ?>
+				<?php endif; ?>
+				<li><a href="<?php echo $choose_url; ?>" class="active">Choose</a></li>
+				<?php
+				if ( ! empty( $url_params ) ) {
+					$pay_url  = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+					$pay_url .= '&amp;' . http_build_query( $url_params );
+				}
+				?>
+				<?php if ( isset( $pay_url ) ) : ?>
+					<li><a href="<?php echo $pay_url; ?>"><?php echo __( 'Payment', 'minnpost-membership' ); ?></a></li>
+				<?php else : ?>
+					<li><span><?php echo __( 'Payment', 'minnpost-membership' ); ?></span></li>
+				<?php endif; ?>
+				<li><span><?php echo __( 'Thank You', 'minnpost-membership' ); ?></span></li>
+			</ol>
+		</section>
 
-			<div class="m-support-progress" aria-label="progress">
-				<ol>
-					<?php $choose_url = site_url( '/support/' ); ?>
-					<?php if ( ! empty( $url_params ) ) : ?>
-							<?php $choose_url .= http_build_query( $url_params ); ?>
-					<?php endif; ?>
-					<li><a href="<?php echo $choose_url; ?>" class="active">Choose</a></li>
-					<?php
-					if ( ! empty( $url_params ) ) {
-						$pay_url  = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
-						$pay_url .= '&amp;' . http_build_query( $url_params );
-					}
-					?>
-					<?php if ( isset( $pay_url ) ) : ?>
-						<li><a href="<?php echo $pay_url; ?>"><?php echo __( 'Payment', 'minnpost-membership' ); ?></a></li>
-					<?php else : ?>
-						<li><span><?php echo __( 'Payment', 'minnpost-membership' ); ?></span></li>
-					<?php endif; ?>
-					<li><span><?php echo __( 'Thank You', 'minnpost-membership' ); ?></span></li>
-				</ol>
-			</div>
+		<main id="main" class="site-main" role="main">
 
 			<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ) ) : ?>
 				<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>
