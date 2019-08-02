@@ -8,7 +8,6 @@ $_color-base-gray: #7a7a7a;
 $_color-base-red: #801018;
 $content-font-size: 1em;
 $cta-spacing: 8px;
-$font__headings: NimbusSanNovConD-Bol, Helvetica, Arial, Geneva, sans-serif;
 
 $progress-font-size-large: 2.5rem;
 $progress-font-size-small: 0.875rem;
@@ -174,9 +173,6 @@ $nav-wrap-screen: 960px;
 }
 
 .m-membership-choose-amount {
-	.m-form-item-wrap {
-		font-size: 1.5em;
-	}
 	.m-form-item, .m-form-radios, .m-form-radios .m-form-item {
 		margin: 0;
 		vertical-align: top;
@@ -193,14 +189,17 @@ $nav-wrap-screen: 960px;
 			top: 0;
 		}
 		label {
-			display: inline-block;
-			margin: 0 0 $vertical-space 0;
-			padding: 0.75em;
+			margin: 0 0 $vertical-space / 2 0;
+			padding: 0.75em 2em;
 			width: 100%;
 			font-size: 0.975em;
-			font-weight: bold;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
+
+			strong {
+				display: inline-block;
+				width: 4em;
+			}
 		}
 	}
 	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {

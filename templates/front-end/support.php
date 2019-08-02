@@ -118,20 +118,43 @@ $user_id    = get_current_user_id();
 					<section class="m-membership-choose-amount">
 						<h1>Choose Amount</h1>
 						<fieldset>
+							<?php
+							$suggested_amounts = $minnpost_membership->member_levels->get_suggested_amounts();
+
+							if ( isset( $url_params['amount'] ) ) {
+								$amount = $url_params['amount'];
+							} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
+								$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
+							}
+							$other_amount = $amount;
+							?>
+
+							<?php if ( ! empty( $suggested_amounts ) ) : ?>
+							<div class="m-form-radios">
+								<?php foreach ( $suggested_amounts as $key => $option ) : ?>
+									<?php
+									$id_key = $key + 1;
+									$checked = '';
+									if ( $amount === $option['amount'] ) {
+										$other_amount = '';
+										$checked = ' checked';
+									}
+									?>
+									<div class="m-form-item">
+										<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" <?php echo $checked; ?>/>
+										<label for="amounts-<?php echo $id_key; ?>" class="a-amount-option"><strong>$<?php echo $option['amount']; ?></strong> <?php echo $option['monthly_desc']; ?></label>
+									</div>
+								<?php endforeach; ?>
+							</div>
+							<?php endif; ?>
+
 							<div class="m-form-item-wrap">
 								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
 									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
 								<?php endif; ?>
 								<span class="a-fast-select-currency">&dollar;</span>
 								<div id="amount-item" class="a-amount-field">
-									<?php
-									if ( isset( $url_params['amount'] ) ) {
-										$amount = $url_params['amount'];
-									} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
-										$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
-									}
-									?>
-									<input id="amount" min="1" name="amount" value="<?php echo $amount; ?>" type="number">
+									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number">
 								</div>
 							</div>
 						</fieldset>

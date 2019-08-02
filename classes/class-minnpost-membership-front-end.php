@@ -240,8 +240,10 @@ class MinnPost_Membership_Front_End {
 		} elseif ( 'post' === $direction ) {
 			$data = $_POST;
 		}
-		if ( isset( $data['amount'] ) ) {
+		if ( isset( $data['amount'] ) && '' !== $data['amount'] ) {
 			$params['amount'] = filter_var( $data['amount'], FILTER_SANITIZE_NUMBER_INT );
+		} elseif ( isset( $data['amounts'] ) ) {
+			$params['amount'] = filter_var( $data['amounts'], FILTER_SANITIZE_NUMBER_INT );
 		}
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
@@ -340,18 +342,18 @@ class MinnPost_Membership_Front_End {
 				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
 			}
 
-			// send the valid form data to the submit url as url parameters
-			foreach ( $params as $key => $value ) {
-				if ( false !== $value ) {
-					$redirect_url = add_query_arg( $key, $value, $redirect_url );
-				}
-			}
-
 			// amount is the only thing our processor requires in order to function
 			if ( ! isset( $params['amount'] ) ) {
 				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
 				wp_safe_redirect( site_url( $error_url ) );
 				exit;
+			}
+
+			// send the valid form data to the submit url as url parameters
+			foreach ( $params as $key => $value ) {
+				if ( false !== $value ) {
+					$redirect_url = add_query_arg( $key, $value, $redirect_url );
+				}
 			}
 
 			// this requires us to hook into the allowed url thing
