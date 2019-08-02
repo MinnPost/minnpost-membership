@@ -1136,10 +1136,10 @@ msgstr ""
 msgid "- Claiming user edit link: %1$s"
 msgstr ""
 
-#: templates/front-end/support.php:31, templates/front-end/support.php:33
+#: templates/front-end/support.php:29, templates/front-end/support.php:31
 msgid "Payment"
 msgstr ""
 
-#: templates/front-end/support.php:35
+#: templates/front-end/support.php:33
 msgid "Thank You"
 msgstr ""

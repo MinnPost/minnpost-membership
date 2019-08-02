@@ -78,23 +78,9 @@ $user_id    = get_current_user_id();
 						</div>
 					<?php endif; ?>
 
-					<section class="m-membership-fast-select">
+					<section class="m-membership-choose-frequency">
+						<h1>Choose Frequency</h1>
 						<fieldset>
-							<div class="m-form-item-wrap">
-								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
-									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
-								<?php endif; ?>
-								<span class="a-fast-select-currency">&dollar;</span>
-								<div id="amount-item" class="m-form-item">
-									<?php
-									if ( isset( $url_params['amount'] ) ) {
-										$amount = $url_params['amount'];
-									} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
-										$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
-									}
-									?>
-									<input id="amount" min="1" name="amount" value="<?php echo $amount; ?>" type="number">
-								</div>
 								<?php
 								$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
 								?>
@@ -126,15 +112,29 @@ $user_id    = get_current_user_id();
 										<?php endforeach; ?>
 									</div>
 								<?php endif; ?>
+						</fieldset>
+					</section>
+
+					<section class="m-membership-choose-amount">
+						<h1>Choose Amount</h1>
+						<fieldset>
+							<div class="m-form-item-wrap">
+								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
+									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
+								<?php endif; ?>
+								<span class="a-fast-select-currency">&dollar;</span>
+								<div id="amount-item" class="a-amount-field">
+									<?php
+									if ( isset( $url_params['amount'] ) ) {
+										$amount = $url_params['amount'];
+									} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
+										$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
+									}
+									?>
+									<input id="amount" min="1" name="amount" value="<?php echo $amount; ?>" type="number">
+								</div>
 							</div>
 						</fieldset>
-
-						<?php
-						$on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
-						$new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
-						$minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
-						?>
-
 					</section>
 
 					<div class="m-form-actions m-membership-form-actions">
