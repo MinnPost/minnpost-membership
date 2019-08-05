@@ -190,15 +190,17 @@ $nav-wrap-screen: 960px;
 		}
 		label {
 			margin: 0 0 $vertical-space / 2 0;
-			padding: 0.75em 2em;
+			padding: 0.75em 2em 0.75em 6em;
 			width: 100%;
 			font-size: 0.975em;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
 
 			strong {
-				display: inline-block;
+				display: block;
+				float: left;
 				width: 4em;
+				margin-left: -4em;
 			}
 		}
 	}
