@@ -47,7 +47,8 @@ $user_id    = get_current_user_id();
 					<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ); ?></h1>
 				</header>
 			<?php endif; ?>
-			<div class="m-entry-content">
+
+			<div class="m-entry-content m-membership-support-wrapper">
 				<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
 					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
 						<section class="m-membership-summary">
