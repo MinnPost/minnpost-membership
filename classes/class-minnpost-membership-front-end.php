@@ -240,8 +240,10 @@ class MinnPost_Membership_Front_End {
 		} elseif ( 'post' === $direction ) {
 			$data = $_POST;
 		}
-		if ( isset( $data['amount'] ) ) {
+		if ( isset( $data['amount'] ) && '' !== $data['amount'] ) {
 			$params['amount'] = filter_var( $data['amount'], FILTER_SANITIZE_NUMBER_INT );
+		} elseif ( isset( $data['amounts'] ) ) {
+			$params['amount'] = filter_var( $data['amounts'], FILTER_SANITIZE_NUMBER_INT );
 		}
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
@@ -340,18 +342,18 @@ class MinnPost_Membership_Front_End {
 				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
 			}
 
-			// send the valid form data to the submit url as url parameters
-			foreach ( $params as $key => $value ) {
-				if ( false !== $value ) {
-					$redirect_url = add_query_arg( $key, $value, $redirect_url );
-				}
-			}
-
 			// amount is the only thing our processor requires in order to function
 			if ( ! isset( $params['amount'] ) ) {
 				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
 				wp_safe_redirect( site_url( $error_url ) );
 				exit;
+			}
+
+			// send the valid form data to the submit url as url parameters
+			foreach ( $params as $key => $value ) {
+				if ( false !== $value ) {
+					$redirect_url = add_query_arg( $key, $value, $redirect_url );
+				}
 			}
 
 			// this requires us to hook into the allowed url thing
@@ -1109,7 +1111,7 @@ class MinnPost_Membership_Front_End {
 		$disable_javascript = get_option( $this->option_prefix . 'disable_javascript', false );
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( true !== filter_var( $disable_javascript, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.min.js' ) );
+			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.js' ) );
 			$minnpost_membership_data = $this->get_user_membership_info();
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
 			wp_localize_script(
@@ -1126,6 +1128,8 @@ class MinnPost_Membership_Front_End {
 				$this->slug . '-front-end',
 				"jQuery(document).ready(function ($) {
 					$('.m-form-membership').minnpostMembership();
+					$('.m-form-membership').minnpostTrackSubmit();
+					$('.m-form-membership').minnpostAmountSelect();
 				});"
 			);
 		}

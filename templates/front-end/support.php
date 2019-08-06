@@ -47,7 +47,20 @@ $user_id    = get_current_user_id();
 					<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ); ?></h1>
 				</header>
 			<?php endif; ?>
-			<div class="m-entry-content">
+
+			<div class="m-entry-content m-membership-support-wrapper">
+				<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
+						<section class="m-membership-summary">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+						</section>
+					<?php endif; ?>
+				<?php else : ?>
+					<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
+						<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
+					</section>
+				<?php endif; ?>
+
 				<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
 					<input type="hidden" name="action" value="donate_choose_form_submit">
 					<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
@@ -60,46 +73,20 @@ $user_id    = get_current_user_id();
 						<?php endforeach; ?>
 					<?php endif; ?>
 
-					<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
-						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
-							<section class="m-membership-summary">
-								<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
-							</section>
-						<?php endif; ?>
-					<?php else : ?>
-						<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
-						</section>
-					<?php endif; ?>
-
 					<?php if ( ! empty( $_GET['errors'] ) ) : ?>
 						<div class="m-form-message m-form-message-error">
 							<p><?php echo $minnpost_membership->front_end->get_result_message( $_GET['errors'] )['message']; ?></p>
 						</div>
 					<?php endif; ?>
 
-					<section class="m-membership-fast-select">
+					<section class="m-membership-choose-frequency">
+						<h1>Choose Frequency</h1>
 						<fieldset>
-							<div class="m-form-item-wrap">
-								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
-									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
-								<?php endif; ?>
-								<span class="a-fast-select-currency">&dollar;</span>
-								<div id="amount-item" class="m-form-item">
-									<?php
-									if ( isset( $url_params['amount'] ) ) {
-										$amount = $url_params['amount'];
-									} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
-										$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
-									}
-									?>
-									<input id="amount" min="1" name="amount" value="<?php echo $amount; ?>" type="number">
-								</div>
 								<?php
 								$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
 								?>
 								<?php if ( ! empty( $frequency_options ) ) : ?>
-									<div class="m-form-radios">
+									<div class="m-form-radios m-frequency-select">
 										<?php foreach ( $frequency_options as $key => $option ) : ?>
 											<?php
 											$id_key = $key + 1;
@@ -126,15 +113,63 @@ $user_id    = get_current_user_id();
 										<?php endforeach; ?>
 									</div>
 								<?php endif; ?>
+						</fieldset>
+					</section>
+
+					<section class="m-membership-choose-amount">
+						<h1>Choose Amount</h1>
+						<fieldset>
+							<?php
+							$suggested_amounts = $minnpost_membership->member_levels->get_suggested_amounts();
+
+							if ( isset( $url_params['amount'] ) ) {
+								$amount = $url_params['amount'];
+							} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
+								$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
+							}
+							$other_amount = $amount;
+							?>
+
+							<?php if ( ! empty( $suggested_amounts ) ) : ?>
+							<div class="m-form-radios m-amount-select">
+								<?php foreach ( $suggested_amounts as $key => $option ) : ?>
+									<?php
+									$id_key = $key + 1;
+									$suggested_amount = $option['amount'];
+									if ( $frequency === 'per year - 1' ) {
+										$suggested_amount = $option['amount'] * 12;
+									}
+									$checked = '';
+									if ( $amount === (string)$suggested_amount ) {
+										$other_amount = '';
+										$checked = ' checked';
+									}
+									?>
+									<div class="m-form-item">
+										<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" <?php echo $checked; ?>/>
+										<label for="amounts-<?php echo $id_key; ?>"
+											class="a-amount-option"
+											data-monthly-amount="<?php echo $option['amount']; ?>"
+											data-monthly-desc="<?php echo $option['monthly_desc']; ?>"
+											data-yearly-desc="<?php echo $option['yearly_desc']; ?>">
+											<strong>$<?php echo $option['amount']; ?></strong>
+											<span class="a-amount-description"><?php echo $option['monthly_desc']; ?></span>
+										</label>
+									</div>
+								<?php endforeach; ?>
+							</div>
+							<?php endif; ?>
+
+							<div class="m-form-item-wrap">
+								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
+									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
+								<?php endif; ?>
+								<span class="a-fast-select-currency">&dollar;</span>
+								<div id="amount-item" class="a-amount-field">
+									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number">
+								</div>
 							</div>
 						</fieldset>
-
-						<?php
-						$on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
-						$new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
-						$minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
-						?>
-
 					</section>
 
 					<div class="m-form-actions m-membership-form-actions">
@@ -145,20 +180,20 @@ $user_id    = get_current_user_id();
 					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ) ) : ?>
 						<?php echo get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ); ?>
 					<?php endif; ?>
-
-					<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
-
-					<aside>
-						<?php
-						if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link', '' ) ) {
-							echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
-								get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
-							);
-						}
-						?>
-					</aside>
-
 				</form>
+
+				<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
+
+				<aside>
+					<?php
+					if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link', '' ) ) {
+						echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
+							get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
+						);
+					}
+					?>
+				</aside>
+
 			</div>
 		</main><!-- #main -->
 

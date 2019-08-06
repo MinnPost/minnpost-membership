@@ -166,6 +166,41 @@ class MinnPost_Membership_Member_Level {
 		return $frequencyvalues;
 	}
 
+	public function get_suggested_amounts( $key = '', $field = 'amount' ) {
+		$suggested_amounts = array(
+			array(
+				'amount'       => '8',
+				'monthly_desc' => 'Reporter traveling to Greater Minnesota for a story',
+				'yearly_desc'  => 'An in-depth feature on an issue in Greater Minnesota',
+			),
+			array(
+				'amount'       => '15',
+				'monthly_desc' => 'An original article on the environment',
+				'yearly_desc'  => 'Capturing a photo of a legislative debate',
+			),
+			array(
+				'amount'       => '25',
+				'monthly_desc' => 'Week of the Morning Glean',
+				'yearly_desc'  => 'Three months of the Morning Glean',
+			),
+			array(
+				'amount'       => '100',
+				'monthly_desc' => 'Week of coverage from the State Capitol',
+				'yearly_desc'  => 'Coverage of a full legislative session',
+			),
+		);
+
+		if ('' !== $key ) {
+			$search_result = array_search( $key, array_column( $suggested_amounts, $field ) );
+			if ( false === $search_result ) {
+				return false;
+			}
+			return $suggested_amounts[$search_result];
+		}
+
+		return $suggested_amounts;
+	}
+
 	/**
 	* Calculate price ranges for member levels
 	*

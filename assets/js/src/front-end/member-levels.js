@@ -52,20 +52,7 @@
 			this.catchHashLinks( this.element, this.options);
 			this.levelFlipper( this.element, this.options );
 			this.startLevelClick( this.element, this.options );
-			this.submitForm( this.element, this.options );
 		},
-
-		analyticsEventTrack: function( type, category, action, label, value ) {
-			if ( typeof ga !== 'undefined' ) {
-				if ( typeof value === 'undefined' ) {
-					ga( 'send', type, category, action, label );
-				} else {
-					ga( 'send', type, category, action, label, value );
-				}
-			} else {
-				return;
-			}
-		}, // end analyticsEventTrack
 
 		catchHashLinks: function( element, options ) {
 			$('a[href*="#"]:not([href="#"])', element).click(function(e) {
@@ -95,7 +82,8 @@
 			if ( typeof minnpost_membership_data !== 'undefined' && $( options.user_current_level ).length > 0 ) {
 				previous_amount = minnpost_membership_data.current_user.previous_amount;
 			}
-			if ( $( options.amount_selector_standalone ).length > 0 ) {
+			if ( $( options.amount_selector_standalone ).length > 0 &&
+			     $( options.frequency_selector_standalone ).length > 0 ) {
 				amount = $( options.amount_selector_standalone ).val();
 				frequency_string = $(options.frequency_selector_standalone + ':checked').val();
 				frequency = frequency_string.split(' - ')[1];
@@ -330,13 +318,6 @@
 			    $( options.single_level_container + '-' + level_number + ' ' + options.single_level_summary_selector ).addClass( 'flipped' );
 			  });
 		}, // end startLevelClick
-
-		submitForm: function( element, options ) {
-			var that = this;
-			$( element ).submit( function( event ) {
-				that.analyticsEventTrack( 'event', 'Support Us', 'Become A Member', location.pathname );
-			});
-		}, // end submitForm
 
 	}; // end Plugin.prototype
 

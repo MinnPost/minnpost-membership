@@ -5,8 +5,10 @@ $color__gray-light: #ababab;
 $color__gray-dark: #404040;
 $color__gray-darkest: #282828;
 $_color-base-gray: #7a7a7a;
+$_color-base-red: #801018;
 $content-font-size: 1em;
 $cta-spacing: 8px;
+
 $progress-font-size-large: 2.5rem;
 $progress-font-size-small: 0.875rem;
 $vertical-space: 1em;
@@ -65,9 +67,6 @@ $nav-wrap-screen: 960px;
 		flex-wrap: wrap;
 		h1 {
 			font-size: $large-title-font-size;
-		}
-		.m-membership-fast-select {
-			margin: 0;
 		}
 		.m-form-actions {
 			margin: 0.5em 0 0 0;
@@ -134,17 +133,82 @@ $nav-wrap-screen: 960px;
 	margin-bottom: $vertical-space;
 }
 
-.m-membership-fast-select {
-	font-size: 1.5em;
-	text-align: center;
-	border: 0;
-	margin: $vertical-space * 2 0 $vertical-space 0;
-	padding: 0;
-	min-width: 0;
-	.m-form-item-wrap {
-		margin: 0 0 $vertical-space / 2 0;
+.m-membership-choose-frequency, .m-membership-choose-amount {
+	h1 {
+		font-size: 1.25em;
+		color: $_color-base-red;
+		margin: $vertical-space 0 $vertical-space / 2 0;
 	}
-	.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios, .m-form-radios .m-form-item {
+	.m-form-radios {
+		width: 100%;
+	}
+}
+
+.m-membership-choose-frequency {
+	.m-form-radios {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		.m-form-item {
+			width: 32%;
+			text-align: center;
+		}
+		input[type="radio"] {
+			left: 0;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+		}
+		label {
+			width: 100%;
+			margin: 0 0.0025em;
+			padding: 0.75em;
+			font-size: 0.975em;
+			font-weight: bold;
+			cursor: pointer;
+			border: 1px solid $border-color-lighter;
+		}
+	}
+}
+
+.m-membership-choose-amount {
+	.m-form-item, .m-form-radios, .m-form-radios .m-form-item {
+		margin: 0;
+		vertical-align: top;
+		position: relative;
+	}
+	.m-form-item {
+		width: 100%;
+	}
+	.m-amount-select {
+		input[type="radio"] {
+			left: 0;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+		}
+		label {
+			margin: 0 0 $vertical-space / 2 0;
+			padding: 0.75em 2em 0.75em 6em;
+			width: 100%;
+			font-size: 0.975em;
+			cursor: pointer;
+			border: 1px solid $border-color-lighter;
+
+			strong {
+				display: block;
+				float: left;
+				width: 4em;
+				margin-left: -4em;
+			}
+
+			.yearly-desc {
+				display: none;
+			}
+		}
+	}
+	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
 		display: inline-block;
 		margin: 0;
 		vertical-align: top;
@@ -169,28 +233,10 @@ $nav-wrap-screen: 960px;
 		text-align: center;
 		vertical-align: top;
 	}
-	.m-form-radios {
-		input[type="radio"] {
-			left: 0;
-			opacity: 0;
-			position: absolute;
-			top: 0;
-		}
-		label {
-			display: inline-block;
-			margin: 0 0.0025em;
-			padding: 0.75em;
-			font-size: 0.65em;
-			font-weight: bold;
-			cursor: pointer;
-			border: 1px solid $border-color-lighter;
-		}
-	}
 }
 
 .m-form-membership-support .m-membership-form-actions {
-	margin: 2em 0 1em 0;
-	text-align: center;
+	margin: $vertical-space 0;
 }
 
 .a-show-level {
