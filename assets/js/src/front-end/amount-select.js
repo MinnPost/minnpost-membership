@@ -61,10 +61,13 @@
 
 			labels.each( function( index ) {
 				var $label = $( this );
-				var amount = parseInt( $( '#' + $label.attr( 'for' ) ).val(), 10 );
-				var amountText = '$' + ( type === 'per year' ? amount * 12 : amount);
+				var $amount = $( '#' + $label.attr( 'for' ) );
+				var amount = parseInt( $label.data( 'monthly-amount' ), 10 );
+				var newAmount = type === 'per year' ? amount * 12 : amount;
+				var amountText = '$' + newAmount;
 				var desc = $label.data( type === 'per year' ? 'yearly-desc' : 'monthly-desc' );
 
+				$amount.val( newAmount );
 				$( this ).find( amountElement ).text( amountText )
 				$( this ).find( descElement ).text( desc );
 			});

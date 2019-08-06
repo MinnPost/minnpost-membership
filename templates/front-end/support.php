@@ -135,8 +135,12 @@ $user_id    = get_current_user_id();
 								<?php foreach ( $suggested_amounts as $key => $option ) : ?>
 									<?php
 									$id_key = $key + 1;
+									$suggested_amount = $option['amount'];
+									if ( $frequency === 'per year - 1' ) {
+										$suggested_amount = $option['amount'] * 12;
+									}
 									$checked = '';
-									if ( $amount === $option['amount'] ) {
+									if ( $amount === (string)$suggested_amount ) {
 										$other_amount = '';
 										$checked = ' checked';
 									}
@@ -145,6 +149,7 @@ $user_id    = get_current_user_id();
 										<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" <?php echo $checked; ?>/>
 										<label for="amounts-<?php echo $id_key; ?>"
 											class="a-amount-option"
+											data-monthly-amount="<?php echo $option['amount']; ?>"
 											data-monthly-desc="<?php echo $option['monthly_desc']; ?>"
 											data-yearly-desc="<?php echo $option['yearly_desc']; ?>">
 											<strong>$<?php echo $option['amount']; ?></strong>
