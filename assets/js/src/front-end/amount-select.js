@@ -4,10 +4,11 @@
 	var pluginName = 'minnpostAmountSelect',
 	defaults = {
 		frequencySelector: '.m-frequency-select input[type="radio"]',
-		amountSelector: '.m-amount-select',
+		amountSelector: '.m-amount-select input[type="radio"]',
 		amountLabels: '.m-amount-select label',
 		amountValue: 'strong',
-		amountDescription: '.a-amount-description'
+		amountDescription: '.a-amount-description',
+		amountField: '.a-amount-field #amount'
 	};
 
 	// The actual plugin constructor
@@ -29,10 +30,13 @@
 	Plugin.prototype = {
 		init: function() {
 			var frequencies = $( this.element ).find( this.options.frequencySelector );
-			var amount = $( this.element ).find( this.options.amountSelector );
+			var amounts = $( this.options.amountSelector );
+			var amount = $( this.element ).find( this.options.amountField );
 
 			this.setAmountLabels( frequencies.filter(':checked').val() );
-			$( frequencies ).change( this.onFrequencyChange.bind(this) );
+			frequencies.change( this.onFrequencyChange.bind(this) );
+			amounts.on( 'change', this.clearAmountField.bind(this) );
+			amount.on( 'keyup mouseup', this.clearAmountSelector.bind(this) );
 		},
 
 		onFrequencyChange: function( event ) {
@@ -64,6 +68,20 @@
 				$( this ).find( amountElement ).text( amountText )
 				$( this ).find( descElement ).text( desc );
 			});
+		}, // end setAmountLabels
+
+		clearAmountSelector: function( event ) {
+			var amounts = $( this.options.amountSelector );
+
+			if ( $( event.target ).val() === '' ) {
+				return;
+			}
+
+			amounts.removeAttr('checked');
+		},
+
+		clearAmountField: function( event ) {
+			$( this.element ).find( this.options.amountField ).val( null );
 		},
 	}; // end Plugin.prototype
 
