@@ -1128,6 +1128,7 @@ class MinnPost_Membership_Front_End {
 				$this->slug . '-front-end',
 				"jQuery(document).ready(function ($) {
 					$('.m-form-membership').minnpostMembership();
+					$('.m-form-membership').minnpostTrackSubmit();
 				});"
 			);
 		}
