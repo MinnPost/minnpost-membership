@@ -181,7 +181,7 @@ $nav-wrap-screen: 960px;
 	.m-form-item {
 		width: 100%;
 	}
-	.m-form-radios {
+	.m-amount-select {
 		input[type="radio"] {
 			left: 0;
 			opacity: 0;
@@ -201,6 +201,10 @@ $nav-wrap-screen: 960px;
 				float: left;
 				width: 4em;
 				margin-left: -4em;
+			}
+
+			.yearly-desc {
+				display: none;
 			}
 		}
 	}

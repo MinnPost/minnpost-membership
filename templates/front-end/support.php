@@ -86,7 +86,7 @@ $user_id    = get_current_user_id();
 								$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
 								?>
 								<?php if ( ! empty( $frequency_options ) ) : ?>
-									<div class="m-form-radios">
+									<div class="m-form-radios m-frequency-select">
 										<?php foreach ( $frequency_options as $key => $option ) : ?>
 											<?php
 											$id_key = $key + 1;
@@ -131,7 +131,7 @@ $user_id    = get_current_user_id();
 							?>
 
 							<?php if ( ! empty( $suggested_amounts ) ) : ?>
-							<div class="m-form-radios">
+							<div class="m-form-radios m-amount-select">
 								<?php foreach ( $suggested_amounts as $key => $option ) : ?>
 									<?php
 									$id_key = $key + 1;
@@ -143,7 +143,13 @@ $user_id    = get_current_user_id();
 									?>
 									<div class="m-form-item">
 										<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" <?php echo $checked; ?>/>
-										<label for="amounts-<?php echo $id_key; ?>" class="a-amount-option"><strong>$<?php echo $option['amount']; ?></strong> <?php echo $option['monthly_desc']; ?></label>
+										<label for="amounts-<?php echo $id_key; ?>"
+											class="a-amount-option"
+											data-monthly-desc="<?php echo $option['monthly_desc']; ?>"
+											data-yearly-desc="<?php echo $option['yearly_desc']; ?>">
+											<strong>$<?php echo $option['amount']; ?></strong>
+											<span class="a-amount-description"><?php echo $option['monthly_desc']; ?></span>
+										</label>
 									</div>
 								<?php endforeach; ?>
 							</div>
