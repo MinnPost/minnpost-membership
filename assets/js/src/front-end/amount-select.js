@@ -31,14 +31,18 @@
 			var frequencies = $( this.element ).find( this.options.frequencySelector );
 			var amount = $( this.element ).find( this.options.amountSelector );
 
+			this.setAmountLabels( frequencies.filter(':checked').val() );
 			$( frequencies ).change( this.onFrequencyChange.bind(this) );
 		},
 
 		onFrequencyChange: function( event ) {
+			this.setAmountLabels( $( event.target ).val() );
+		},
+
+		setAmountLabels: function( frequencyString ) {
 			var amountElement = this.options.amountValue;
 			var descElement = this.options.amountDescription;
 			var labels = $( this.options.amountLabels );
-			var frequencyString = $( event.target ).val();
 			var typeAndFrequency;
 			var type;
 			var frequency;
