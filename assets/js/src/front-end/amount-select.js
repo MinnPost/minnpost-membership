@@ -4,6 +4,7 @@
 	var pluginName = 'minnpostAmountSelect',
 	defaults = {
 		frequencySelector: '.m-frequency-select input[type="radio"]',
+		amountGroup: '.m-frequency-group',
 		amountSelector: '.m-amount-select input[type="radio"]',
 		amountLabels: '.m-amount-select label',
 		amountValue: 'strong',
@@ -44,33 +45,18 @@
 		},
 
 		setAmountLabels: function( frequencyString ) {
-			var amountElement = this.options.amountValue;
-			var descElement = this.options.amountDescription;
-			var labels = $( this.options.amountLabels );
-			var typeAndFrequency;
-			var type;
-			var frequency;
+			var $groups = $( this.options.amountGroup );
+			var $selected = $( this.options.amountSelector )
+			    .filter( ':checked' );
+			var index = $selected.data( 'index' );
 
-			if ( labels.length < 0 || typeof frequencyString === 'undefined' ) {
-				return;
-			}
-
-			typeAndFrequency = frequencyString.split(' - ');
-			type = typeAndFrequency[0];
-			frequency = parseInt( typeAndFrequency[1], 10 );
-
-			labels.each( function( index ) {
-				var $label = $( this );
-				var $amount = $( '#' + $label.attr( 'for' ) );
-				var amount = parseInt( $label.data( 'monthly-amount' ), 10 );
-				var newAmount = type === 'per year' ? amount * 12 : amount;
-				var amountText = '$' + newAmount;
-				var desc = $label.data( type === 'per year' ? 'yearly-desc' : 'monthly-desc' );
-
-				$amount.val( newAmount );
-				$( this ).find( amountElement ).text( amountText )
-				$( this ).find( descElement ).text( desc );
-			});
+			$groups.removeClass( 'active' );
+			$groups.filter( '[data-frequency="' + frequencyString + '"]' )
+				.addClass( 'active' );
+			$selected.prop( 'checked', false );
+			$groups.filter( '.active' )
+				.find( 'input[type="radio"][data-index="' + index + '"]' )
+				.prop( 'checked', true );
 		}, // end setAmountLabels
 
 		clearAmountSelector: function( event ) {

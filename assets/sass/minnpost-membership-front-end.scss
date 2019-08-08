@@ -182,6 +182,12 @@ $nav-wrap-screen: 960px;
 		width: 100%;
 	}
 	.m-amount-select {
+		.m-frequency-group {
+			display: none;
+			&.active {
+				display: block;
+			}
+		}
 		input[type="radio"] {
 			left: 0;
 			opacity: 0;

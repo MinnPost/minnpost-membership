@@ -137,30 +137,31 @@ $user_id    = get_current_user_id();
 
 							<?php if ( ! empty( $suggested_amounts ) ) : ?>
 							<div class="m-form-radios m-amount-select">
-								<?php foreach ( $suggested_amounts as $key => $option ) : ?>
-									<?php
-									$id_key = $key + 1;
-									$suggested_amount = $option['amount'];
-									if ( $frequency === 'per year - 1' ) {
-										$suggested_amount = $option['amount'] * 12;
-									}
-									$checked = '';
-									if ( $amount === (string)$suggested_amount ) {
-										$other_amount = '';
-										$checked = ' checked';
-									}
-									?>
-									<div class="m-form-item">
-										<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" <?php echo $checked; ?>/>
-										<label for="amounts-<?php echo $id_key; ?>"
-											class="a-amount-option"
-											data-monthly-amount="<?php echo $option['amount']; ?>"
-											data-monthly-desc="<?php echo $option['monthly_desc']; ?>"
-											data-yearly-desc="<?php echo $option['yearly_desc']; ?>">
-											<strong>$<?php echo $option['amount']; ?></strong>
-											<span class="a-amount-description"><?php echo $option['monthly_desc']; ?></span>
-										</label>
-									</div>
+								<?php foreach ( $suggested_amounts as $freq_id => $amounts ) : ?>
+									<?php $freq_value = $minnpost_membership->member_levels->get_frequency_options( $freq_id, 'id' )['value']; ?>
+									<div class="m-frequency-group<?php echo ( $freq_value === $frequency ) ? ' active' : '' ?>" data-frequency="<?php echo $freq_value ?>">
+									<?php foreach ( $amounts as $key => $option ) : ?>
+										<?php
+										$id_key = $freq_id . '-' . ($key + 1);
+										$suggested_amount = $option['amount'];
+										$checked = '';
+										if ( $freq_value === $frequency && $amount === (string)$suggested_amount ) {
+											$other_amount = '';
+											$checked = ' checked';
+										}
+										?>
+										<div class="m-form-item">
+											<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?> />
+											<label for="amounts-<?php echo $id_key; ?>"
+												class="a-amount-option"
+												data-amount="<?php echo $option['amount']; ?>"
+												data-desc="<?php echo $option['desc']; ?>">
+												<strong>$<?php echo $option['amount']; ?></strong>
+												<span class="a-amount-description"><?php echo $option['desc']; ?></span>
+											</label>
+										</div>
+									<?php endforeach; ?>
+								</div>
 								<?php endforeach; ?>
 							</div>
 							<?php endif; ?>

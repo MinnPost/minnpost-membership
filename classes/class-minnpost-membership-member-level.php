@@ -166,47 +166,82 @@ class MinnPost_Membership_Member_Level {
 		return $frequencyvalues;
 	}
 
-	public function get_suggested_amounts( $key = '', $field = 'amount' ) {
+	/**
+	* Get suggested monthly, yearly, and one-time amounts
+	*
+	* @param string $value
+	* @return array $frequencyvalues
+	*
+	*/
+	public function get_suggested_amounts() {
 		$suggested_amounts = array(
-			array(
-				'amount'       => '8',
-				'monthly_desc' => 'Reporter traveling to Greater Minnesota for a story',
-				'yearly_desc'  => 'An in-depth feature on an issue in Greater Minnesota',
+			'monthly' => array(
+				array(
+					'amount' => '8',
+					'desc'   => 'Reporter traveling to Greater Minnesota for a story',
+				),
+				array(
+					'amount' => '15',
+					'desc'   => 'An original article on the environment',
+				),
+				array(
+					'amount' => '25',
+					'desc'   => 'Week of the Morning Glean',
+				),
+				array(
+					'amount' => '100',
+					'desc'   => 'Week of coverage from the State Capitol',
+				),
 			),
-			array(
-				'amount'       => '15',
-				'monthly_desc' => 'An original article on the environment',
-				'yearly_desc'  => 'Capturing a photo of a legislative debate',
+			'yearly' => array(
+				array(
+					'amount' => '50',
+					'desc'   => 'Reporter researching public records',
+				),
+				array(
+					'amount' => '125',
+					'desc'   => 'Capturing a photo of a legislative debate',
+				),
+				array(
+					'amount' => '250',
+					'desc'   => 'Week of the Morning Glean',
+				),
+				array(
+					'amount' => '1200',
+					'desc'   => 'Week of coverage from the State Capitol',
+				),
 			),
-			array(
-				'amount'       => '25',
-				'monthly_desc' => 'Week of the Morning Glean',
-				'yearly_desc'  => 'Three months of the Morning Glean',
-			),
-			array(
-				'amount'       => '100',
-				'monthly_desc' => 'Week of coverage from the State Capitol',
-				'yearly_desc'  => 'Coverage of a full legislative session',
+			'one-time' => array(
+				array(
+					'amount' => '30',
+					'desc'   => 'Keep our website running strong for a day',
+				),
+				array(
+					'amount' => '125',
+					'desc'   => 'Capturing a photo of a legislative debate',
+				),
+				array(
+					'amount' => '250',
+					'desc'   => 'Week of the Morning Glean',
+				),
+				array(
+					'amount' => '500',
+					'desc'   => 'Month of our DC Memo newsletter',
+				),
 			),
 		);
 
-		if ('' !== $key ) {
-			$search_result = array_search( $key, array_column( $suggested_amounts, $field ) );
-			if ( false === $search_result ) {
-				return false;
-			}
-			return $suggested_amounts[$search_result];
-		}
-
 		// Sort suggested amounts in descending order
-		usort( $suggested_amounts, function( $a, $b ) {
-			$amta = intval( $a['amount'] );
-			$amtb = intval( $b['amount'] );
-			if ( $amta === $amtb ) {
-				return 0;
-			}
-			return ( $amta > $amtb ) ? -1 : 1;
-		});
+		foreach ( $suggested_amounts as $frequency => &$amounts ) {
+			usort( $amounts, function( $a, $b ) {
+				$amta = intval( $a['amount'] );
+				$amtb = intval( $b['amount'] );
+				if ( $amta === $amtb ) {
+					return 0;
+				}
+				return ( $amta > $amtb ) ? -1 : 1;
+			});
+		}
 
 		return $suggested_amounts;
 	}
