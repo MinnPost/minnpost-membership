@@ -198,6 +198,16 @@ class MinnPost_Membership_Member_Level {
 			return $suggested_amounts[$search_result];
 		}
 
+		// Sort suggested amounts in descending order
+		usort( $suggested_amounts, function( $a, $b ) {
+			$amta = intval( $a['amount'] );
+			$amtb = intval( $b['amount'] );
+			if ( $amta === $amtb ) {
+				return 0;
+			}
+			return ( $amta > $amtb ) ? -1 : 1;
+		});
+
 		return $suggested_amounts;
 	}
 
