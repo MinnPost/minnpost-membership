@@ -118,6 +118,11 @@ $user_id    = get_current_user_id();
 
 					<section class="m-membership-choose-amount">
 						<h1>Choose Amount</h1>
+
+						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ) ) : ?>
+						<p class="a-suggested-amounts-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ); ?></p>
+						<?php endif; ?>
+
 						<fieldset>
 							<?php
 							$suggested_amounts = $minnpost_membership->member_levels->get_suggested_amounts();
