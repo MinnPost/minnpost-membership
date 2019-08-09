@@ -136,7 +136,7 @@ $nav-wrap-screen: 960px;
 	display: none;
 }
 
-.m-membership-choose-frequency, .m-membership-choose-amount {
+.m-membership-choose-frequency, .m-membership-choose-amount, .m-membership-choose-gift {
 	h1 {
 		font-size: 1.25em;
 		color: $_color-base-red;
@@ -147,14 +147,13 @@ $nav-wrap-screen: 960px;
 	}
 }
 
-.m-membership-choose-frequency {
+.m-membership-choose-frequency, .m-membership-choose-gift {
 	.m-form-radios {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 
 		.m-form-item {
-			width: 32%;
 			text-align: center;
 		}
 		input[type="radio"] {
@@ -165,6 +164,7 @@ $nav-wrap-screen: 960px;
 		}
 		label {
 			width: 100%;
+			height: 100%;
 			margin: 0 0.0025em;
 			padding: 0.75em;
 			font-size: 0.975em;
@@ -172,6 +172,18 @@ $nav-wrap-screen: 960px;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
 		}
+	}
+}
+
+.m-membership-choose-frequency {
+	.m-form-radios .m-form-item {
+		width: 32%;
+	}
+}
+
+.m-membership-choose-gift {
+	.m-form-radios .m-form-item {
+		width: 49%;
 	}
 }
 
@@ -198,9 +210,10 @@ $nav-wrap-screen: 960px;
 			top: 0;
 		}
 		label {
+			width: 100%;
+			height: 100%;
 			margin: 0 0 $vertical-space / 2 0;
 			padding: 0.75em 2em 0.75em 6em;
-			width: 100%;
 			font-size: 0.975em;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;

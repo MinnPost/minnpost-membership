@@ -198,6 +198,22 @@ $user_id    = get_current_user_id();
 						</fieldset>
 					</section>
 
+					<section class="m-membership-choose-gift">
+						<h1>Select Thank You Gift</h1>
+						<fieldset>
+									<div class="m-form-radios m-decline-benefits-select">
+											<div class="m-form-item">
+												<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n"/>
+												<label for="decline-benefits-n"  class="a-decline-benefits-option">Choose thank you gift</label>
+											</div>
+											<div class="m-form-item">
+												<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y"/>
+												<label for="decline-benefits-y"  class="a-decline-benefits-option">Decline gift and give entire amount to MinnPost</label>
+											</div>
+									</div>
+						</fieldset>
+					</section>
+
 					<div class="m-form-actions m-membership-form-actions">
 						<button type="submit" name="give" class="a-button"><?php echo get_option( $minnpost_membership->option_prefix . 'support_button_text', '' ); ?></button>
 						<?php $minnpost_membership->front_end->link_next_to_button( 'support' ); ?>

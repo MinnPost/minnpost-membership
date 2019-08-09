@@ -248,6 +248,10 @@ class MinnPost_Membership_Front_End {
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
 		}
+		if ( isset( $data['decline_benefits'] ) &&
+			 filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
+			$params['decline_benefits'] = 'true';
+		}
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
 		}
