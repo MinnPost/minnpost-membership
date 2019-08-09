@@ -694,6 +694,18 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
+			$settings[ $this_section . '_pre_suggested_amounts_text' ] = array(
+				'title'    => __( 'Suggested amounts intro', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => __( 'Explains the list of suggested amounts', 'minnpost-membership' ),
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
 			$settings[ $this_section . '_pre_form_text' ] = array(
 				'title'    => __( 'Pre form text', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
