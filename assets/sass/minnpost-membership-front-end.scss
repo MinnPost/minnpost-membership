@@ -136,7 +136,7 @@ $nav-wrap-screen: 960px;
 	display: none;
 }
 
-.m-membership-choose-frequency, .m-membership-choose-amount, .m-membership-choose-gift {
+.m-membership-choice-group {
 	h1 {
 		font-size: 1.25em;
 		color: $_color-base-red;
@@ -147,12 +147,19 @@ $nav-wrap-screen: 960px;
 	}
 }
 
-.m-membership-choose-frequency, .m-membership-choose-gift {
+.m-membership-choice-group {
 	.m-form-radios {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 
+		.m-frequency-group {
+			width: 100%;
+			display: none;
+			&.active {
+				display: block;
+			}
+		}
 		.m-form-item {
 			text-align: center;
 		}
@@ -181,53 +188,25 @@ $nav-wrap-screen: 960px;
 	}
 }
 
-.m-membership-choose-gift {
+.m-membership-choice-group.m-membership-choose-amount {
 	.m-form-radios .m-form-item {
-		width: 49%;
-	}
-}
-
-.m-membership-choose-amount {
-	.m-form-item, .m-form-radios, .m-form-radios .m-form-item {
 		margin: 0;
-		vertical-align: top;
-		position: relative;
-	}
-	.m-form-item {
 		width: 100%;
+		text-align: left;
 	}
-	.m-amount-select {
-		.m-frequency-group {
+	label {
+		margin: 0 0 $vertical-space / 2 0;
+		padding: 0.75em 2em 0.75em 6em;
+		font-weight: normal;
+		strong {
+			display: block;
+			float: left;
+			width: 4em;
+			margin-left: -4em;
+		}
+
+		.yearly-desc {
 			display: none;
-			&.active {
-				display: block;
-			}
-		}
-		input[type="radio"] {
-			left: 0;
-			opacity: 0;
-			position: absolute;
-			top: 0;
-		}
-		label {
-			width: 100%;
-			height: 100%;
-			margin: 0 0 $vertical-space / 2 0;
-			padding: 0.75em 2em 0.75em 6em;
-			font-size: 0.975em;
-			cursor: pointer;
-			border: 1px solid $border-color-lighter;
-
-			strong {
-				display: block;
-				float: left;
-				width: 4em;
-				margin-left: -4em;
-			}
-
-			.yearly-desc {
-				display: none;
-			}
 		}
 	}
 	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
@@ -254,6 +233,12 @@ $nav-wrap-screen: 960px;
 		padding: 0.25em 0;
 		text-align: center;
 		vertical-align: top;
+	}
+}
+
+.m-membership-choose-gift {
+	.m-form-radios .m-form-item {
+		width: 49%;
 	}
 }
 

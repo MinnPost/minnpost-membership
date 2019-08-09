@@ -99,7 +99,7 @@ $user_id    = get_current_user_id();
 						</div>
 					<?php endif; ?>
 
-					<section class="m-membership-choose-frequency">
+					<section class="m-membership-choose-frequency m-membership-choice-group">
 						<h1>Choose Frequency</h1>
 						<fieldset>
 								<?php
@@ -136,7 +136,7 @@ $user_id    = get_current_user_id();
 						</fieldset>
 					</section>
 
-					<section class="m-membership-choose-amount">
+					<section class="m-membership-choose-amount m-membership-choice-group">
 						<h1>Choose Amount</h1>
 
 						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ) ) : ?>
@@ -198,7 +198,7 @@ $user_id    = get_current_user_id();
 						</fieldset>
 					</section>
 
-					<section class="m-membership-choose-gift">
+					<section class="m-membership-choose-gift m-membership-choice-group">
 						<h1>Select Thank You Gift</h1>
 						<fieldset>
 									<div class="m-form-radios m-decline-benefits-select">
