@@ -709,6 +709,21 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
+			$frequency_options = $this->member_levels->get_frequency_options();
+			if ( ! empty( $frequency_options ) ) {
+				foreach ( $frequency_options as $key => $option ) {
+					$settings[ $this_section . '_suggested_amounts_' . $option['id'] ] = array(
+						'title'    => sprintf( __( '%1$s suggested amounts', 'minnpost-membership' ), ucwords( $option['text'] ) ),
+						'callback' => array( $this, 'display_suggested_amounts' ),
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'args'     => array(
+							'desc'        => ''
+						),
+					);
+				}
+			}
+
 			$settings[ $this_section . '_pre_form_text' ] = array(
 				'title'    => __( 'Pre form text', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
@@ -3340,6 +3355,29 @@ class MinnPost_Membership_Admin {
 			);
 		}
 
+	}
+
+	public function display_suggested_amounts( $args ) {
+		$desc      = $args['desc'];
+		$id        = $args['label_for'];
+		$name      = $args['name'];
+		$value     = get_option( $id, '' );
+		if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
+			$value = $args['default'];
+		}
+
+		foreach ( range( 0, 3 ) as $i ) {
+		    printf( '<div>' );
+			printf( '<input type="text" name="%1$s" value="%2$s" size="5">',
+				esc_attr( $name . '[' . $i . '][amount]' ),
+				esc_attr( $value[$i]['amount'] )
+			);
+			printf( '<input type="text" name="%1$s" value="%2$s" size="40">',
+				esc_attr( $name . '[' . $i . '][desc]' ),
+				esc_attr( $value[$i]['desc'] )
+			);
+		    printf( '</div>' );
+		}
 	}
 
 }
