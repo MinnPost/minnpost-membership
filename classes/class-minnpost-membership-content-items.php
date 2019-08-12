@@ -57,6 +57,7 @@ class MinnPost_Membership_Content_Items {
 		add_action( 'init', array( $this, 'create_partner_offer' ), 0 );
 		add_action( 'admin_menu', array( $this, 'create_sub_menus' ), 20 );
 		add_filter( 'enter_title_here', array( $this, 'title_placeholders' ), 10, 1 );
+		add_action( 'cmb2_init', array( $this, 'create_thank_you_gift_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
 		add_action( 'admin_menu', array( $this, 'remove_partner_offer_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
@@ -248,10 +249,10 @@ class MinnPost_Membership_Content_Items {
 	*/
 	public function create_sub_menus() {
 		$capability     = 'manage_minnpost_membership_options';
-		$partner        = 'edit.php?post_type=partner';
-		add_submenu_page( $this->slug, 'Partners', 'Partners', $capability, $partner );
 		$thank_you_gift = 'edit.php?post_type=thank_you_gift';
 		add_submenu_page( $this->slug, 'Thank-you Gifts', 'Thank-you Gifts', $capability, $thank_you_gift );
+		$partner        = 'edit.php?post_type=partner';
+		add_submenu_page( $this->slug, 'Partners', 'Partners', $capability, $partner );
 		$partner_offer  = 'edit.php?post_type=partner_offer';
 		add_submenu_page( $this->slug, 'Partner Offers', 'Partner Offers', $capability, $partner_offer );
 	}
@@ -272,6 +273,36 @@ class MinnPost_Membership_Content_Items {
 			$title = __( 'Enter offer/event name here', 'minnpost-membership' );
 		}
 		return $title;
+	}
+
+	/**
+	* Create the thank-you gift fields with CMB2
+	*
+	*/
+	public function create_thank_you_gift_fields() {
+		$object_type = 'thank_you_gift';
+		$prefix      = '_mp_thank_you_gift_';
+
+		$thank_you_gift_fields = new_cmb2_box(
+			array(
+				'id' => $prefix . 'thank_you_gift_fields',
+				'title' => __( 'Gift Details' ),
+				'object_types' => $object_type,
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   => $prefix . 'image',
+				'name' => __( 'Image', 'minnpost-membership' ),
+				'desc'         => __( 'Upload an image or enter an URL.', 'minnpost-membership' ),
+				'type' => 'file',
+				'preview_size' => array( 130, 85 ),
+				// query_args are passed to wp.media's library query.
+					'query_args'   => array(
+					'type' => 'image',
+				),
+			)
+		);
 	}
 
 	/**
