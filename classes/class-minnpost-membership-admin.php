@@ -694,6 +694,20 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
+			$settings[ $this_section . '_summary_compact' ] = array(
+				'title'    => __( 'Summary for smaller screens', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => '',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+
 			$settings[ $this_section . '_pre_form_text' ] = array(
 				'title'    => __( 'Pre form text', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
