@@ -283,24 +283,59 @@ class MinnPost_Membership_Content_Items {
 		$object_type = 'thank_you_gift';
 		$prefix      = '_mp_thank_you_gift_';
 
+		$member_level_options = $this->member_levels->get_member_levels();
+		array_walk( $member_level_options, function(&$level) {
+			$level = $level['name'];
+		});
+
 		$thank_you_gift_fields = new_cmb2_box(
 			array(
-				'id' => $prefix . 'thank_you_gift_fields',
-				'title' => __( 'Gift Details' ),
+				'id'           => $prefix . 'thank_you_gift_fields',
+				'title'        => __( 'Gift Details' ),
 				'object_types' => $object_type,
 			)
 		);
 		$thank_you_gift_fields->add_field(
 			array(
-				'id'   => $prefix . 'image',
-				'name' => __( 'Image', 'minnpost-membership' ),
+				'id'   => $prefix . 'description',
+				'name' => __( 'Description', 'minnpost-membership' ),
+				'type' => 'text',
+				'desc' => __( 'Enter a short description of the gift.', 'minnpost-membership' )
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'           => $prefix . 'image',
+				'name'         => __( 'Image', 'minnpost-membership' ),
 				'desc'         => __( 'Upload an image or enter an URL.', 'minnpost-membership' ),
-				'type' => 'file',
+				'type'         => 'file',
 				'preview_size' => array( 130, 85 ),
 				// query_args are passed to wp.media's library query.
-					'query_args'   => array(
+				'query_args'   => array(
 					'type' => 'image',
 				),
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'               => $prefix . 'type',
+				'type'             => 'radio_inline',
+				'name'             => __( 'Type', 'minnpost-membership' ),
+				'desc'             => __( 'Users can choose only one piece of swag; subscriptions are multi-select.', 'minnpost-membership' ),
+				'options'          => array(
+					'swag'         => __( 'Swag', 'minnpost-membership' ),
+					'subscription' => __( 'Subscription', 'minnpost-membership' )
+				),
+				'default'          => 'swag'
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   		=> $prefix . 'minimum_member_level_id',
+				'type' 		=> 'select',
+				'name' 		=> __( 'Minimum member level', 'minnpost-membership' ),
+				'desc' 		=> '',
+				'options' => $member_level_options
 			)
 		);
 	}
