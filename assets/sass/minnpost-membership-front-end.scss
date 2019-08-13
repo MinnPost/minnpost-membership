@@ -129,8 +129,11 @@ $nav-wrap-screen: 960px;
 	padding: 0;
 }
 
-.m-membership-summary {
+.m-membership-summary, .m-membership-summary-short {
 	margin-bottom: $vertical-space;
+}
+.m-membership-summary {
+	display: none;
 }
 
 .m-membership-choose-frequency, .m-membership-choose-amount {
@@ -577,6 +580,15 @@ $nav-wrap-screen: 960px;
 				width: 22%;
 			}
 		}
+	}
+}
+
+@media screen and (min-width: $nav-wrap-screen) {
+	.m-membership-summary-short {
+		display: none;
+	}
+	.m-membership-summary {
+		display: block;
 	}
 }
 
