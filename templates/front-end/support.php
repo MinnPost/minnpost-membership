@@ -55,10 +55,26 @@ $user_id    = get_current_user_id();
 							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
 						</section>
 					<?php endif; ?>
+
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary_short', '' ) ) : ?>
+						<section class="m-membership-summary-short">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_short', '' ) ); ?>
+						</section>
+					<?php else : ?>
+						<section class="m-membership-summary-short">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+						</section>
+					<?php endif; ?>
 				<?php else : ?>
 					<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
 						<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
 					</section>
+
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_short', '' ) ) : ?>
+						<section class="m-membership-summary-short">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_short', '' ) ); ?>
+						</section>
+					<?php endif; ?>
 				<?php endif; ?>
 
 				<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
