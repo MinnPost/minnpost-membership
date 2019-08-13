@@ -3366,9 +3366,11 @@ class MinnPost_Membership_Admin {
 			$values = $args['default'];
 		}
 
+		// this hardcodes an expectation of 4 suggested amounts per frequency
+		// if we ever want to make this configurable, we'll need to do that here as well.
 		foreach ( range( 0, 3 ) as $i ) {
 			$value = array('amount' => '', 'desc' => '');
-			if ( array_key_exists( $i, $values ) ) {
+			if ( is_array( $values ) && array_key_exists( $i, $values ) ) {
 				$value = $values[$i];
 			}
 
