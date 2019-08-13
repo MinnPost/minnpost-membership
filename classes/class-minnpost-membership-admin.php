@@ -3361,22 +3361,27 @@ class MinnPost_Membership_Admin {
 		$desc      = $args['desc'];
 		$id        = $args['label_for'];
 		$name      = $args['name'];
-		$value     = get_option( $id, '' );
-		if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
-			$value = $args['default'];
+		$values    = get_option( $id, '' );
+		if ( '' === $values && isset( $args['default'] ) && '' !== $args['default'] ) {
+			$values = $args['default'];
 		}
 
 		foreach ( range( 0, 3 ) as $i ) {
-		    printf( '<div>' );
+			$value = array('amount' => '', 'desc' => '');
+			if ( array_key_exists( $i, $values ) ) {
+				$value = $values[$i];
+			}
+
+			printf( '<div>' );
 			printf( '<input type="text" name="%1$s" value="%2$s" size="5">',
 				esc_attr( $name . '[' . $i . '][amount]' ),
-				esc_attr( $value[$i]['amount'] )
+				esc_attr( $value['amount'] )
 			);
 			printf( '<input type="text" name="%1$s" value="%2$s" size="40">',
 				esc_attr( $name . '[' . $i . '][desc]' ),
-				esc_attr( $value[$i]['desc'] )
+				esc_attr( $value['desc'] )
 			);
-		    printf( '</div>' );
+			printf( '</div>' );
 		}
 	}
 
