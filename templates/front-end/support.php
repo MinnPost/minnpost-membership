@@ -50,29 +50,31 @@ $user_id    = get_current_user_id();
 
 			<div class="m-entry-content m-membership-support-wrapper">
 				<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
-					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
+					<?php
+						$summary = get_option( $minnpost_membership->option_prefix . 'support_summary', '' );
+					?>
+					<?php if ( '' !== $summary ) : ?>
 						<section class="m-membership-summary">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+							<?php echo wpautop( $summary ); ?>
 						</section>
 					<?php endif; ?>
 
-					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary_short', '' ) ) : ?>
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary_short', $summary ) ) : ?>
 						<section class="m-membership-summary-short">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_short', '' ) ); ?>
-						</section>
-					<?php else : ?>
-						<section class="m-membership-summary-short">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_short', $summary ) ); ?>
 						</section>
 					<?php endif; ?>
 				<?php else : ?>
-					<section class="m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
-						<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
+					<?php
+						$summary = get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' );
+					?>
+					<section class="m-membership-summary m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
+						<?php echo wpautop( $summary ); ?>
 					</section>
 
-					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_short', '' ) ) : ?>
-						<section class="m-membership-summary-short">
-							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_short', '' ) ); ?>
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_short', $summary ) ) : ?>
+						<section class="m-membership-summary-short m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>-short">
+							<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_short', $summary ) ); ?>
 						</section>
 					<?php endif; ?>
 				<?php endif; ?>
