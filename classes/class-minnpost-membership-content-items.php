@@ -52,14 +52,68 @@ class MinnPost_Membership_Content_Items {
 	*
 	*/
 	public function add_actions() {
+		add_action( 'init', array( $this, 'create_thank_you_gift' ), 0 );
 		add_action( 'init', array( $this, 'create_partner' ), 0 );
 		add_action( 'init', array( $this, 'create_partner_offer' ), 0 );
 		add_action( 'admin_menu', array( $this, 'create_sub_menus' ), 20 );
 		add_filter( 'enter_title_here', array( $this, 'title_placeholders' ), 10, 1 );
+		add_action( 'cmb2_init', array( $this, 'create_thank_you_gift_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
 		add_action( 'admin_menu', array( $this, 'remove_partner_offer_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
 		add_filter( 'pre_get_posts', array( $this, 'membership_content_default_order' ), 10, 1 );
+	}
+
+	/**
+	* Create the thank-you gift content type
+	*
+	*/
+	public function create_thank_you_gift() {
+		$labels = array(
+			'name'                  => _x( 'Thank-you Gifts', 'Post Type General Name', 'minnpost-membership' ),
+			'singular_name'         => _x( 'Thank-you Gift', 'Post Type Singular Name', 'minnpost-membership' ),
+			'menu_name'             => __( 'Thank-you Gifts', 'minnpost-membership' ),
+			'name_admin_bar'        => __( 'Thank-you Gift', 'minnpost-membership' ),
+			'attributes'            => __( 'Thank-you Gift Attributes', 'minnpost-membership' ),
+			'all_items'             => __( 'All Thank-you Gifts', 'minnpost-membership' ),
+			'add_new_item'          => __( 'Add New Thank-you Gift', 'minnpost-membership' ),
+			'add_new'               => __( 'Add New', 'minnpost-membership' ),
+			'new_item'              => __( 'New Thank-you Gift', 'minnpost-membership' ),
+			'edit_item'             => __( 'Edit Thank-you Gift', 'minnpost-membership' ),
+			'update_item'           => __( 'Update Thank-you Gift', 'minnpost-membership' ),
+			'view_item'             => __( 'View Thank-you Gift', 'minnpost-membership' ),
+			'view_items'            => __( 'View Thank-you Gifts', 'minnpost-membership' ),
+			'search_items'          => __( 'Search Thank-you Gift', 'minnpost-membership' ),
+			'not_found'             => __( 'Not found', 'minnpost-membership' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'minnpost-membership' ),
+			'featured_image'        => __( 'Featured Image', 'minnpost-membership' ),
+			'set_featured_image'    => __( 'Set featured image', 'minnpost-membership' ),
+			'remove_featured_image' => __( 'Remove featured image', 'minnpost-membership' ),
+			'use_featured_image'    => __( 'Use as featured image', 'minnpost-membership' ),
+			'insert_into_item'      => __( 'Insert into thank-you gift', 'minnpost-membership' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this thank-you gift', 'minnpost-membership' ),
+			'items_list'            => __( 'Thank-you gifts list', 'minnpost-membership' ),
+			'items_list_navigation' => __( 'Thank-you gifts list navigation', 'minnpost-membership' ),
+			'filter_items_list'     => __( 'Filter thank-you gifts list', 'minnpost-membership' ),
+		);
+		$args   = array(
+			'label'               => __( 'Thank-you gift', 'minnpost-membership' ),
+			'description'         => __( 'Thank-you gifts for members', 'minnpost-membership' ),
+			'labels'              => $labels,
+			'supports'            => array( 'title', 'revisions' ),
+			'hierarchical'        => false,
+			'public'              => true,
+			'show_ui'             => true,
+			'show_in_menu'        => false,
+			'show_in_admin_bar'   => true,
+			'show_in_nav_menus'   => true,
+			'can_export'          => true,
+			'has_archive'         => false,
+			'exclude_from_search' => true,
+			'publicly_queryable'  => true,
+			'capability_type'     => 'page',
+		);
+		register_post_type( 'thank_you_gift', $args );
 	}
 
 	/**
@@ -194,10 +248,12 @@ class MinnPost_Membership_Content_Items {
 	*
 	*/
 	public function create_sub_menus() {
-		$partner    = 'edit.php?post_type=partner';
-		$capability = 'manage_minnpost_membership_options';
+		$capability     = 'manage_minnpost_membership_options';
+		$thank_you_gift = 'edit.php?post_type=thank_you_gift';
+		add_submenu_page( $this->slug, 'Thank-you Gifts', 'Thank-you Gifts', $capability, $thank_you_gift );
+		$partner        = 'edit.php?post_type=partner';
 		add_submenu_page( $this->slug, 'Partners', 'Partners', $capability, $partner );
-		$partner_offer = 'edit.php?post_type=partner_offer';
+		$partner_offer  = 'edit.php?post_type=partner_offer';
 		add_submenu_page( $this->slug, 'Partner Offers', 'Partner Offers', $capability, $partner_offer );
 	}
 
@@ -217,6 +273,71 @@ class MinnPost_Membership_Content_Items {
 			$title = __( 'Enter offer/event name here', 'minnpost-membership' );
 		}
 		return $title;
+	}
+
+	/**
+	* Create the thank-you gift fields with CMB2
+	*
+	*/
+	public function create_thank_you_gift_fields() {
+		$object_type = 'thank_you_gift';
+		$prefix      = '_mp_thank_you_gift_';
+
+		$member_level_options = $this->member_levels->get_member_levels();
+		array_walk( $member_level_options, function(&$level) {
+			$level = $level['name'];
+		});
+
+		$thank_you_gift_fields = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'thank_you_gift_fields',
+				'title'        => __( 'Gift Details' ),
+				'object_types' => $object_type,
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   => $prefix . 'description',
+				'name' => __( 'Description', 'minnpost-membership' ),
+				'type' => 'text',
+				'desc' => __( 'Enter a short description of the gift.', 'minnpost-membership' )
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'           => $prefix . 'image',
+				'name'         => __( 'Image', 'minnpost-membership' ),
+				'desc'         => __( 'Upload an image or enter an URL.', 'minnpost-membership' ),
+				'type'         => 'file',
+				'preview_size' => array( 130, 85 ),
+				// query_args are passed to wp.media's library query.
+				'query_args'   => array(
+					'type' => 'image',
+				),
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'               => $prefix . 'type',
+				'type'             => 'radio_inline',
+				'name'             => __( 'Type', 'minnpost-membership' ),
+				'desc'             => __( 'Users can choose only one piece of swag; subscriptions are multi-select.', 'minnpost-membership' ),
+				'options'          => array(
+					'swag'         => __( 'Swag', 'minnpost-membership' ),
+					'subscription' => __( 'Subscription', 'minnpost-membership' )
+				),
+				'default'          => 'swag'
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   		=> $prefix . 'minimum_member_level_id',
+				'type' 		=> 'select',
+				'name' 		=> __( 'Minimum member level', 'minnpost-membership' ),
+				'desc' 		=> '',
+				'options' => $member_level_options
+			)
+		);
 	}
 
 	/**

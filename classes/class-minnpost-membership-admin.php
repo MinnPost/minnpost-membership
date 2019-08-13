@@ -198,43 +198,44 @@ class MinnPost_Membership_Admin {
 			}
 			switch ( $page ) {
 				case $this->slug . '-settings':
-					if ( isset( $get_data['method'] ) ) {
-						$method      = sanitize_key( $get_data['method'] );
-						$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&method=' . $method );
-						$success_url = get_admin_url( null, 'admin.php?page=' . $page );
-
-						if ( isset( $get_data['transient'] ) ) {
-							$transient = sanitize_key( $get_data['transient'] );
-							$posted    = $this->mp_mem_transients->get( $transient );
-						}
-
-						if ( isset( $posted ) && is_array( $posted ) ) {
-							$member_level = $posted;
-							$id           = $member_level['id'];
-						} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
-							$id           = $get_data['id'];
-							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '', true, 'id', true );
-						}
-
-						$benefits = '';
-
-						if ( isset( $member_level ) && is_array( $member_level ) ) {
-							$name                   = $member_level['name'];
-							$is_nonmember           = isset( $member_level['is_nonmember'] ) ? intval( $member_level['is_nonmember'] ) : '';
-							$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
-							$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
-							$starting_value         = $member_level['starting_value'];
-							$benefits               = $member_level['benefits'];
-						}
-
-						if ( 'add-member-level' === $method || 'edit-member-level' === $method ) {
-							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
-						} elseif ( 'delete-member-level' === $method ) {
-							require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
-						}
-					} else {
+					if ( ! isset( $get_data['method'] ) ) {
 						$member_levels = $this->member_levels->get_member_levels();
 						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
+						break;
+					}
+
+					$method      = sanitize_key( $get_data['method'] );
+					$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&method=' . $method );
+					$success_url = get_admin_url( null, 'admin.php?page=' . $page );
+
+					if ( isset( $get_data['transient'] ) ) {
+						$transient = sanitize_key( $get_data['transient'] );
+						$posted    = $this->mp_mem_transients->get( $transient );
+					}
+
+					if ( isset( $posted ) && is_array( $posted ) ) {
+						$member_level = $posted;
+						$id           = $member_level['id'];
+					} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
+						$id           = $get_data['id'];
+						$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '', true, 'id', true );
+					}
+
+					$benefits = '';
+
+					if ( isset( $member_level ) && is_array( $member_level ) ) {
+						$name                   = $member_level['name'];
+						$is_nonmember           = isset( $member_level['is_nonmember'] ) ? intval( $member_level['is_nonmember'] ) : '';
+						$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
+						$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
+						$starting_value         = $member_level['starting_value'];
+						$benefits               = $member_level['benefits'];
+					}
+
+					if ( 'add-member-level' === $method || 'edit-member-level' === $method ) {
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
+					} elseif ( 'delete-member-level' === $method ) {
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
 					}
 					break;
 				case $this->slug . '-benefit-results':
@@ -693,6 +694,35 @@ class MinnPost_Membership_Admin {
 					'media_buttons' => false,
 				),
 			);
+
+			$settings[ $this_section . '_summary_compact' ] = array(
+				'title'    => __( 'Summary for smaller screens', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => '',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+
+			$frequency_options = $this->member_levels->get_frequency_options();
+			if ( ! empty( $frequency_options ) ) {
+				foreach ( $frequency_options as $key => $option ) {
+					$settings[ $this_section . '_suggested_amounts_' . $option['id'] ] = array(
+						'title'    => sprintf( __( '%1$s suggested amounts', 'minnpost-membership' ), ucwords( $option['text'] ) ),
+						'callback' => array( $this, 'display_suggested_amounts' ),
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'args'     => array(
+							'desc'        => ''
+						),
+					);
+				}
+			}
 
 			$settings[ $this_section . '_pre_form_text' ] = array(
 				'title'    => __( 'Pre form text', 'minnpost-membership' ),
@@ -3325,6 +3355,29 @@ class MinnPost_Membership_Admin {
 			);
 		}
 
+	}
+
+	public function display_suggested_amounts( $args ) {
+		$desc      = $args['desc'];
+		$id        = $args['label_for'];
+		$name      = $args['name'];
+		$value     = get_option( $id, '' );
+		if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
+			$value = $args['default'];
+		}
+
+		foreach ( range( 0, 3 ) as $i ) {
+		    printf( '<div>' );
+			printf( '<input type="text" name="%1$s" value="%2$s" size="5">',
+				esc_attr( $name . '[' . $i . '][amount]' ),
+				esc_attr( $value[$i]['amount'] )
+			);
+			printf( '<input type="text" name="%1$s" value="%2$s" size="40">',
+				esc_attr( $name . '[' . $i . '][desc]' ),
+				esc_attr( $value[$i]['desc'] )
+			);
+		    printf( '</div>' );
+		}
 	}
 
 }
