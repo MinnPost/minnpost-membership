@@ -219,6 +219,54 @@ $user_id    = get_current_user_id();
               $new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
               $minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
               ?>
+
+							<p>Choose from <strong>one</strong> of the following:</p>
+
+							<div class="m-form-radios m-select-swag">
+								<div class="m-form-item">
+									<input type="radio" name="swag" id="swag-mug" value="mug">
+									<label for="swag-mug" class="a-swag-option">
+										<img src="https://support.minnpost.com/static/img/mug.png"/>
+									</label>
+								</div>
+								<div class="m-form-item">
+									<input type="radio" name="swag" id="swag-waterbottle" value="waterbottle">
+									<label for="swag-waterbottle" class="a-swag-option">
+										<img src="https://support.minnpost.com/static/img/waterbottle.png"/>
+									</label>
+								</div>
+								<div class="m-form-item">
+									<input type="radio" name="swag" id="swag-decline" value="">
+									<label for="swag-decline" class="a-swag-option">
+										Decline gift
+									</label>
+								</div>
+							</div>
+
+							<p>Also choose if you want <strong>one or both</strong> of these subscriptions:</p>
+
+							<div class="m-form-checkboxes m-select-subscription">
+								<div class="m-form-item">
+									<input type="checkbox" name="atlantic_subscription" id="subscription-atlantic" value="true">
+									<label for="subscription-atlantic" class="a-subscription-option">
+										<span class="a-subscription-label">1-year print subscription to:</span>
+										<img src="https://support.minnpost.com/static/img/mug.png"/>
+									</label>
+								</div>
+								<div class="m-form-item">
+									<input type="checkbox" name="nyt_subscription" id="subscription-nyt" value="true">
+									<label for="subscription-nyt" class="a-subscription-option">
+										<span class="a-subscription-label">1-year digital subscription to:</span>
+										<img src="https://support.minnpost.com/static/img/waterbottle.png"/>
+									</label>
+								</div>
+								<div class="m-form-item">
+									<input type="checkbox" name="decline_subscription" id="subscription-decline" value="">
+									<label for="subscription-decline" class="a-subscription-option">
+										Decline both subscriptions
+									</label>
+								</div>
+							</div>
 						</div>
 					</section>
 

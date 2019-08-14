@@ -14,7 +14,9 @@
 		levelName: '.a-level',
 		userCurrentLevel: '.a-current-level',
 		declineBenefits: '.m-decline-benefits-select input[type="radio"]',
-		giftSelector: '.m-membership-gift-selector'
+		giftSelector: '.m-membership-gift-selector',
+		subscriptionsSelector: '.m-select-subscription input[type="checkbox"]',
+		declineSubscriptions: '#subscription-decline'
 	};
 
 	// The actual plugin constructor
@@ -39,6 +41,7 @@
 			var $suggestedAmount = $( this.options.amountSelector );
 			var $amount = $( this.element ).find( this.options.amountField );
 			var $declineBenefits = $( this.element ).find( this.options.declineBenefits );
+			var $subscriptions = $( this.element ).find( this.options.subscriptionsSelector );
 			if ( !( $amount.length > 0 &&
 			        $frequency.length > 0 &&
 			        $suggestedAmount.length > 0 ) ) {
@@ -53,11 +56,18 @@
 			$suggestedAmount.on( 'change', this.onSuggestedAmountChange.bind(this) );
 			$amount.on( 'keyup mouseup', this.onAmountChange.bind(this) );
 
-			if ( ! $declineBenefits.length > 0 ) {
+			if ( ! ( $declineBenefits.length > 0 && $subscriptions.length > 0 ) ) {
 				return;
 			}
+
+			// Set up the UI for the current field state on (re-)load
+			if ( $subscriptions.not( this.options.declineSubscriptions ).is( ':checked' ) ) {
+				$( this.element ).find( this.options.declineSubscriptions ).prop( 'checked', false );
+			}
 			this.onDeclineBenefitsChange();
-			$declineBenefits.on( 'change', this.onDeclineBenefitsChange.bind(this) );
+
+			$declineBenefits.on( 'change', this.onDeclineBenefitsChange.bind( this ) );
+			$subscriptions.on( 'click', this.onSubscriptionsClick.bind( this ) );
 		}, // end init
 
 		onFrequencyChange: function( event ) {
@@ -91,6 +101,18 @@
 
 			$giftSelector.show();
 		}, // end onDeclineBenefitsChange
+
+		onSubscriptionsClick: function( event ) {
+			var $subscriptions = $( this.element ).find( this.options.subscriptionsSelector ).not( this.options.declineSubscriptions );
+			var $decline = $( this.element ).find( this.options.declineSubscriptions );
+
+			if ( $( event.target ).is( this.options.declineSubscriptions ) ) {
+				$subscriptions.prop( 'checked', false );
+				return;
+			}
+
+			$decline.prop( 'checked', false );
+		}, // end onSubscriptionsChange
 
 		clearAmountSelector: function( event ) {
 			var $suggestedAmount = $( this.options.amountSelector );

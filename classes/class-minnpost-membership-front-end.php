@@ -252,6 +252,17 @@ class MinnPost_Membership_Front_End {
 			 filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['decline_benefits'] = 'true';
 		}
+		if ( isset( $data['swag'] ) ) {
+			$params['swag'] = filter_var( $data['swag'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $data['atlantic_subscription'] ) &&
+		     filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
+			$params['atlantic_subscripton'] = 'true';
+		}
+		if ( isset( $data['nyt_subscription'] ) &&
+		     filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
+			$params['nyt_subscripton'] = 'true';
+		}
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
 		}
