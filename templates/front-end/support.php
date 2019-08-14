@@ -222,26 +222,39 @@ $user_id    = get_current_user_id();
 
 							<p>Choose from <strong>one</strong> of the following:</p>
 
-							<div class="m-form-radios m-select-swag">
-								<div class="m-form-item">
-									<input type="radio" name="swag" id="swag-mug" value="mug">
-									<label for="swag-mug" class="a-swag-option">
-										<img src="https://support.minnpost.com/static/img/mug.png"/>
-									</label>
+							<?php
+							$swag = new WP_Query( [
+								'post_type' => 'thank_you_gift',
+								'meta_key' => '_mp_thank_you_gift_type',
+								'meta_value' => 'swag'
+							] );
+							?>
+							<?php if ( $swag->have_posts() ) : ?>
+								<div class="m-form-radios m-select-swag">
+									<?php while ( $swag->have_posts() ) : ?>
+										<?php
+											$swag->the_post();
+											$slug = get_post()->post_name;
+											$meta = get_post_meta( get_the_ID() );
+										?>
+										<div class="m-form-item">
+											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>">
+											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
+												<figure class="m-thank-you-gift-image">
+													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
+												</figure>
+											</label>
+										</div>
+									<?php endwhile; ?>
+
+									<div class="m-form-item">
+										<input type="radio" name="swag" id="swag-decline" value="">
+										<label for="swag-decline" class="a-swag-option">
+											Decline gift
+										</label>
+									</div>
 								</div>
-								<div class="m-form-item">
-									<input type="radio" name="swag" id="swag-waterbottle" value="waterbottle">
-									<label for="swag-waterbottle" class="a-swag-option">
-										<img src="https://support.minnpost.com/static/img/waterbottle.png"/>
-									</label>
-								</div>
-								<div class="m-form-item">
-									<input type="radio" name="swag" id="swag-decline" value="">
-									<label for="swag-decline" class="a-swag-option">
-										Decline gift
-									</label>
-								</div>
-							</div>
+							<?php endif; ?>
 
 							<p>Also choose if you want <strong>one or both</strong> of these subscriptions:</p>
 
