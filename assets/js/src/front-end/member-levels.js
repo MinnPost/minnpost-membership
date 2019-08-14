@@ -1,5 +1,5 @@
 // plugin
-;(function ( $, window, document, undefined ) {
+;(function ( $, window, document, MinnPostMembership, undefined ) {
 
 	// Create the defaults once
 	var pluginName = 'minnpostMembership',
@@ -102,7 +102,7 @@
 			var frequency = frequency_string.split(' - ')[1];
 			var frequency_name = frequency_string.split(' - ')[0];
 
-			var level = this.checkLevel( amount, frequency, frequency_name, this.previousAmount, this.element, this.options );
+			var level = this.checkLevel( amount, frequency, frequency_name, this.element, this.options );
 			this.showNewLevel( this.element, this.options, level );
 		}, // end checkAndSetLevel
 
@@ -139,7 +139,7 @@
 
 						amount = $( options.amount_selector_in_levels + '[data-member-level-number="' + level_number + '"]').val();
 
-						level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
+						level = that.checkLevel( amount, frequency, frequency_name, element, options );
 						that.changeFrequency( frequency_string, level['name'], element, options );
 
 					} else if ( $( options.level_frequency_text_selector ).length > 0 ) {
@@ -148,7 +148,7 @@
 							level_number = $(options.amount_selector_in_levels, $(this)).data('member-level-number');
 							if ( typeof level_number !== 'undefined' ) {
 								amount = $( options.amount_selector_in_levels, $(this) ).val();
-								level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
+								level = that.checkLevel( amount, frequency, frequency_name, element, options );
 							}
 						});
 					}
@@ -166,30 +166,14 @@
 					frequency_string = $(options.frequency_selector_in_levels, $(this).parent() ).val();
 					frequency = frequency_string.split(' - ')[1];
 					amount = $( options.amount_selector_in_levels + '[data-member-level-number="' + level_number + '"]').val();
-					level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
+					level = that.checkLevel( amount, frequency, frequency_name, element, options );
 					event.preventDefault();
 				});
 			}
 		}, // end levelFlipper
 
-		checkLevel: function( amount, frequency, type, previous_amount, element, options ) {
-			var thisyear = parseInt( amount ) * parseInt( frequency );
-			var level = '';
-			if ( typeof previous_amount !== 'undefined' && previous_amount !== '' ) {
-				var prior_year_amount = parseInt( previous_amount.prior_year_contributions );
-				var coming_year_amount = parseInt( previous_amount.coming_year_contributions );
-				var annual_recurring_amount = parseInt( previous_amount.annual_recurring_amount );
-				// calculate member level formula
-				if ( type === 'one-time' ) {
-					prior_year_amount += thisyear;
-				} else {
-					annual_recurring_amount += thisyear;
-				}
-
-				thisyear = Math.max( prior_year_amount, coming_year_amount, annual_recurring_amount );
-			}
-
-			level = this.getLevel( thisyear );
+		checkLevel: function( amount, frequency, type, element, options ) {
+			var level = MinnPostMembership.checkLevel( amount, frequency, type );
 
 			$('h2', options.single_level_summary_selector).each( function() {
 				if ( $(this).text() == level['name'] ) {
@@ -197,28 +181,9 @@
 					$(this).parent().parent().addClass( 'active' );
 				}
 			} );
-			return level;
 
+			return level;
 		}, // end checkLevel
-
-		getLevel: function( thisyear ) {
-			var level = [];
-			if ( thisyear > 0 && thisyear < 60 ) {
-				level['name'] = 'Bronze';
-				level['number'] = 1;
-			}
-			else if (thisyear > 59 && thisyear < 120) {
-				level['name'] = 'Silver';
-				level['number'] = 2;
-			} else if (thisyear > 119 && thisyear < 240) {
-				level['name'] = 'Gold';
-				level['number'] = 3;
-			} else if (thisyear > 239) {
-				level['name'] = 'Platinum';
-				level['number'] = 4;
-			}
-			return level;
-		}, // end getLevel
 
 		showNewLevel: function( element, options, level ) {
 			var member_level_prefix = '';
@@ -333,4 +298,4 @@
 		});
 	};
 
-})( jQuery, window, document );
+})( jQuery, window, document, MinnPostMembership );
