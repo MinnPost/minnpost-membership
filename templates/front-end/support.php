@@ -213,7 +213,7 @@ $user_id    = get_current_user_id();
 									</div>
 						</fieldset>
 
-						<div class="m-membership-gift-selector">
+						<div class="m-membership-gift-selector m-membership-choice-group">
               <?php
               $on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
               $new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );

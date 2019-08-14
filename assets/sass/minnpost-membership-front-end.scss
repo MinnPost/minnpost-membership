@@ -148,7 +148,7 @@ $nav-wrap-screen: 960px;
 }
 
 .m-membership-choice-group {
-	.m-form-radios {
+	.m-form-radios, .m-form-checkboxes {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -163,7 +163,7 @@ $nav-wrap-screen: 960px;
 		.m-form-item {
 			text-align: center;
 		}
-		input[type="radio"] {
+		input[type="radio"], input[type="checkbox"] {
 			left: 0;
 			opacity: 0;
 			position: absolute;
@@ -178,6 +178,9 @@ $nav-wrap-screen: 960px;
 			font-weight: bold;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
+		}
+		input:checked + label {
+			background-color: $border-color-lighter;
 		}
 	}
 }
@@ -244,6 +247,12 @@ $nav-wrap-screen: 960px;
 
 .m-form-membership-support .m-membership-form-actions {
 	margin: $vertical-space 0;
+}
+
+.m-membership-choice-group.m-membership-gift-selector {
+	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
+		width: 32%;
+	}
 }
 
 .o-membership-member-levels {
