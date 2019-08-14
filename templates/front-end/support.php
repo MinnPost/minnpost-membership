@@ -258,28 +258,42 @@ $user_id    = get_current_user_id();
 
 							<p>Also choose if you want <strong>one or both</strong> of these subscriptions:</p>
 
-							<div class="m-form-checkboxes m-select-subscription">
-								<div class="m-form-item">
-									<input type="checkbox" name="atlantic_subscription" id="subscription-atlantic" value="true">
-									<label for="subscription-atlantic" class="a-subscription-option">
-										<span class="a-subscription-label">1-year print subscription to:</span>
-										<img src="https://support.minnpost.com/static/img/mug.png"/>
-									</label>
+							<?php
+							$subscriptions = new WP_Query( [
+								'post_type' => 'thank_you_gift',
+								'meta_key' => '_mp_thank_you_gift_type',
+								'meta_value' => 'subscription'
+							] );
+							?>
+							<?php if ( $subscriptions->have_posts() ) : ?>
+								<div class="m-form-checkboxes m-select-subscription">
+									<?php while ( $subscriptions->have_posts() ) : ?>
+										<?php
+											$subscriptions->the_post();
+											$slug = get_post()->post_name;
+											$meta = get_post_meta( get_the_ID() );
+										?>
+										<div class="m-form-item">
+											<input type="checkbox" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true">
+											<label for="subscription-<?php echo $slug; ?>" class="a-subscription-option">
+												<figure class="m-thank-you-gift-image">
+													<figcaption>
+														<?php echo $meta['_mp_thank_you_gift_description'][0]; ?>
+													</figcaption>
+													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
+												</figure>
+											</label>
+										</div>
+									<?php endwhile; ?>
+
+									<div class="m-form-item">
+										<input type="checkbox" name="decline_subscription" id="subscription-decline" value="">
+										<label for="subscription-decline" class="a-subscription-option">
+											Decline both subscriptions
+										</label>
+									</div>
 								</div>
-								<div class="m-form-item">
-									<input type="checkbox" name="nyt_subscription" id="subscription-nyt" value="true">
-									<label for="subscription-nyt" class="a-subscription-option">
-										<span class="a-subscription-label">1-year digital subscription to:</span>
-										<img src="https://support.minnpost.com/static/img/waterbottle.png"/>
-									</label>
-								</div>
-								<div class="m-form-item">
-									<input type="checkbox" name="decline_subscription" id="subscription-decline" value="">
-									<label for="subscription-decline" class="a-subscription-option">
-										Decline both subscriptions
-									</label>
-								</div>
-							</div>
+							<?php endif; ?>
 						</div>
 					</section>
 
