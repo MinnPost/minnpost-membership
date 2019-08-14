@@ -49,7 +49,13 @@
 			// and this.options
 			// you can add more functions like the one below and
 			// call them like so: this.yourOtherFunction(this.element, this.options).
+			this.previousAmount = '';
+			if ( typeof minnpost_membership_data !== 'undefined' && $( this.options.user_current_level ).length > 0 ) {
+				this.previousAmount = minnpost_membership_data.current_user.previous_amount;
+			}
+
 			this.catchHashLinks( this.element, this.options);
+			this.levelViewer();
 			this.levelFlipper( this.element, this.options );
 			this.startLevelClick( this.element, this.options );
 		},
@@ -70,50 +76,46 @@
 			});
 		}, // end catchLinks
 
+		levelViewer: function() {
+			var $amount = $( this.options.amount_selector_standalone );
+			var $frequency = $( this.options.frequency_selector_standalone );
+			if ( !( $amount.length > 0 && $frequency.length > 0 ) ) {
+				return;
+			}
+
+			this.checkAndSetLevel();
+			$frequency.on('change', this.checkAndSetLevel.bind( this ) );
+			$amount.bind('keyup mouseup', this.onAmountChange.bind( this ) );
+		}, // end levelViewer
+
+		onAmountChange: function( event ) {
+			var $target = $( event.target );
+			if ( $target.data( 'last-value' ) != $target.val() ) {
+				$target.data( 'last-value', $target.val() );
+				this.checkAndSetLevel();
+			}
+		}, // end onAmountChange
+
+		checkAndSetLevel: function() {
+			var amount = $( this.options.amount_selector_standalone ).val();
+			var frequency_string = $( this.options.frequency_selector_standalone + ':checked' ).val();
+			var frequency = frequency_string.split(' - ')[1];
+			var frequency_name = frequency_string.split(' - ')[0];
+
+			var level = this.checkLevel( amount, frequency, frequency_name, this.previousAmount, this.element, this.options );
+			this.showNewLevel( this.element, this.options, level );
+		}, // end checkAndSetLevel
+
 		levelFlipper: function( element, options ) {
 			var that = this;
-			var previous_amount = '';
+			var previous_amount = this.previousAmount;
 			var amount = 0;
 			var level = '';
 			var level_number = 0;
 			var frequency_string = '';
 			var frequency = '';
 			var frequency_name = '';
-			if ( typeof minnpost_membership_data !== 'undefined' && $( options.user_current_level ).length > 0 ) {
-				previous_amount = minnpost_membership_data.current_user.previous_amount;
-			}
-			if ( $( options.amount_selector_standalone ).length > 0 &&
-			     $( options.frequency_selector_standalone ).length > 0 ) {
-				amount = $( options.amount_selector_standalone ).val();
-				frequency_string = $(options.frequency_selector_standalone + ':checked').val();
-				frequency = frequency_string.split(' - ')[1];
-				frequency_name = frequency_string.split(' - ')[0];
 
-				level = that.checkLevel( amount, frequency, frequency_name, previous_amount, element, options );
-				that.showNewLevel( element, options, level );
-
-				$(options.frequency_selector_standalone).change( function() {
-
-					frequency_string = $( options.frequency_selector_standalone + ':checked').val()
-					frequency = frequency_string.split(' - ')[1];
-					frequency_name = frequency_string.split(' - ')[0];
-
-					level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), frequency_name, previous_amount, element, options );
-					that.showNewLevel( element, options, level );
-				});
-
-				$(options.amount_selector_standalone).bind('keyup mouseup', function() {
-					frequency_string = $( options.frequency_selector_standalone + ':checked').val()
-					frequency = frequency_string.split(' - ')[1];
-					frequency_name = frequency_string.split(' - ')[0];
-					if($(this).data('last-value') != $(this).val()) {
-						$(this).data('last-value', $(this).val());
-						level = that.checkLevel( $( options.amount_selector_standalone ).val(), $( options.frequency_selector_standalone + ':checked' ).attr( 'data-year-frequency' ), frequency_name, previous_amount, element, options );
-						that.showNewLevel( element, options, level );
-					};
-				});
-
-			}
 			if ( $( options.levels_container ).length > 0 ) {
 				$( options.single_level_summary_selector, element ).each(function() {
 					$( options.flipped_items, $(this) ).wrapAll( '<div class="flipper"/>' );
