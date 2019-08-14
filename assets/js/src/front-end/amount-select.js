@@ -12,7 +12,9 @@
 		amountField: '.a-amount-field #amount',
 		levelViewer: '.a-show-level',
 		levelName: '.a-level',
-		userCurrentLevel: '.a-current-level'
+		userCurrentLevel: '.a-current-level',
+		declineBenefits: '.m-decline-benefits-select input[type="radio"]',
+		giftSelector: '.m-membership-gift-selector'
 	};
 
 	// The actual plugin constructor
@@ -36,29 +38,37 @@
 			var $frequency = $( this.element ).find( this.options.frequencySelector );
 			var $suggestedAmount = $( this.options.amountSelector );
 			var $amount = $( this.element ).find( this.options.amountField );
+			var $declineBenefits = $( this.element ).find( this.options.declineBenefits );
 			if ( !( $amount.length > 0 &&
 			        $frequency.length > 0 &&
 			        $suggestedAmount.length > 0 ) ) {
 				return;
 			}
 
+			// Set up the UI for the current field state on (re-)load
 			this.setAmountLabels( $frequency.filter(':checked').val() );
 			this.checkAndSetLevel();
 
 			$frequency.on( 'change', this.onFrequencyChange.bind(this) );
 			$suggestedAmount.on( 'change', this.onSuggestedAmountChange.bind(this) );
 			$amount.on( 'keyup mouseup', this.onAmountChange.bind(this) );
-		},
+
+			if ( ! $declineBenefits.length > 0 ) {
+				return;
+			}
+			this.onDeclineBenefitsChange();
+			$declineBenefits.on( 'change', this.onDeclineBenefitsChange.bind(this) );
+		}, // end init
 
 		onFrequencyChange: function( event ) {
 			this.setAmountLabels( $( event.target ).val() );
 			this.checkAndSetLevel();
-		},
+		}, // end onFrequencyChange
 
 		onSuggestedAmountChange: function( event ) {
 			$( this.element ).find( this.options.amountField ).val( null );
 			this.checkAndSetLevel();
-		},
+		}, // end onSuggestedAmountChange
 
 		onAmountChange: function( event ) {
 			this.clearAmountSelector( event );
@@ -70,6 +80,18 @@
 			}
 		}, // end onAmountChange
 
+		onDeclineBenefitsChange: function( event ) {
+			var $giftSelector = $( this.element ).find( this.options.giftSelector );
+			var decline = $( this.element ).find( this.options.declineBenefits ).filter( ':checked' ).val();
+
+			if ( decline === 'true' ) {
+				$giftSelector.hide();
+				return;
+			}
+
+			$giftSelector.show();
+		}, // end onDeclineBenefitsChange
+
 		clearAmountSelector: function( event ) {
 			var $suggestedAmount = $( this.options.amountSelector );
 
@@ -78,7 +100,7 @@
 			}
 
 			$suggestedAmount.removeAttr('checked');
-		},
+		}, // end clearAmountSelector
 
 		setAmountLabels: function( frequencyString ) {
 			var $groups = $( this.options.amountGroup );
