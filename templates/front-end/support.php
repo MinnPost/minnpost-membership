@@ -212,11 +212,18 @@ $user_id    = get_current_user_id();
 											</div>
 									</div>
 						</fieldset>
+
+						<div class="m-membership-gift-selector">
+              <?php
+              $on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
+              $new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
+              $minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
+              ?>
+						</div>
 					</section>
 
 					<div class="m-form-actions m-membership-form-actions">
 						<button type="submit" name="give" class="a-button"><?php echo get_option( $minnpost_membership->option_prefix . 'support_button_text', '' ); ?></button>
-						<?php $minnpost_membership->front_end->link_next_to_button( 'support' ); ?>
 					</div>
 				</form>
 

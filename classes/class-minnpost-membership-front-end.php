@@ -865,12 +865,9 @@ class MinnPost_Membership_Front_End {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
 		}
 
-		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '<a href="' . esc_url( get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) . '">';
-		}
 		$post_form_text_display .= $post_form_text;
 		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '</a>';
+			$post_form_text_display .= ' ' . $this->get_link_next_to_button( 'support' );
 		}
 
 		$post_form_text_display .= '</p>';
