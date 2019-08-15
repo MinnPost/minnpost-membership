@@ -174,62 +174,12 @@ class MinnPost_Membership_Member_Level {
 	*
 	*/
 	public function get_suggested_amounts() {
-		$suggested_amounts = array(
-			'monthly' => array(
-				array(
-					'amount' => '8',
-					'desc'   => 'Reporter traveling to Greater Minnesota for a story',
-				),
-				array(
-					'amount' => '15',
-					'desc'   => 'An original article on the environment',
-				),
-				array(
-					'amount' => '25',
-					'desc'   => 'Week of the Morning Glean',
-				),
-				array(
-					'amount' => '100',
-					'desc'   => 'Week of coverage from the State Capitol',
-				),
-			),
-			'yearly' => array(
-				array(
-					'amount' => '50',
-					'desc'   => 'Reporter researching public records',
-				),
-				array(
-					'amount' => '125',
-					'desc'   => 'Capturing a photo of a legislative debate',
-				),
-				array(
-					'amount' => '250',
-					'desc'   => 'Week of the Morning Glean',
-				),
-				array(
-					'amount' => '1200',
-					'desc'   => 'Week of coverage from the State Capitol',
-				),
-			),
-			'one-time' => array(
-				array(
-					'amount' => '30',
-					'desc'   => 'Keep our website running strong for a day',
-				),
-				array(
-					'amount' => '125',
-					'desc'   => 'Capturing a photo of a legislative debate',
-				),
-				array(
-					'amount' => '250',
-					'desc'   => 'Week of the Morning Glean',
-				),
-				array(
-					'amount' => '500',
-					'desc'   => 'Month of our DC Memo newsletter',
-				),
-			),
-		);
+		$frequency_options = $this->get_frequency_options();
+		$suggested_amounts = array();
+		foreach ( $frequency_options as $option ) {
+			$frequency = $option['id'];
+			$suggested_amounts[ $frequency ] = get_option( $this->option_prefix . 'support_suggested_amounts_' . $frequency );
+		}
 
 		// Sort suggested amounts in descending order
 		foreach ( $suggested_amounts as $frequency => &$amounts ) {
