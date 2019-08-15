@@ -3187,7 +3187,7 @@ class MinnPost_Membership_Admin {
 				'<div class="select"><select id="%1$s" name="%2$s"><option value="">- %3$s -</option>',
 				esc_attr( $id ),
 				esc_attr( $name ),
-				__( 'Select one', 'minnpost-membership' ),
+				__( 'Select one', 'minnpost-membership' )
 			);
 
 			foreach ( $args['items'] as $key => $value ) {
