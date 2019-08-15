@@ -3393,12 +3393,12 @@ class MinnPost_Membership_Admin {
 	*/
 	public function display_suggested_amounts( $args ) {
 
-		$desc  = $args['desc'];
-		$id    = $args['label_for'];
-		$name  = $args['name'];
-		$value = get_option( $id, '' );
-		if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
-			$value = $args['default'];
+		$desc   = $args['desc'];
+		$id     = $args['label_for'];
+		$name   = $args['name'];
+		$values = get_option( $id, '' );
+		if ( '' === $values && isset( $args['default'] ) && '' !== $args['default'] ) {
+			$values = $args['default'];
 		}
 
 		// this hardcodes an expectation of 4 suggested amounts per frequency
