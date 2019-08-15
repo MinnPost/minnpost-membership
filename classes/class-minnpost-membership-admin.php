@@ -710,6 +710,18 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
+			$settings[ $this_section . '_pre_suggested_amounts_text' ] = array(
+				'title'		 => __( 'Suggested amounts intro', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'		 => $this_section,
+				'section'	 => $this_section,
+				'args'		 => array(
+					'desc'		 => __( 'Explains the list of suggested amounts', 'minnpost-membership' ),
+					'constant' => '',
+					'type'		 => 'text'
+				)
+			);
+
 			$frequency_options = $this->member_levels->get_frequency_options();
 			if ( ! empty( $frequency_options ) ) {
 				foreach ( $frequency_options as $key => $option ) {
