@@ -31,7 +31,10 @@ const config = {
   },
   scripts: {
     admin: './assets/js/src/admin/**/*.js',
-    front_end: './assets/js/src/front-end/**/*.js',
+    front_end: [
+			'./assets/js/src/util/minnpost-membership.js',
+			'./assets/js/src/front-end/**/*.js'
+		],
     uglify: [ 'assets/js/*.js', '!assets/js/*.min.js' ],
     dest: './assets/js'
   },
@@ -168,7 +171,7 @@ function browserSyncReload(done) {
 function watch() {
   gulp.watch(config.styles.srcDir, styles);
   gulp.watch(config.scripts.admin, adminscripts);
-  
+
   // Reload browsersync when PHP files change, if active
   if (config.browserSync.active) {
     gulp.watch('./**/*.php', browserSyncReload);

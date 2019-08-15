@@ -99,7 +99,7 @@ $user_id    = get_current_user_id();
 						</div>
 					<?php endif; ?>
 
-					<section class="m-membership-choose-frequency">
+					<section class="m-membership-choose-frequency m-membership-choice-group">
 						<h1>Choose Frequency</h1>
 						<fieldset>
 								<?php
@@ -136,7 +136,7 @@ $user_id    = get_current_user_id();
 						</fieldset>
 					</section>
 
-					<section class="m-membership-choose-amount">
+					<section class="m-membership-choose-amount m-membership-choice-group">
 						<h1>Choose Amount</h1>
 
 						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ) ) : ?>
@@ -198,15 +198,111 @@ $user_id    = get_current_user_id();
 						</fieldset>
 					</section>
 
+					<section class="m-membership-choose-gift m-membership-choice-group">
+						<h1>Select Thank You Gift</h1>
+						<fieldset>
+									<div class="m-form-radios m-decline-benefits-select">
+											<div class="m-form-item">
+												<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n"/>
+												<label for="decline-benefits-n"  class="a-decline-benefits-option">Choose thank you gift</label>
+											</div>
+											<div class="m-form-item">
+												<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y"/>
+												<label for="decline-benefits-y"  class="a-decline-benefits-option">Decline gift and give entire amount to MinnPost</label>
+											</div>
+									</div>
+						</fieldset>
+
+						<div class="m-membership-gift-selector m-membership-choice-group">
+              <?php
+              $on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
+              $new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
+              $minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
+              ?>
+
+							<p>Choose from <strong>one</strong> of the following:</p>
+
+							<?php
+							$swag = new WP_Query( [
+								'post_type' => 'thank_you_gift',
+								'meta_key' => '_mp_thank_you_gift_type',
+								'meta_value' => 'swag'
+							] );
+							?>
+							<?php if ( $swag->have_posts() ) : ?>
+								<div class="m-form-radios m-select-swag">
+									<?php while ( $swag->have_posts() ) : ?>
+										<?php
+											$swag->the_post();
+											$slug = get_post()->post_name;
+											$meta = get_post_meta( get_the_ID() );
+										?>
+										<div class="m-form-item">
+											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>">
+											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
+												<figure class="m-thank-you-gift-image">
+													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
+												</figure>
+											</label>
+										</div>
+									<?php endwhile; ?>
+
+									<div class="m-form-item">
+										<input type="radio" name="swag" id="swag-decline" value="">
+										<label for="swag-decline" class="a-swag-option">
+											Decline gift
+										</label>
+									</div>
+								</div>
+							<?php endif; ?>
+
+							<p>Also choose if you want <strong>one or both</strong> of these subscriptions:</p>
+
+							<?php
+							$subscriptions = new WP_Query( [
+								'post_type' => 'thank_you_gift',
+								'meta_key' => '_mp_thank_you_gift_type',
+								'meta_value' => 'subscription'
+							] );
+							?>
+							<?php if ( $subscriptions->have_posts() ) : ?>
+								<div class="m-form-checkboxes m-select-subscription">
+									<?php while ( $subscriptions->have_posts() ) : ?>
+										<?php
+											$subscriptions->the_post();
+											$slug = get_post()->post_name;
+											$meta = get_post_meta( get_the_ID() );
+										?>
+										<div class="m-form-item">
+											<input type="checkbox" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true">
+											<label for="subscription-<?php echo $slug; ?>" class="a-subscription-option">
+												<figure class="m-thank-you-gift-image">
+													<figcaption>
+														<?php echo $meta['_mp_thank_you_gift_description'][0]; ?>
+													</figcaption>
+													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
+												</figure>
+											</label>
+										</div>
+									<?php endwhile; ?>
+
+									<div class="m-form-item">
+										<input type="checkbox" name="decline_subscription" id="subscription-decline" value="">
+										<label for="subscription-decline" class="a-subscription-option">
+											Decline both subscriptions
+										</label>
+									</div>
+								</div>
+							<?php endif; ?>
+						</div>
+					</section>
+
 					<div class="m-form-actions m-membership-form-actions">
 						<button type="submit" name="give" class="a-button"><?php echo get_option( $minnpost_membership->option_prefix . 'support_button_text', '' ); ?></button>
-						<?php $minnpost_membership->front_end->link_next_to_button( 'support' ); ?>
 					</div>
-
-					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ) ) : ?>
-						<?php echo get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ); ?>
-					<?php endif; ?>
 				</form>
+
+				<?php echo get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ); ?>
 
 				<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
 

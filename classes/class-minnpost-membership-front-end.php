@@ -248,6 +248,21 @@ class MinnPost_Membership_Front_End {
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
 		}
+		if ( isset( $data['decline_benefits'] ) &&
+			 filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
+			$params['decline_benefits'] = 'true';
+		}
+		if ( isset( $data['swag'] ) ) {
+			$params['swag'] = filter_var( $data['swag'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $data['atlantic_subscription'] ) &&
+		     filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
+			$params['atlantic_subscripton'] = 'true';
+		}
+		if ( isset( $data['nyt_subscription'] ) &&
+		     filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
+			$params['nyt_subscripton'] = 'true';
+		}
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
 		}
@@ -861,12 +876,9 @@ class MinnPost_Membership_Front_End {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
 		}
 
-		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '<a href="' . esc_url( get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) . '">';
-		}
 		$post_form_text_display .= $post_form_text;
 		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '</a>';
+			$post_form_text_display .= ' ' . $this->get_link_next_to_button( 'support' );
 		}
 
 		$post_form_text_display .= '</p>';
