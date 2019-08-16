@@ -48,6 +48,11 @@
 				return;
 			}
 
+			// setup Analytics Enhanced Ecommerce plugin
+			if ( typeof ga !== 'undefined' ) {
+				ga( 'require', 'ec' );
+			}
+
 			// Set up the UI for the current field state on (re-)load
 			this.setAmountLabels( $frequency.filter(':checked').val() );
 			this.checkAndSetLevel();
@@ -69,6 +74,29 @@
 			$declineBenefits.on( 'change', this.onDeclineBenefitsChange.bind( this ) );
 			$subscriptions.on( 'click', this.onSubscriptionsClick.bind( this ) );
 		}, // end init
+
+		 // step is the integer for the step in the ecommerce process.
+		 // for this purpose, it's probably always 1.
+		 // things we need to know: the level name, the amount, and the frequency
+		 // example:
+		 /*
+		 Running command: ga("ec:addProduct", {id: "minnpost_silver_membership", name: "MinnPost Silver Membership", category: "Donation", brand: "MinnPost", variant: "Monthly", price: "5", quantity: 1})
+		 */
+		analyticsTracker: function( level, amount, frequency_label ) {
+			if ( typeof ga !== 'undefined' ) {
+				ga( 'ec:addProduct', {
+					'id': 'minnpost_' + level.toLowerCase() + '_membership',
+					'name': 'MinnPost ' + level.charAt(0).toUpperCase() + level.slice(1) + ' Membership',
+					'category': 'Donation',
+					'brand': 'MinnPost',
+					'variant':  frequency_label,
+					'price': amount,
+					'quantity': 1
+				});
+			} else {
+				return;
+			}
+		}, // end analyticsTracker
 
 		onFrequencyChange: function( event ) {
 			this.setAmountLabels( $( event.target ).val() );
@@ -148,9 +176,12 @@
 			var frequency_string = $( this.options.frequencySelector + ':checked' ).val();
 			var frequency = frequency_string.split(' - ')[1];
 			var frequency_name = frequency_string.split(' - ')[0];
+			var frequency_id = $( this.options.frequencySelector + ':checked' ).prop( 'id' );
+			var frequency_label = $( 'label[for="' + frequency_id + '"]' ).text();
 
 			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
 			this.showNewLevel( this.element, this.options, level );
+			this.analyticsTracker( level['name'], amount, frequency_label );
 		}, // end checkAndSetLevel
 
 		showNewLevel: function( element, options, level ) {
