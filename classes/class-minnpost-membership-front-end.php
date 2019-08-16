@@ -257,11 +257,11 @@ class MinnPost_Membership_Front_End {
 		}
 		if ( isset( $data['atlantic_subscription'] ) &&
 		     filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
-			$params['atlantic_subscripton'] = 'true';
+			$params['atlantic_subscription'] = 'true';
 		}
 		if ( isset( $data['nyt_subscription'] ) &&
 		     filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
-			$params['nyt_subscripton'] = 'true';
+			$params['nyt_subscription'] = 'true';
 		}
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );

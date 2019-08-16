@@ -56,7 +56,7 @@ $user_id    = get_current_user_id();
 			<div class="m-entry-content m-membership-support-wrapper">
 				<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
 					<?php
-						$summary = get_option( $minnpost_membership->option_prefix . 'support_summary', '' );
+						$summary         = get_option( $minnpost_membership->option_prefix . 'support_summary', '' );
 						$compact_summary = get_option( $minnpost_membership->option_prefix . 'support_summary_compact', $summary );
 					?>
 					<?php if ( '' !== $summary ) : ?>
@@ -72,7 +72,7 @@ $user_id    = get_current_user_id();
 					<?php endif; ?>
 				<?php else : ?>
 					<?php
-						$summary = get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' );
+						$summary         = get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' );
 						$compact_summary = get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'] . '_compact', $summary );
 					?>
 					<section class="m-membership-summary m-membership-summary-campaign-<?php echo $url_params['campaign']; ?>">
