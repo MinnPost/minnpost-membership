@@ -21,8 +21,13 @@ $user_id    = get_current_user_id();
 				<li><a href="<?php echo $choose_url; ?>" class="active">Choose</a></li>
 				<?php
 				if ( ! empty( $url_params ) ) {
-					$pay_url  = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
-					$pay_url .= '&amp;' . http_build_query( $url_params );
+					$pay_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+					if ( strstr( $pay_url, '?' ) ) {
+						$character = '&amp;';
+					} else {
+						$character = '?';
+					}
+					$pay_url .= $character . http_build_query( $url_params );
 				}
 				?>
 				<?php if ( isset( $pay_url ) ) : ?>
