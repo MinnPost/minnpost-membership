@@ -182,6 +182,9 @@ $nav-wrap-screen: 960px;
 		input:checked + label {
 			background-color: $border-color-lighter;
 		}
+		input:disabled + label {
+			opacity: 0.5;
+		}
 	}
 }
 
