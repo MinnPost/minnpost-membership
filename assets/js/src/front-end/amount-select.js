@@ -121,7 +121,7 @@
 				return;
 			}
 
-			$suggestedAmount.removeAttr('checked');
+			$suggestedAmount.prop( 'checked', false );
 		}, // end clearAmountSelector
 
 		setAmountLabels: function( frequencyString ) {
