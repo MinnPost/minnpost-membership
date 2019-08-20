@@ -270,6 +270,8 @@ $nav-wrap-screen: 960px;
 			.support-tooltip {
 				position: absolute;
 				visibility: hidden;
+				bottom: 0;
+				left: 0;
 				z-index: 1;
 
 				.tooltip-text {
@@ -280,6 +282,8 @@ $nav-wrap-screen: 960px;
 					width: 10em;
 					margin-left: -5em;
 					z-index: 1;
+					background-color: white;
+					border: 1px solid #ccc;
 				}
 			}
 		}
