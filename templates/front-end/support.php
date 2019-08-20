@@ -254,6 +254,10 @@ $user_id    = get_current_user_id();
 												<figure class="m-thank-you-gift-image">
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
 												</figure>
+												<div class="support-tooltip">
+													<span class="dashicons dashicons-editor-help"></span>
+													<div class="tooltip-text">This gift requires you to give at least $<?php echo $level['minimum_monthly_amount'] ?> a month</div>
+												</div>
 											</label>
 										</div>
 									<?php endwhile; ?>
@@ -297,6 +301,10 @@ $user_id    = get_current_user_id();
 													</figcaption>
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
 												</figure>
+												<div class="support-tooltip">
+													<span class="dashicons dashicons-editor-help"></span>
+													<div class="tooltip-text">This gift requires you to give at least $<?php echo $level['minimum_monthly_amount'] ?> a month</div>
+												</div>
 											</label>
 										</div>
 									<?php endwhile; ?>

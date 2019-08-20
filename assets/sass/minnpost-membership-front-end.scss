@@ -182,7 +182,7 @@ $nav-wrap-screen: 960px;
 		input:checked + label {
 			background-color: $border-color-lighter;
 		}
-		input:disabled + label {
+		input:disabled + label figure {
 			opacity: 0.5;
 		}
 	}
@@ -255,6 +255,52 @@ $nav-wrap-screen: 960px;
 .m-membership-choice-group.m-membership-gift-selector {
 	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
 		width: 32%;
+
+		label {
+			position: relative;
+
+			.support-tooltip {
+				position: absolute;
+				visibility: hidden;
+
+				.tooltip-text {
+					visibility: hidden;
+					position: absolute;
+					top: 100%;
+					left: 50%;
+					width: 10em;
+					margin-left: -5em;
+					z-index: 1;
+
+					background-color: white;
+					border: 1px solid $border-color-darker;
+					padding: $vertical-space / 2;
+					font-weight: normal;
+					text-align: center;
+				}
+
+				.tooltip-text::after {
+					content: "";
+					position: absolute;
+					bottom: 100%;
+					left: 50%;
+					margin-left: -5px;
+					border-width: 5px;
+					border-style: solid;
+					border-color: transparent transparent $border-color-darker transparent;
+				}
+			}
+		}
+
+		input:disabled + label {
+			.support-tooltip {
+				visibility: visible;
+
+				&:hover .tooltip-text {
+					visibility: visible;
+				}
+			}
+		}
 	}
 }
 
