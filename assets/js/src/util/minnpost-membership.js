@@ -38,7 +38,9 @@
 		}, // end checkLevel
 
 		getLevel: function( thisyear ) {
-			var level = {};
+			var level = {
+				'yearlyAmount': thisyear
+			};
 			if ( thisyear > 0 && thisyear < 60 ) {
 				level['name'] = 'Bronze';
 				level['number'] = 1;

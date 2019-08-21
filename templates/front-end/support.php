@@ -223,6 +223,8 @@ $user_id    = get_current_user_id();
               $on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
               $new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
               $minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
+							$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $frequency );
+							$yearly_amount = $amount * $frequency_values['times_per_year'];
               ?>
 
 							<p>Choose from <strong>one</strong> of the following:</p>
@@ -238,16 +240,24 @@ $user_id    = get_current_user_id();
 								<div class="m-form-radios m-select-swag">
 									<?php while ( $swag->have_posts() ) : ?>
 										<?php
-											$swag->the_post();
-											$slug = get_post()->post_name;
-											$meta = get_post_meta( get_the_ID() );
+										$swag->the_post();
+										$slug = get_post()->post_name;
+										$meta = get_post_meta( get_the_ID() );
+
+										$level = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+										$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
+										$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>">
+											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
 											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
 												<figure class="m-thank-you-gift-image">
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
 												</figure>
+												<div class="support-tooltip">
+													<span class="dashicons dashicons-editor-help"></span>
+													<div class="tooltip-text">This gift requires you to give at least $<?php echo $level['minimum_monthly_amount'] ?> a month</div>
+												</div>
 											</label>
 										</div>
 									<?php endwhile; ?>
@@ -274,12 +284,16 @@ $user_id    = get_current_user_id();
 								<div class="m-form-checkboxes m-select-subscription">
 									<?php while ( $subscriptions->have_posts() ) : ?>
 										<?php
-											$subscriptions->the_post();
-											$slug = get_post()->post_name;
-											$meta = get_post_meta( get_the_ID() );
+										$subscriptions->the_post();
+										$slug = get_post()->post_name;
+										$meta = get_post_meta( get_the_ID() );
+
+										$level = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+										$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
+										$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
 										?>
 										<div class="m-form-item">
-											<input type="checkbox" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true">
+											<input type="checkbox" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
 											<label for="subscription-<?php echo $slug; ?>" class="a-subscription-option">
 												<figure class="m-thank-you-gift-image">
 													<figcaption>
@@ -287,6 +301,10 @@ $user_id    = get_current_user_id();
 													</figcaption>
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
 												</figure>
+												<div class="support-tooltip">
+													<span class="dashicons dashicons-editor-help"></span>
+													<div class="tooltip-text">This gift requires you to give at least $<?php echo $level['minimum_monthly_amount'] ?> a month</div>
+												</div>
 											</label>
 										</div>
 									<?php endwhile; ?>

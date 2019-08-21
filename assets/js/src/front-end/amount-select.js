@@ -14,7 +14,8 @@
 		levelName: '.a-level',
 		userCurrentLevel: '.a-current-level',
 		declineBenefits: '.m-decline-benefits-select input[type="radio"]',
-		giftSelector: '.m-membership-gift-selector',
+		giftSelectionGroup: '.m-membership-gift-selector',
+		swagSelector: '.m-select-swag input[type="radio"]',
 		subscriptionsSelector: '.m-select-subscription input[type="checkbox"]',
 		declineSubscriptions: '#subscription-decline'
 	};
@@ -119,15 +120,15 @@
 		}, // end onAmountChange
 
 		onDeclineBenefitsChange: function( event ) {
-			var $giftSelector = $( this.element ).find( this.options.giftSelector );
+			var $giftSelectionGroup = $( this.element ).find( this.options.giftSelectionGroup );
 			var decline = $( this.element ).find( this.options.declineBenefits ).filter( ':checked' ).val();
 
 			if ( decline === 'true' ) {
-				$giftSelector.hide();
+				$giftSelectionGroup.hide();
 				return;
 			}
 
-			$giftSelector.show();
+			$giftSelectionGroup.show();
 		}, // end onDeclineBenefitsChange
 
 		onSubscriptionsClick: function( event ) {
@@ -149,7 +150,7 @@
 				return;
 			}
 
-			$suggestedAmount.removeAttr('checked');
+			$suggestedAmount.prop( 'checked', false );
 		}, // end clearAmountSelector
 
 		setAmountLabels: function( frequencyString ) {
@@ -181,6 +182,7 @@
 
 			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
 			this.showNewLevel( this.element, this.options, level );
+			this.setEnabledGifts( level );
 			this.analyticsTracker( level['name'], amount, frequency_label );
 		}, // end checkAndSetLevel
 
@@ -218,8 +220,16 @@
 
 				$(options.levelName, options.levelViewer).text( level['name'] );
 			}
-
 		}, // end showNewLevel
+
+		setEnabledGifts: function( level ) {
+			var setEnabled = function() {
+				$( this ).prop( 'disabled', level.yearlyAmount < $( this ).data( 'minYearlyAmount' ) );
+			};
+
+			$( this.options.swagSelector ).each( setEnabled );
+			$( this.options.subscriptionsSelector ).each( setEnabled );
+		}, // end setEnabledGifts
 	}; // end Plugin.prototype
 
 
