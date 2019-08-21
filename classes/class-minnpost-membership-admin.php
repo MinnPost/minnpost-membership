@@ -282,7 +282,8 @@ class MinnPost_Membership_Admin {
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $tabs as $tab_key => $tab_caption ) {
 			$active = $current_tab === $tab_key ? ' nav-tab-active' : '';
-			echo sprintf( '<a class="nav-tab%1$s" href="%2$s">%3$s</a>',
+			echo sprintf(
+				'<a class="nav-tab%1$s" href="%2$s">%3$s</a>',
 				esc_attr( $active ),
 				esc_url( '?page=' . $page . '&tab=' . $tab_key ),
 				esc_html( $tab_caption )
@@ -477,7 +478,7 @@ class MinnPost_Membership_Admin {
 	* @param string $page
 	* @param array $callbacks
 	*/
-	function site_header( $page, $callbacks ) {
+	private function site_header( $page, $callbacks ) {
 		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
 			$sections = $this->get_admin_pages()[ $page ]['sections'];
 			if ( ! empty( $sections ) ) {
@@ -725,12 +726,13 @@ class MinnPost_Membership_Admin {
 			if ( ! empty( $frequency_options ) ) {
 				foreach ( $frequency_options as $key => $option ) {
 					$settings[ $this_section . '_suggested_amounts_' . $option['id'] ] = array(
+						// translators: 1 is the text for this frequency option
 						'title'    => sprintf( __( '%1$s suggested amounts', 'minnpost-membership' ), ucwords( $option['text'] ) ),
 						'callback' => array( $this, 'display_suggested_amounts' ),
 						'page'     => $this_section,
 						'section'  => $this_section,
 						'args'     => array(
-							'desc'        => ''
+							'desc' => '',
 						),
 					);
 				}
@@ -766,7 +768,8 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => __( 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level', 'minnpost-membership' ),
+					// translators: 1 is the value of bloginfo('name')
+					'desc'     => sprintf( __( 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as %1$s Level', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 3,
@@ -804,7 +807,8 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => __( 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
+					// translators: 1 is the value of bloginfo('name')
+					'desc'     => sprintf( __( 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as %1$s Level', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -818,7 +822,8 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => __( 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
+					// translators: 1 is the value of bloginfo('name')
+					'desc'     => sprintf( __( 'This text is used if the user\'s membership status has changed based on this transaction. $current_level and $new_level will show as %1$s Level', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -1357,7 +1362,7 @@ class MinnPost_Membership_Admin {
 						'media_buttons' => false,
 					),
 				),
-				'history_failed_value'        => array(
+				'history_failed_value'         => array(
 					'title'    => __( 'Failed donation value', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1368,7 +1373,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_success_value'       => array(
+				'history_success_value'        => array(
 					'title'    => __( 'Successful donation value', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1379,7 +1384,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_days_for_failed'     => array(
+				'history_days_for_failed'      => array(
 					'title'    => __( 'Days back for failed donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1390,7 +1395,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'failed_recurring_id_field'   => array(
+				'failed_recurring_id_field'    => array(
 					'title'    => __( 'Recurring donation ID field name', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1401,7 +1406,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_failed_heading'      => array(
+				'history_failed_heading'       => array(
 					'title'    => __( 'Heading for failed donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1412,7 +1417,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_failed_message'      => array(
+				'history_failed_message'       => array(
 					'title'    => __( 'Failed donation message', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => 'donation_history',
@@ -1425,7 +1430,7 @@ class MinnPost_Membership_Admin {
 						'media_buttons' => false,
 					),
 				),
-				'history_success_heading'     => array(
+				'history_success_heading'      => array(
 					'title'    => __( 'Heading for successful donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1436,7 +1441,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_success_message'     => array(
+				'history_success_message'      => array(
 					'title'    => __( 'Successful donation message', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => 'donation_history',
@@ -1714,7 +1719,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -1891,7 +1897,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -2448,7 +2455,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -2664,7 +2672,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '10',
@@ -3076,7 +3085,8 @@ class MinnPost_Membership_Admin {
 				$value = $args['default'];
 			}
 
-			echo sprintf( '<input type="%1$s" value="%2$s" name="%3$s" id="%4$s" class="%5$s"%6$s>',
+			echo sprintf(
+				'<input type="%1$s" value="%2$s" name="%3$s" id="%4$s" class="%5$s"%6$s>',
 				esc_attr( $type ),
 				esc_attr( $value ),
 				esc_attr( $name ),
@@ -3085,12 +3095,14 @@ class MinnPost_Membership_Admin {
 				esc_html( $checked )
 			);
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3133,7 +3145,8 @@ class MinnPost_Membership_Admin {
 			$input_name = $name;
 
 			if ( ! isset( $args['label'] ) || 'parallel' !== $args['label'] ) {
-				echo sprintf( '<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
+				echo sprintf(
+					'<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
 					esc_attr( $type ),
 					esc_attr( $item_value ),
 					esc_attr( $input_name ),
@@ -3142,7 +3155,8 @@ class MinnPost_Membership_Admin {
 					esc_html( $text )
 				);
 			} else {
-				echo sprintf( '<div class="checkbox"><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s><label for="%4$s">%6$s</label></div>',
+				echo sprintf(
+					'<div class="checkbox"><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s><label for="%4$s">%6$s</label></div>',
 					esc_attr( $type ),
 					esc_attr( $item_value ),
 					esc_attr( $input_name ),
@@ -3152,14 +3166,16 @@ class MinnPost_Membership_Admin {
 				);
 			}
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		}
 
 		if ( '' !== $group_desc ) {
-			echo sprintf( '<p class="description">%1$s</p>',
+			echo sprintf(
+				'<p class="description">%1$s</p>',
 				esc_html( $group_desc )
 			);
 		}
@@ -3179,9 +3195,11 @@ class MinnPost_Membership_Admin {
 		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
 			$current_value = get_option( $name );
 
-			echo sprintf( '<div class="select"><select id="%1$s" name="%2$s"><option value="">- Select one -</option>',
+			echo sprintf(
+				'<div class="select"><select id="%1$s" name="%2$s"><option value="">- %3$s -</option>',
 				esc_attr( $id ),
-				esc_attr( $name )
+				esc_attr( $name ),
+				__( 'Select one', 'minnpost-membership' )
 			);
 
 			foreach ( $args['items'] as $key => $value ) {
@@ -3192,7 +3210,8 @@ class MinnPost_Membership_Admin {
 					$selected = ' selected';
 				}
 
-				echo sprintf( '<option value="%1$s"%2$s>%3$s</option>',
+				echo sprintf(
+					'<option value="%1$s"%2$s>%3$s</option>',
 					esc_attr( $value ),
 					esc_attr( $selected ),
 					esc_html( $text )
@@ -3201,13 +3220,15 @@ class MinnPost_Membership_Admin {
 			}
 			echo '</select>';
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 			echo '</div>';
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3243,7 +3264,8 @@ class MinnPost_Membership_Admin {
 				$cols_attr = '';
 			}
 
-			echo sprintf( '<textarea name="%1$s" id="%2$s" class="%3$s"%4$s%5$s>%6$s</textarea>',
+			echo sprintf(
+				'<textarea name="%1$s" id="%2$s" class="%3$s"%4$s%5$s>%6$s</textarea>',
 				esc_attr( $name ),
 				esc_attr( $id ),
 				sanitize_html_class( $class . esc_html( ' code' ) ),
@@ -3252,12 +3274,14 @@ class MinnPost_Membership_Admin {
 				esc_attr( $value )
 			);
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3328,12 +3352,14 @@ class MinnPost_Membership_Admin {
 
 			wp_editor( $value, $id, $settings );
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3349,46 +3375,67 @@ class MinnPost_Membership_Admin {
 		$desc  = $args['desc'];
 		$url   = $args['url'];
 		if ( isset( $args['link_class'] ) ) {
-			echo sprintf( '<p><a class="%1$s" href="%2$s">%3$s</a></p>',
+			echo sprintf(
+				'<p><a class="%1$s" href="%2$s">%3$s</a></p>',
 				esc_attr( $args['link_class'] ),
 				esc_url( $url ),
 				esc_html( $label )
 			);
 		} else {
-			echo sprintf( '<p><a href="%1$s">%2$s</a></p>',
+			echo sprintf(
+				'<p><a href="%1$s">%2$s</a></p>',
 				esc_url( $url ),
 				esc_html( $label )
 			);
 		}
 
 		if ( '' !== $desc ) {
-			echo sprintf( '<p class="description">%1$s</p>',
+			echo sprintf(
+				'<p class="description">%1$s</p>',
 				esc_html( $desc )
 			);
 		}
 
 	}
 
+	/**
+	* Display suggested donation amounts for each frequency to be configured
+	*
+	* @param array $args
+	*/
 	public function display_suggested_amounts( $args ) {
-		$desc      = $args['desc'];
-		$id        = $args['label_for'];
-		$name      = $args['name'];
-		$value     = get_option( $id, '' );
-		if ( '' === $value && isset( $args['default'] ) && '' !== $args['default'] ) {
-			$value = $args['default'];
+
+		$desc   = $args['desc'];
+		$id     = $args['label_for'];
+		$name   = $args['name'];
+		$values = get_option( $id, '' );
+		if ( '' === $values && isset( $args['default'] ) && '' !== $args['default'] ) {
+			$values = $args['default'];
 		}
 
+		// this hardcodes an expectation of 4 suggested amounts per frequency
+		// if we ever want to make this configurable, we'll need to do that here as well.
 		foreach ( range( 0, 3 ) as $i ) {
-		    printf( '<div>' );
-			printf( '<input type="text" name="%1$s" value="%2$s" size="5">',
+			$value = array(
+				'amount' => '',
+				'desc'   => '',
+			);
+			if ( is_array( $values ) && array_key_exists( $i, $values ) ) {
+				$value = $values[ $i ];
+			}
+
+			printf( '<div>' );
+			printf(
+				'<input type="text" name="%1$s" value="%2$s" size="5">',
 				esc_attr( $name . '[' . $i . '][amount]' ),
-				esc_attr( $value[$i]['amount'] )
+				esc_attr( $value['amount'] )
 			);
-			printf( '<input type="text" name="%1$s" value="%2$s" size="40">',
+			printf(
+				'<input type="text" name="%1$s" value="%2$s" size="40">',
 				esc_attr( $name . '[' . $i . '][desc]' ),
-				esc_attr( $value[$i]['desc'] )
+				esc_attr( $value['desc'] )
 			);
-		    printf( '</div>' );
+			printf( '</div>' );
 		}
 	}
 
