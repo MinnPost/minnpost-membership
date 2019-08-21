@@ -1,9 +1,19 @@
-// variables
+// variables. some of these match variables in minnpost-largo.
 $border-color-lighter: #e5e5e5;
 $border-color-darker: #cdcdd0;
+$color__gray-light: #ababab;
+$color__gray-dark: #404040;
+$color__gray-darkest: #282828;
+$_color-base-gray: #7a7a7a;
+$_color-base-red: #801018;
+$content-font-size: 1em;
 $cta-spacing: 8px;
+
+$progress-font-size-large: 2.5rem;
+$progress-font-size-small: 0.875rem;
 $vertical-space: 1em;
 $large-title-font-size: 215.4%;
+$small-space: 0.8125em; // 13px
 
 // media query sizes. see minnpost-largo for theme queries.
 $more-than-logo-screen: 500px;
@@ -58,9 +68,6 @@ $nav-wrap-screen: 960px;
 		h1 {
 			font-size: $large-title-font-size;
 		}
-		.m-membership-fast-select {
-			margin: 0;
-		}
 		.m-form-actions {
 			margin: 0.5em 0 0 0;
 		}
@@ -75,6 +82,44 @@ $nav-wrap-screen: 960px;
 		padding: 0;
 	}
 }
+
+.m-support-progress {
+	margin: 0.625rem 0 0.625rem * 2 0;
+	ol {
+		list-style: none;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		background: $_color-base-gray;
+		display: flex;
+		counter-reset: li;
+	}
+	li {
+		flex: 1;
+		position: relative;
+	}
+	a, span {
+		display: block;
+		padding: $small-space;
+		text-decoration: none;
+		transition: background-color 0.1s linear;
+	}
+	a:hover, a:focus, a:active, a.active, span.active {
+		background: $color__gray-dark;
+		color: #fff;
+		text-decoration: none;
+	}
+	a:before, span:before {
+		content: none;
+		counter-increment: li;
+		top: 0;
+		left: 1rem;
+		position: absolute;
+		color: $color--gray-light;
+		font-size: $progress-font-size-large;
+	}
+}
+
 .m-membership-support-intro {
 	margin-bottom: $vertical-space;
 }
@@ -84,21 +129,101 @@ $nav-wrap-screen: 960px;
 	padding: 0;
 }
 
-.m-membership-summary {
+.m-membership-summary, .m-membership-summary-short {
 	margin-bottom: $vertical-space;
 }
+.m-membership-summary {
+	display: none;
+}
 
-.m-membership-fast-select {
-	font-size: 1.5em;
-	text-align: center;
-	border: 0;
-	margin: $vertical-space * 2 0 $vertical-space 0;
-	padding: 0;
-	min-width: 0;
-	.m-form-item-wrap {
-		margin: 0 0 $vertical-space / 2 0;
+.m-membership-choice-group {
+	h1 {
+		font-size: 1.25em;
+		color: $_color-base-red;
+		margin: $vertical-space 0 $vertical-space / 2 0;
 	}
-	.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios, .m-form-radios .m-form-item {
+	.m-form-radios {
+		width: 100%;
+	}
+}
+
+.m-membership-choice-group {
+	.m-form-radios, .m-form-checkboxes {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		.m-frequency-group {
+			width: 100%;
+			display: none;
+			&.active {
+				display: block;
+			}
+		}
+		.m-form-item {
+			position: relative;
+			text-align: center;
+		}
+		input[type="radio"], input[type="checkbox"] {
+			left: 0;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+		}
+		label {
+			width: 100%;
+			height: 100%;
+			margin: 0 0.0025em;
+			padding: 0.75em;
+			font-size: 0.975em;
+			font-weight: bold;
+			cursor: pointer;
+			border: 1px solid $border-color-lighter;
+		}
+		input:checked + label {
+			background-color: $border-color-lighter;
+		}
+		input:disabled + label::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: $border-color-lighter;
+			opacity: 0.75;
+		}
+	}
+}
+
+.m-membership-choose-frequency {
+	.m-form-radios .m-form-item {
+		width: 32%;
+	}
+}
+
+.m-membership-choice-group.m-membership-choose-amount {
+	.m-form-radios .m-form-item {
+		margin: 0;
+		width: 100%;
+		text-align: left;
+	}
+	label {
+		margin: 0 0 $vertical-space / 2 0;
+		padding: 0.75em 2em 0.75em 6em;
+		font-weight: normal;
+		strong {
+			display: block;
+			float: left;
+			width: 4em;
+			margin-left: -4em;
+		}
+
+		.yearly-desc {
+			display: none;
+		}
+	}
+	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
 		display: inline-block;
 		margin: 0;
 		vertical-align: top;
@@ -123,35 +248,56 @@ $nav-wrap-screen: 960px;
 		text-align: center;
 		vertical-align: top;
 	}
-	.m-form-radios {
-		input[type="radio"] {
-			left: 0;
-			opacity: 0;
-			position: absolute;
-			top: 0;
-		}
-		label {
-			display: inline-block;
-			margin: 0 0.0025em;
-			padding: 0.75em;
-			font-size: 0.65em;
-			font-weight: bold;
-			cursor: pointer;
-			border: 1px solid $border-color-lighter;
-		}
+}
+
+.m-membership-choose-gift {
+	.m-form-radios .m-form-item {
+		width: 49%;
 	}
 }
 
 .m-form-membership-support .m-membership-form-actions {
-	margin: 2em 0 1em 0;
-	text-align: center;
+	margin: $vertical-space 0;
 }
 
-.a-show-level {
-	display: inline-block;
-	font-size: 0.65em;
-	margin: 1.75em 0 0;
-	padding: $vertical-space / 2;
+.m-membership-choice-group.m-membership-gift-selector {
+	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
+		width: 32%;
+
+		label {
+			position: relative;
+
+			.support-tooltip {
+				position: absolute;
+				visibility: hidden;
+				bottom: 0;
+				left: 0;
+				z-index: 1;
+
+				.tooltip-text {
+					visibility: hidden;
+					position: absolute;
+					top: 100%;
+					left: 50%;
+					width: 10em;
+					margin-left: -5em;
+					z-index: 1;
+					background-color: white;
+					border: 1px solid #ccc;
+				}
+			}
+		}
+
+		input:disabled + label {
+			.support-tooltip {
+				visibility: visible;
+
+				&:hover .tooltip-text {
+					visibility: visible;
+				}
+			}
+		}
+	}
 }
 
 .o-membership-member-levels {
@@ -376,41 +522,6 @@ $nav-wrap-screen: 960px;
 
 
 // start media queries
-@media screen and (min-width: $medium-margins-too-small) {
-	.m-membership-member-level {
-		width: 46%;
-		margin-right: 2%;
-		float: left;
-	}
-	.m-partner-offers {
-		.m-partner-offer {
-			//clear: both;
-			display: flex;
-			.m-partner-offer-image {
-				margin: 0 1em 0 0;
-				//float: left;
-			}
-			.m-partner-offer-content {
-				//float: left;
-				//width: auto;
-				//max-width: 70%;
-			}
-		}
-	}
-}
-
-@media screen and (min-width: $level-widths-change) {
-	.m-membership-member-level {
-		width: 23%;
-	}
-	.m-all-partners {
-		.m-partner-list {
-			li {
-				width: 22%;
-			}
-		}
-	}
-}
 
 @media screen and (min-width: 400px) {
 	.m-support-cta {
@@ -443,6 +554,38 @@ $nav-wrap-screen: 960px;
 			}
 		}
 	}
+	.m-support-progress {
+		a, span {
+			font-size: $progress-font-size-small;
+			padding: $small-space 0 $small-space 3em;
+		}
+		a:before, span:before {
+			content: counter(li, decimal);
+			top: -0.15em;
+			font-size: $progress-font-size-large;
+		}
+	}
+}
+
+@media screen and (min-width: $medium-margins-too-small) {
+	.m-membership-member-level {
+		width: 46%;
+		margin-right: 2%;
+		float: left;
+	}
+	.m-partner-offers {
+		.m-partner-offer {
+			display: flex;
+			.m-partner-offer-image {
+				margin: 0 1em 0 0;
+			}
+		}
+	}
+	.m-support-progress {
+		a, span {
+			font-size: $content-font-size;
+		}
+	}
 }
 
 @media screen and (min-width: $nav-breaks) {
@@ -469,6 +612,28 @@ $nav-wrap-screen: 960px;
 			margin-left: auto;
 			margin-bottom: 0;
 		}
+	}
+}
+
+@media screen and (min-width: $level-widths-change) {
+	.m-membership-member-level {
+		width: 23%;
+	}
+	.m-all-partners {
+		.m-partner-list {
+			li {
+				width: 22%;
+			}
+		}
+	}
+}
+
+@media screen and (min-width: $nav-wrap-screen) {
+	.m-membership-summary-short {
+		display: none;
+	}
+	.m-membership-summary {
+		display: block;
 	}
 }
 
