@@ -15,31 +15,20 @@
 	$url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' );
 	$user_id    = get_current_user_id();
 	?>
-	<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ) ) : ?>
-		<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>
-			<header class="m-membership-intro m-membership-support-intro">
-				<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title', '' ); ?></h1>
-			</header>
-		<?php endif; ?>
-	<?php else : ?>
-		<header class="m-membership-intro m-membership-intro-campaign-<?php echo $url_params['campaign']; ?> m-membership-support-intro">
-			<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title_' . $url_params['campaign'], '' ); ?></h1>
+	<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>
+		<header class="m-membership-intro m-membership-support-intro">
+			<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title', '' ); ?></h1>
 		</header>
 	<?php endif; ?>
-	<form action="<?php echo $attributes['button_url']; ?>" method="get" class="m-form m-form-membership m-form-membership-support">
-		<?php if ( ! isset( $url_params['campaign'] ) || '' === get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ) : ?>
-			<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ) : ?>
-				<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary', '' ) ); ?>
-			<?php endif; ?>
-		<?php else : ?>
-			<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support_summary_' . $url_params['campaign'], '' ) ); ?>
+	<form action="<?php echo $attributes['donate_url']; ?>" method="get" class="m-form m-form-membership m-form-membership-support">
+		<?php if ( '' !== $attributes['footer_intro_text'] ) : ?>
+			<?php echo wpautop( $attributes['footer_intro_text'] ); ?>
 		<?php endif; ?>
-
 		<section class="m-membership-fast-select">
 			<fieldset>
 				<div class="m-form-item-wrap">
-					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
-						<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
+					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'pre_select_text', '' ) ) : ?>
+						<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'pre_select_text', '' ); ?></span>
 					<?php endif; ?>
 					<span class="a-fast-select-currency">&dollar;</span>
 					<div id="amount-item" class="m-form-item">
@@ -87,7 +76,7 @@
 		</section>
 
 		<div class="m-form-actions m-membership-form-actions">
-			<button type="submit" name="give" class="a-button"><?php echo get_option( $minnpost_membership->option_prefix . 'support_button_text', '' ); ?></button>
+			<button type="submit" name="give" class="a-button<?php echo $attributes['donate_class']; ?>"><?php echo $attributes['donate_text']; ?></button>
 		</div>
 
 	</form>

@@ -159,9 +159,29 @@ class MinnPost_Membership_Front_End {
 	public function site_footer( $show_button ) {
 		$params = array();
 
-		$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		$redirect_url = get_option( $this->option_prefix . 'donate_url', '' );
+		if ( '' === $redirect_url ) {
+			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		}
+		$params['donate_url'] = $redirect_url;
 
-		$params['button_url'] = $redirect_url;
+		$footer_intro_text = get_option( $this->option_prefix . 'footer_intro_text', '' );
+		if ( '' === $footer_intro_text ) {
+			$footer_intro_text = get_option( $this->option_prefix . 'support_summary_compact', '' );
+		}
+		$params['footer_intro_text'] = $footer_intro_text;
+
+		$donate_text = get_option( $this->option_prefix . 'donate_text', '' );
+		if ( '' === $donate_text ) {
+			$donate_text = __( 'Donate', 'minnpost-membership' );
+		}
+		$params['donate_text'] = $donate_text;
+
+		$params['donate_class'] = '';
+		$donate_class           = get_option( $this->option_prefix . 'donate_class', '' );
+		if ( '' !== $donate_class ) {
+			$params['donate_class'] = ' ' . $donate_class;
+		}
 
 		$site_footer = $this->get_template_html( 'footer-support', 'template-parts', $params );
 		echo $site_footer;
