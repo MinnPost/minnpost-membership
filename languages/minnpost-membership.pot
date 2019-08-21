@@ -97,562 +97,590 @@ msgstr ""
 msgid "Access settings"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:376
+#: classes/class-minnpost-membership-admin.php:377
 msgid "Use member levels?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:387
+#: classes/class-minnpost-membership-admin.php:388
 msgid "Frequency options"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:399
+#: classes/class-minnpost-membership-admin.php:400
 msgid "Disable plugin JavaScript?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:405
+#: classes/class-minnpost-membership-admin.php:406
 msgid "Checking this will keep the plugin from adding its JavaScript to the front end interface."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:410
+#: classes/class-minnpost-membership-admin.php:411
 msgid "Disable plugin CSS?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:416
+#: classes/class-minnpost-membership-admin.php:417
 msgid "Checking this will keep the plugin from adding its stylesheet to the front end interface."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:431
+#: classes/class-minnpost-membership-admin.php:432
 msgid "Default frequency"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:506
+#: classes/class-minnpost-membership-admin.php:507
 msgid "Tagline text"
 msgstr ""
 
 #. translators: %1 is the site description
-#: classes/class-minnpost-membership-admin.php:514
+#: classes/class-minnpost-membership-admin.php:515
 msgid "This value will be used for the tagline. If you do not add a value, the site will use the value for the site tagline from the WordPress general settings: %1$s"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:521
+#: classes/class-minnpost-membership-admin.php:522
 msgid "Include the heart?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:527
+#: classes/class-minnpost-membership-admin.php:528
 msgid "If checked, the button will include the heart in front of the text."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:532, classes/class-minnpost-membership-admin.php:830, classes/class-minnpost-membership-admin.php:1726, classes/class-minnpost-membership-admin.php:1903, classes/class-minnpost-membership-admin.php:2460
+#: classes/class-minnpost-membership-admin.php:533, classes/class-minnpost-membership-admin.php:835, classes/class-minnpost-membership-admin.php:1732, classes/class-minnpost-membership-admin.php:1910, classes/class-minnpost-membership-admin.php:2468
 msgid "Button text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:538
+#: classes/class-minnpost-membership-admin.php:539
 msgid "This value will be used for the button text. If you do not add a value, the value will be Donate."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:543
+#: classes/class-minnpost-membership-admin.php:544
 msgid "Button CSS class"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:549
+#: classes/class-minnpost-membership-admin.php:550
 msgid "Add any CSS classes for styling, scripting, etc. Separate multiple classes with spaces."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:554, classes/class-minnpost-membership-admin.php:1739, classes/class-minnpost-membership-admin.php:1916, classes/class-minnpost-membership-admin.php:2473
+#: classes/class-minnpost-membership-admin.php:555, classes/class-minnpost-membership-admin.php:1745, classes/class-minnpost-membership-admin.php:1923, classes/class-minnpost-membership-admin.php:2481
 msgid "Button URL"
 msgstr ""
 
 #. translators: %1 is the first payment URL
-#: classes/class-minnpost-membership-admin.php:562
+#: classes/class-minnpost-membership-admin.php:563
 msgid "When a user clicks the button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the first payment URL: %1$s"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:624
+#: classes/class-minnpost-membership-admin.php:625
 msgid "Payment URLs"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:636
+#: classes/class-minnpost-membership-admin.php:637
 msgid "Payment processor URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:647
+#: classes/class-minnpost-membership-admin.php:648
 msgid "Error message for missing amount"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:672, classes/class-minnpost-membership-admin.php:968, classes/class-minnpost-membership-admin.php:1532, classes/class-minnpost-membership-admin.php:1641, classes/class-minnpost-membership-admin.php:1818, classes/class-minnpost-membership-admin.php:1971, classes/class-minnpost-membership-admin.php:2089, classes/class-minnpost-membership-admin.php:2375
+#: classes/class-minnpost-membership-admin.php:673, classes/class-minnpost-membership-admin.php:973, classes/class-minnpost-membership-admin.php:1537, classes/class-minnpost-membership-admin.php:1646, classes/class-minnpost-membership-admin.php:1824, classes/class-minnpost-membership-admin.php:1978, classes/class-minnpost-membership-admin.php:2096, classes/class-minnpost-membership-admin.php:2382
 msgid "Page title"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:685, classes/class-minnpost-membership-admin.php:1545
+#: classes/class-minnpost-membership-admin.php:686, classes/class-minnpost-membership-admin.php:1550
 msgid "Summary"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:699
+#: classes/class-minnpost-membership-admin.php:700
 msgid "Summary for smaller screens"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:713
+#: classes/class-minnpost-membership-admin.php:714
 msgid "Suggested amounts intro"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:718
+#: classes/class-minnpost-membership-admin.php:719
 msgid "Explains the list of suggested amounts"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:728
+#. translators: 1 is the text for this frequency option
+#: classes/class-minnpost-membership-admin.php:730
 msgid "%1$s suggested amounts"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:740
+#: classes/class-minnpost-membership-admin.php:742
 msgid "Pre form text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:745
+#: classes/class-minnpost-membership-admin.php:747
 msgid "This is the text before, and on the same line as, the form fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:752
+#: classes/class-minnpost-membership-admin.php:754
 msgid "Start value"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:764
+#: classes/class-minnpost-membership-admin.php:766
 msgid "Post form text - non-members"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:778
+#. translators: 1 is the value of bloginfo('name')
+#: classes/class-minnpost-membership-admin.php:772
+msgid "This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as %1$s Level"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:781
 msgid "Post form link URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:783
+#: classes/class-minnpost-membership-admin.php:786
 msgid "If present, this URL will wrap the above (or below) text value."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:790
+#: classes/class-minnpost-membership-admin.php:793
 msgid "Change post-form text for members?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:795
+#: classes/class-minnpost-membership-admin.php:798
 msgid "If checked, the message above will instead change based on the current member status of the logged in user, as in the fields below."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:802
+#: classes/class-minnpost-membership-admin.php:805
 msgid "Post form text - no change"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:816
+#. translators: 1 is the value of bloginfo('name')
+#: classes/class-minnpost-membership-admin.php:811
+msgid "This text is used if the user's membership status has not changed based on this transaction. $current_level will show as %1$s Level"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:820
 msgid "Post form text - change"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:842, classes/class-minnpost-membership-admin.php:1752, classes/class-minnpost-membership-admin.php:1929, classes/class-minnpost-membership-admin.php:2486
+#. translators: 1 is the value of bloginfo('name')
+#: classes/class-minnpost-membership-admin.php:826
+msgid "This text is used if the user's membership status has changed based on this transaction. $current_level and $new_level will show as %1$s Level"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:847, classes/class-minnpost-membership-admin.php:1758, classes/class-minnpost-membership-admin.php:1936, classes/class-minnpost-membership-admin.php:2494
 msgid "Link text next to button"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:854, classes/class-minnpost-membership-admin.php:1765, classes/class-minnpost-membership-admin.php:1942, classes/class-minnpost-membership-admin.php:2499
+#: classes/class-minnpost-membership-admin.php:859, classes/class-minnpost-membership-admin.php:1771, classes/class-minnpost-membership-admin.php:1949, classes/class-minnpost-membership-admin.php:2507
 msgid "Link URL next to button"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:866
+#: classes/class-minnpost-membership-admin.php:871
 msgid "Post body content"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:871
+#: classes/class-minnpost-membership-admin.php:876
 msgid "You can do basic edits without worrying about HTML knowledge, but more than that will cause problems with the underlying structure."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:880, classes/class-minnpost-membership-admin.php:1054
+#: classes/class-minnpost-membership-admin.php:885, classes/class-minnpost-membership-admin.php:1059
 msgid "Post body text link"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:894, classes/class-minnpost-membership-admin.php:1068
+#: classes/class-minnpost-membership-admin.php:899, classes/class-minnpost-membership-admin.php:1073
 msgid "Post body link URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:906, classes/class-minnpost-membership-admin.php:1080
+#: classes/class-minnpost-membership-admin.php:911, classes/class-minnpost-membership-admin.php:1085
 msgid "Post body link fragment"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:918, classes/class-minnpost-membership-admin.php:1092
+#: classes/class-minnpost-membership-admin.php:923, classes/class-minnpost-membership-admin.php:1097
 msgid "Post body link class"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:930, classes/class-minnpost-membership-admin.php:1104
+#: classes/class-minnpost-membership-admin.php:935, classes/class-minnpost-membership-admin.php:1109
 msgid "Post body link text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:942, classes/class-minnpost-membership-admin.php:1116, classes/class-minnpost-membership-admin.php:1804, classes/class-minnpost-membership-admin.php:1957, classes/class-minnpost-membership-admin.php:2514
+#: classes/class-minnpost-membership-admin.php:947, classes/class-minnpost-membership-admin.php:1121, classes/class-minnpost-membership-admin.php:1810, classes/class-minnpost-membership-admin.php:1964, classes/class-minnpost-membership-admin.php:2522
 msgid "Show link to member benefit details page?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:956
+#: classes/class-minnpost-membership-admin.php:961
 msgid "Submit URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:962
+#: classes/class-minnpost-membership-admin.php:967
 msgid "Enter the URL users should be sent to after submitting the form. If you leave it blank, the site will use the default payment processor URL instead."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:981
+#: classes/class-minnpost-membership-admin.php:986
 msgid "Pre-form text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1017
+#: classes/class-minnpost-membership-admin.php:1022
 msgid "Default level"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1030
+#: classes/class-minnpost-membership-admin.php:1035
 msgid "Level button text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1042
+#: classes/class-minnpost-membership-admin.php:1047
 msgid "Give button text"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1181
+#: classes/class-minnpost-membership-admin.php:1186
 msgid "URL for editing opportunities"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1187, classes/class-minnpost-membership-admin.php:1299
+#: classes/class-minnpost-membership-admin.php:1192, classes/class-minnpost-membership-admin.php:1304
 msgid "Enter the full URL. $opportunity_id will be replaced with the Salesforce Id value for the opportunity."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1192
+#: classes/class-minnpost-membership-admin.php:1197
 msgid "Opportunity type field"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1198
+#: classes/class-minnpost-membership-admin.php:1203
 msgid "Value expected for the Type field on a Salesforce opportunity."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1203
+#: classes/class-minnpost-membership-admin.php:1208
 msgid "Opportunity Contact ID field"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1209
+#: classes/class-minnpost-membership-admin.php:1214
 msgid "Salesforce field that contains the Contact ID for an opportunity."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1214, classes/class-minnpost-membership-admin.php:1326
+#: classes/class-minnpost-membership-admin.php:1219, classes/class-minnpost-membership-admin.php:1331
 msgid "Payment type field"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1220
+#: classes/class-minnpost-membership-admin.php:1225
 msgid "Salesforce field that determines payment type for opportunities."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1225, classes/class-minnpost-membership-admin.php:1337
+#: classes/class-minnpost-membership-admin.php:1230, classes/class-minnpost-membership-admin.php:1342
 msgid "Payment type value"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1231
+#: classes/class-minnpost-membership-admin.php:1236
 msgid "Expected value for payment type on opportunities. If both these fields are present, only matching opportunities will be queried."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1236
+#: classes/class-minnpost-membership-admin.php:1241
 msgid "Onetime recurrence field"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1242
+#: classes/class-minnpost-membership-admin.php:1247
 msgid "Salesforce field that ensures an opportunity is one-time only."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1247
+#: classes/class-minnpost-membership-admin.php:1252
 msgid "Onetime recurrence value"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1253
+#: classes/class-minnpost-membership-admin.php:1258
 msgid "Expected value for the onetime recurrence field if an opportunity is one-time only."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1258
+#: classes/class-minnpost-membership-admin.php:1263
 msgid "No donation message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1263
+#: classes/class-minnpost-membership-admin.php:1268
 msgid "Message to display if the user has no donations. This will appear on both the donation and donation history pages."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1271
+#: classes/class-minnpost-membership-admin.php:1276
 msgid "URL for editing recurring donations"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1277, classes/class-minnpost-membership-admin.php:1288
+#: classes/class-minnpost-membership-admin.php:1282, classes/class-minnpost-membership-admin.php:1293
 msgid "Enter the full URL. $recurring_donation_id will be replaced with the Salesforce Id value for the active recurring donation."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1282
+#: classes/class-minnpost-membership-admin.php:1287
 msgid "URL for cancelling recurring donations"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1293
+#: classes/class-minnpost-membership-admin.php:1298
 msgid "URL for cancelling opportunities"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1304
+#: classes/class-minnpost-membership-admin.php:1309
 msgid "Active status field"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1310
+#: classes/class-minnpost-membership-admin.php:1315
 msgid "Salesforce field that determines if a recurring donation is active. Use the API Name value for the field."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1315
+#: classes/class-minnpost-membership-admin.php:1320
 msgid "Active status value"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1321
+#: classes/class-minnpost-membership-admin.php:1326
 msgid "Expected value for the active status field if the donation is active."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1332
+#: classes/class-minnpost-membership-admin.php:1337
 msgid "Salesforce field that determines payment type for recurring donations."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1343
+#: classes/class-minnpost-membership-admin.php:1348
 msgid "Expected value for payment type on recurring donations. If both these fields are present, only matching recurring donations will be queried."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1348
+#: classes/class-minnpost-membership-admin.php:1353
 msgid "Donation history message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1353
+#: classes/class-minnpost-membership-admin.php:1358
 msgid "Message to display to send the user to the donation history page. This will only show if the user actually has previous donations."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1361
+#: classes/class-minnpost-membership-admin.php:1366
 msgid "Failed donation value"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1367
+#: classes/class-minnpost-membership-admin.php:1372
 msgid "Expected value for StageName field when a donation has failed."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1372
+#: classes/class-minnpost-membership-admin.php:1377
 msgid "Successful donation value"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1378
+#: classes/class-minnpost-membership-admin.php:1383
 msgid "Expected value for StageName field when a donation has succeeded."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1383
+#: classes/class-minnpost-membership-admin.php:1388
 msgid "Days back for failed donations"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1389
+#: classes/class-minnpost-membership-admin.php:1394
 msgid "The list of failed donations will go back this many days from today. Ex: 30 means all donations failed within the last 30 days will be listed."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1394
+#: classes/class-minnpost-membership-admin.php:1399
 msgid "Recurring donation ID field name"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1400
+#: classes/class-minnpost-membership-admin.php:1405
 msgid "If a failed opportunity is part of a recurring donation, the value of this field will be used to get the ID for that recurring donation."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1405
+#: classes/class-minnpost-membership-admin.php:1410
 msgid "Heading for failed donations"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1411
+#: classes/class-minnpost-membership-admin.php:1416
 msgid "Heading for failed donation table"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1416
+#: classes/class-minnpost-membership-admin.php:1421
 msgid "Failed donation message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1421
+#: classes/class-minnpost-membership-admin.php:1426
 msgid "Message to display before the table of failed donations, if there are any."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1429
+#: classes/class-minnpost-membership-admin.php:1434
 msgid "Heading for successful donations"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1435
+#: classes/class-minnpost-membership-admin.php:1440
 msgid "Heading for successful donation table"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1440
+#: classes/class-minnpost-membership-admin.php:1445
 msgid "Successful donation message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1445
+#: classes/class-minnpost-membership-admin.php:1450
 msgid "Message to display before the list of successful donations, if there are any."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1508
+#: classes/class-minnpost-membership-admin.php:1513
 msgid "Campaign IDs"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1513
+#: classes/class-minnpost-membership-admin.php:1518
 msgid "Enter each campaign ID that needs its own settings on a separate line."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1615, classes/class-minnpost-membership-admin.php:2063
+#: classes/class-minnpost-membership-admin.php:1620, classes/class-minnpost-membership-admin.php:2070
 msgid "Member benefit URLs"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1654, classes/class-minnpost-membership-admin.php:1831, classes/class-minnpost-membership-admin.php:1984
+#: classes/class-minnpost-membership-admin.php:1659, classes/class-minnpost-membership-admin.php:1837, classes/class-minnpost-membership-admin.php:1991
 msgid "Page body"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1666, classes/class-minnpost-membership-admin.php:1843, classes/class-minnpost-membership-admin.php:2400, classes/class-minnpost-membership-admin.php:2618
+#: classes/class-minnpost-membership-admin.php:1671, classes/class-minnpost-membership-admin.php:1849, classes/class-minnpost-membership-admin.php:2407, classes/class-minnpost-membership-admin.php:2626
 msgid "Eligible levels"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1681, classes/class-minnpost-membership-admin.php:1858, classes/class-minnpost-membership-admin.php:2415, classes/class-minnpost-membership-admin.php:2645
+#: classes/class-minnpost-membership-admin.php:1686, classes/class-minnpost-membership-admin.php:1864, classes/class-minnpost-membership-admin.php:2422, classes/class-minnpost-membership-admin.php:2653
 msgid "Switch user state"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1698, classes/class-minnpost-membership-admin.php:1875, classes/class-minnpost-membership-admin.php:2432
+#: classes/class-minnpost-membership-admin.php:1703, classes/class-minnpost-membership-admin.php:1881, classes/class-minnpost-membership-admin.php:2439
 msgid "Action title"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1711, classes/class-minnpost-membership-admin.php:1888, classes/class-minnpost-membership-admin.php:2445
+#: classes/class-minnpost-membership-admin.php:1716, classes/class-minnpost-membership-admin.php:1894, classes/class-minnpost-membership-admin.php:2452
 msgid "Action body"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1780
+#. translators: 1 is the value of bloginfo('name')
+#. translators: 1 is the value of bloginfo('name')
+#. translators: 1 is the value of bloginfo('name')
+#. translators: 1 is the value of bloginfo('name')
+#: classes/class-minnpost-membership-admin.php:1723, classes/class-minnpost-membership-admin.php:1901, classes/class-minnpost-membership-admin.php:2459, classes/class-minnpost-membership-admin.php:2676
+msgid "$memberlevel will show as %1$s Level with the level of the user"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:1786
 msgid "List all partners?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1792
+#: classes/class-minnpost-membership-admin.php:1798
 msgid "Partner list heading"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:1996
+#: classes/class-minnpost-membership-admin.php:2003
 msgid "Link from other pages"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2102
+#: classes/class-minnpost-membership-admin.php:2109
 msgid "How often users can claim"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2107
+#: classes/class-minnpost-membership-admin.php:2114
 msgid "Time period users have to wait between claiming offers."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2116
+#: classes/class-minnpost-membership-admin.php:2123
 msgid "Switch display item"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2153
+#: classes/class-minnpost-membership-admin.php:2160
 msgid "User is not logged in"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2166
+#: classes/class-minnpost-membership-admin.php:2173
 msgid "Instances not claimable yet"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2175
+#: classes/class-minnpost-membership-admin.php:2182
 msgid "User is eligible"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2188
+#: classes/class-minnpost-membership-admin.php:2195
 msgid "Chosen instance was already claimed"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2198
+#: classes/class-minnpost-membership-admin.php:2205
 msgid "User is ineligible"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2211
+#: classes/class-minnpost-membership-admin.php:2218
 msgid "User claimed too recently"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2221
+#: classes/class-minnpost-membership-admin.php:2228
 msgid "Offer is all claimed"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2231
+#: classes/class-minnpost-membership-admin.php:2238
 msgid "User tried to claim offer that is all claimed"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2244
+#: classes/class-minnpost-membership-admin.php:2251
 msgid "Previous claim"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2254
+#: classes/class-minnpost-membership-admin.php:2261
 msgid "Claim success message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2263
+#: classes/class-minnpost-membership-admin.php:2270
 msgid "Send us an email alert when an offer is claimed?"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2276
+#: classes/class-minnpost-membership-admin.php:2283
 msgid "Where to send email alerts"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2289
+#: classes/class-minnpost-membership-admin.php:2296
 msgid "Send email to claiming user"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2302
+#: classes/class-minnpost-membership-admin.php:2309
 msgid "Email sending address"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2315
+#: classes/class-minnpost-membership-admin.php:2322
 msgid "Email sending name"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2328
+#: classes/class-minnpost-membership-admin.php:2335
 msgid "Email subject"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2334
+#: classes/class-minnpost-membership-admin.php:2341
 msgid "The subject of the email sent to claiming users."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2341
+#: classes/class-minnpost-membership-admin.php:2348
 msgid "Email body"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2347
+#: classes/class-minnpost-membership-admin.php:2354
 msgid "The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2359
+#: classes/class-minnpost-membership-admin.php:2366
 msgid "No published offers"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2388
+#: classes/class-minnpost-membership-admin.php:2395
 msgid "Page intro"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2605
+#: classes/class-minnpost-membership-admin.php:2613
 msgid "Post access meta key"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2631
+#: classes/class-minnpost-membership-admin.php:2639
 msgid "Blocked single template suffix"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2637
+#: classes/class-minnpost-membership-admin.php:2645
 msgid "Ex: if you put \"blocked\" here, the plugin will try to load the file single-blocked.php for a blocked single template call. If you leave it blank, the plugin does provide its own template (templates/blocked/single.php) that loads the messages below, if applicable. The template will have access to the $minnpost_membership and $user_state variables."
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2661
+#: classes/class-minnpost-membership-admin.php:2669
 msgid "Message"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2713
+#: classes/class-minnpost-membership-admin.php:2722
 msgid "Payment Pages"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2730
+#: classes/class-minnpost-membership-admin.php:2739
 msgid "Campaigns"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:2754, classes/class-minnpost-membership-admin.php:2771
+#: classes/class-minnpost-membership-admin.php:2763, classes/class-minnpost-membership-admin.php:2780
 msgid "Member Benefit Pages"
 msgstr ""
 
-#: classes/class-minnpost-membership-admin.php:3094, classes/class-minnpost-membership-admin.php:3211, classes/class-minnpost-membership-admin.php:3261, classes/class-minnpost-membership-admin.php:3337
+#: classes/class-minnpost-membership-admin.php:3106, classes/class-minnpost-membership-admin.php:3232, classes/class-minnpost-membership-admin.php:3285, classes/class-minnpost-membership-admin.php:3363
 msgid "Defined in wp-config.php"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:3202
+msgid "Select one"
 msgstr ""
 
 #: classes/class-minnpost-membership-content-items.php:73
@@ -1057,55 +1085,55 @@ msgstr ""
 msgid "one time"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:169
+#: classes/class-minnpost-membership-shortcodes.php:170
 msgid "One-time"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:171
+#: classes/class-minnpost-membership-shortcodes.php:172
 msgid "Transaction Date"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:176
+#: classes/class-minnpost-membership-shortcodes.php:177
 msgid "recurring"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:177
+#: classes/class-minnpost-membership-shortcodes.php:178
 msgid "Next Transaction Date"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:185
+#: classes/class-minnpost-membership-shortcodes.php:186
 msgid "Modify Your Donation"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:186
+#: classes/class-minnpost-membership-shortcodes.php:187
 msgid "Update Payment Method"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:187
+#: classes/class-minnpost-membership-shortcodes.php:188
 msgid "Change Amount"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:188
+#: classes/class-minnpost-membership-shortcodes.php:189
 msgid "Stop"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:189
+#: classes/class-minnpost-membership-shortcodes.php:190
 msgid "You will be able to review and confirm these actions in the final step."
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:318, classes/class-minnpost-membership-shortcodes.php:344
+#: classes/class-minnpost-membership-shortcodes.php:319, classes/class-minnpost-membership-shortcodes.php:345
 msgid "Amount"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:319
+#: classes/class-minnpost-membership-shortcodes.php:320
 msgid "Attempted Date"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:320
+#: classes/class-minnpost-membership-shortcodes.php:321
 msgid "Edit and retry"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:345
+#: classes/class-minnpost-membership-shortcodes.php:346
 msgid "Charged Date"
 msgstr ""
 

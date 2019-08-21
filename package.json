@@ -1,6 +1,6 @@
 {
   "name": "minnpost-membership",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Handle membership UX for MinnPost",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "gulp-stylelint": "^9.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-wp-pot": "^2.3.5",
-    "npm-check-updates": "^3.1.20",
+    "npm-check-updates": "^3.1.21",
     "stylelint": "^10.1.0",
     "stylelint-config-wordpress": "^14.0.0"
   },
