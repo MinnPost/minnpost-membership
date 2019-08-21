@@ -68,6 +68,60 @@ $nav-wrap-screen: 960px;
 		h1 {
 			font-size: $large-title-font-size;
 		}
+		.m-membership-fast-select {
+			margin: 0;
+			font-size: 1.5em;
+			text-align: center;
+			border: 0;
+			padding: 0;
+			min-width: 0;
+			.m-form-item-wrap {
+				margin: 0 0 0.5em;
+			}
+			.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios, .m-form-radios .m-form-item {
+				display: inline-block;
+				margin: 0;
+				vertical-align: top;
+				position: relative;
+			}
+			a.a-button, button, input#amount, input.a-button {
+				padding: .25em 0;
+				text-align: center;
+				vertical-align: top;
+			}
+			.a-fast-select-currency {
+				padding-right: 0.25em;
+			}
+			.a-fast-select-currency, .a-fast-select-intro {
+				padding-top: 0.35em;
+			}
+			.a-fast-select-intro {
+				color: $_color-base-gray;
+				padding-right: 0.5em;
+			}
+			#amount-item #amount {
+				border: 1px solid #ccc;
+				width: 3em;
+				padding: .35em 0;
+			}
+			.m-form-radios {
+				input[type="radio"] {
+				    left: 0;
+				    opacity: 0;
+				    position: absolute;
+				    top: 0;
+				}
+				label {
+					display: inline-block;
+					margin: 0 .0025em;
+					padding: .75em;
+					font-size: .65em;
+					font-weight: 700;
+					cursor: pointer;
+					border: 1px solid $border-color-lighter;
+				}
+			}
+		}
 		.m-form-actions {
 			margin: 0.5em 0 0 0;
 		}
