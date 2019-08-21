@@ -112,6 +112,13 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
+			$this->slug . '-site-footer'        => array(
+				'title'    => __( 'Site Footer', 'minnpost-membership' ),
+				'sections' => array(
+					'settings' => __( 'Settings', 'minnpost-membership' ),
+				),
+				'use_tabs' => false,
+			),
 			$this->slug . '-taking-payments'    => array(
 				'title'    => __( 'Taking Payments', 'minnpost-membership' ),
 				'sections' => $this->setup_payment_page_sections(),
@@ -330,6 +337,7 @@ class MinnPost_Membership_Admin {
 
 		$this->general_settings( $page, $all_field_callbacks );
 		$this->site_header( $page, $all_field_callbacks );
+		$this->site_footer( $page, $all_field_callbacks );
 		$this->taking_payments( $page, $all_field_callbacks );
 		$this->managing_donations( $page, $all_field_callbacks );
 		$this->campaign_settings( $page, $all_field_callbacks );
@@ -562,6 +570,126 @@ class MinnPost_Membership_Admin {
 							// translators: %1 is the first payment URL
 							__( 'When a user clicks the button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the first payment URL: %1$s', 'minnpost-membership' ),
 							$payment_url
+						),
+						'constant' => '',
+					),
+				),
+			);
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
+			}
+		}
+	}
+
+	/**
+	* Fields for the support footer at the bottom of the site
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function site_footer( $page, $callbacks ) {
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
+				add_settings_section( $section, $title, null, $page );
+			}
+
+			$this_section = 'settings';
+			$settings     = array(
+				'footer_intro_text' => array(
+					'title'    => __( 'Intro text', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'          => 'text',
+						'desc'          => sprintf(
+							// translators: %1 is the compact value from /support settings
+							__( 'This value will be used for the paragraph in the footer. If you do not add a value, the site will use the compact value for the /support page from the plugin settings: %1$s', 'minnpost-membership' ),
+							get_option( $this->option_prefix . 'support_summary_compact', '' )
+						),
+						'rows'          => '5',
+						'media_buttons' => false,
+						'constant'      => '',
+					),
+				),
+				'pre_select_text'   => array(
+					'title'    => __( 'Pre-select text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'This value will be used for the text right before the amount box.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donate_text'       => array(
+					'title'    => __( 'Donate button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'This value will be used for the button text. If you do not add a value, the value will be Donate.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donate_class'      => array(
+					'title'    => __( 'Donate button CSS class', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Add any CSS classes for styling, scripting, etc. Separate multiple classes with spaces.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donate_url'        => array(
+					'title'    => __( 'Donate URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => sprintf(
+							// translators: %1 is the payment URL
+							__( 'When a user clicks the footer button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the plugin payment processor URL: %1$s', 'minnpost-membership' ),
+							defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' )
 						),
 						'constant' => '',
 					),
