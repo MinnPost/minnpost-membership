@@ -31,13 +31,16 @@
 			var options = this.options;
 
 			$( this.element ).submit( function( event ) {
+				// this tracks an event submission based on the plugin options
+				// it also bubbles the event up to submit the form
 				that.analyticsEventTrack(
 					options.type,
 					options.category,
 					options.action,
 					options.label
 				);
-				// also bubbles the event up to submit the form
+				// if this is the main checkout form, send it to the ec plugin as a checkout
+				that.analyticsEcommerceTrack( $( that.element ) );
 			});
 		},
 
@@ -53,6 +56,19 @@
 
 			ga( 'send', type, category, action, label, value );
 		}, // end analyticsEventTrack
+
+		analyticsEcommerceTrack: function( element ) {
+			if ( typeof ga === 'undefined' ) {
+				return;
+			}
+			ga( 'require', 'ec' );
+			if ( element.hasClass( 'm-form-membership-support' ) ) {
+				ga( 'ec:setAction', 'checkout', {
+					'step': 1,
+				});
+			}
+		}, // end analyticsEcommerceTrack
+
 	}; // end Plugin.prototype
 
 
