@@ -15,6 +15,7 @@
 		userCurrentLevel: '.a-current-level',
 		declineBenefits: '.m-decline-benefits-select input[type="radio"]',
 		giftSelectionGroup: '.m-membership-gift-selector',
+		swagEligibilityText: '.m-membership-gift-selector .swag-eligibility',
 		swagSelector: '.m-select-swag input[type="radio"]',
 		swagLabels: '.m-select-swag input[type="radio"] + label',
 		subscriptionsSelector: '.m-select-subscription input[type="radio"]',
@@ -241,6 +242,14 @@
 
 			$( this.options.swagSelector ).each( setEnabled );
 			$( this.options.subscriptionsSelector ).each( setEnabled );
+
+			if ( $( this.options.swagSelector ).not( '#swag-decline' ).is( ':enabled' ) ) {
+				$( '.swag-disabled' ).removeClass( 'active' );
+				$( '.swag-enabled' ).addClass( 'active' );
+			} else {
+				$( '.swag-disabled' ).addClass( 'active' );
+				$( '.swag-enabled' ).removeClass( 'active' );
+			}
 		}, // end setEnabledGifts
 	}; // end Plugin.prototype
 
