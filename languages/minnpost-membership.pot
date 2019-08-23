@@ -1007,103 +1007,103 @@ msgstr ""
 msgid "Enter offer/event name here"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:301
+#: classes/class-minnpost-membership-content-items.php:302
 msgid "Description"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:303
+#: classes/class-minnpost-membership-content-items.php:304
 msgid "Enter a short description of the gift. $min_amount will show as e.g. \"$15 monthly\"."
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:309
+#: classes/class-minnpost-membership-content-items.php:310
 msgid "Image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:310, classes/class-minnpost-membership-content-items.php:365
+#: classes/class-minnpost-membership-content-items.php:311, classes/class-minnpost-membership-content-items.php:366
 msgid "Upload an image or enter an URL."
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:323, classes/class-minnpost-membership-content-items.php:451
+#: classes/class-minnpost-membership-content-items.php:324, classes/class-minnpost-membership-content-items.php:452
 msgid "Type"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:324
+#: classes/class-minnpost-membership-content-items.php:325
 msgid "Users can choose only one piece of swag; subscriptions are multi-select."
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:326
+#: classes/class-minnpost-membership-content-items.php:327
 msgid "Swag"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:327
+#: classes/class-minnpost-membership-content-items.php:328
 msgid "Subscription"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:336
+#: classes/class-minnpost-membership-content-items.php:337
 msgid "Minimum member level"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:354
+#: classes/class-minnpost-membership-content-items.php:355
 msgid "Partner Fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:358, templates/admin/partner-add-edit.php:24
+#: classes/class-minnpost-membership-content-items.php:359, templates/admin/partner-add-edit.php:24
 msgid "Link URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:364
+#: classes/class-minnpost-membership-content-items.php:365
 msgid "Logo Image"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:426
+#: classes/class-minnpost-membership-content-items.php:427
 msgid "Choose Partner"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:437
+#: classes/class-minnpost-membership-content-items.php:438
 msgid "Offer fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:443
+#: classes/class-minnpost-membership-content-items.php:444
 msgid "Quantity"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:459
+#: classes/class-minnpost-membership-content-items.php:460
 msgid "Restriction"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:487
+#: classes/class-minnpost-membership-content-items.php:488
 msgid "More info fields"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:493
+#: classes/class-minnpost-membership-content-items.php:494
 msgid "Text"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:501
+#: classes/class-minnpost-membership-content-items.php:502
 msgid "URL"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:511
+#: classes/class-minnpost-membership-content-items.php:512
 msgid "Claimable dates"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:545
+#: classes/class-minnpost-membership-content-items.php:546
 msgid "Instance {#}"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:546
+#: classes/class-minnpost-membership-content-items.php:547
 msgid "Add Another Instance"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:547
+#: classes/class-minnpost-membership-content-items.php:548
 msgid "Remove Instance"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:561
+#: classes/class-minnpost-membership-content-items.php:562
 msgid "Instance date"
 msgstr ""
 
-#: classes/class-minnpost-membership-content-items.php:568
+#: classes/class-minnpost-membership-content-items.php:569
 msgid "Claimed date"
 msgstr ""
 
@@ -1119,15 +1119,15 @@ msgstr ""
 msgid "This gift requires you to give at least "
 msgstr ""
 
-#: classes/class-minnpost-membership-member-level.php:117
+#: classes/class-minnpost-membership-member-level.php:121
 msgid "monthly"
 msgstr ""
 
-#: classes/class-minnpost-membership-member-level.php:124
+#: classes/class-minnpost-membership-member-level.php:128
 msgid "yearly"
 msgstr ""
 
-#: classes/class-minnpost-membership-member-level.php:131
+#: classes/class-minnpost-membership-member-level.php:135
 msgid "one time"
 msgstr ""
 
@@ -1364,14 +1364,14 @@ msgstr ""
 msgid "Decline gift and give entire amount to MinnPost"
 msgstr ""
 
-#: templates/front-end/support.php:231
+#: templates/front-end/support.php:236
 msgid "You are eligible for <strong>one</strong> of the following items:"
 msgstr ""
 
-#: templates/front-end/support.php:277
+#: templates/front-end/support.php:282
 msgid "Decline gift"
 msgstr ""
 
-#: templates/front-end/support.php:328
+#: templates/front-end/support.php:333
 msgid "Decline subscription"
 msgstr ""

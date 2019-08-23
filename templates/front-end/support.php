@@ -232,13 +232,8 @@ $user_id    = get_current_user_id();
 							$swag_disabled          = $yearly_amount < $swag_min_yearly_amount ? true : false;
 							?>
 
-							<p class="a-swag-eligibility-checker" data-eligible="<?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?>" data-ineligible="<?php $minnpost_membership->front_end->support_tooltip_text( $min_swag_level, $frequency ); ?>.">
-								<?php if ( true === $swag_disabled ) : ?>
-									<?php $minnpost_membership->front_end->support_tooltip_text( $min_swag_level, $frequency ); ?>.
-								<?php else : ?>
-									<?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?>
-								<?php endif; ?>
-							</p>
+							<p class="swag-eligibility swag-disabled<?php if ( true === $swag_disabled ) { echo ' active'; } ?>"><?php $minnpost_membership->front_end->support_tooltip_text( $min_swag_level, $frequency ); ?>.</p>
+							<p class="swag-eligibility swag-enabled<?php if ( true !== $swag_disabled ) { echo ' active'; } ?>"><?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?></p>
 
 							<?php
 							$swag = new WP_Query(
