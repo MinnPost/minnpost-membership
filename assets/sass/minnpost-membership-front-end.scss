@@ -331,6 +331,10 @@ $nav-wrap-screen: 960px;
 		}
 	}
 
+	p.swag-eligibility.active {
+		display: block;
+	}
+
 	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
 		label {
 			position: relative;
