@@ -71,6 +71,10 @@ class MinnPost_Membership_Member_Level {
 		$minimum_amount = array_column( $member_levels, 'minimum_monthly_amount' );
 		array_multisort( $member_status, SORT_DESC, $minimum_amount, SORT_ASC, $member_levels );
 
+		if ( is_array( $value ) ) {
+			return $value;
+		}
+
 		$call = $field . '=' . $value . 'show_nonmember=' . $show_nonmember;
 
 		$cached = $this->cache->cache_get( $call, $reset );

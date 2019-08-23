@@ -283,10 +283,11 @@ class MinnPost_Membership_Content_Items {
 		$object_type = 'thank_you_gift';
 		$prefix      = '_mp_thank_you_gift_';
 
-		$member_level_options = $this->member_levels->get_member_levels();
-		array_walk( $member_level_options, function(&$level) {
-			$level = $level['name'];
-		});
+		$member_levels        = $this->member_levels->get_member_levels();
+		$member_level_options = array();
+		foreach ( $member_levels as $key => $value ) {
+			$member_level_options[ $key ] = $value['name'];
+		}
 
 		$thank_you_gift_fields = new_cmb2_box(
 			array(
@@ -300,7 +301,7 @@ class MinnPost_Membership_Content_Items {
 				'id'   => $prefix . 'description',
 				'name' => __( 'Description', 'minnpost-membership' ),
 				'type' => 'text',
-				'desc' => __( 'Enter a short description of the gift. $min_amount will show as e.g. "$15 monthly".', 'minnpost-membership' )
+				'desc' => __( 'Enter a short description of the gift. $min_amount will show as e.g. "$15 monthly".', 'minnpost-membership' ),
 			)
 		);
 		$thank_you_gift_fields->add_field(
@@ -331,11 +332,11 @@ class MinnPost_Membership_Content_Items {
 		);
 		$thank_you_gift_fields->add_field(
 			array(
-				'id'   		=> $prefix . 'minimum_member_level_id',
-				'type' 		=> 'select',
-				'name' 		=> __( 'Minimum member level', 'minnpost-membership' ),
-				'desc' 		=> '',
-				'options' => $member_level_options
+				'id'      => $prefix . 'minimum_member_level_id',
+				'type'    => 'select',
+				'name'    => __( 'Minimum member level', 'minnpost-membership' ),
+				'desc'    => '',
+				'options' => $member_level_options,
 			)
 		);
 	}
