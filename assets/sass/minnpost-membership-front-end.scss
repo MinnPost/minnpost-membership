@@ -327,7 +327,7 @@ $nav-wrap-screen: 960px;
 	.min-amount, .swag-eligibility {
 		display: none;
 		&.active {
-			display: initial;
+			display: inline-block;
 		}
 	}
 
