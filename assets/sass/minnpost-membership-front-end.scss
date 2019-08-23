@@ -352,10 +352,9 @@ $nav-wrap-screen: 960px;
 		input:disabled + label {
 			.support-tooltip {
 				visibility: visible;
-
-				&:hover .tooltip-text {
-					visibility: visible;
-				}
+			}
+			&:hover .tooltip-text {
+				visibility: visible;
 			}
 		}
 	}
