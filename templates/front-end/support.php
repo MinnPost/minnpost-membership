@@ -133,7 +133,7 @@ $user_id    = get_current_user_id();
 										?>
 										<div class="m-form-item">
 											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
-											<label for="frequencies-<?php echo $id_key; ?>"  class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
+											<label for="frequencies-<?php echo $id_key; ?>" class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
 										</div>
 									<?php endforeach; ?>
 								</div>
@@ -209,11 +209,11 @@ $user_id    = get_current_user_id();
 							<div class="m-form-radios m-decline-benefits-select">
 								<div class="m-form-item">
 									<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n">
-									<label for="decline-benefits-n"  class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
+									<label for="decline-benefits-n" class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
 								</div>
 								<div class="m-form-item">
 									<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y">
-									<label for="decline-benefits-y"  class="a-decline-benefits-option"><?php echo __( 'Decline gift and give entire amount to MinnPost', 'minnpost-membership' ); ?></label>
+									<label for="decline-benefits-y" class="a-decline-benefits-option"><?php echo __( 'Decline gift and give entire amount to MinnPost', 'minnpost-membership' ); ?></label>
 								</div>
 							</div>
 						</fieldset>
