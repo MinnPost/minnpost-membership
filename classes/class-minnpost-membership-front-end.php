@@ -223,27 +223,32 @@ class MinnPost_Membership_Front_End {
 			require_once( plugin_dir_path( __FILE__ ) . '../vendor/autoload.php' );
 		}
 		Brain\Cortex::boot();
-		add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
-			if ( '' !== $this->allowed_urls ) {
-				foreach ( $this->allowed_urls as $url ) {
-					$routes->addRoute( new QueryRoute(
-						$url,
-						function ( array $matches, $this_url ) {
-							// send this object to the template so it can be called
-							global $minnpost_membership;
-							$minnpost_membership = MinnPost_Membership::get_instance();
-							// set a query var so we can filter it
-							$query = array(
-								'is_membership'  => true,
-								'membership_url' => implode( '-', $this_url->chunks() ),
-							);
-							return $query;
-						},
-						[ 'template' => $this->get_template_for_url( $url ) ]
-					));
+		add_action(
+			'cortex.routes',
+			function( RouteCollectionInterface $routes ) {
+				if ( '' !== $this->allowed_urls ) {
+					foreach ( $this->allowed_urls as $url ) {
+						$routes->addRoute(
+							new QueryRoute(
+								$url,
+								function ( array $matches, $this_url ) {
+									// send this object to the template so it can be called
+									global $minnpost_membership;
+									$minnpost_membership = MinnPost_Membership::get_instance();
+									// set a query var so we can filter it
+									$query = array(
+										'is_membership'  => true,
+										'membership_url' => implode( '-', $this_url->chunks() ),
+									);
+									return $query;
+								},
+								[ 'template' => $this->get_template_for_url( $url ) ]
+							)
+						);
+					}
 				}
 			}
-		});
+		);
 	}
 
 	/**
@@ -268,19 +273,16 @@ class MinnPost_Membership_Front_End {
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
 		}
-		if ( isset( $data['decline_benefits'] ) &&
-			 filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
+		if ( isset( $data['decline_benefits'] ) && filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['decline_benefits'] = 'true';
 		}
 		if ( isset( $data['swag'] ) && '' !== $data['swag'] ) {
 			$params['swag'] = filter_var( $data['swag'], FILTER_SANITIZE_STRING );
 		}
-		if ( isset( $data['atlantic_subscription'] ) &&
-		     filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
+		if ( isset( $data['atlantic_subscription'] ) && filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['atlantic_subscription'] = 'true';
 		}
-		if ( isset( $data['nyt_subscription'] ) &&
-		     filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true') {
+		if ( isset( $data['nyt_subscription'] ) && filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['nyt_subscription'] = 'true';
 		}
 		if ( isset( $data['customer_id'] ) ) {
@@ -1063,11 +1065,11 @@ class MinnPost_Membership_Front_End {
 	/**
 	* Display the intro text for a subscription, showing minimum amount
 	*
-	* @param integer $postID Thank-You Gift post metadata
+	* @param integer $post_id Thank-You Gift post metadata
 	*
 	*/
-	public function thank_you_gift_description( $postID, $selected_frequency ) {
-		$text = $this->get_thank_you_gift_description( $postID, $selected_frequency );
+	public function thank_you_gift_description( $post_id, $selected_frequency ) {
+		$text = $this->get_thank_you_gift_description( $post_id, $selected_frequency );
 		if ( '' !== $text ) {
 			echo $text;
 		}
@@ -1076,19 +1078,19 @@ class MinnPost_Membership_Front_End {
 	/**
 	* Display the intro text for a subscription, showing minimum amount
 	*
-	* @param integer $postID Thank-You Gift post metadata
+	* @param integer $post_id Thank-You Gift post metadata
 	* @return string $full_text
 	*
 	*/
-	private function get_thank_you_gift_description( $postID, $selected_frequency ) {
-		$full_text = '';
-		$meta = get_post_meta( $postID );
+	private function get_thank_you_gift_description( $post_id, $selected_frequency ) {
+		$full_text   = '';
+		$meta        = get_post_meta( $post_id );
 		$description = $meta['_mp_thank_you_gift_description'][0];
 		if ( ! isset( $description ) ) {
 			return '';
 		}
 
-		$level = $this->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+		$level     = $this->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
 		$full_text = str_replace( '$min_amount', $this->get_min_amount( $level, $selected_frequency ), $description );
 
 		return wpautop( $full_text );
@@ -1117,23 +1119,31 @@ class MinnPost_Membership_Front_End {
 	*
 	*/
 	private function get_support_tooltip_text( $min_level, $selected_frequency ) {
-		$full_text = 'This gift requires you to give at least ';
+		$full_text  = __( 'This gift requires you to give at least ', 'minnpost-membership' );
 		$full_text .= $this->get_min_amount( $min_level, $selected_frequency );
 		return $full_text;
 	}
 
+	/**
+	* Get the minimum amount for the given level and frequency
+	*
+	* @param array $min_level
+	* @param string $selected_frequency
+	* @return string $full_text
+	*
+	*/
 	private function get_min_amount( $min_level, $selected_frequency ) {
-		$full_text = '';
+		$full_text         = '';
 		$frequency_options = $this->member_levels->get_frequency_options();
 		foreach ( $frequency_options as $frequency ) {
 			$classes = 'min-amount';
 			if ( $frequency['value'] === $selected_frequency ) {
 				$classes .= ' active';
 			}
-			$full_text .= '<span class="' . $classes . '" data-frequency="' . $frequency['value'] . '">';
-			$frequency_values = $this->member_levels->get_frequency_values( $frequency['value'] );
+			$full_text        .= '<span class="' . $classes . '" data-frequency="' . $frequency['value'] . '">';
+			$frequency_values  = $this->member_levels->get_frequency_values( $frequency['value'] );
 			$min_yearly_amount = $min_level['minimum_monthly_amount'] * 12;
-			$full_text .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
+			$full_text        .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
 			if ( 'one-time' !== $frequency['id'] ) {
 				$full_text .= ' ' . $frequency['text'];
 			}
