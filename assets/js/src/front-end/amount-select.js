@@ -16,7 +16,10 @@
 		declineBenefits: '.m-decline-benefits-select input[type="radio"]',
 		giftSelectionGroup: '.m-membership-gift-selector',
 		swagSelector: '.m-select-swag input[type="radio"]',
+		swagLabels: '.m-select-swag input[type="radio"] + label',
 		subscriptionsSelector: '.m-select-subscription input[type="checkbox"]',
+		subscriptionsLabels: '.m-select-subscription input[type="checkbox"] + label',
+		tooltipTextAmountInLabel: '.tooltip-text .min-amount',
 		declineSubscriptions: '#subscription-decline'
 	};
 
@@ -101,6 +104,7 @@
 
 		onFrequencyChange: function( event ) {
 			this.setAmountLabels( $( event.target ).val() );
+			this.setTooltipAmounts( $( event.target ).val() );
 			this.checkAndSetLevel();
 		}, // end onFrequencyChange
 
@@ -167,6 +171,18 @@
 				.find( 'input[type="radio"][data-index="' + index + '"]' )
 				.prop( 'checked', true );
 		}, // end setAmountLabels
+
+		setTooltipAmounts: function( frequencyString ) {
+			var that = this;
+			var setActiveAmounts = function() {
+				var $elements = $( this ).find( that.options.tooltipTextAmountInLabel );
+				$elements.removeClass( 'active' );
+				$elements.filter( '[data-frequency="' + frequencyString + '"]' )
+					.addClass( 'active' );
+			};
+			$( this.options.swagLabels ).each( setActiveAmounts );
+			$( this.options.subscriptionsLabels ).each( setActiveAmounts );
+		}, // end setTooltipAmounts
 
 		checkAndSetLevel: function() {
 			var amount = $( this.options.amountSelector ).filter( ':checked' ).val();
