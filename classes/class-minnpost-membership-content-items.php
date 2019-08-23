@@ -300,7 +300,7 @@ class MinnPost_Membership_Content_Items {
 				'id'   => $prefix . 'description',
 				'name' => __( 'Description', 'minnpost-membership' ),
 				'type' => 'text',
-				'desc' => __( 'Enter a short description of the gift.', 'minnpost-membership' )
+				'desc' => __( 'Enter a short description of the gift. $min_amount will show as e.g. "$15 monthly".', 'minnpost-membership' )
 			)
 		);
 		$thank_you_gift_fields->add_field(
