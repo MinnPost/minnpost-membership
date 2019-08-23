@@ -233,7 +233,11 @@ $user_id    = get_current_user_id();
 							$swag = new WP_Query( [
 								'post_type' => 'thank_you_gift',
 								'meta_key' => '_mp_thank_you_gift_type',
-								'meta_value' => 'swag'
+								'meta_value' => 'swag',
+								'orderby' => [
+									'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id'
+								],
+								'order' => 'ASC'
 							] );
 							?>
 							<?php if ( $swag->have_posts() ) : ?>
@@ -277,7 +281,11 @@ $user_id    = get_current_user_id();
 							$subscriptions = new WP_Query( [
 								'post_type' => 'thank_you_gift',
 								'meta_key' => '_mp_thank_you_gift_type',
-								'meta_value' => 'subscription'
+								'meta_value' => 'subscription',
+								'orderby' => [
+									'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id'
+								],
+								'order' => 'ASC'
 							] );
 							?>
 							<?php if ( $subscriptions->have_posts() ) : ?>
