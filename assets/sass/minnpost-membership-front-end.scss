@@ -327,8 +327,12 @@ $nav-wrap-screen: 960px;
 	.min-amount, .swag-eligibility {
 		display: none;
 		&.active {
-			display: inline-block;
+			display: initial;
 		}
+	}
+
+	p.swag-eligibility.active {
+		display: block;
 	}
 
 	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
