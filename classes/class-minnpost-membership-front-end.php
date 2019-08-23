@@ -1060,6 +1060,33 @@ class MinnPost_Membership_Front_End {
 		return $full_text;
 	}
 
+	public function support_tooltip_text( $min_level, $selected_frequency ) {
+		$text = $this->get_support_tooltip_text( $min_level, $selected_frequency );
+		if ( '' !== $text ) {
+			echo $text;
+		}
+	}
+
+	public function get_support_tooltip_text( $min_level, $selected_frequency ) {
+		$full_text = 'This gift requires you to give at least ';
+		$frequency_options = $this->member_levels->get_frequency_options();
+		foreach ( $frequency_options as $frequency ) {
+			$classes = 'min-amount';
+			if ( $frequency['value'] === $selected_frequency ) {
+				$classes .= ' active';
+			}
+			$full_text .= '<span class="' . $classes . '" data-frequency="' . $frequency['value'] . '">';
+			$frequency_values = $this->member_levels->get_frequency_values( $frequency['value'] );
+			$min_yearly_amount = $min_level['minimum_monthly_amount'] * 12;
+			$full_text .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
+			if ( 'one-time' !== $frequency['id'] ) {
+				$full_text .= ' ' . $frequency['text'];
+			}
+			$full_text .= '</span>';
+		}
+		return $full_text;
+	}
+
 	/**
 	* Get correct template path for URLs from plugin or theme folder
 	*

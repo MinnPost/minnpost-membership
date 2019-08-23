@@ -338,6 +338,13 @@ $nav-wrap-screen: 960px;
 					z-index: 1;
 					background-color: white;
 					border: 1px solid #ccc;
+
+					.min-amount {
+						display: none;
+						&.active {
+							display: initial;
+						}
+					}
 				}
 			}
 		}

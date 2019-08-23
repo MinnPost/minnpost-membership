@@ -249,14 +249,16 @@ $user_id    = get_current_user_id();
 										$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
+											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>" data-min-monthly-amount="<?php echo $level['minimum_monthly_amount'] ?>" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
 											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
 												<figure class="m-thank-you-gift-image">
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
 												</figure>
 												<div class="support-tooltip">
 													<span class="dashicons dashicons-editor-help"></span>
-													<div class="tooltip-text">This gift requires you to give at least $<?php echo $level['minimum_monthly_amount'] ?> a month</div>
+													<div class="tooltip-text">
+														<?php $minnpost_membership->front_end->support_tooltip_text( $level, $frequency ); ?>
+													</div>
 												</div>
 											</label>
 										</div>
@@ -303,7 +305,9 @@ $user_id    = get_current_user_id();
 												</figure>
 												<div class="support-tooltip">
 													<span class="dashicons dashicons-editor-help"></span>
-													<div class="tooltip-text">This gift requires you to give at least $<?php echo $level['minimum_monthly_amount'] ?> a month</div>
+													<div class="tooltip-text">
+														<?php $minnpost_membership->front_end->support_tooltip_text( $level, $frequency ); ?>
+													</div>
 												</div>
 											</label>
 										</div>
