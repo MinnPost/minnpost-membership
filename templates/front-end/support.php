@@ -107,37 +107,37 @@ $user_id    = get_current_user_id();
 					<section class="m-membership-choose-frequency m-membership-choice-group">
 						<h1><?php echo __( 'Choose Frequency', 'minnpost-membership' ); ?></h1>
 						<fieldset>
-								<?php
-								$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
-								?>
-								<?php if ( ! empty( $frequency_options ) ) : ?>
-									<div class="m-form-radios m-frequency-select">
-										<?php foreach ( $frequency_options as $key => $option ) : ?>
-											<?php
-											$id_key = $key + 1;
+							<?php
+							$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
+							?>
+							<?php if ( ! empty( $frequency_options ) ) : ?>
+								<div class="m-form-radios m-frequency-select">
+									<?php foreach ( $frequency_options as $key => $option ) : ?>
+										<?php
+										$id_key = $key + 1;
 
-											if ( isset( $url_params['frequency'] ) ) {
-												$frequency = $minnpost_membership->member_levels->get_frequency_options( $url_params['frequency'], 'id' )['value'];
-											} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0] ) {
-												$frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
-											} else {
-												$frequency = '';
-											}
+										if ( isset( $url_params['frequency'] ) ) {
+											$frequency = $minnpost_membership->member_levels->get_frequency_options( $url_params['frequency'], 'id' )['value'];
+										} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0] ) {
+											$frequency = get_option( $minnpost_membership->option_prefix . 'default_frequency', '' )[0];
+										} else {
+											$frequency = '';
+										}
 
-											if ( $frequency === $option['value'] ) {
-												$checked = ' checked';
-											} else {
-												$checked = '';
-											}
-											$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
-											?>
-											<div class="m-form-item">
-												<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
-												<label for="frequencies-<?php echo $id_key; ?>"  class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
-											</div>
-										<?php endforeach; ?>
-									</div>
-								<?php endif; ?>
+										if ( $frequency === $option['value'] ) {
+											$checked = ' checked';
+										} else {
+											$checked = '';
+										}
+										$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+										?>
+										<div class="m-form-item">
+											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
+											<label for="frequencies-<?php echo $id_key; ?>"  class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
+										</div>
+									<?php endforeach; ?>
+								</div>
+							<?php endif; ?>
 						</fieldset>
 					</section>
 
@@ -206,16 +206,16 @@ $user_id    = get_current_user_id();
 					<section class="m-membership-choose-gift m-membership-choice-group">
 						<h1><?php echo __( 'Select Thank You Gift', 'minnpost-membership' ); ?></h1>
 						<fieldset>
-									<div class="m-form-radios m-decline-benefits-select">
-											<div class="m-form-item">
-												<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n"/>
-												<label for="decline-benefits-n"  class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
-											</div>
-											<div class="m-form-item">
-												<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y"/>
-												<label for="decline-benefits-y"  class="a-decline-benefits-option"><?php echo __( 'Decline gift and give entire amount to MinnPost', 'minnpost-membership' ); ?></label>
-											</div>
-									</div>
+							<div class="m-form-radios m-decline-benefits-select">
+								<div class="m-form-item">
+									<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n">
+									<label for="decline-benefits-n"  class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
+								</div>
+								<div class="m-form-item">
+									<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y">
+									<label for="decline-benefits-y"  class="a-decline-benefits-option"><?php echo __( 'Decline gift and give entire amount to MinnPost', 'minnpost-membership' ); ?></label>
+								</div>
+							</div>
 						</fieldset>
 
 						<div class="m-membership-gift-selector m-membership-choice-group">
