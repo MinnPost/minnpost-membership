@@ -272,7 +272,7 @@ class MinnPost_Membership_Front_End {
 			 filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['decline_benefits'] = 'true';
 		}
-		if ( isset( $data['swag'] ) ) {
+		if ( isset( $data['swag'] ) && '' !== $data['swag'] ) {
 			$params['swag'] = filter_var( $data['swag'], FILTER_SANITIZE_STRING );
 		}
 		if ( isset( $data['atlantic_subscription'] ) &&
@@ -1060,6 +1060,47 @@ class MinnPost_Membership_Front_End {
 		return $full_text;
 	}
 
+	/**
+	* Display the intro text for a subscription, showing minimum amount
+	*
+	* @param integer $postID Thank-You Gift post metadata
+	*
+	*/
+	public function thank_you_gift_description( $postID, $selected_frequency ) {
+		$text = $this->get_thank_you_gift_description( $postID, $selected_frequency );
+		if ( '' !== $text ) {
+			echo $text;
+		}
+	}
+
+	/**
+	* Display the intro text for a subscription, showing minimum amount
+	*
+	* @param integer $postID Thank-You Gift post metadata
+	* @return string $full_text
+	*
+	*/
+	private function get_thank_you_gift_description( $postID, $selected_frequency ) {
+		$full_text = '';
+		$meta = get_post_meta( $postID );
+		$description = $meta['_mp_thank_you_gift_description'][0];
+		if ( ! isset( $description ) ) {
+			return '';
+		}
+
+		$level = $this->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+		$full_text = str_replace( '$min_amount', $this->get_min_amount( $level, $selected_frequency ), $description );
+
+		return wpautop( $full_text );
+	}
+
+	/**
+	* Display the minimum amount for the given level and frequency
+	*
+	* @param array $min_level
+	* @param string $selected_frequency
+	*
+	*/
 	public function support_tooltip_text( $min_level, $selected_frequency ) {
 		$text = $this->get_support_tooltip_text( $min_level, $selected_frequency );
 		if ( '' !== $text ) {
@@ -1067,8 +1108,22 @@ class MinnPost_Membership_Front_End {
 		}
 	}
 
-	public function get_support_tooltip_text( $min_level, $selected_frequency ) {
+	/**
+	* Get the minimum amount for the given level and frequency
+	*
+	* @param array $min_level
+	* @param string $selected_frequency
+	* @return string $full_text
+	*
+	*/
+	private function get_support_tooltip_text( $min_level, $selected_frequency ) {
 		$full_text = 'This gift requires you to give at least ';
+		$full_text .= $this->get_min_amount( $min_level, $selected_frequency );
+		return $full_text;
+	}
+
+	private function get_min_amount( $min_level, $selected_frequency ) {
+		$full_text = '';
 		$frequency_options = $this->member_levels->get_frequency_options();
 		foreach ( $frequency_options as $frequency ) {
 			$classes = 'min-amount';

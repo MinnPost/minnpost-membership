@@ -17,9 +17,9 @@
 		giftSelectionGroup: '.m-membership-gift-selector',
 		swagSelector: '.m-select-swag input[type="radio"]',
 		swagLabels: '.m-select-swag input[type="radio"] + label',
-		subscriptionsSelector: '.m-select-subscription input[type="checkbox"]',
-		subscriptionsLabels: '.m-select-subscription input[type="checkbox"] + label',
-		tooltipTextAmountInLabel: '.tooltip-text .min-amount',
+		subscriptionsSelector: '.m-select-subscription input[type="radio"]',
+		subscriptionsLabels: '.m-select-subscription input[type="radio"] + label',
+		minAmounts: '.m-membership-gift-selector .min-amount',
 		declineSubscriptions: '#subscription-decline'
 	};
 
@@ -173,15 +173,10 @@
 		}, // end setAmountLabels
 
 		setTooltipAmounts: function( frequencyString ) {
-			var that = this;
-			var setActiveAmounts = function() {
-				var $elements = $( this ).find( that.options.tooltipTextAmountInLabel );
-				$elements.removeClass( 'active' );
-				$elements.filter( '[data-frequency="' + frequencyString + '"]' )
-					.addClass( 'active' );
-			};
-			$( this.options.swagLabels ).each( setActiveAmounts );
-			$( this.options.subscriptionsLabels ).each( setActiveAmounts );
+			var $elements = $( this.options.minAmounts );
+			$elements.removeClass( 'active' );
+			$elements.filter( '[data-frequency="' + frequencyString + '"]' )
+				.addClass( 'active' );
 		}, // end setTooltipAmounts
 
 		checkAndSetLevel: function() {
