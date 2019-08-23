@@ -1012,7 +1012,7 @@ msgid "Description"
 msgstr ""
 
 #: classes/class-minnpost-membership-content-items.php:303
-msgid "Enter a short description of the gift."
+msgid "Enter a short description of the gift. $min_amount will show as e.g. \"$15 monthly\"."
 msgstr ""
 
 #: classes/class-minnpost-membership-content-items.php:309
@@ -1113,6 +1113,10 @@ msgstr ""
 
 #: classes/class-minnpost-membership-front-end.php:176
 msgid "Donate"
+msgstr ""
+
+#: classes/class-minnpost-membership-front-end.php:1122
+msgid "This gift requires you to give at least "
 msgstr ""
 
 #: classes/class-minnpost-membership-member-level.php:117
@@ -1338,4 +1342,36 @@ msgstr ""
 
 #: templates/front-end/support.php:38
 msgid "Thank You"
+msgstr ""
+
+#: templates/front-end/support.php:108
+msgid "Choose Frequency"
+msgstr ""
+
+#: templates/front-end/support.php:145
+msgid "Choose Amount"
+msgstr ""
+
+#: templates/front-end/support.php:207
+msgid "Select Thank You Gift"
+msgstr ""
+
+#: templates/front-end/support.php:212
+msgid "Choose thank you gift"
+msgstr ""
+
+#: templates/front-end/support.php:216
+msgid "Decline gift and give entire amount to MinnPost"
+msgstr ""
+
+#: templates/front-end/support.php:231
+msgid "You are eligible for <strong>one</strong> of the following items:"
+msgstr ""
+
+#: templates/front-end/support.php:277
+msgid "Decline gift"
+msgstr ""
+
+#: templates/front-end/support.php:328
+msgid "Decline subscription"
 msgstr ""

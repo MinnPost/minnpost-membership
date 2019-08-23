@@ -59,6 +59,7 @@
 
 			// Set up the UI for the current field state on (re-)load
 			this.setAmountLabels( $frequency.filter(':checked').val() );
+			this.setMinAmounts( $frequency.filter(':checked').val() );
 			this.checkAndSetLevel();
 
 			$frequency.on( 'change', this.onFrequencyChange.bind(this) );
@@ -104,7 +105,7 @@
 
 		onFrequencyChange: function( event ) {
 			this.setAmountLabels( $( event.target ).val() );
-			this.setTooltipAmounts( $( event.target ).val() );
+			this.setMinAmounts( $( event.target ).val() );
 			this.checkAndSetLevel();
 		}, // end onFrequencyChange
 
@@ -172,12 +173,12 @@
 				.prop( 'checked', true );
 		}, // end setAmountLabels
 
-		setTooltipAmounts: function( frequencyString ) {
+		setMinAmounts: function( frequencyString ) {
 			var $elements = $( this.options.minAmounts );
 			$elements.removeClass( 'active' );
 			$elements.filter( '[data-frequency="' + frequencyString + '"]' )
 				.addClass( 'active' );
-		}, // end setTooltipAmounts
+		}, // end setMinAmounts
 
 		checkAndSetLevel: function() {
 			var amount = $( this.options.amountSelector ).filter( ':checked' ).val();
