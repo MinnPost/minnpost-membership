@@ -226,9 +226,17 @@ $user_id    = get_current_user_id();
 							$minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
 							$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $frequency );
 							$yearly_amount    = $amount * $frequency_values['times_per_year'];
+
+							$min_swag_level         = $minnpost_membership->member_levels->get_member_levels( 'member_silver', false, 'slug' ); // swag is silver. probably wise to put this as a setting somewhere.
+							$swag_min_yearly_amount = $min_swag_level['minimum_monthly_amount'] * 12;
+							$swag_disabled          = $yearly_amount < $swag_min_yearly_amount ? true : false;
 							?>
 
-							<p><?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?></p>
+							<?php if ( true === $swag_disabled ) : ?>
+								<p><?php $minnpost_membership->front_end->support_tooltip_text( $min_swag_level, $frequency ); ?>.</p>
+							<?php else : ?>
+								<p><?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?>
+							<?php endif; ?>
 
 							<?php
 							$swag = new WP_Query(
