@@ -315,9 +315,23 @@ $nav-wrap-screen: 960px;
 }
 
 .m-membership-choice-group.m-membership-gift-selector {
-	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
-		width: 32%;
+	.m-select-swag, .m-select-subscription {
+		justify-content: flex-start;
 
+		.m-form-item {
+			width: 32%;
+			margin-left: 0.67%;
+		}
+	}
+
+	.min-amount {
+		display: none;
+		&.active {
+			display: initial;
+		}
+	}
+
+	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
 		label {
 			position: relative;
 
@@ -338,13 +352,6 @@ $nav-wrap-screen: 960px;
 					z-index: 1;
 					background-color: white;
 					border: 1px solid #ccc;
-
-					.min-amount {
-						display: none;
-						&.active {
-							display: initial;
-						}
-					}
 				}
 			}
 		}

@@ -227,13 +227,17 @@ $user_id    = get_current_user_id();
 							$yearly_amount = $amount * $frequency_values['times_per_year'];
               ?>
 
-							<p>Choose from <strong>one</strong> of the following:</p>
+							<p>You are eligible for <strong>one</strong> of the following items:</p>
 
 							<?php
 							$swag = new WP_Query( [
 								'post_type' => 'thank_you_gift',
 								'meta_key' => '_mp_thank_you_gift_type',
-								'meta_value' => 'swag'
+								'meta_value' => 'swag',
+								'orderby' => [
+									'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id'
+								],
+								'order' => 'ASC'
 							] );
 							?>
 							<?php if ( $swag->have_posts() ) : ?>
@@ -273,34 +277,35 @@ $user_id    = get_current_user_id();
 								</div>
 							<?php endif; ?>
 
-							<p>Also choose if you want <strong>one or both</strong> of these subscriptions:</p>
-
 							<?php
 							$subscriptions = new WP_Query( [
 								'post_type' => 'thank_you_gift',
 								'meta_key' => '_mp_thank_you_gift_type',
-								'meta_value' => 'subscription'
+								'meta_value' => 'subscription',
+								'orderby' => [
+									'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id'
+								],
+								'order' => 'ASC'
 							] );
 							?>
 							<?php if ( $subscriptions->have_posts() ) : ?>
-								<div class="m-form-checkboxes m-select-subscription">
-									<?php while ( $subscriptions->have_posts() ) : ?>
-										<?php
-										$subscriptions->the_post();
-										$slug = get_post()->post_name;
-										$meta = get_post_meta( get_the_ID() );
+								<?php while ( $subscriptions->have_posts() ) : ?>
+									<?php
+									$subscriptions->the_post();
+									$slug = get_post()->post_name;
+									$postID = get_the_ID();
+									$meta = get_post_meta( $postID );
 
-										$level = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
-										$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
-										$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
-										?>
+									$level = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+									$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
+									$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
+									?>
+									<?php $minnpost_membership->front_end->thank_you_gift_description( $postID, $frequency ); ?>
+									<div class="m-form-radios m-select-subscription">
 										<div class="m-form-item">
-											<input type="checkbox" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
+											<input type="radio" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
 											<label for="subscription-<?php echo $slug; ?>" class="a-subscription-option">
 												<figure class="m-thank-you-gift-image">
-													<figcaption>
-														<?php echo $meta['_mp_thank_you_gift_description'][0]; ?>
-													</figcaption>
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
 												</figure>
 												<div class="support-tooltip">
@@ -311,15 +316,15 @@ $user_id    = get_current_user_id();
 												</div>
 											</label>
 										</div>
-									<?php endwhile; ?>
 
-									<div class="m-form-item">
-										<input type="checkbox" name="decline_subscription" id="subscription-decline" value="">
-										<label for="subscription-decline" class="a-subscription-option">
-											Decline both subscriptions
-										</label>
+										<div class="m-form-item">
+											<input type="radio" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>-decline" value="">
+											<label for="subscription-<?php echo $slug ?>-decline" class="a-subscription-option">
+												Decline subscription
+											</label>
+										</div>
 									</div>
-								</div>
+								<?php endwhile; ?>
 							<?php endif; ?>
 						</div>
 					</section>
