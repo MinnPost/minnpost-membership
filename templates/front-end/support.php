@@ -164,19 +164,19 @@ $user_id    = get_current_user_id();
 							<div class="m-form-radios m-amount-select">
 								<?php foreach ( $suggested_amounts as $freq_id => $amounts ) : ?>
 									<?php $freq_value = $minnpost_membership->member_levels->get_frequency_options( $freq_id, 'id' )['value']; ?>
-									<div class="m-frequency-group<?php echo ( $freq_value === $frequency ) ? ' active' : '' ?>" data-frequency="<?php echo $freq_value ?>">
+									<div class="m-frequency-group<?php echo ( $freq_value === $frequency ) ? ' active' : ''; ?>" data-frequency="<?php echo $freq_value; ?>">
 									<?php foreach ( $amounts as $key => $option ) : ?>
 										<?php
-										$id_key = $freq_id . '-' . ($key + 1);
+										$id_key           = $freq_id . '-' . ( $key + 1 );
 										$suggested_amount = $option['amount'];
-										$checked = '';
-										if ( $freq_value === $frequency && $amount === (string)$suggested_amount ) {
+										$checked          = '';
+										if ( $freq_value === $frequency && $amount === (string) $suggested_amount ) {
 											$other_amount = '';
-											$checked = ' checked';
+											$checked      = ' checked';
 										}
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="amounts" value="<?php echo $option['amount'] ?>" id="amounts-<?php echo $id_key ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?> />
+											<input type="radio" name="amounts" value="<?php echo $option['amount']; ?>" id="amounts-<?php echo $id_key; ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?> />
 											<label for="amounts-<?php echo $id_key; ?>"
 												class="a-amount-option"
 												data-amount="<?php echo $option['amount']; ?>"
@@ -209,37 +209,40 @@ $user_id    = get_current_user_id();
 									<div class="m-form-radios m-decline-benefits-select">
 											<div class="m-form-item">
 												<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n"/>
-												<label for="decline-benefits-n"  class="a-decline-benefits-option">Choose thank you gift</label>
+												<label for="decline-benefits-n"  class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
 											</div>
 											<div class="m-form-item">
 												<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y"/>
-												<label for="decline-benefits-y"  class="a-decline-benefits-option">Decline gift and give entire amount to MinnPost</label>
+												<label for="decline-benefits-y"  class="a-decline-benefits-option"><?php echo __( 'Decline gift and give entire amount to MinnPost', 'minnpost-membership' ); ?></label>
 											</div>
 									</div>
 						</fieldset>
 
 						<div class="m-membership-gift-selector m-membership-choice-group">
-              <?php
-              $on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
-              $new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
-              $minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
+							<?php
+							$on_page_frequency    = $minnpost_membership->member_levels->get_frequency_options( $frequency, 'value' );
+							$new_amount_this_year = $minnpost_membership->user_info->get_user_new_amount( $user_id, $amount, $on_page_frequency );
+							$minnpost_membership->front_end->post_form_text( $amount, $on_page_frequency, $new_amount_this_year, $user_id );
 							$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $frequency );
-							$yearly_amount = $amount * $frequency_values['times_per_year'];
-              ?>
+							$yearly_amount    = $amount * $frequency_values['times_per_year'];
+							?>
 
-							<p>You are eligible for <strong>one</strong> of the following items:</p>
+							<p><?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?></p>
 
 							<?php
-							$swag = new WP_Query( [
-								'post_type' => 'thank_you_gift',
-								'meta_key' => '_mp_thank_you_gift_type',
-								'meta_value' => 'swag',
-								'orderby' => [
-									'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id'
-								],
-								'order' => 'ASC'
-							] );
+							$swag = new WP_Query(
+								[
+									'post_type'  => 'thank_you_gift',
+									'meta_key'   => '_mp_thank_you_gift_type',
+									'meta_value' => 'swag',
+									'orderby'    => [
+										'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id',
+									],
+									'order'      => 'ASC',
+								]
+							);
 							?>
+
 							<?php if ( $swag->have_posts() ) : ?>
 								<div class="m-form-radios m-select-swag">
 									<?php while ( $swag->have_posts() ) : ?>
@@ -248,12 +251,12 @@ $user_id    = get_current_user_id();
 										$slug = get_post()->post_name;
 										$meta = get_post_meta( get_the_ID() );
 
-										$level = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+										$level             = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
 										$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
-										$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
+										$disabled          = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="swag" id="swag-<?php echo $slug ?>" value="<?php echo $slug ?>" data-min-monthly-amount="<?php echo $level['minimum_monthly_amount'] ?>" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
+											<input type="radio" name="swag" id="swag-<?php echo $slug; ?>" value="<?php echo $slug; ?>" data-min-monthly-amount="<?php echo $level['minimum_monthly_amount']; ?>" data-min-yearly-amount="<?php echo $min_yearly_amount; ?>" <?php echo $disabled; ?>>
 											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
 												<figure class="m-thank-you-gift-image">
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
@@ -270,40 +273,42 @@ $user_id    = get_current_user_id();
 
 									<div class="m-form-item">
 										<input type="radio" name="swag" id="swag-decline" value="">
-										<label for="swag-decline" class="a-swag-option">
-											Decline gift
-										</label>
+										<label for="swag-decline" class="a-swag-option"><?php echo __( 'Decline gift', 'minnpost-membership' ); ?></label>
 									</div>
 								</div>
 							<?php endif; ?>
 
 							<?php
-							$subscriptions = new WP_Query( [
-								'post_type' => 'thank_you_gift',
-								'meta_key' => '_mp_thank_you_gift_type',
-								'meta_value' => 'subscription',
-								'orderby' => [
-									'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id'
-								],
-								'order' => 'ASC'
-							] );
+							$subscriptions = new WP_Query(
+								[
+									'post_type'  => 'thank_you_gift',
+									'meta_key'   => '_mp_thank_you_gift_type',
+									'meta_value' => 'subscription',
+									'orderby'    => [
+										'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id',
+									],
+									'order'      => 'ASC',
+								]
+							);
 							?>
+
 							<?php if ( $subscriptions->have_posts() ) : ?>
 								<?php while ( $subscriptions->have_posts() ) : ?>
 									<?php
 									$subscriptions->the_post();
-									$slug = get_post()->post_name;
-									$postID = get_the_ID();
-									$meta = get_post_meta( $postID );
+									$slug    = get_post()->post_name;
+									$post_id = get_the_ID();
+									$meta    = get_post_meta( $post_id );
 
-									$level = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+									$level             = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
 									$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
-									$disabled = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
+									$disabled          = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
 									?>
-									<?php $minnpost_membership->front_end->thank_you_gift_description( $postID, $frequency ); ?>
+
+									<?php $minnpost_membership->front_end->thank_you_gift_description( $post_id, $frequency ); ?>
 									<div class="m-form-radios m-select-subscription">
 										<div class="m-form-item">
-											<input type="radio" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>" value="true" data-min-yearly-amount="<?php echo $min_yearly_amount ?>" <?php echo $disabled ?>>
+											<input type="radio" name="<?php echo $slug; ?>" id="subscription-<?php echo $slug; ?>" value="true" data-min-yearly-amount="<?php echo $min_yearly_amount; ?>" <?php echo $disabled; ?>>
 											<label for="subscription-<?php echo $slug; ?>" class="a-subscription-option">
 												<figure class="m-thank-you-gift-image">
 													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
@@ -318,10 +323,8 @@ $user_id    = get_current_user_id();
 										</div>
 
 										<div class="m-form-item">
-											<input type="radio" name="<?php echo $slug ?>" id="subscription-<?php echo $slug ?>-decline" value="">
-											<label for="subscription-<?php echo $slug ?>-decline" class="a-subscription-option">
-												Decline subscription
-											</label>
+											<input type="radio" name="<?php echo $slug; ?>" id="subscription-<?php echo $slug; ?>-decline" value="">
+											<label for="subscription-<?php echo $slug; ?>-decline" class="a-subscription-option"><?php echo __( 'Decline subscription', 'minnpost-membership' ); ?></label>
 										</div>
 									</div>
 								<?php endwhile; ?>
@@ -338,12 +341,13 @@ $user_id    = get_current_user_id();
 
 				<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
 
-				<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link', '' ) ): ?>
+				<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages', '' ) && '' !== get_option( $minnpost_membership->option_prefix . 'support_post_body_show_member_details_link', '' ) ) : ?>
 				<aside>
 					<?php
-					echo sprintf( '<p class="member-benefit-details-link">%1$s</p>',
+					echo sprintf(
+						'<p class="member-benefit-details-link">%1$s</p>',
 						get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
-						);
+					);
 					?>
 				</aside>
 				<?php endif; ?>
