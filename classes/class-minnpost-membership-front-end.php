@@ -892,7 +892,7 @@ class MinnPost_Membership_Front_End {
 			return $post_form_text_display;
 		}
 
-		if ( true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
+		if ( isset( $change_for_members ) && true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '" data-changed="' . htmlentities( $post_form_text_changed ) . '" data-not-changed="' . htmlentities( $post_form_text_not_changed ) . '">';
 		} else {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
