@@ -266,9 +266,9 @@ class MinnPost_Membership_Front_End {
 			$data = $_POST;
 		}
 		if ( isset( $data['amount'] ) && '' !== $data['amount'] ) {
-			$params['amount'] = filter_var( $data['amount'], FILTER_SANITIZE_NUMBER_INT );
+			$params['amount'] = filter_var( $data['amount'], FILTER_VALIDATE_FLOAT );
 		} elseif ( isset( $data['amounts'] ) ) {
-			$params['amount'] = filter_var( $data['amounts'], FILTER_SANITIZE_NUMBER_INT );
+			$params['amount'] = filter_var( $data['amounts'], FILTER_VALIDATE_FLOAT );
 		}
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
