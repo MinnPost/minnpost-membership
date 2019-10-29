@@ -129,10 +129,11 @@ $user_id    = get_current_user_id();
 										} else {
 											$checked = '';
 										}
-										$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+										$frequency_values     = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+										$frequency_text_label = $minnpost_membership->member_levels->get_frequency_text_label( $url_params['frequency'] );
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
+											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" data-frequency-text-label="<?php echo $frequency_text_label; ?>" id="frequencies-<?php echo $id_key; ?>">
 											<label for="frequencies-<?php echo $id_key; ?>" class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
 										</div>
 									<?php endforeach; ?>
@@ -182,7 +183,7 @@ $user_id    = get_current_user_id();
 												class="a-amount-option"
 												data-amount="<?php echo $option['amount']; ?>"
 												data-desc="<?php echo $option['desc']; ?>">
-												<strong>$<?php echo $option['amount'] . $text_label; ?></strong>
+												<strong>$<?php echo $option['amount']; ?><span class="frequency-text-label"><?php echo $text_label; ?></span></strong>
 												<span class="a-amount-description"><?php echo $option['desc']; ?></span>
 											</label>
 										</div>
