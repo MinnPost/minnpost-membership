@@ -434,6 +434,24 @@ class MinnPost_Membership_Admin {
 				$options = array();
 				foreach ( $frequency_options as $key ) {
 					$options[ $key ] = $this->member_levels->get_frequency_options( $key );
+
+					// label field for how to display the frequency
+					$settings[ $options[ $key ]['id'] . '_text_label' ] = array(
+						'title'    => sprintf(
+							// translators: %1 is the id of the frequency
+							__( 'Text label for %1$s frequency', 'minnpost-membership' ),
+							$options[ $key ]['id']
+						),
+						'callback' => $callbacks['text'],
+						'page'     => $page,
+						'section'  => 'member_levels',
+						'args'     => array(
+							'type'     => 'text',
+							'desc'     => __( 'This label is used when displaying what label a user has selected. It is not used in buttons, but rather in things like headings and text boxes.', 'minnpost-membership' ),
+							'constant' => '',
+						),
+					);
+
 				}
 
 				$settings['default_frequency'] = array(

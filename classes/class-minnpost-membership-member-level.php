@@ -171,6 +171,19 @@ class MinnPost_Membership_Member_Level {
 	}
 
 	/**
+	* Get text label for a given frequency value
+	*
+	* @param string $value
+	* @return string $text_label
+	*
+	*/
+	public function get_frequency_text_label( $value ) {
+		$frequency_id = $this->get_frequency_options( $value, 'id' )['id'];
+		$text_label   = get_option( $this->option_prefix . $frequency_id . '_text_label', '' );
+		return $text_label;
+	}
+
+	/**
 	* Get suggested monthly, yearly, and one-time amounts
 	*
 	* @param string $value
@@ -181,20 +194,23 @@ class MinnPost_Membership_Member_Level {
 		$frequency_options = $this->get_frequency_options();
 		$suggested_amounts = array();
 		foreach ( $frequency_options as $option ) {
-			$frequency = $option['id'];
+			$frequency                       = $option['id'];
 			$suggested_amounts[ $frequency ] = get_option( $this->option_prefix . 'support_suggested_amounts_' . $frequency );
 		}
 
 		// Sort suggested amounts in descending order
 		foreach ( $suggested_amounts as $frequency => &$amounts ) {
-			usort( $amounts, function( $a, $b ) {
-				$amta = intval( $a['amount'] );
-				$amtb = intval( $b['amount'] );
-				if ( $amta === $amtb ) {
-					return 0;
+			usort(
+				$amounts,
+				function ( $a, $b ) {
+					$amta = intval( $a['amount'] );
+					$amtb = intval( $b['amount'] );
+					if ( $amta === $amtb ) {
+						return 0;
+					}
+					return ( $amta > $amtb ) ? -1 : 1;
 				}
-				return ( $amta > $amtb ) ? -1 : 1;
-			});
+			);
 		}
 
 		return $suggested_amounts;

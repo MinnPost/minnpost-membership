@@ -174,14 +174,15 @@ $user_id    = get_current_user_id();
 											$other_amount = '';
 											$checked      = ' checked';
 										}
+										$text_label = $minnpost_membership->member_levels->get_frequency_text_label( $freq_id );
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="amounts" value="<?php echo $option['amount']; ?>" id="amounts-<?php echo $id_key; ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?> />
+											<input type="radio" name="amounts" value="<?php echo $option['amount']; ?>" id="amounts-<?php echo $id_key; ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?>>
 											<label for="amounts-<?php echo $id_key; ?>"
 												class="a-amount-option"
 												data-amount="<?php echo $option['amount']; ?>"
 												data-desc="<?php echo $option['desc']; ?>">
-												<strong>$<?php echo $option['amount']; ?></strong>
+												<strong>$<?php echo $option['amount'] . $text_label; ?></strong>
 												<span class="a-amount-description"><?php echo $option['desc']; ?></span>
 											</label>
 										</div>
