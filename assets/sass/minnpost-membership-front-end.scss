@@ -311,6 +311,7 @@ $summary-max-width: 45%;
 		position: absolute;
 	}
 	.a-fast-select-intro {
+		cursor: pointer;
 		padding-top: 0.25em;
 		padding-right: $vertical-space / 2;
 		width: 200px;
