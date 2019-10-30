@@ -29,110 +29,7 @@ $nav-wrap-screen: 960px;
 $form-max-width: 50%;
 $summary-max-width: 45%;
 
-.m-support-cta {
-	display: flex;
-	&.m-support-cta-top {
-		justify-content: space-evenly;
-		align-items: center;
-		text-align: center;
-		flex-direction: column-reverse;
-		width: auto;
-		max-width: 100%;
-		width: 100%;
-		margin-bottom: $cta-spacing;
-		h2 {
-			font-weight: normal;
-			line-height: 1.3;
-		}
-		.a-support-button {
-			display: flex;
-			border-radius: $cta-spacing / 2;
-			background: $border-color-lighter;
-			color: #000;
-			height: 34px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 1.5em;
-			width: 80%;
-			margin-left: auto;
-			margin-right: auto;
-			margin-bottom: $cta-spacing;
-			&.a-support-button-with-heart {
-				svg {
-					fill: currentColor;
-					max-height: 100%;
-					width: 20px;
-					display: inline-block;
-					margin-right: $cta-spacing;
-				}
-			}
-		}
-	}
-	&.m-support-cta-bottom {
-		flex-wrap: wrap;
-		h1 {
-			font-size: $large-title-font-size;
-		}
-		.m-membership-fast-select {
-			margin: 0;
-			font-size: 1.5em;
-			text-align: center;
-			border: 0;
-			padding: 0;
-			min-width: 0;
-			.m-form-item-wrap {
-				margin: 0 0 0.5em;
-			}
-			.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios, .m-form-radios .m-form-item {
-				display: inline-block;
-				margin: 0;
-				vertical-align: top;
-				position: relative;
-			}
-			a.a-button, button, input#amount, input.a-button {
-				padding: .25em 0;
-				text-align: center;
-				vertical-align: top;
-			}
-			.a-fast-select-currency {
-				padding-right: 0.25em;
-			}
-			.a-fast-select-currency, .a-fast-select-intro {
-				padding-top: 0.35em;
-			}
-			.a-fast-select-intro {
-				color: $_color-base-gray;
-				padding-right: 0.5em;
-			}
-			#amount-item #amount {
-				border: 1px solid #ccc;
-				width: 3em;
-				padding: .35em 0;
-			}
-			.m-form-radios {
-				input[type="radio"] {
-				    left: 0;
-				    opacity: 0;
-				    position: absolute;
-				    top: 0;
-				}
-				label {
-					display: inline-block;
-					margin: 0 .0025em;
-					padding: .75em;
-					font-size: .65em;
-					font-weight: 700;
-					cursor: pointer;
-					border: 1px solid $border-color-lighter;
-				}
-			}
-		}
-		.m-form-actions {
-			margin: 0.5em 0 0 0;
-		}
-	}
-}
+@import "imports/*";
 
 .m-layout-membership {
 	width: 100%;
@@ -140,44 +37,6 @@ $summary-max-width: 45%;
 		border: 0;
 		margin: 0;
 		padding: 0;
-	}
-}
-
-// this is the support menu
-.m-support-progress {
-	margin: 0.625rem 0 0.625rem * 2 0;
-	ol {
-		list-style: none;
-		width: 100%;
-		margin: 0;
-		padding: 0;
-		background: $_color-base-gray;
-		display: flex;
-		counter-reset: li;
-	}
-	li {
-		flex: 1;
-		position: relative;
-	}
-	a, span {
-		display: block;
-		padding: $small-space;
-		text-decoration: none;
-		transition: background-color 0.1s linear;
-	}
-	a:hover, a:focus, a:active, a.active, span.active {
-		background: $color__gray-dark;
-		color: #fff;
-		text-decoration: none;
-	}
-	a:before, span:before {
-		content: none;
-		counter-increment: li;
-		top: 0;
-		left: 1rem;
-		position: absolute;
-		color: $color--gray-light;
-		font-size: $progress-font-size-large;
 	}
 }
 
@@ -199,19 +58,16 @@ $summary-max-width: 45%;
 	display: none;
 }
 
-// radios
 .m-membership-choice-group {
 	h1 {
 		font-size: 1.25em;
 		color: $_color-base-red;
 		margin: $vertical-space 0 $vertical-space / 2 0;
 	}
+	// radios
 	.m-form-radios {
 		width: 100%;
 	}
-}
-
-.m-membership-choice-group {
 	.m-form-radios, .m-form-checkboxes {
 		display: flex;
 		flex-direction: row;
@@ -294,8 +150,9 @@ $summary-max-width: 45%;
 	.m-form-item-wrap {
 		width: 100%;
 		display: flex;
-		justify-content: space-around;
-		max-width: 300px;
+		justify-content: flex-start;
+		//max-width: 300px;
+		flex-wrap: nowrap;
 	}
 	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
 		display: inline-block;
@@ -304,11 +161,13 @@ $summary-max-width: 45%;
 		position: relative;
 	}
 	.a-fast-select-currency, .a-fast-select-intro {
-		padding: 0.65em 0;
+		padding: 0.75em 0;
 	}
 	.a-fast-select-currency {
 		z-index: 1;
 		position: absolute;
+		margin-left: $vertical-space / 2;
+		font-size: 1.2em;
 	}
 	.a-fast-select-intro {
 		cursor: pointer;
@@ -322,10 +181,12 @@ $summary-max-width: 45%;
 	}
 	#amount-item {
 		width: 250px;
+		flex: 1;
+		display: flex;
 		#amount {
 			border: 1px solid #ccc;
 			width: 100%;
-			padding: 0.75rem 0 0.75em 2em;
+			padding: 0.75rem 0 0.75em 1.75em;
 			border-radius: $cta-spacing;
 			text-align: left;
 			font-size: 1em;
@@ -453,119 +314,6 @@ $summary-max-width: 45%;
 	}
 }
 
-.o-membership-member-levels {
-	margin: 3em 0 $vertical-space 0;
-	padding: 0;
-	min-width: 0;
-	.m-membership-member-level {
-		margin-bottom: $vertical-space * 2;
-		.m-member-level-brief {
-			border: 1px solid $border-color-lighter;
-			padding: 0.5em;
-			margin-bottom: $vertical-space * 2;
-			text-align: center;
-			h2 {
-				margin: 0 0 0.5em 0;
-				padding: 0.5em 0;
-				line-height: normal;
-			}
-			h3 {
-				font-size: 3em;
-				min-height: 75px;
-				display: block;
-				line-height: normal;
-				margin: 0;
-				padding: 0 0 0.25em 0;
-				&.smaller {
-					font-size: 2.85em;
-				}
-			}
-			.a-button {
-				line-height: normal;
-				margin-right: 0;
-			}
-			.amount {
-				.a-button-flip {
-					margin: 0;
-				}
-			}
-			.enter {
-				text-align: center;
-				backface-visibility: hidden;
-				transform: perspective(800px) rotateY(180deg);
-				h3 {
-					.m-form-item {
-						display: inline-block;
-						margin: 0;
-						input {
-							width: 3em;
-							text-align: center;
-							height: auto;
-							line-height: normal;
-							margin: 0;
-							padding: 0;
-							border: 1px solid #999;
-						}
-					}
-				}
-				.a-button {
-					display: block;
-					margin: 0 auto 0.75em auto;
-				}
-			}
-			.flipper, .flipper .amount, .flipper .enter {
-				height: 190px;
-				width: 100%;
-			}
-			.flipper {
-				position: relative;
-				.amount, .enter {
-					position: absolute;
-					left: 0;
-					top: 0;
-					transition: 0.6s;
-				}
-				.enter {
-					backface-visibility: hidden;
-					transform: perspective(800px) rotateY(180deg);
-				}
-				.amount {
-					backface-visibility: hidden;
-					transform: perspective(800px) rotateY(0deg);
-				}
-			}
-			&.flipped {
-				.enter {
-					transform: perspective(800px) rotateY(0);
-			  	}
-			  	.amount {
-			  		transform: perspective(800px) rotateY(-179.9deg);
-				}
-			}
-		}
-		.m-member-level-benefits {
-			ul, ul li {
-			  list-style: none;
-			  padding-left: 0;
-			}
-			ul {
-			  color: #7A7A7A;
-			  font-size: 0.9em;
-			  li {
-				  padding: 0 0.5em;
-				  line-height: 1.5em;
-				  margin-bottom: 1.5em;
-				}
-			}
-		}
-		&:hover .m-member-level-benefits, &.active .m-member-level-benefits {
-			ul {
-				color: #1a1818;
-			}
-		}
-	}
-}
-
 .m-membership-action {
 	padding: $vertical-space;
 	margin: $vertical-space 0;
@@ -583,207 +331,14 @@ $summary-max-width: 45%;
 	}
 }
 
-.m-all-partners {
-	font-size: 1.23em;
-	line-height: 1.5em;
-	margin-bottom: 0.75em;
-	.m-partner-list {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		padding: 0;
-		margin-left: 0;
-		li {
-			padding: 20px;
-			width: 44%;
-			list-style: none;
-		}
-		img {
-			display: block;
-			width: 100%;
-		}
-	}
-}
-
-.m-entry-content.m-partner-offers {
-	margin: $vertical-space 0;
-	padding: $vertical-space / 2 0;
-	.m-partner-offer {
-		border: 1px solid $border-color-darker;
-		margin-bottom: $vertical-space;
-		padding: $vertical-space / 2;
-		.m-partner-offer-image {
-			width: 200px;
-			min-width: 200px;
-		}
-		.m-partner-offer-content {
-			.m-partner-offer-header {
-				margin-bottom: 0;
-			}
-			.a-entry-title {
-				font-size: 215.4%;
-				margin-bottom: 0.25em;
-				line-height: 1.15em;
-			}
-			p {
-				margin: 0;
-			}
-			select {
-				margin: 0.25em 0;
-			}
-			.a-button {
-				margin: 0.25em 0;
-				display: block;
-			}
-			a.a-button {
-				display: inline-block;
-			}
-			.a-partner-offer-learn-more {
-				display: inline-block;
-			}
-		}
-	}
-}
-
-// basically use default WP table styles, here, unless it makes sense to do otherwise
-.m-donation-history {
-	margin-bottom: 1.5em;
-	table {
-		border: 1px solid $border-color-lighter;
-		box-shadow: 0 1px 1px rgba(0,0,0,.04);
-		border-spacing: 0;
-		width: 100%;
-		clear: both;
-		margin: 0;
-		td, th {
-			padding: 8px 10px;
-		}
-		td, th, thead td {
-			text-align: left;
-			line-height: 1.3em;
-			font-size: 14px;
-		}
-		td, thead th {
-			border-bottom: 1px solid #e1e1e1;
-		}
-		> tbody > :nth-child( 2n+1 ) {
-	    	background-color: #f9f9f9;
-		}
-	}
-}
-
-
-// start media queries
-
-@media screen and (min-width: 400px) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			.a-support-button {
-				width: 60%;
-			}
-		}
-	}
-}
+// media queries
 
 @media screen and (min-width: $more-than-logo-screen) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			text-align: left;
-			flex-direction: row;
-			width: auto;
-			h2 {
-				font-weight: bold;
-				line-height: normal;
-			}
-			.a-support-button {
-				margin-left: $cta-spacing;
-				margin-bottom: 0;
-				border-radius: $cta-spacing;
-				width: 112px;
-				&.a-support-button-with-heart {
-					width: 130px;
-				}
-			}
-		}
-	}
-	.m-support-progress {
-		a, span {
-			font-size: $progress-font-size-small;
-			padding: $small-space 0 $small-space 3em;
-		}
-		a:before, span:before {
-			content: counter(li, decimal);
-			top: -0.15em;
-			font-size: $progress-font-size-large;
-		}
-	}
 	.m-membership-choice-group.m-membership-choose-amount {
 		label {
 			height: auto;
 			strong {
 				float: left;
-			}
-		}
-	}
-}
-
-@media screen and (min-width: $medium-margins-too-small) {
-	.m-membership-member-level {
-		width: 46%;
-		margin-right: 2%;
-		float: left;
-	}
-	.m-partner-offers {
-		.m-partner-offer {
-			display: flex;
-			.m-partner-offer-image {
-				margin: 0 1em 0 0;
-			}
-		}
-	}
-	.m-support-progress {
-		a, span {
-			font-size: $content-font-size;
-		}
-	}
-}
-
-@media screen and (min-width: $nav-breaks) {
-	.m-support-cta {
-		&.m-support-cta-bottom {
-			max-width: 50%;
-		}
-	}
-}
-
-@media screen and (min-width: $wrap-header) and (max-width: $nav-wrap-screen) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			justify-content: space-evenly;
-			align-items: flex-end;
-			flex-direction: column;
-		}
-	}
-}
-
-@media screen and (min-width: $wrap-header) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			margin-left: auto;
-			margin-bottom: 0;
-		}
-	}
-}
-
-@media screen and (min-width: $level-widths-change) {
-	.m-membership-member-level {
-		width: 23%;
-	}
-	.m-all-partners {
-		.m-partner-list {
-			li {
-				width: 22%;
 			}
 		}
 	}
@@ -804,20 +359,10 @@ $summary-max-width: 45%;
 			margin: $vertical-space 0;
 		}
 		.m-membership-choice-group.m-membership-choose-amount {
-			.m-form-item-wrap {
-				max-width: $more-than-logo-screen;
-			}
 			.a-fast-select-intro {
 				padding-left: 7em;
 			}
 		}
-		/*.m-membership-choose-frequency {
-			.m-form-radios {
-				.m-form-item {
-					//max-width: 150px;
-				}
-			}
-		}*/
 	}
 }
 
@@ -834,12 +379,5 @@ $summary-max-width: 45%;
 		.enter select, .amount .a-button {
 			display: none;
 		}
-	}
-}
-
-.no-borderimage .m-all-partners .m-partner-list {
-	display: block;
-	li {
-	  display: inline-block;
 	}
 }
