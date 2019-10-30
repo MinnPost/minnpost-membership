@@ -130,7 +130,7 @@ $user_id    = get_current_user_id();
 											$checked = '';
 										}
 										$frequency_values     = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
-										$frequency_text_label = $minnpost_membership->member_levels->get_frequency_text_label( $url_params['frequency'] );
+										$frequency_text_label = $minnpost_membership->member_levels->get_frequency_text_label( $frequency, 'value' );
 										?>
 										<div class="m-form-item">
 											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" data-frequency-text-label="<?php echo $frequency_text_label; ?>" id="frequencies-<?php echo $id_key; ?>">

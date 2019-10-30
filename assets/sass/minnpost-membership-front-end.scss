@@ -7,6 +7,7 @@ $color__gray-darkest: #282828;
 $_color-base-gray: #7a7a7a;
 $_color-base-red: #801018;
 $color__white: #fff;
+$color__black: #000;
 $content-font-size: 1em;
 $cta-spacing: 8px;
 
@@ -248,6 +249,7 @@ $summary-max-width: 45%;
 		}
 		input:checked + label {
 			background-color: $border-color-lighter;
+			color: $color__black;
 		}
 		input:disabled + label::after {
 			content: "";

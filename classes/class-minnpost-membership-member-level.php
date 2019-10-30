@@ -174,11 +174,12 @@ class MinnPost_Membership_Member_Level {
 	* Get text label for a given frequency value
 	*
 	* @param string $value
+	* @param string $field
 	* @return string $text_label
 	*
 	*/
-	public function get_frequency_text_label( $value ) {
-		$frequency_id = $this->get_frequency_options( $value, 'id' )['id'];
+	public function get_frequency_text_label( $value, $field = 'id' ) {
+		$frequency_id = $this->get_frequency_options( $value, $field )['id'];
 		$text_label   = get_option( $this->option_prefix . $frequency_id . '_text_label', '' );
 		return $text_label;
 	}
