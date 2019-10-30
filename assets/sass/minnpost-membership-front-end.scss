@@ -302,18 +302,31 @@ $summary-max-width: 45%;
 		position: relative;
 	}
 	.a-fast-select-currency, .a-fast-select-intro {
-		padding-top: 0.35em;
+		padding: 0.65em 0;
 	}
 	.a-fast-select-currency {
-		padding-right: 0.25em;
+		z-index: 1;
+		position: absolute;
 	}
 	.a-fast-select-intro {
-		padding-right: 0.5em;
+		padding-top: 0.25em;
+		padding-right: $vertical-space / 2;
+		width: 200px;
+		font-size: 1em;
+		font-family: Helvetica,Arial,sans-serif;
+		line-height: 1.2em;
+		padding-left: 2em;
 	}
-	#amount-item #amount {
-		width: 3em;
-		padding: 0.35em 0;
-		border: 1px solid #ccc;
+	#amount-item {
+		width: 250px;
+		#amount {
+			border: 1px solid #ccc;
+			width: 100%;
+			padding: 0.75rem 0 0.75em 2em;
+			border-radius: $cta-spacing;
+			text-align: left;
+			font-size: 1em;
+		}
 	}
 	input#amount, select, button, input.a-button, a.a-button {
 		padding: 0.25em 0;
