@@ -6,6 +6,7 @@ $color__gray-dark: #404040;
 $color__gray-darkest: #282828;
 $_color-base-gray: #7a7a7a;
 $_color-base-red: #801018;
+$color__white: #fff;
 $content-font-size: 1em;
 $cta-spacing: 8px;
 
@@ -22,6 +23,10 @@ $nav-breaks: 768px;
 $wrap-header: 830px;
 $level-widths-change: 890px;
 $nav-wrap-screen: 960px;
+
+// page sizes
+$form-max-width: 50%;
+$summary-max-width: 45%;
 
 .m-support-cta {
 	display: flex;
@@ -137,6 +142,7 @@ $nav-wrap-screen: 960px;
 	}
 }
 
+// this is the support menu
 .m-support-progress {
 	margin: 0.625rem 0 0.625rem * 2 0;
 	ol {
@@ -174,9 +180,11 @@ $nav-wrap-screen: 960px;
 	}
 }
 
+// full width header
 .m-membership-support-intro {
 	margin-bottom: $vertical-space;
 }
+// default fieldset
 .m-form-membership fieldset {
 	border: 0;
 	margin: 0;
@@ -190,6 +198,7 @@ $nav-wrap-screen: 960px;
 	display: none;
 }
 
+// radios
 .m-membership-choice-group {
 	h1 {
 		font-size: 1.25em;
@@ -233,6 +242,9 @@ $nav-wrap-screen: 960px;
 			font-weight: bold;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
+			border-radius: $cta-spacing;
+			background: $_color-base-gray;
+			color: $color__white;
 		}
 		input:checked + label {
 			background-color: $border-color-lighter;
@@ -261,21 +273,27 @@ $nav-wrap-screen: 960px;
 		margin: 0;
 		width: 100%;
 		text-align: left;
+		display: flex;
 	}
 	label {
 		margin: 0 0 $vertical-space / 2 0;
-		padding: 0.75em 2em 0.75em 6em;
+		padding: 0.75em 1.5em;
 		font-weight: normal;
 		strong {
 			display: block;
-			float: left;
-			width: 4em;
-			margin-left: -4em;
+			width: 9em;
+			height: 100%;
 		}
 
 		.yearly-desc {
 			display: none;
 		}
+	}
+	.m-form-item-wrap {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		max-width: 300px;
 	}
 	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
 		display: inline-block;
@@ -315,6 +333,9 @@ $nav-wrap-screen: 960px;
 }
 
 .m-membership-choice-group.m-membership-gift-selector {
+	border: 1px solid $color__gray-light;
+	padding: $vertical-space / 2;
+
 	.m-select-swag, .m-select-subscription {
 		justify-content: flex-start;
 
@@ -338,12 +359,31 @@ $nav-wrap-screen: 960px;
 	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
 		label {
 			position: relative;
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-around;
+			background: inherit;
+			color: inherit;
+			border: 3px solid transparent;
+
+			figure {
+				margin: 0;
+				height: 126px;
+				figcaption {
+					text-align: left;
+					font-weight: normal;
+					font-size: 0.8em;
+					line-height: 1.2em;
+					margin-bottom: 1.2em;
+				}
+			}
 
 			.support-tooltip {
 				position: absolute;
 				visibility: hidden;
-				bottom: 0;
-				left: 0;
+				bottom: 0.75em;
+				left: unset;
+				right: 0.75em;
 				z-index: 1;
 
 				.tooltip-text {
@@ -353,9 +393,22 @@ $nav-wrap-screen: 960px;
 					left: 50%;
 					width: 10em;
 					margin-left: -5em;
+					padding: $vertical-space / 2;
 					z-index: 1;
 					background-color: white;
-					border: 1px solid #ccc;
+					border: 1px solid $border-color-lighter;
+					font-weight: normal;
+					text-align: center;
+				}
+				.tooltip-text::after {
+					content: "";
+					position: absolute;
+					bottom: 100%;
+					left: 50%;
+					margin-left: -5px;
+					border-width: 5px;
+					border-style: solid;
+					border-color: transparent transparent $border-color-lighter transparent;
 				}
 			}
 		}
@@ -368,6 +421,19 @@ $nav-wrap-screen: 960px;
 				visibility: visible;
 			}
 		}
+
+		input:checked + label {
+			background: transparent;
+			border: 3px solid $border-color-lighter;
+		}
+		input:disabled + label::after {
+			border-radius: $cta-spacing;
+			background-color: $color__gray-light;
+		}
+		input:checked:disabled + label {
+			border: 3px solid transparent;
+		}
+
 	}
 }
 
@@ -525,12 +591,12 @@ $nav-wrap-screen: 960px;
 }
 
 .m-entry-content.m-partner-offers {
-	margin: 1em 0;
-	padding: .5em 0;
+	margin: $vertical-space 0;
+	padding: $vertical-space / 2 0;
 	.m-partner-offer {
 		border: 1px solid $border-color-darker;
-		margin-bottom: 1em;
-		padding: 0.5em;
+		margin-bottom: $vertical-space;
+		padding: $vertical-space / 2;
 		.m-partner-offer-image {
 			width: 200px;
 			min-width: 200px;
@@ -636,6 +702,14 @@ $nav-wrap-screen: 960px;
 			font-size: $progress-font-size-large;
 		}
 	}
+	.m-membership-choice-group.m-membership-choose-amount {
+		label {
+			height: auto;
+			strong {
+				float: left;
+			}
+		}
+	}
 }
 
 @media screen and (min-width: $medium-margins-too-small) {
@@ -700,11 +774,34 @@ $nav-wrap-screen: 960px;
 }
 
 @media screen and (min-width: $nav-wrap-screen) {
-	.m-membership-summary-short {
-		display: none;
-	}
-	.m-membership-summary {
-		display: block;
+	.m-layout-membership .m-membership-support-wrapper {
+		.m-form-membership {
+			max-width: $form-max-width;
+			order: -1;
+		}
+		.m-membership-summary-short {
+			display: none;
+		}
+		.m-membership-summary {
+			display: block;
+			max-width: $summary-max-width;
+			margin: $vertical-space 0;
+		}
+		.m-membership-choice-group.m-membership-choose-amount {
+			.m-form-item-wrap {
+				max-width: $more-than-logo-screen;
+			}
+			.a-fast-select-intro {
+				padding-left: 7em;
+			}
+		}
+		/*.m-membership-choose-frequency {
+			.m-form-radios {
+				.m-form-item {
+					//max-width: 150px;
+				}
+			}
+		}*/
 	}
 }
 
