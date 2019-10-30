@@ -197,8 +197,8 @@ $user_id    = get_current_user_id();
 								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
 									<label for="amount" class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></label>
 								<?php endif; ?>
-								<span class="a-fast-select-currency">&dollar;</span>
 								<div id="amount-item" class="a-amount-field">
+									<span class="a-fast-select-currency">&dollar;</span>
 									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number">
 								</div>
 							</div>
