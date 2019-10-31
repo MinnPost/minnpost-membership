@@ -18,6 +18,7 @@ $large-title-font-size: 215.4%;
 $small-space: 0.8125em; // 13px
 
 // media query sizes. see minnpost-largo for theme queries.
+$size__main-large-screen: 400px;
 $more-than-logo-screen: 500px;
 $medium-margins-too-small: 700px;
 $nav-breaks: 768px;
@@ -125,7 +126,7 @@ $summary-max-width: 45%;
 			width: 32%;
 		}
 	}
-	// second in sequence: choose frequency
+	// second in sequence: choose amount
 	&.m-membership-choose-amount {
 		.m-form-radios .m-form-item {
 			margin: 0;
@@ -181,18 +182,19 @@ $summary-max-width: 45%;
 		#amount-item {
 			flex: 1;
 			display: flex;
+			flex-wrap: wrap;
 			#amount {
 				border: 2px solid $_color-base-gray;
 				width: 100%;
-				padding: 0 4em 0 1.75em;
+				padding: 0.75em 0 0.75em 1.75em;
 				border-radius: $cta-spacing;
 				text-align: left;
 				font-size: 1.2em;
 			}
 			.a-frequency-text-label {
-				margin: 0.75em 0;
-				position: absolute;
-				right: 1em;
+				margin: $vertical-space / 2;
+				width: 100%;
+				text-align: right;
 			}
 		}
 		input#amount, select, button, input.a-button, a.a-button {
@@ -323,7 +325,27 @@ $summary-max-width: 45%;
 }
 
 // media queries
-
+@media screen and (min-width: $size__main-large-screen) {
+	.m-membership-choice-group {
+		// second in sequence: choose amount
+		&.m-membership-choose-amount {
+			#amount-item {
+				flex-wrap: nowrap;
+				#amount {
+					width: 100%;
+					padding: 0 4em 0 1.75em;
+				}
+				.a-frequency-text-label {
+					margin: 0.75em 0;
+					position: absolute;
+					right: 1em;
+					text-align: left;
+					width: auto;
+				}
+			}
+		}
+	}
+}
 @media screen and (min-width: $more-than-logo-screen) {
 	.m-membership-choice-group {
 		&.m-membership-choose-amount {
