@@ -1144,8 +1144,11 @@ class MinnPost_Membership_Front_End {
 			$frequency_values  = $this->member_levels->get_frequency_values( $frequency['value'] );
 			$min_yearly_amount = $min_level['minimum_monthly_amount'] * 12;
 			$full_text        .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
-			if ( 'one-time' !== $frequency['id'] ) {
+			$frequency_text_label = $this->member_levels->get_frequency_text_label( $frequency['id'] );
+			if ( '' === $frequency_text_label && 'one-time' !== $frequency['id'] ) {
 				$full_text .= ' ' . $frequency['text'];
+			} else {
+				$full_text .= $frequency_text_label;
 			}
 			$full_text .= '</span>';
 		}

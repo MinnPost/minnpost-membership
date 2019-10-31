@@ -6,6 +6,8 @@ $color__gray-dark: #404040;
 $color__gray-darkest: #282828;
 $_color-base-gray: #7a7a7a;
 $_color-base-red: #801018;
+$color__white: #fff;
+$color__black: #000;
 $content-font-size: 1em;
 $cta-spacing: 8px;
 
@@ -16,6 +18,7 @@ $large-title-font-size: 215.4%;
 $small-space: 0.8125em; // 13px
 
 // media query sizes. see minnpost-largo for theme queries.
+$size__main-large-screen: 400px;
 $more-than-logo-screen: 500px;
 $medium-margins-too-small: 700px;
 $nav-breaks: 768px;
@@ -23,110 +26,11 @@ $wrap-header: 830px;
 $level-widths-change: 890px;
 $nav-wrap-screen: 960px;
 
-.m-support-cta {
-	display: flex;
-	&.m-support-cta-top {
-		justify-content: space-evenly;
-		align-items: center;
-		text-align: center;
-		flex-direction: column-reverse;
-		width: auto;
-		max-width: 100%;
-		width: 100%;
-		margin-bottom: $cta-spacing;
-		h2 {
-			font-weight: normal;
-			line-height: 1.3;
-		}
-		.a-support-button {
-			display: flex;
-			border-radius: $cta-spacing / 2;
-			background: $border-color-lighter;
-			color: #000;
-			height: 34px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 1.5em;
-			width: 80%;
-			margin-left: auto;
-			margin-right: auto;
-			margin-bottom: $cta-spacing;
-			&.a-support-button-with-heart {
-				svg {
-					fill: currentColor;
-					max-height: 100%;
-					width: 20px;
-					display: inline-block;
-					margin-right: $cta-spacing;
-				}
-			}
-		}
-	}
-	&.m-support-cta-bottom {
-		flex-wrap: wrap;
-		h1 {
-			font-size: $large-title-font-size;
-		}
-		.m-membership-fast-select {
-			margin: 0;
-			font-size: 1.5em;
-			text-align: center;
-			border: 0;
-			padding: 0;
-			min-width: 0;
-			.m-form-item-wrap {
-				margin: 0 0 0.5em;
-			}
-			.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios, .m-form-radios .m-form-item {
-				display: inline-block;
-				margin: 0;
-				vertical-align: top;
-				position: relative;
-			}
-			a.a-button, button, input#amount, input.a-button {
-				padding: .25em 0;
-				text-align: center;
-				vertical-align: top;
-			}
-			.a-fast-select-currency {
-				padding-right: 0.25em;
-			}
-			.a-fast-select-currency, .a-fast-select-intro {
-				padding-top: 0.35em;
-			}
-			.a-fast-select-intro {
-				color: $_color-base-gray;
-				padding-right: 0.5em;
-			}
-			#amount-item #amount {
-				border: 1px solid #ccc;
-				width: 3em;
-				padding: .35em 0;
-			}
-			.m-form-radios {
-				input[type="radio"] {
-				    left: 0;
-				    opacity: 0;
-				    position: absolute;
-				    top: 0;
-				}
-				label {
-					display: inline-block;
-					margin: 0 .0025em;
-					padding: .75em;
-					font-size: .65em;
-					font-weight: 700;
-					cursor: pointer;
-					border: 1px solid $border-color-lighter;
-				}
-			}
-		}
-		.m-form-actions {
-			margin: 0.5em 0 0 0;
-		}
-	}
-}
+// page sizes
+$form-max-width: 50%;
+$summary-max-width: 45%;
+
+@import "imports/*";
 
 .m-layout-membership {
 	width: 100%;
@@ -137,46 +41,11 @@ $nav-wrap-screen: 960px;
 	}
 }
 
-.m-support-progress {
-	margin: 0.625rem 0 0.625rem * 2 0;
-	ol {
-		list-style: none;
-		width: 100%;
-		margin: 0;
-		padding: 0;
-		background: $_color-base-gray;
-		display: flex;
-		counter-reset: li;
-	}
-	li {
-		flex: 1;
-		position: relative;
-	}
-	a, span {
-		display: block;
-		padding: $small-space;
-		text-decoration: none;
-		transition: background-color 0.1s linear;
-	}
-	a:hover, a:focus, a:active, a.active, span.active {
-		background: $color__gray-dark;
-		color: #fff;
-		text-decoration: none;
-	}
-	a:before, span:before {
-		content: none;
-		counter-increment: li;
-		top: 0;
-		left: 1rem;
-		position: absolute;
-		color: $color--gray-light;
-		font-size: $progress-font-size-large;
-	}
-}
-
+// full width header
 .m-membership-support-intro {
 	margin-bottom: $vertical-space;
 }
+// default fieldset
 .m-form-membership fieldset {
 	border: 0;
 	margin: 0;
@@ -191,17 +60,16 @@ $nav-wrap-screen: 960px;
 }
 
 .m-membership-choice-group {
-	h1 {
-		font-size: 1.25em;
-		color: $_color-base-red;
-		margin: $vertical-space 0 $vertical-space / 2 0;
+	&:first-of-type {
+		margin-top: $vertical-space;
 	}
+	h2 {
+		margin-bottom: $cta-spacing;
+	}
+	// radios
 	.m-form-radios {
 		width: 100%;
 	}
-}
-
-.m-membership-choice-group {
 	.m-form-radios, .m-form-checkboxes {
 		display: flex;
 		flex-direction: row;
@@ -233,9 +101,13 @@ $nav-wrap-screen: 960px;
 			font-weight: bold;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
+			border-radius: $cta-spacing;
+			background: $_color-base-gray;
+			color: $color__white;
 		}
 		input:checked + label {
 			background-color: $border-color-lighter;
+			color: $color__black;
 		}
 		input:disabled + label::after {
 			content: "";
@@ -248,463 +120,272 @@ $nav-wrap-screen: 960px;
 			opacity: 0.75;
 		}
 	}
-}
-
-.m-membership-choose-frequency {
-	.m-form-radios .m-form-item {
-		width: 32%;
-	}
-}
-
-.m-membership-choice-group.m-membership-choose-amount {
-	.m-form-radios .m-form-item {
-		margin: 0;
-		width: 100%;
-		text-align: left;
-	}
-	label {
-		margin: 0 0 $vertical-space / 2 0;
-		padding: 0.75em 2em 0.75em 6em;
-		font-weight: normal;
-		strong {
-			display: block;
-			float: left;
-			width: 4em;
-			margin-left: -4em;
-		}
-
-		.yearly-desc {
-			display: none;
-		}
-	}
-	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
-		display: inline-block;
-		margin: 0;
-		vertical-align: top;
-		position: relative;
-	}
-	.a-fast-select-currency, .a-fast-select-intro {
-		padding-top: 0.35em;
-	}
-	.a-fast-select-currency {
-		padding-right: 0.25em;
-	}
-	.a-fast-select-intro {
-		padding-right: 0.5em;
-	}
-	#amount-item #amount {
-		width: 3em;
-		padding: 0.35em 0;
-		border: 1px solid #ccc;
-	}
-	input#amount, select, button, input.a-button, a.a-button {
-		padding: 0.25em 0;
-		text-align: center;
-		vertical-align: top;
-	}
-}
-
-.m-membership-choose-gift {
-	.m-form-radios .m-form-item {
-		width: 49%;
-	}
-}
-
-.m-form-membership-support .m-membership-form-actions {
-	margin: $vertical-space 0;
-}
-
-.m-membership-choice-group.m-membership-gift-selector {
-	.m-select-swag, .m-select-subscription {
-		justify-content: flex-start;
-
-		.m-form-item {
+	// first in sequence: choose frequency
+	&.m-membership-choose-frequency {
+		.m-form-radios .m-form-item {
 			width: 32%;
-			margin-left: 0.67%;
 		}
 	}
-
-	.min-amount, .swag-eligibility {
-		display: none;
-		&.active {
-			display: initial;
+	// second in sequence: choose amount
+	&.m-membership-choose-amount {
+		.m-form-radios .m-form-item {
+			margin: 0;
+			width: 100%;
+			text-align: left;
+			display: flex;
 		}
-	}
-
-	p.swag-eligibility.active {
-		display: block;
-	}
-
-	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
 		label {
-			position: relative;
+			margin: 0 0 0.75em 0;
+			padding: 0.75em 1.5em;
+			font-weight: normal;
+			strong {
+				display: block;
+				width: 9em;
+				height: 100%;
+			}
 
-			.support-tooltip {
-				position: absolute;
-				visibility: hidden;
-				bottom: 0;
-				left: 0;
-				z-index: 1;
-
-				.tooltip-text {
-					visibility: hidden;
-					position: absolute;
-					top: 100%;
-					left: 50%;
-					width: 10em;
-					margin-left: -5em;
-					z-index: 1;
-					background-color: white;
-					border: 1px solid #ccc;
-				}
+			.yearly-desc {
+				display: none;
 			}
 		}
-
-		input:disabled + label {
-			.support-tooltip {
-				visibility: visible;
+		.m-form-item-wrap {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			flex-wrap: nowrap;
+		}
+		.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
+			display: inline-block;
+			margin: 0;
+			vertical-align: top;
+			position: relative;
+		}
+		.a-fast-select-currency, .a-fast-select-intro {
+			padding: 0.5em 0;
+		}
+		.a-fast-select-currency {
+			z-index: 1;
+			position: absolute;
+			margin-left: $vertical-space / 2;
+			font-size: 1.5em;
+		}
+		.a-fast-select-intro {
+			cursor: pointer;
+			padding-top: 0.25em;
+			padding-right: 1.5em;
+			width: 200px;
+			font-size: 1em;
+			font-family: Helvetica,Arial,sans-serif;
+			line-height: 2.4em;
+			padding-left: 2em;
+		}
+		#amount-item {
+			flex: 1;
+			display: flex;
+			flex-wrap: wrap;
+			#amount {
+				border: 2px solid $_color-base-gray;
+				width: 100%;
+				padding: 0.75em 0 0.75em 1.75em;
+				border-radius: $cta-spacing;
+				text-align: left;
+				font-size: 1.2em;
 			}
-			&:hover .tooltip-text {
-				visibility: visible;
+			.a-frequency-text-label {
+				margin: $vertical-space / 2;
+				width: 100%;
+				text-align: right;
+			}
+		}
+		input#amount, select, button, input.a-button, a.a-button {
+			padding: 0.25em 0;
+			text-align: center;
+			vertical-align: top;
+		}
+	}
+	// third in sequency: choose whether to get a gift
+	&.m-membership-choose-gift {
+		.m-form-radios .m-form-item {
+			width: 49%;
+			label {
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				text-align: center;
 			}
 		}
 	}
-}
+	// fourth in sequence: choose gift
+	&.m-membership-gift-selector {
+		border: 1px solid $color__gray-light;
+		padding: $vertical-space / 2;
 
-.o-membership-member-levels {
-	margin: 3em 0 $vertical-space 0;
-	padding: 0;
-	min-width: 0;
-	.m-membership-member-level {
-		margin-bottom: $vertical-space * 2;
-		.m-member-level-brief {
-			border: 1px solid $border-color-lighter;
-			padding: 0.5em;
-			margin-bottom: $vertical-space * 2;
-			text-align: center;
-			h2 {
-				margin: 0 0 0.5em 0;
-				padding: 0.5em 0;
-				line-height: normal;
+		.m-select-swag, .m-select-subscription {
+			justify-content: flex-start;
+
+			.m-form-item {
+				width: 32%;
+				margin-left: 0.67%;
 			}
-			h3 {
-				font-size: 3em;
-				min-height: 75px;
-				display: block;
-				line-height: normal;
-				margin: 0;
-				padding: 0 0 0.25em 0;
-				&.smaller {
-					font-size: 2.85em;
-				}
+		}
+
+		.min-amount, .swag-eligibility {
+			display: none;
+			&.active {
+				display: initial;
 			}
-			.a-button {
-				line-height: normal;
-				margin-right: 0;
-			}
-			.amount {
-				.a-button-flip {
+		}
+
+		p.swag-eligibility.active {
+			display: block;
+		}
+
+		.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
+			label {
+				position: relative;
+				display: flex;
+				flex-flow: column nowrap;
+				justify-content: space-around;
+				background: inherit;
+				color: inherit;
+				border: 3px solid transparent;
+
+				figure {
 					margin: 0;
-				}
-			}
-			.enter {
-				text-align: center;
-				backface-visibility: hidden;
-				transform: perspective(800px) rotateY(180deg);
-				h3 {
-					.m-form-item {
-						display: inline-block;
-						margin: 0;
-						input {
-							width: 3em;
-							text-align: center;
-							height: auto;
-							line-height: normal;
-							margin: 0;
-							padding: 0;
-							border: 1px solid #999;
-						}
+					height: 126px;
+					figcaption {
+						text-align: left;
+						font-weight: normal;
+						font-size: 0.8em;
+						line-height: 1.2em;
+						margin-bottom: 1.2em;
 					}
 				}
-				.a-button {
-					display: block;
-					margin: 0 auto 0.75em auto;
-				}
-			}
-			.flipper, .flipper .amount, .flipper .enter {
-				height: 190px;
-				width: 100%;
-			}
-			.flipper {
-				position: relative;
-				.amount, .enter {
+
+				.support-tooltip {
 					position: absolute;
-					left: 0;
-					top: 0;
-					transition: 0.6s;
-				}
-				.enter {
-					backface-visibility: hidden;
-					transform: perspective(800px) rotateY(180deg);
-				}
-				.amount {
-					backface-visibility: hidden;
-					transform: perspective(800px) rotateY(0deg);
-				}
-			}
-			&.flipped {
-				.enter {
-					transform: perspective(800px) rotateY(0);
-			  	}
-			  	.amount {
-			  		transform: perspective(800px) rotateY(-179.9deg);
-				}
-			}
-		}
-		.m-member-level-benefits {
-			ul, ul li {
-			  list-style: none;
-			  padding-left: 0;
-			}
-			ul {
-			  color: #7A7A7A;
-			  font-size: 0.9em;
-			  li {
-				  padding: 0 0.5em;
-				  line-height: 1.5em;
-				  margin-bottom: 1.5em;
+					visibility: hidden;
+					bottom: 0.75em;
+					left: unset;
+					right: 0.75em;
+					z-index: 1;
+
+					.tooltip-text {
+						visibility: hidden;
+						position: absolute;
+						top: 100%;
+						left: 50%;
+						width: 10em;
+						margin-left: -5em;
+						padding: $vertical-space / 2;
+						z-index: 1;
+						background-color: white;
+						border: 1px solid $border-color-lighter;
+						font-weight: normal;
+						text-align: center;
+					}
+					.tooltip-text::after {
+						content: "";
+						position: absolute;
+						bottom: 100%;
+						left: 50%;
+						margin-left: -5px;
+						border-width: 5px;
+						border-style: solid;
+						border-color: transparent transparent $border-color-lighter transparent;
+					}
 				}
 			}
-		}
-		&:hover .m-member-level-benefits, &.active .m-member-level-benefits {
-			ul {
-				color: #1a1818;
-			}
-		}
-	}
-}
 
-.m-membership-action {
-	padding: $vertical-space;
-	margin: $vertical-space 0;
-	border: 1px solid $border-color-lighter;
-	h2 {
-		margin-bottom: $vertical-space / 2;
-	}
-	p:last-of-type {
-		margin-bottom: 0;
-	}
-	.a-button {
-		display: inline-block;
-		margin-top: 5px;
-		margin-bottom: 5px;
-	}
-}
+			input:disabled + label {
+				.support-tooltip {
+					visibility: visible;
+				}
+				&:hover .tooltip-text {
+					visibility: visible;
+				}
+			}
 
-.m-all-partners {
-	font-size: 1.23em;
-	line-height: 1.5em;
-	margin-bottom: 0.75em;
-	.m-partner-list {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		padding: 0;
-		margin-left: 0;
-		li {
-			padding: 20px;
-			width: 44%;
-			list-style: none;
-		}
-		img {
-			display: block;
-			width: 100%;
-		}
-	}
-}
-
-.m-entry-content.m-partner-offers {
-	margin: 1em 0;
-	padding: .5em 0;
-	.m-partner-offer {
-		border: 1px solid $border-color-darker;
-		margin-bottom: 1em;
-		padding: 0.5em;
-		.m-partner-offer-image {
-			width: 200px;
-			min-width: 200px;
-		}
-		.m-partner-offer-content {
-			.m-partner-offer-header {
-				margin-bottom: 0;
+			input:checked + label {
+				background: transparent;
+				border: 3px solid $border-color-lighter;
 			}
-			.a-entry-title {
-				font-size: 215.4%;
-				margin-bottom: 0.25em;
-				line-height: 1.15em;
-			}
-			p {
-				margin: 0;
-			}
-			select {
-				margin: 0.25em 0;
-			}
-			.a-button {
-				margin: 0.25em 0;
-				display: block;
-			}
-			a.a-button {
-				display: inline-block;
-			}
-			.a-partner-offer-learn-more {
-				display: inline-block;
-			}
-		}
-	}
-}
-
-// basically use default WP table styles, here, unless it makes sense to do otherwise
-.m-donation-history {
-	margin-bottom: 1.5em;
-	table {
-		border: 1px solid $border-color-lighter;
-		box-shadow: 0 1px 1px rgba(0,0,0,.04);
-		border-spacing: 0;
-		width: 100%;
-		clear: both;
-		margin: 0;
-		td, th {
-			padding: 8px 10px;
-		}
-		td, th, thead td {
-			text-align: left;
-			line-height: 1.3em;
-			font-size: 14px;
-		}
-		td, thead th {
-			border-bottom: 1px solid #e1e1e1;
-		}
-		> tbody > :nth-child( 2n+1 ) {
-	    	background-color: #f9f9f9;
-		}
-	}
-}
-
-
-// start media queries
-
-@media screen and (min-width: 400px) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			.a-support-button {
-				width: 60%;
-			}
-		}
-	}
-}
-
-@media screen and (min-width: $more-than-logo-screen) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			text-align: left;
-			flex-direction: row;
-			width: auto;
-			h2 {
-				font-weight: bold;
-				line-height: normal;
-			}
-			.a-support-button {
-				margin-left: $cta-spacing;
-				margin-bottom: 0;
+			input:disabled + label::after {
 				border-radius: $cta-spacing;
-				width: 112px;
-				&.a-support-button-with-heart {
-					width: 130px;
+				background-color: $color__gray-light;
+			}
+			input:checked:disabled + label {
+				border: 3px solid transparent;
+			}
+
+		}
+	}
+}
+
+// buttons
+.m-form-membership-support .m-membership-form-actions {
+	margin: $vertical-space 0;
+	button, input.a-button, a.a-button {
+		padding: $vertical-space / 2 $vertical-space;
+	}
+}
+
+// media queries
+@media screen and (min-width: $size__main-large-screen) {
+	.m-membership-choice-group {
+		// second in sequence: choose amount
+		&.m-membership-choose-amount {
+			#amount-item {
+				flex-wrap: nowrap;
+				#amount {
+					width: 100%;
+					padding: 0 0 0 1.75em;
+					&:last-child {
+						padding-right: 4em;
+					}
+				}
+				.a-frequency-text-label {
+					margin: 0.75em 0;
+					position: absolute;
+					right: 1em;
+					text-align: left;
+					width: auto;
 				}
 			}
 		}
 	}
-	.m-support-progress {
-		a, span {
-			font-size: $progress-font-size-small;
-			padding: $small-space 0 $small-space 3em;
-		}
-		a:before, span:before {
-			content: counter(li, decimal);
-			top: -0.15em;
-			font-size: $progress-font-size-large;
-		}
-	}
 }
-
-@media screen and (min-width: $medium-margins-too-small) {
-	.m-membership-member-level {
-		width: 46%;
-		margin-right: 2%;
-		float: left;
-	}
-	.m-partner-offers {
-		.m-partner-offer {
-			display: flex;
-			.m-partner-offer-image {
-				margin: 0 1em 0 0;
+@media screen and (min-width: $more-than-logo-screen) {
+	.m-membership-choice-group {
+		&.m-membership-choose-amount {
+			label {
+				height: auto;
+				strong {
+					float: left;
+				}
 			}
-		}
-	}
-	.m-support-progress {
-		a, span {
-			font-size: $content-font-size;
-		}
-	}
-}
-
-@media screen and (min-width: $nav-breaks) {
-	.m-support-cta {
-		&.m-support-cta-bottom {
-			max-width: 50%;
-		}
-	}
-}
-
-@media screen and (min-width: $wrap-header) and (max-width: $nav-wrap-screen) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			justify-content: space-evenly;
-			align-items: flex-end;
-			flex-direction: column;
-		}
-	}
-}
-
-@media screen and (min-width: $wrap-header) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			margin-left: auto;
-			margin-bottom: 0;
-		}
-	}
-}
-
-@media screen and (min-width: $level-widths-change) {
-	.m-membership-member-level {
-		width: 23%;
-	}
-	.m-all-partners {
-		.m-partner-list {
-			li {
-				width: 22%;
+			.a-fast-select-intro {
+				padding-left: 6em;
+				line-height: 1.2em;
 			}
 		}
 	}
 }
 
 @media screen and (min-width: $nav-wrap-screen) {
-	.m-membership-summary-short {
-		display: none;
-	}
-	.m-membership-summary {
-		display: block;
+	.m-layout-membership .m-membership-support-wrapper {
+		.m-form-membership {
+			max-width: $form-max-width;
+			order: -1;
+		}
+		.m-membership-summary-short {
+			display: none;
+		}
+		.m-membership-summary {
+			display: block;
+			max-width: $summary-max-width;
+			margin: $vertical-space 0;
+		}
 	}
 }
 
@@ -721,12 +402,5 @@ $nav-wrap-screen: 960px;
 		.enter select, .amount .a-button {
 			display: none;
 		}
-	}
-}
-
-.no-borderimage .m-all-partners .m-partner-list {
-	display: block;
-	li {
-	  display: inline-block;
 	}
 }

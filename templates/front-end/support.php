@@ -105,7 +105,7 @@ $user_id    = get_current_user_id();
 					<?php endif; ?>
 
 					<section class="m-membership-choose-frequency m-membership-choice-group">
-						<h1><?php echo __( 'Choose Frequency', 'minnpost-membership' ); ?></h1>
+						<h2 class="a-membership-choose"><?php echo __( 'Choose Frequency', 'minnpost-membership' ); ?></h2>
 						<fieldset>
 							<?php
 							$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
@@ -129,10 +129,11 @@ $user_id    = get_current_user_id();
 										} else {
 											$checked = '';
 										}
-										$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+										$frequency_values     = $minnpost_membership->member_levels->get_frequency_values( $option['value'] );
+										$frequency_text_label = $minnpost_membership->member_levels->get_frequency_text_label( $frequency, 'value' );
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" id="frequencies-<?php echo $id_key; ?>">
+											<input type="radio" name="frequencies" value="<?php echo $option['value']; ?>"<?php echo $checked; ?> data-year-frequency="<?php echo $frequency_values['times_per_year']; ?>" data-frequency-text-label="<?php echo $frequency_text_label; ?>" id="frequencies-<?php echo $id_key; ?>">
 											<label for="frequencies-<?php echo $id_key; ?>" class="a-frequency-option"><?php echo ucwords( $option['text'] ); ?></label>
 										</div>
 									<?php endforeach; ?>
@@ -142,12 +143,10 @@ $user_id    = get_current_user_id();
 					</section>
 
 					<section class="m-membership-choose-amount m-membership-choice-group">
-						<h1><?php echo __( 'Choose Amount', 'minnpost-membership' ); ?></h1>
-
+						<h2 class="a-membership-choose"><?php echo __( 'Choose Amount', 'minnpost-membership' ); ?></h2>
 						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ) ) : ?>
 						<p class="a-suggested-amounts-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ); ?></p>
 						<?php endif; ?>
-
 						<fieldset>
 							<?php
 							$suggested_amounts = $minnpost_membership->member_levels->get_suggested_amounts();
@@ -174,14 +173,15 @@ $user_id    = get_current_user_id();
 											$other_amount = '';
 											$checked      = ' checked';
 										}
+										$text_label = $minnpost_membership->member_levels->get_frequency_text_label( $freq_id );
 										?>
 										<div class="m-form-item">
-											<input type="radio" name="amounts" value="<?php echo $option['amount']; ?>" id="amounts-<?php echo $id_key; ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?> />
+											<input type="radio" name="amounts" value="<?php echo $option['amount']; ?>" id="amounts-<?php echo $id_key; ?>" data-index="<?php echo $key + 1; ?>" <?php echo $checked; ?>>
 											<label for="amounts-<?php echo $id_key; ?>"
 												class="a-amount-option"
 												data-amount="<?php echo $option['amount']; ?>"
 												data-desc="<?php echo $option['desc']; ?>">
-												<strong>$<?php echo $option['amount']; ?></strong>
+												<strong>$<?php echo $option['amount']; ?><span class="a-frequency-text-label"><?php echo $text_label; ?></span></strong>
 												<span class="a-amount-description"><?php echo $option['desc']; ?></span>
 											</label>
 										</div>
@@ -193,23 +193,23 @@ $user_id    = get_current_user_id();
 
 							<div class="m-form-item-wrap">
 								<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ) ) : ?>
-									<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></span>
+									<label for="amount" class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_form_text', '' ); ?></label>
 								<?php endif; ?>
-								<span class="a-fast-select-currency">&dollar;</span>
 								<div id="amount-item" class="a-amount-field">
-									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number">
+									<span class="a-fast-select-currency">&dollar;</span>
+									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number"><span class="a-frequency-text-label"><?php echo $frequency_text_label; ?></span>
 								</div>
 							</div>
 						</fieldset>
 					</section>
 
 					<section class="m-membership-choose-gift m-membership-choice-group">
-						<h1><?php echo __( 'Select Thank You Gift', 'minnpost-membership' ); ?></h1>
+						<h2 class="a-membership-choose"><?php echo __( 'Select Thank You Gift', 'minnpost-membership' ); ?></h2>
 						<fieldset>
 							<div class="m-form-radios m-decline-benefits-select">
 								<div class="m-form-item">
 									<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n">
-									<label for="decline-benefits-n" class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
+									<label for="decline-benefits-n" class="a-decline-benefits-option"><?php echo __( 'Choose thank you&nbsp;gift', 'minnpost-membership' ); ?></label>
 								</div>
 								<div class="m-form-item">
 									<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y">
