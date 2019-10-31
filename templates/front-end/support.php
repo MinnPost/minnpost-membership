@@ -105,7 +105,7 @@ $user_id    = get_current_user_id();
 					<?php endif; ?>
 
 					<section class="m-membership-choose-frequency m-membership-choice-group">
-						<h1><?php echo __( 'Choose Frequency', 'minnpost-membership' ); ?></h1>
+						<h2 class="a-membership-choose"><?php echo __( 'Choose Frequency', 'minnpost-membership' ); ?></h2>
 						<fieldset>
 							<?php
 							$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
@@ -143,12 +143,10 @@ $user_id    = get_current_user_id();
 					</section>
 
 					<section class="m-membership-choose-amount m-membership-choice-group">
-						<h1><?php echo __( 'Choose Amount', 'minnpost-membership' ); ?></h1>
-
+						<h2 class="a-membership-choose"><?php echo __( 'Choose Amount', 'minnpost-membership' ); ?></h2>
 						<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ) ) : ?>
 						<p class="a-suggested-amounts-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'support_pre_suggested_amounts_text', '' ); ?></p>
 						<?php endif; ?>
-
 						<fieldset>
 							<?php
 							$suggested_amounts = $minnpost_membership->member_levels->get_suggested_amounts();
@@ -207,7 +205,7 @@ $user_id    = get_current_user_id();
 					</section>
 
 					<section class="m-membership-choose-gift m-membership-choice-group">
-						<h1><?php echo __( 'Select Thank You Gift', 'minnpost-membership' ); ?></h1>
+						<h2 class="a-membership-choose"><?php echo __( 'Select Thank You Gift', 'minnpost-membership' ); ?></h2>
 						<fieldset>
 							<div class="m-form-radios m-decline-benefits-select">
 								<div class="m-form-item">

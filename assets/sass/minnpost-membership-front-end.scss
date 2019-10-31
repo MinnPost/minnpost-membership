@@ -59,10 +59,11 @@ $summary-max-width: 45%;
 }
 
 .m-membership-choice-group {
-	h1 {
-		font-size: 1.25em;
-		color: $_color-base-red;
-		margin: $vertical-space 0 $vertical-space / 2 0;
+	&:first-of-type {
+		margin-top: $vertical-space;
+	}
+	h2 {
+		margin-bottom: $cta-spacing;
 	}
 	// radios
 	.m-form-radios {
@@ -118,235 +119,224 @@ $summary-max-width: 45%;
 			opacity: 0.75;
 		}
 	}
-}
-
-.m-membership-choose-frequency {
-	.m-form-radios .m-form-item {
-		width: 32%;
-	}
-}
-
-.m-membership-choice-group.m-membership-choose-amount {
-	.m-form-radios .m-form-item {
-		margin: 0;
-		width: 100%;
-		text-align: left;
-		display: flex;
-	}
-	label {
-		margin: 0 0 0.75em 0;
-		padding: 0.75em 1.5em;
-		font-weight: normal;
-		strong {
-			display: block;
-			width: 9em;
-			height: 100%;
-		}
-
-		.yearly-desc {
-			display: none;
+	// first in sequence: choose frequency
+	&.m-membership-choose-frequency {
+		.m-form-radios .m-form-item {
+			width: 32%;
 		}
 	}
-	.m-form-item-wrap {
-		width: 100%;
-		display: flex;
-		justify-content: flex-start;
-		flex-wrap: nowrap;
-	}
-	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
-		display: inline-block;
-		margin: 0;
-		vertical-align: top;
-		position: relative;
-	}
-	.a-fast-select-currency, .a-fast-select-intro {
-		padding: 0.5em 0;
-	}
-	.a-fast-select-currency {
-		z-index: 1;
-		position: absolute;
-		margin-left: $vertical-space / 2;
-		font-size: 1.5em;
-	}
-	.a-fast-select-intro {
-		cursor: pointer;
-		padding-top: 0.25em;
-		padding-right: 1.5em;
-		width: 200px;
-		font-size: 1em;
-		font-family: Helvetica,Arial,sans-serif;
-		line-height: 2.4em;
-		padding-left: 2em;
-	}
-	#amount-item {
-		flex: 1;
-		display: flex;
-		#amount {
-			border: 2px solid $_color-base-gray;
+	// second in sequence: choose frequency
+	&.m-membership-choose-amount {
+		.m-form-radios .m-form-item {
+			margin: 0;
 			width: 100%;
-			padding: 0 4em 0 1.75em;
-			border-radius: $cta-spacing;
 			text-align: left;
-			font-size: 1.2em;
+			display: flex;
 		}
-		.a-frequency-text-label {
-			margin: 0.75em 0;
+		label {
+			margin: 0 0 0.75em 0;
+			padding: 0.75em 1.5em;
+			font-weight: normal;
+			strong {
+				display: block;
+				width: 9em;
+				height: 100%;
+			}
+
+			.yearly-desc {
+				display: none;
+			}
+		}
+		.m-form-item-wrap {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			flex-wrap: nowrap;
+		}
+		.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
+			display: inline-block;
+			margin: 0;
+			vertical-align: top;
+			position: relative;
+		}
+		.a-fast-select-currency, .a-fast-select-intro {
+			padding: 0.5em 0;
+		}
+		.a-fast-select-currency {
+			z-index: 1;
 			position: absolute;
-			right: 1em;
+			margin-left: $vertical-space / 2;
+			font-size: 1.5em;
+		}
+		.a-fast-select-intro {
+			cursor: pointer;
+			padding-top: 0.25em;
+			padding-right: 1.5em;
+			width: 200px;
+			font-size: 1em;
+			font-family: Helvetica,Arial,sans-serif;
+			line-height: 2.4em;
+			padding-left: 2em;
+		}
+		#amount-item {
+			flex: 1;
+			display: flex;
+			#amount {
+				border: 2px solid $_color-base-gray;
+				width: 100%;
+				padding: 0 4em 0 1.75em;
+				border-radius: $cta-spacing;
+				text-align: left;
+				font-size: 1.2em;
+			}
+			.a-frequency-text-label {
+				margin: 0.75em 0;
+				position: absolute;
+				right: 1em;
+			}
+		}
+		input#amount, select, button, input.a-button, a.a-button {
+			padding: 0.25em 0;
+			text-align: center;
+			vertical-align: top;
 		}
 	}
-	input#amount, select, button, input.a-button, a.a-button {
-		padding: 0.25em 0;
-		text-align: center;
-		vertical-align: top;
+	// third in sequency: choose whether to get a gift
+	&.m-membership-choose-gift {
+		.m-form-radios .m-form-item {
+			width: 49%;
+		}
+	}
+	// fourth in sequence: choose gift
+	&.m-membership-gift-selector {
+		border: 1px solid $color__gray-light;
+		padding: $vertical-space / 2;
+
+		.m-select-swag, .m-select-subscription {
+			justify-content: flex-start;
+
+			.m-form-item {
+				width: 32%;
+				margin-left: 0.67%;
+			}
+		}
+
+		.min-amount, .swag-eligibility {
+			display: none;
+			&.active {
+				display: initial;
+			}
+		}
+
+		p.swag-eligibility.active {
+			display: block;
+		}
+
+		.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
+			label {
+				position: relative;
+				display: flex;
+				flex-flow: column nowrap;
+				justify-content: space-around;
+				background: inherit;
+				color: inherit;
+				border: 3px solid transparent;
+
+				figure {
+					margin: 0;
+					height: 126px;
+					figcaption {
+						text-align: left;
+						font-weight: normal;
+						font-size: 0.8em;
+						line-height: 1.2em;
+						margin-bottom: 1.2em;
+					}
+				}
+
+				.support-tooltip {
+					position: absolute;
+					visibility: hidden;
+					bottom: 0.75em;
+					left: unset;
+					right: 0.75em;
+					z-index: 1;
+
+					.tooltip-text {
+						visibility: hidden;
+						position: absolute;
+						top: 100%;
+						left: 50%;
+						width: 10em;
+						margin-left: -5em;
+						padding: $vertical-space / 2;
+						z-index: 1;
+						background-color: white;
+						border: 1px solid $border-color-lighter;
+						font-weight: normal;
+						text-align: center;
+					}
+					.tooltip-text::after {
+						content: "";
+						position: absolute;
+						bottom: 100%;
+						left: 50%;
+						margin-left: -5px;
+						border-width: 5px;
+						border-style: solid;
+						border-color: transparent transparent $border-color-lighter transparent;
+					}
+				}
+			}
+
+			input:disabled + label {
+				.support-tooltip {
+					visibility: visible;
+				}
+				&:hover .tooltip-text {
+					visibility: visible;
+				}
+			}
+
+			input:checked + label {
+				background: transparent;
+				border: 3px solid $border-color-lighter;
+			}
+			input:disabled + label::after {
+				border-radius: $cta-spacing;
+				background-color: $color__gray-light;
+			}
+			input:checked:disabled + label {
+				border: 3px solid transparent;
+			}
+
+		}
 	}
 }
 
-.m-membership-choose-gift {
-	.m-form-radios .m-form-item {
-		width: 49%;
-	}
-}
-
+// buttons
 .m-form-membership-support .m-membership-form-actions {
 	margin: $vertical-space 0;
-}
-
-.m-membership-choice-group.m-membership-gift-selector {
-	border: 1px solid $color__gray-light;
-	padding: $vertical-space / 2;
-
-	.m-select-swag, .m-select-subscription {
-		justify-content: flex-start;
-
-		.m-form-item {
-			width: 32%;
-			margin-left: 0.67%;
-		}
-	}
-
-	.min-amount, .swag-eligibility {
-		display: none;
-		&.active {
-			display: initial;
-		}
-	}
-
-	p.swag-eligibility.active {
-		display: block;
-	}
-
-	.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
-		label {
-			position: relative;
-			display: flex;
-			flex-flow: column nowrap;
-			justify-content: space-around;
-			background: inherit;
-			color: inherit;
-			border: 3px solid transparent;
-
-			figure {
-				margin: 0;
-				height: 126px;
-				figcaption {
-					text-align: left;
-					font-weight: normal;
-					font-size: 0.8em;
-					line-height: 1.2em;
-					margin-bottom: 1.2em;
-				}
-			}
-
-			.support-tooltip {
-				position: absolute;
-				visibility: hidden;
-				bottom: 0.75em;
-				left: unset;
-				right: 0.75em;
-				z-index: 1;
-
-				.tooltip-text {
-					visibility: hidden;
-					position: absolute;
-					top: 100%;
-					left: 50%;
-					width: 10em;
-					margin-left: -5em;
-					padding: $vertical-space / 2;
-					z-index: 1;
-					background-color: white;
-					border: 1px solid $border-color-lighter;
-					font-weight: normal;
-					text-align: center;
-				}
-				.tooltip-text::after {
-					content: "";
-					position: absolute;
-					bottom: 100%;
-					left: 50%;
-					margin-left: -5px;
-					border-width: 5px;
-					border-style: solid;
-					border-color: transparent transparent $border-color-lighter transparent;
-				}
-			}
-		}
-
-		input:disabled + label {
-			.support-tooltip {
-				visibility: visible;
-			}
-			&:hover .tooltip-text {
-				visibility: visible;
-			}
-		}
-
-		input:checked + label {
-			background: transparent;
-			border: 3px solid $border-color-lighter;
-		}
-		input:disabled + label::after {
-			border-radius: $cta-spacing;
-			background-color: $color__gray-light;
-		}
-		input:checked:disabled + label {
-			border: 3px solid transparent;
-		}
-
-	}
-}
-
-.m-membership-action {
-	padding: $vertical-space;
-	margin: $vertical-space 0;
-	border: 1px solid $border-color-lighter;
-	h2 {
-		margin-bottom: $vertical-space / 2;
-	}
-	p:last-of-type {
-		margin-bottom: 0;
-	}
-	.a-button {
-		display: inline-block;
-		margin-top: 5px;
-		margin-bottom: 5px;
+	button, input.a-button, a.a-button {
+		padding: $vertical-space / 2 $vertical-space;
 	}
 }
 
 // media queries
 
 @media screen and (min-width: $more-than-logo-screen) {
-	.m-membership-choice-group.m-membership-choose-amount {
-		label {
-			height: auto;
-			strong {
-				float: left;
+	.m-membership-choice-group {
+		&.m-membership-choose-amount {
+			label {
+				height: auto;
+				strong {
+					float: left;
+				}
 			}
-		}
-		.a-fast-select-intro {
-			padding-left: 6em;
-			line-height: 1.2em;
+			.a-fast-select-intro {
+				padding-left: 6em;
+				line-height: 1.2em;
+			}
 		}
 	}
 }
