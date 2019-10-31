@@ -339,7 +339,10 @@ $summary-max-width: 45%;
 				flex-wrap: nowrap;
 				#amount {
 					width: 100%;
-					padding: 0 4em 0 1.75em;
+					padding: 0 0 0 1.75em;
+					&:last-child {
+						padding-right: 4em;
+					}
 				}
 				.a-frequency-text-label {
 					margin: 0.75em 0;

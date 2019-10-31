@@ -197,8 +197,7 @@ $user_id    = get_current_user_id();
 								<?php endif; ?>
 								<div id="amount-item" class="a-amount-field">
 									<span class="a-fast-select-currency">&dollar;</span>
-									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number">
-									<span class="a-frequency-text-label"><?php echo $frequency_text_label; ?></span>
+									<input id="amount" min="1" name="amount" value="<?php echo $other_amount; ?>" type="number"><span class="a-frequency-text-label"><?php echo $frequency_text_label; ?></span>
 								</div>
 							</div>
 						</fieldset>
