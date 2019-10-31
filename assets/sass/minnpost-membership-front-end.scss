@@ -151,7 +151,6 @@ $summary-max-width: 45%;
 		width: 100%;
 		display: flex;
 		justify-content: flex-start;
-		//max-width: 300px;
 		flex-wrap: nowrap;
 	}
 	.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
@@ -161,13 +160,13 @@ $summary-max-width: 45%;
 		position: relative;
 	}
 	.a-fast-select-currency, .a-fast-select-intro {
-		padding: 0.75em 0;
+		padding: 0.5em 0;
 	}
 	.a-fast-select-currency {
 		z-index: 1;
 		position: absolute;
 		margin-left: $vertical-space / 2;
-		font-size: 1.2em;
+		font-size: 1.5em;
 	}
 	.a-fast-select-intro {
 		cursor: pointer;
@@ -176,20 +175,19 @@ $summary-max-width: 45%;
 		width: 200px;
 		font-size: 1em;
 		font-family: Helvetica,Arial,sans-serif;
-		line-height: 1.2em;
+		line-height: 2.4em;
 		padding-left: 2em;
 	}
 	#amount-item {
-		width: 250px;
 		flex: 1;
 		display: flex;
 		#amount {
 			border: 1px solid #ccc;
 			width: 100%;
-			padding: 0.75rem 0 0.75em 1.75em;
+			padding: 0 0 0 1.75em;
 			border-radius: $cta-spacing;
 			text-align: left;
-			font-size: 1em;
+			font-size: 1.2em;
 		}
 	}
 	input#amount, select, button, input.a-button, a.a-button {
@@ -341,6 +339,10 @@ $summary-max-width: 45%;
 				float: left;
 			}
 		}
+		.a-fast-select-intro {
+			padding-left: 7em;
+			line-height: 1.2em;
+		}
 	}
 }
 
@@ -357,11 +359,6 @@ $summary-max-width: 45%;
 			display: block;
 			max-width: $summary-max-width;
 			margin: $vertical-space 0;
-		}
-		.m-membership-choice-group.m-membership-choose-amount {
-			.a-fast-select-intro {
-				padding-left: 7em;
-			}
 		}
 	}
 }
