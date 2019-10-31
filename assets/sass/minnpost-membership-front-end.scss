@@ -171,7 +171,7 @@ $summary-max-width: 45%;
 	.a-fast-select-intro {
 		cursor: pointer;
 		padding-top: 0.25em;
-		padding-right: $vertical-space / 2;
+		padding-right: 1.5em;
 		width: 200px;
 		font-size: 1em;
 		font-family: Helvetica,Arial,sans-serif;
@@ -182,12 +182,17 @@ $summary-max-width: 45%;
 		flex: 1;
 		display: flex;
 		#amount {
-			border: 1px solid #ccc;
+			border: 2px solid $_color-base-gray;
 			width: 100%;
-			padding: 0 0 0 1.75em;
+			padding: 0 4em 0 1.75em;
 			border-radius: $cta-spacing;
 			text-align: left;
 			font-size: 1.2em;
+		}
+		.a-frequency-text-label {
+			margin: 0.75em 0;
+			position: absolute;
+			right: 1em;
 		}
 	}
 	input#amount, select, button, input.a-button, a.a-button {
@@ -340,7 +345,7 @@ $summary-max-width: 45%;
 			}
 		}
 		.a-fast-select-intro {
-			padding-left: 7em;
+			padding-left: 6em;
 			line-height: 1.2em;
 		}
 	}

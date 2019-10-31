@@ -10,6 +10,7 @@
 		amountValue: 'strong',
 		amountDescription: '.a-amount-description',
 		amountField: '.a-amount-field #amount',
+		customAmountFrequency: '#amount-item .a-frequency-text-label',
 		levelViewer: '.a-show-level',
 		levelName: '.a-level',
 		userCurrentLevel: '.a-current-level',
@@ -164,6 +165,7 @@
 			var $selected = $( this.options.amountSelector )
 			    .filter( ':checked' );
 			var index = $selected.data( 'index' );
+			var $customAmountFrequency = $( this.options.customAmountFrequency );
 
 			$groups.removeClass( 'active' );
 			$groups.filter( '[data-frequency="' + frequencyString + '"]' )
@@ -172,6 +174,9 @@
 			$groups.filter( '.active' )
 				.find( 'input[type="radio"][data-index="' + index + '"]' )
 				.prop( 'checked', true );
+
+			var currentFrequencyLabel = $groups.filter( '.active' ).find('.a-frequency-text-label').first().text();
+			$customAmountFrequency.text( currentFrequencyLabel );
 		}, // end setAmountLabels
 
 		setMinAmounts: function( frequencyString ) {
