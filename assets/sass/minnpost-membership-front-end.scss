@@ -207,6 +207,12 @@ $summary-max-width: 45%;
 	&.m-membership-choose-gift {
 		.m-form-radios .m-form-item {
 			width: 49%;
+			label {
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				text-align: center;
+			}
 		}
 	}
 	// fourth in sequence: choose gift

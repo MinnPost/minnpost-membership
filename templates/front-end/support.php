@@ -210,7 +210,7 @@ $user_id    = get_current_user_id();
 							<div class="m-form-radios m-decline-benefits-select">
 								<div class="m-form-item">
 									<input type="radio" name="decline_benefits" value="false" id="decline-benefits-n">
-									<label for="decline-benefits-n" class="a-decline-benefits-option"><?php echo __( 'Choose thank you gift', 'minnpost-membership' ); ?></label>
+									<label for="decline-benefits-n" class="a-decline-benefits-option"><?php echo __( 'Choose thank you&nbsp;gift', 'minnpost-membership' ); ?></label>
 								</div>
 								<div class="m-form-item">
 									<input type="radio" name="decline_benefits" value="true" checked id="decline-benefits-y">
