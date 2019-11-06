@@ -153,9 +153,29 @@ class MinnPost_Membership_Front_End {
 	public function site_footer( $show_button ) {
 		$params = array();
 
-		$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		$redirect_url = get_option( $this->option_prefix . 'donate_url', '' );
+		if ( '' === $redirect_url ) {
+			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		}
+		$params['donate_url'] = $redirect_url;
 
-		$params['button_url'] = $redirect_url;
+		$footer_intro_text = get_option( $this->option_prefix . 'footer_intro_text', '' );
+		if ( '' === $footer_intro_text ) {
+			$footer_intro_text = get_option( $this->option_prefix . 'support_summary_compact', '' );
+		}
+		$params['footer_intro_text'] = $footer_intro_text;
+
+		$donate_text = get_option( $this->option_prefix . 'donate_text', '' );
+		if ( '' === $donate_text ) {
+			$donate_text = __( 'Donate', 'minnpost-membership' );
+		}
+		$params['donate_text'] = $donate_text;
+
+		$params['donate_class'] = '';
+		$donate_class           = get_option( $this->option_prefix . 'donate_class', '' );
+		if ( '' !== $donate_class ) {
+			$params['donate_class'] = ' ' . $donate_class;
+		}
 
 		$site_footer = $this->get_template_html( 'footer-support', 'template-parts', $params );
 		echo $site_footer;
@@ -238,11 +258,25 @@ class MinnPost_Membership_Front_End {
 		} elseif ( 'post' === $direction ) {
 			$data = $_POST;
 		}
-		if ( isset( $data['amount'] ) ) {
-			$params['amount'] = filter_var( $data['amount'], FILTER_SANITIZE_NUMBER_INT );
+		if ( isset( $data['amount'] ) && '' !== $data['amount'] ) {
+			$params['amount'] = filter_var( $data['amount'], FILTER_VALIDATE_FLOAT );
+		} elseif ( isset( $data['amounts'] ) ) {
+			$params['amount'] = filter_var( $data['amounts'], FILTER_VALIDATE_FLOAT );
 		}
 		if ( isset( $data['campaign'] ) ) {
 			$params['campaign'] = filter_var( $data['campaign'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $data['decline_benefits'] ) && filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
+			$params['decline_benefits'] = 'true';
+		}
+		if ( isset( $data['swag'] ) && '' !== $data['swag'] ) {
+			$params['swag'] = filter_var( $data['swag'], FILTER_SANITIZE_STRING );
+		}
+		if ( isset( $data['atlantic_subscription'] ) && filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
+			$params['atlantic_subscription'] = 'true';
+		}
+		if ( isset( $data['nyt_subscription'] ) && filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
+			$params['nyt_subscription'] = 'true';
 		}
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
@@ -338,18 +372,18 @@ class MinnPost_Membership_Front_End {
 				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
 			}
 
-			// send the valid form data to the submit url as url parameters
-			foreach ( $params as $key => $value ) {
-				if ( false !== $value ) {
-					$redirect_url = add_query_arg( $key, $value, $redirect_url );
-				}
-			}
-
 			// amount is the only thing our processor requires in order to function
 			if ( ! isset( $params['amount'] ) ) {
 				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
 				wp_safe_redirect( site_url( $error_url ) );
 				exit;
+			}
+
+			// send the valid form data to the submit url as url parameters
+			foreach ( $params as $key => $value ) {
+				if ( false !== $value ) {
+					$redirect_url = add_query_arg( $key, $value, $redirect_url );
+				}
 			}
 
 			// this requires us to hook into the allowed url thing
@@ -851,18 +885,15 @@ class MinnPost_Membership_Front_End {
 			return $post_form_text_display;
 		}
 
-		if ( true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
+		if ( isset( $change_for_members ) && true === filter_var( $change_for_members, FILTER_VALIDATE_BOOLEAN ) ) {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '" data-changed="' . htmlentities( $post_form_text_changed ) . '" data-not-changed="' . htmlentities( $post_form_text_not_changed ) . '">';
 		} else {
 			$post_form_text_display .= '<p class="a-show-level a-show-level-' . strtolower( $page_level['name'] ) . '">';
 		}
 
-		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '<a href="' . esc_url( get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) . '">';
-		}
 		$post_form_text_display .= $post_form_text;
 		if ( '' !== get_option( $this->option_prefix . 'support_post_form_link_url', '' ) ) {
-			$post_form_text_display .= '</a>';
+			$post_form_text_display .= ' ' . $this->get_link_next_to_button( 'support' );
 		}
 
 		$post_form_text_display .= '</p>';
@@ -1025,6 +1056,99 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Display the intro text for a subscription, showing minimum amount
+	*
+	* @param integer $post_id Thank-You Gift post metadata
+	*
+	*/
+	public function thank_you_gift_description( $post_id, $selected_frequency ) {
+		$text = $this->get_thank_you_gift_description( $post_id, $selected_frequency );
+		if ( '' !== $text ) {
+			echo $text;
+		}
+	}
+
+	/**
+	* Display the intro text for a subscription, showing minimum amount
+	*
+	* @param integer $post_id Thank-You Gift post metadata
+	* @return string $full_text
+	*
+	*/
+	private function get_thank_you_gift_description( $post_id, $selected_frequency ) {
+		$full_text   = '';
+		$meta        = get_post_meta( $post_id );
+		$description = $meta['_mp_thank_you_gift_description'][0];
+		if ( ! isset( $description ) ) {
+			return '';
+		}
+
+		$level     = $this->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+		$full_text = str_replace( '$min_amount', $this->get_min_amount( $level, $selected_frequency ), $description );
+
+		return wpautop( $full_text );
+	}
+
+	/**
+	* Display the minimum amount for the given level and frequency
+	*
+	* @param array $min_level
+	* @param string $selected_frequency
+	*
+	*/
+	public function support_tooltip_text( $min_level, $selected_frequency ) {
+		$text = $this->get_support_tooltip_text( $min_level, $selected_frequency );
+		if ( '' !== $text ) {
+			echo $text;
+		}
+	}
+
+	/**
+	* Get the minimum amount for the given level and frequency
+	*
+	* @param array $min_level
+	* @param string $selected_frequency
+	* @return string $full_text
+	*
+	*/
+	private function get_support_tooltip_text( $min_level, $selected_frequency ) {
+		$full_text  = __( 'This gift requires you to give at least ', 'minnpost-membership' );
+		$full_text .= $this->get_min_amount( $min_level, $selected_frequency );
+		return $full_text;
+	}
+
+	/**
+	* Get the minimum amount for the given level and frequency
+	*
+	* @param array $min_level
+	* @param string $selected_frequency
+	* @return string $full_text
+	*
+	*/
+	private function get_min_amount( $min_level, $selected_frequency ) {
+		$full_text         = '';
+		$frequency_options = $this->member_levels->get_frequency_options();
+		foreach ( $frequency_options as $frequency ) {
+			$classes = 'min-amount';
+			if ( $frequency['value'] === $selected_frequency ) {
+				$classes .= ' active';
+			}
+			$full_text           .= '<span class="' . $classes . '" data-frequency="' . $frequency['value'] . '">';
+			$frequency_values     = $this->member_levels->get_frequency_values( $frequency['value'] );
+			$min_yearly_amount    = $min_level['minimum_monthly_amount'] * 12;
+			$full_text           .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
+			$frequency_text_label = $this->member_levels->get_frequency_text_label( $frequency['id'] );
+			if ( '' === $frequency_text_label && 'one-time' !== $frequency['id'] ) {
+				$full_text .= ' ' . $frequency['text'];
+			} else {
+				$full_text .= $frequency_text_label;
+			}
+			$full_text .= '</span>';
+		}
+		return $full_text;
+	}
+
+	/**
 	* Get correct template path for URLs from plugin or theme folder
 	*
 	* @param string $url
@@ -1124,6 +1248,8 @@ class MinnPost_Membership_Front_End {
 				$this->slug . '-front-end',
 				"jQuery(document).ready(function ($) {
 					$('.m-form-membership').minnpostMembership();
+					$('.m-form-membership').minnpostTrackSubmit();
+					$('.m-form-membership').minnpostAmountSelect();
 				});"
 			);
 		}

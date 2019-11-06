@@ -68,6 +68,10 @@ class MinnPost_Membership_Member_Level {
 		$minimum_amount = array_column( $member_levels, 'minimum_monthly_amount' );
 		array_multisort( $member_status, SORT_DESC, $minimum_amount, SORT_ASC, $member_levels );
 
+		if ( is_array( $value ) ) {
+			return $value;
+		}
+
 		$call = $field . '=' . $value . 'show_nonmember=' . $show_nonmember;
 
 		$cached = $this->cache->cache_get( $call, $reset );
@@ -111,21 +115,21 @@ class MinnPost_Membership_Member_Level {
 			array(
 				'id'      => 'monthly',
 				'value'   => 'per month - 12',
-				'text'    => __( 'per month', 'minnpost-membership' ),
+				'text'    => __( 'monthly', 'minnpost-membership' ),
 				'desc'    => '',
 				'default' => '',
 			),
 			array(
 				'id'      => 'yearly',
 				'value'   => 'per year - 1',
-				'text'    => __( 'per year', 'minnpost-membership' ),
+				'text'    => __( 'yearly', 'minnpost-membership' ),
 				'desc'    => '',
 				'default' => '',
 			),
 			array(
 				'id'      => 'one-time',
 				'value'   => 'one-time - 1',
-				'text'    => __( 'one-time', 'minnpost-membership' ),
+				'text'    => __( 'one time', 'minnpost-membership' ),
 				'desc'    => '',
 				'default' => '',
 			),
@@ -161,6 +165,53 @@ class MinnPost_Membership_Member_Level {
 			'times_per_year' => $number,
 		);
 		return $frequencyvalues;
+	}
+
+	/**
+	* Get text label for a given frequency value
+	*
+	* @param string $value
+	* @param string $field
+	* @return string $text_label
+	*
+	*/
+	public function get_frequency_text_label( $value, $field = 'id' ) {
+		$frequency_id = $this->get_frequency_options( $value, $field )['id'];
+		$text_label   = get_option( $this->option_prefix . $frequency_id . '_text_label', '' );
+		return $text_label;
+	}
+
+	/**
+	* Get suggested monthly, yearly, and one-time amounts
+	*
+	* @param string $value
+	* @return array $frequencyvalues
+	*
+	*/
+	public function get_suggested_amounts() {
+		$frequency_options = $this->get_frequency_options();
+		$suggested_amounts = array();
+		foreach ( $frequency_options as $option ) {
+			$frequency                       = $option['id'];
+			$suggested_amounts[ $frequency ] = get_option( $this->option_prefix . 'support_suggested_amounts_' . $frequency );
+		}
+
+		// Sort suggested amounts in descending order
+		foreach ( $suggested_amounts as $frequency => &$amounts ) {
+			usort(
+				$amounts,
+				function ( $a, $b ) {
+					$amta = intval( $a['amount'] );
+					$amtb = intval( $b['amount'] );
+					if ( $amta === $amtb ) {
+						return 0;
+					}
+					return ( $amta > $amtb ) ? -1 : 1;
+				}
+			);
+		}
+
+		return $suggested_amounts;
 	}
 
 	/**

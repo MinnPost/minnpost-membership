@@ -123,6 +123,13 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
+			$this->slug . '-site-footer'        => array(
+				'title'    => __( 'Site Footer', 'minnpost-membership' ),
+				'sections' => array(
+					'settings' => __( 'Settings', 'minnpost-membership' ),
+				),
+				'use_tabs' => false,
+			),
 			$this->slug . '-taking-payments'    => array(
 				'title'    => __( 'Taking Payments', 'minnpost-membership' ),
 				'sections' => $this->setup_payment_page_sections(),
@@ -209,43 +216,44 @@ class MinnPost_Membership_Admin {
 			}
 			switch ( $page ) {
 				case $this->slug . '-settings':
-					if ( isset( $get_data['method'] ) ) {
-						$method      = sanitize_key( $get_data['method'] );
-						$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&method=' . $method );
-						$success_url = get_admin_url( null, 'admin.php?page=' . $page );
-
-						if ( isset( $get_data['transient'] ) ) {
-							$transient = sanitize_key( $get_data['transient'] );
-							$posted    = $this->mp_mem_transients->get( $transient );
-						}
-
-						if ( isset( $posted ) && is_array( $posted ) ) {
-							$member_level = $posted;
-							$id           = $member_level['id'];
-						} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
-							$id           = $get_data['id'];
-							$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '', true, 'id', true );
-						}
-
-						$benefits = '';
-
-						if ( isset( $member_level ) && is_array( $member_level ) ) {
-							$name                   = $member_level['name'];
-							$is_nonmember           = isset( $member_level['is_nonmember'] ) ? intval( $member_level['is_nonmember'] ) : '';
-							$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
-							$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
-							$starting_value         = $member_level['starting_value'];
-							$benefits               = $member_level['benefits'];
-						}
-
-						if ( 'add-member-level' === $method || 'edit-member-level' === $method ) {
-							require_once( plugin_dir_path( $this->file ) . '/templates/admin/member-levels-add-edit.php' );
-						} elseif ( 'delete-member-level' === $method ) {
-							require_once( plugin_dir_path( $this->file ) . '/templates/admin/member-levels-delete.php' );
-						}
-					} else {
+					if ( ! isset( $get_data['method'] ) ) {
 						$member_levels = $this->member_levels->get_member_levels();
-						require_once( plugin_dir_path( $this->file ) . '/templates/admin/general-settings.php' );
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/general-settings.php' );
+						break;
+					}
+
+					$method      = sanitize_key( $get_data['method'] );
+					$error_url   = get_admin_url( null, 'admin.php?page=' . $page . '&method=' . $method );
+					$success_url = get_admin_url( null, 'admin.php?page=' . $page );
+
+					if ( isset( $get_data['transient'] ) ) {
+						$transient = sanitize_key( $get_data['transient'] );
+						$posted    = $this->mp_mem_transients->get( $transient );
+					}
+
+					if ( isset( $posted ) && is_array( $posted ) ) {
+						$member_level = $posted;
+						$id           = $member_level['id'];
+					} elseif ( 'edit-member-level' === $method || 'delete-member-level' === $method ) {
+						$id           = $get_data['id'];
+						$member_level = $this->member_levels->get_member_levels( isset( $id ) ? sanitize_key( $id ) : '', true, 'id', true );
+					}
+
+					$benefits = '';
+
+					if ( isset( $member_level ) && is_array( $member_level ) ) {
+						$name                   = $member_level['name'];
+						$is_nonmember           = isset( $member_level['is_nonmember'] ) ? intval( $member_level['is_nonmember'] ) : '';
+						$minimum_monthly_amount = $member_level['minimum_monthly_amount'];
+						$maximum_monthly_amount = $member_level['maximum_monthly_amount'];
+						$starting_value         = $member_level['starting_value'];
+						$benefits               = $member_level['benefits'];
+					}
+
+					if ( 'add-member-level' === $method || 'edit-member-level' === $method ) {
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-add-edit.php' );
+					} elseif ( 'delete-member-level' === $method ) {
+						require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/member-levels-delete.php' );
 					}
 					break;
 				case $this->slug . '-benefit-results':
@@ -292,7 +300,8 @@ class MinnPost_Membership_Admin {
 		echo '<h2 class="nav-tab-wrapper">';
 		foreach ( $tabs as $tab_key => $tab_caption ) {
 			$active = $current_tab === $tab_key ? ' nav-tab-active' : '';
-			echo sprintf( '<a class="nav-tab%1$s" href="%2$s">%3$s</a>',
+			echo sprintf(
+				'<a class="nav-tab%1$s" href="%2$s">%3$s</a>',
 				esc_attr( $active ),
 				esc_url( '?page=' . $page . '&tab=' . $tab_key ),
 				esc_html( $tab_caption )
@@ -339,6 +348,7 @@ class MinnPost_Membership_Admin {
 
 		$this->general_settings( $page, $all_field_callbacks );
 		$this->site_header( $page, $all_field_callbacks );
+		$this->site_footer( $page, $all_field_callbacks );
 		$this->taking_payments( $page, $all_field_callbacks );
 		$this->managing_donations( $page, $all_field_callbacks );
 		$this->campaign_settings( $page, $all_field_callbacks );
@@ -435,6 +445,24 @@ class MinnPost_Membership_Admin {
 				$options = array();
 				foreach ( $frequency_options as $key ) {
 					$options[ $key ] = $this->member_levels->get_frequency_options( $key );
+
+					// label field for how to display the frequency
+					$settings[ $options[ $key ]['id'] . '_text_label' ] = array(
+						'title'    => sprintf(
+							// translators: %1 is the id of the frequency
+							__( 'Text label for %1$s frequency', 'minnpost-membership' ),
+							$options[ $key ]['id']
+						),
+						'callback' => $callbacks['text'],
+						'page'     => $page,
+						'section'  => 'member_levels',
+						'args'     => array(
+							'type'     => 'text',
+							'desc'     => __( 'This label is used when displaying what label a user has selected. It is not used in buttons, but rather in things like headings and text boxes.', 'minnpost-membership' ),
+							'constant' => '',
+						),
+					);
+
 				}
 
 				$settings['default_frequency'] = array(
@@ -487,7 +515,7 @@ class MinnPost_Membership_Admin {
 	* @param string $page
 	* @param array $callbacks
 	*/
-	function site_header( $page, $callbacks ) {
+	private function site_header( $page, $callbacks ) {
 		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
 			$sections = $this->get_admin_pages()[ $page ]['sections'];
 			if ( ! empty( $sections ) ) {
@@ -571,6 +599,126 @@ class MinnPost_Membership_Admin {
 							// translators: %1 is the first payment URL
 							__( 'When a user clicks the button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the first payment URL: %1$s', 'minnpost-membership' ),
 							$payment_url
+						),
+						'constant' => '',
+					),
+				),
+			);
+
+			foreach ( $settings as $key => $attributes ) {
+				$id       = $this->option_prefix . $key;
+				$name     = $this->option_prefix . $key;
+				$title    = $attributes['title'];
+				$callback = $attributes['callback'];
+				$page     = $attributes['page'];
+				$section  = $attributes['section'];
+				$class    = isset( $attributes['class'] ) ? $attributes['class'] : 'minnpost-member-field ' . $id;
+				$args     = array_merge(
+					$attributes['args'],
+					array(
+						'title'     => $title,
+						'id'        => $id,
+						'label_for' => $id,
+						'name'      => $name,
+						'class'     => $class,
+					)
+				);
+
+				// if there is a constant and it is defined, don't run a validate function if there is one
+				if ( isset( $attributes['args']['constant'] ) && defined( $attributes['args']['constant'] ) ) {
+					$validate = '';
+				}
+				add_settings_field( $id, $title, $callback, $page, $section, $args );
+				register_setting( $section, $id );
+			}
+		}
+	}
+
+	/**
+	* Fields for the support footer at the bottom of the site
+	* This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+	*
+	* @param string $page
+	* @param array $callbacks
+	*/
+	private function site_footer( $page, $callbacks ) {
+		if ( isset( $this->get_admin_pages()[ $page ] ) ) {
+			$sections = $this->get_admin_pages()[ $page ]['sections'];
+			if ( ! empty( $sections ) ) {
+				foreach ( $sections as $key => $value ) {
+					$section = $key;
+					$title   = $value;
+					add_settings_section( $section, $title, null, $page );
+				}
+			} else {
+				$section = $page;
+				$title   = $this->get_admin_pages()[ $page ]['title'];
+				add_settings_section( $section, $title, null, $page );
+			}
+
+			$this_section = 'settings';
+			$settings     = array(
+				'footer_intro_text' => array(
+					'title'    => __( 'Intro text', 'minnpost-membership' ),
+					'callback' => $callbacks['editor'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'          => 'text',
+						'desc'          => sprintf(
+							// translators: %1 is the compact value from /support settings
+							__( 'This value will be used for the paragraph in the footer. If you do not add a value, the site will use the compact value for the /support page from the plugin settings: %1$s', 'minnpost-membership' ),
+							get_option( $this->option_prefix . 'support_summary_compact', '' )
+						),
+						'rows'          => '5',
+						'media_buttons' => false,
+						'constant'      => '',
+					),
+				),
+				'pre_select_text'   => array(
+					'title'    => __( 'Pre-select text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'This value will be used for the text right before the amount box.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donate_text'       => array(
+					'title'    => __( 'Donate button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'This value will be used for the button text. If you do not add a value, the value will be Donate.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donate_class'      => array(
+					'title'    => __( 'Donate button CSS class', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Add any CSS classes for styling, scripting, etc. Separate multiple classes with spaces.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'donate_url'        => array(
+					'title'    => __( 'Donate URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => sprintf(
+							// translators: %1 is the payment URL
+							__( 'When a user clicks the footer button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the plugin payment processor URL: %1$s', 'minnpost-membership' ),
+							defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' )
 						),
 						'constant' => '',
 					),
@@ -705,6 +853,48 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
+			$settings[ $this_section . '_summary_compact' ] = array(
+				'title'    => __( 'Summary for smaller screens', 'minnpost-membership' ),
+				'callback' => $callbacks['editor'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'          => '',
+					'constant'      => '',
+					'type'          => 'text',
+					'rows'          => '5',
+					'media_buttons' => false,
+				),
+			);
+
+			$settings[ $this_section . '_pre_suggested_amounts_text' ] = array(
+				'title'    => __( 'Suggested amounts intro', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => __( 'Explains the list of suggested amounts', 'minnpost-membership' ),
+					'constant' => '',
+					'type'     => 'text',
+				),
+			);
+
+			$frequency_options = $this->member_levels->get_frequency_options();
+			if ( ! empty( $frequency_options ) ) {
+				foreach ( $frequency_options as $key => $option ) {
+					$settings[ $this_section . '_suggested_amounts_' . $option['id'] ] = array(
+						// translators: 1 is the text for this frequency option
+						'title'    => sprintf( __( '%1$s suggested amounts', 'minnpost-membership' ), ucwords( $option['text'] ) ),
+						'callback' => array( $this, 'display_suggested_amounts' ),
+						'page'     => $this_section,
+						'section'  => $this_section,
+						'args'     => array(
+							'desc' => '',
+						),
+					);
+				}
+			}
+
 			$settings[ $this_section . '_pre_form_text' ] = array(
 				'title'    => __( 'Pre form text', 'minnpost-membership' ),
 				'callback' => $callbacks['text'],
@@ -735,7 +925,8 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => __( 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as ' . get_bloginfo( 'name' ) . ' Level', 'minnpost-membership' ),
+					// translators: 1 is the value of bloginfo('name')
+					'desc'     => sprintf( __( 'This value is used if the user is not a member, or if the checkbox below remains unchecked. $level will show as %1$s Level', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 3,
@@ -773,7 +964,8 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => __( 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
+					// translators: 1 is the value of bloginfo('name')
+					'desc'     => sprintf( __( 'This text is used if the user\'s membership status has not changed based on this transaction. $current_level will show as %1$s Level', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -787,7 +979,8 @@ class MinnPost_Membership_Admin {
 				'page'     => $this_section,
 				'section'  => $this_section,
 				'args'     => array(
-					'desc'     => __( 'This text is used if the user\'s membership status has changed based on this transaction.  $current_level and $new_level will show as ' . get_bloginfo( 'name' ) . ' Level.', 'minnpost-membership' ),
+					// translators: 1 is the value of bloginfo('name')
+					'desc'     => sprintf( __( 'This text is used if the user\'s membership status has changed based on this transaction. $current_level and $new_level will show as %1$s Level', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 					'constant' => '',
 					'type'     => 'text',
 					'rows'     => 5,
@@ -1326,7 +1519,7 @@ class MinnPost_Membership_Admin {
 						'media_buttons' => false,
 					),
 				),
-				'history_failed_value'        => array(
+				'history_failed_value'         => array(
 					'title'    => __( 'Failed donation value', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1337,7 +1530,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_success_value'       => array(
+				'history_success_value'        => array(
 					'title'    => __( 'Successful donation value', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1348,7 +1541,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_days_for_failed'     => array(
+				'history_days_for_failed'      => array(
 					'title'    => __( 'Days back for failed donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1359,7 +1552,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'failed_recurring_id_field'   => array(
+				'failed_recurring_id_field'    => array(
 					'title'    => __( 'Recurring donation ID field name', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1370,7 +1563,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_failed_heading'      => array(
+				'history_failed_heading'       => array(
 					'title'    => __( 'Heading for failed donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1381,7 +1574,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_failed_message'      => array(
+				'history_failed_message'       => array(
 					'title'    => __( 'Failed donation message', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => 'donation_history',
@@ -1394,7 +1587,7 @@ class MinnPost_Membership_Admin {
 						'media_buttons' => false,
 					),
 				),
-				'history_success_heading'     => array(
+				'history_success_heading'      => array(
 					'title'    => __( 'Heading for successful donations', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
 					'page'     => 'donation_history',
@@ -1405,7 +1598,7 @@ class MinnPost_Membership_Admin {
 						'constant' => '',
 					),
 				),
-				'history_success_message'     => array(
+				'history_success_message'      => array(
 					'title'    => __( 'Successful donation message', 'minnpost-membership' ),
 					'callback' => $callbacks['editor'],
 					'page'     => 'donation_history',
@@ -1683,7 +1876,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -1860,7 +2054,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -2417,7 +2612,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '5',
@@ -2633,7 +2829,8 @@ class MinnPost_Membership_Admin {
 					'section'  => $this_section,
 					'class'    => 'minnpost-member-field minnpost-member-field-' . $eligibility_state['id'],
 					'args'     => array(
-						'desc'          => __( '$memberlevel will show as ' . get_bloginfo( 'name' ) . ' Level with the level of the user', 'minnpost-membership' ),
+						// translators: 1 is the value of bloginfo('name')
+						'desc'          => sprintf( __( '$memberlevel will show as %1$s Level with the level of the user', 'minnpost-membership' ), get_bloginfo( 'name' ) ),
 						'constant'      => '',
 						'type'          => 'text',
 						'rows'          => '10',
@@ -3045,7 +3242,8 @@ class MinnPost_Membership_Admin {
 				$value = $args['default'];
 			}
 
-			echo sprintf( '<input type="%1$s" value="%2$s" name="%3$s" id="%4$s" class="%5$s"%6$s>',
+			echo sprintf(
+				'<input type="%1$s" value="%2$s" name="%3$s" id="%4$s" class="%5$s"%6$s>',
 				esc_attr( $type ),
 				esc_attr( $value ),
 				esc_attr( $name ),
@@ -3054,12 +3252,14 @@ class MinnPost_Membership_Admin {
 				esc_html( $checked )
 			);
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3102,7 +3302,8 @@ class MinnPost_Membership_Admin {
 			$input_name = $name;
 
 			if ( ! isset( $args['label'] ) || 'parallel' !== $args['label'] ) {
-				echo sprintf( '<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
+				echo sprintf(
+					'<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
 					esc_attr( $type ),
 					esc_attr( $item_value ),
 					esc_attr( $input_name ),
@@ -3111,7 +3312,8 @@ class MinnPost_Membership_Admin {
 					esc_html( $text )
 				);
 			} else {
-				echo sprintf( '<div class="checkbox"><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s><label for="%4$s">%6$s</label></div>',
+				echo sprintf(
+					'<div class="checkbox"><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s><label for="%4$s">%6$s</label></div>',
 					esc_attr( $type ),
 					esc_attr( $item_value ),
 					esc_attr( $input_name ),
@@ -3121,14 +3323,16 @@ class MinnPost_Membership_Admin {
 				);
 			}
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		}
 
 		if ( '' !== $group_desc ) {
-			echo sprintf( '<p class="description">%1$s</p>',
+			echo sprintf(
+				'<p class="description">%1$s</p>',
 				esc_html( $group_desc )
 			);
 		}
@@ -3148,9 +3352,11 @@ class MinnPost_Membership_Admin {
 		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
 			$current_value = get_option( $name );
 
-			echo sprintf( '<div class="select"><select id="%1$s" name="%2$s"><option value="">- Select one -</option>',
+			echo sprintf(
+				'<div class="select"><select id="%1$s" name="%2$s"><option value="">- %3$s -</option>',
 				esc_attr( $id ),
-				esc_attr( $name )
+				esc_attr( $name ),
+				__( 'Select one', 'minnpost-membership' )
 			);
 
 			foreach ( $args['items'] as $key => $value ) {
@@ -3161,7 +3367,8 @@ class MinnPost_Membership_Admin {
 					$selected = ' selected';
 				}
 
-				echo sprintf( '<option value="%1$s"%2$s>%3$s</option>',
+				echo sprintf(
+					'<option value="%1$s"%2$s>%3$s</option>',
 					esc_attr( $value ),
 					esc_attr( $selected ),
 					esc_html( $text )
@@ -3170,13 +3377,15 @@ class MinnPost_Membership_Admin {
 			}
 			echo '</select>';
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 			echo '</div>';
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3212,7 +3421,8 @@ class MinnPost_Membership_Admin {
 				$cols_attr = '';
 			}
 
-			echo sprintf( '<textarea name="%1$s" id="%2$s" class="%3$s"%4$s%5$s>%6$s</textarea>',
+			echo sprintf(
+				'<textarea name="%1$s" id="%2$s" class="%3$s"%4$s%5$s>%6$s</textarea>',
 				esc_attr( $name ),
 				esc_attr( $id ),
 				sanitize_html_class( $class . esc_html( ' code' ) ),
@@ -3221,12 +3431,14 @@ class MinnPost_Membership_Admin {
 				esc_attr( $value )
 			);
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3297,12 +3509,14 @@ class MinnPost_Membership_Admin {
 
 			wp_editor( $value, $id, $settings );
 			if ( '' !== $desc ) {
-				echo sprintf( '<p class="description">%1$s</p>',
+				echo sprintf(
+					'<p class="description">%1$s</p>',
 					esc_html( $desc )
 				);
 			}
 		} else {
-			echo sprintf( '<p><code>%1$s</code></p>',
+			echo sprintf(
+				'<p><code>%1$s</code></p>',
 				esc_html__( 'Defined in wp-config.php', 'minnpost-membership' )
 			);
 		}
@@ -3318,24 +3532,68 @@ class MinnPost_Membership_Admin {
 		$desc  = $args['desc'];
 		$url   = $args['url'];
 		if ( isset( $args['link_class'] ) ) {
-			echo sprintf( '<p><a class="%1$s" href="%2$s">%3$s</a></p>',
+			echo sprintf(
+				'<p><a class="%1$s" href="%2$s">%3$s</a></p>',
 				esc_attr( $args['link_class'] ),
 				esc_url( $url ),
 				esc_html( $label )
 			);
 		} else {
-			echo sprintf( '<p><a href="%1$s">%2$s</a></p>',
+			echo sprintf(
+				'<p><a href="%1$s">%2$s</a></p>',
 				esc_url( $url ),
 				esc_html( $label )
 			);
 		}
 
 		if ( '' !== $desc ) {
-			echo sprintf( '<p class="description">%1$s</p>',
+			echo sprintf(
+				'<p class="description">%1$s</p>',
 				esc_html( $desc )
 			);
 		}
 
+	}
+
+	/**
+	* Display suggested donation amounts for each frequency to be configured
+	*
+	* @param array $args
+	*/
+	public function display_suggested_amounts( $args ) {
+
+		$desc   = $args['desc'];
+		$id     = $args['label_for'];
+		$name   = $args['name'];
+		$values = get_option( $id, '' );
+		if ( '' === $values && isset( $args['default'] ) && '' !== $args['default'] ) {
+			$values = $args['default'];
+		}
+
+		// this hardcodes an expectation of 4 suggested amounts per frequency
+		// if we ever want to make this configurable, we'll need to do that here as well.
+		foreach ( range( 0, 3 ) as $i ) {
+			$value = array(
+				'amount' => '',
+				'desc'   => '',
+			);
+			if ( is_array( $values ) && array_key_exists( $i, $values ) ) {
+				$value = $values[ $i ];
+			}
+
+			printf( '<div>' );
+			printf(
+				'<input type="text" name="%1$s" value="%2$s" size="5">',
+				esc_attr( $name . '[' . $i . '][amount]' ),
+				esc_attr( $value['amount'] )
+			);
+			printf(
+				'<input type="text" name="%1$s" value="%2$s" size="40">',
+				esc_attr( $name . '[' . $i . '][desc]' ),
+				esc_attr( $value['desc'] )
+			);
+			printf( '</div>' );
+		}
 	}
 
 }

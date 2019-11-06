@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Membership
 Description: This plugin manages various parts of MinnPost's membership UX.
-Version: 0.0.9
+Version: 0.0.11
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-membership
@@ -33,7 +33,7 @@ define( 'MINNPOST_MEMBERSHIP_FILE', __FILE__ );
  * @since 0.0.6
  * @var string
  */
-define( 'MINNPOST_MEMBERSHIP_VERSION', '0.0.9' );
+define( 'MINNPOST_MEMBERSHIP_VERSION', '0.0.11' );
 
 // Load the autoloader.
 require_once( 'lib/autoloader.php' );

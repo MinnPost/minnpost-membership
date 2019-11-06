@@ -52,6 +52,7 @@ class MinnPost_Membership_Shortcodes {
 		// shortcodes for pages
 		add_shortcode( 'donations', array( $this, 'donations' ) ); // active/pending donations
 		add_shortcode( 'donation-history', array( $this, 'donation_history' ) ); // donation history
+		add_action( 'template_redirect', array( $this, 'manage_donations_require_login' ) ); // these shortcodes require users to be logged in
 	}
 
 	/**
@@ -367,6 +368,42 @@ class MinnPost_Membership_Shortcodes {
 
 		return $message;
 
+	}
+
+	/**
+	* Redirect users who are not logged in if they encounter manage donation shortcodes
+	*
+	*/
+	public function manage_donations_require_login() {
+		// if we're not on a singular, it doesn't matter
+		if ( ! is_singular() ) {
+			return;
+		}
+		// if a user is logged in, go ahead and let it continue
+		$user_id = get_current_user_id();
+		if ( 0 !== $user_id ) {
+			return;
+		}
+		global $post;
+		if ( ! empty( $post->post_content ) ) {
+			$regex = get_shortcode_regex();
+			preg_match_all( '/' . $regex . '/', $post->post_content, $matches );
+			// is there a shortcode?
+			if ( ! empty( $matches[2] ) ) {
+				// does the shortcode match either of these donation managing shortcodes?
+				if ( ! empty( array_intersect( array( 'donations', 'donation-history' ), $matches[2] ) ) ) {
+					global $wp;
+					$current_slug = add_query_arg( array(), $wp->request );
+					wp_redirect( site_url( '/user/login/?destination=/' . $current_slug ) );
+				} else {
+					return;
+				}
+			} else {
+				return;
+			}
+		} else {
+			return;
+		}
 	}
 
 }
