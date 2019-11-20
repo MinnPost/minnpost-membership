@@ -58,6 +58,7 @@ function adminstyles() {
       mqpacker( {
         'sort': true
       } ),
+      autoprefixer(),
       cssnano( {
         'safe': true // Use safe optimizations.
       } ) // Minify
@@ -80,6 +81,7 @@ function frontendstyles() {
       mqpacker( {
         'sort': true
       } ),
+      autoprefixer(),
       cssnano( {
         'safe': true // Use safe optimizations.
       } ) // Minify
