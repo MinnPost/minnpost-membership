@@ -1361,26 +1361,26 @@ msgstr ""
 msgid "Choose Amount"
 msgstr ""
 
-#: templates/front-end/support.php:207
+#: templates/front-end/support.php:208
 msgid "Select Thank You Gift"
 msgstr ""
 
-#: templates/front-end/support.php:212
+#: templates/front-end/support.php:213
 msgid "Choose thank you&nbsp;gift"
 msgstr ""
 
-#: templates/front-end/support.php:216
+#: templates/front-end/support.php:217
 msgid "Decline gift and give entire amount to MinnPost"
 msgstr ""
 
-#: templates/front-end/support.php:236
+#: templates/front-end/support.php:237
 msgid "You are eligible for <strong>one</strong> of the following items:"
 msgstr ""
 
-#: templates/front-end/support.php:282
+#: templates/front-end/support.php:283
 msgid "Decline gift"
 msgstr ""
 
-#: templates/front-end/support.php:333
+#: templates/front-end/support.php:334
 msgid "Decline subscription"
 msgstr ""
