@@ -9,7 +9,7 @@
     ],
     "require": {
         "brain/cortex": "~1.0.0",
-        "cmb2/cmb2": "^2.7.0"
+        "cmb2/cmb2": "2.6.0"
     },
     "autoload"    : {
       "files": [
