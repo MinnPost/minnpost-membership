@@ -9,7 +9,8 @@ $_color-base-red: #801018;
 $color__white: #fff;
 $color__black: #000;
 $content-font-size: 1em;
-$cta-spacing: 8px;
+$cta-spacing: 0.5em;
+$border-radius: 0.25em;
 
 $progress-font-size-large: 2.5rem;
 $progress-font-size-small: 0.875rem;
@@ -101,7 +102,7 @@ $summary-max-width: 45%;
 			font-weight: bold;
 			cursor: pointer;
 			border: 1px solid $border-color-lighter;
-			border-radius: $cta-spacing;
+			border-radius: $border-radius;
 			background: $_color-base-gray;
 			color: $color__white;
 		}
@@ -187,7 +188,7 @@ $summary-max-width: 45%;
 				border: 2px solid $_color-base-gray;
 				width: 100%;
 				padding: 0.75em 0 0.75em 1.75em;
-				border-radius: $cta-spacing;
+				border-radius: $border-radius;
 				text-align: left;
 				font-size: 1.2em;
 			}
@@ -311,7 +312,7 @@ $summary-max-width: 45%;
 				border: 3px solid $border-color-lighter;
 			}
 			input:disabled + label::after {
-				border-radius: $cta-spacing;
+				border-radius: $border-radius;
 				background-color: $color__gray-light;
 			}
 			input:checked:disabled + label {
