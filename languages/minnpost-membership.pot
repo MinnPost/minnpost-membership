@@ -1,4 +1,4 @@
-# Copyright (C) 2019 minnpost-membership
+# Copyright (C) 2020 minnpost-membership
 # This file is distributed under the same license as the minnpost-membership package.
 msgid ""
 msgstr ""
