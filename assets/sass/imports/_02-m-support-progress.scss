@@ -37,7 +37,7 @@
 }
 
 // media queries
-@media screen and (min-width: $more-than-logo-screen) {
+@media screen and (min-width: $size__xs) {
 	.m-support-progress {
 		a, span {
 			font-size: $progress-font-size-small;

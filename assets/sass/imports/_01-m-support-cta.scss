@@ -1,107 +1,133 @@
 .m-support-cta {
 	display: flex;
-	padding: 0 $cta-spacing;
 
+	// cta in the site header
 	&.m-support-cta-top {
 		justify-content: space-evenly;
 		align-items: center;
 		text-align: center;
 		flex-direction: column-reverse;
 		width: auto;
-		max-width: 100%;
 		width: 100%;
-		margin-bottom: $cta-spacing;
 
+		// tagline
 		h2 {
 			font-weight: normal;
-			line-height: 1.3;
 		}
 
+		// donate button
 		.a-support-button {
 			display: flex;
-			height: auto;
-			width: 80%;
-			border-radius: $border-radius;
-			background: $border-color-lighter;
-			color: #000;
-			display: flex;
+			flex: 1;
 			align-items: center;
 			justify-content: center;
-			font-size: 1.5em;
-			padding: 0.25em 0.5em;
+			height: auto;
+			width: 80%;
+			padding: $cta-spacing / 2 $cta-spacing;
 			margin-left: auto;
 			margin-right: auto;
-			margin-bottom: $cta-spacing;
+			border-radius: $border-radius;
+			background: $color-border;
+			color: $color__black;
+
 			&.a-support-button-with-heart {
+
 				svg {
 					fill: currentColor;
 					max-height: 100%;
-					width: 1em;
+					width: $content-font-size;
 					display: inline-block;
 					margin-right: $cta-spacing;
 				}
 			}
 		}
 	}
+
+	// cta in the site footer
 	&.m-support-cta-bottom {
 		flex-wrap: wrap;
-		h1 {
-			font-size: $large-title-font-size;
+
+		p {
+			margin-bottom: $cta-spacing * 2;
 		}
+
+		// form
 		.m-membership-fast-select {
 			margin: 0;
-			font-size: 1.5em;
-			text-align: center;
-			border: 0;
-			padding: 0;
-			min-width: 0;
+
 			.m-form-item-wrap {
-				margin: 0 0 0.5em;
+				display: flex;
+				flex-wrap: wrap;
+				width: 100%;
+				justify-content: flex-start;
+				align-items: center;
+				margin-bottom: $cta-spacing;
 			}
-			.a-fast-select-currency, .a-fast-select-intro, .m-form-item, .m-form-radios, .m-form-radios .m-form-item {
-				display: inline-block;
-				margin: 0;
-				vertical-align: top;
-				position: relative;
+
+			.m-amount-group,
+			.a-fast-select-currency,
+			.a-fast-select-intro,
+			.m-form-item,
+			.m-form-radios,
+			.m-form-radios .m-form-item {
+				display: flex;
 			}
-			a.a-button, button, input#amount, input.a-button {
-				padding: .25em 0;
-				text-align: center;
-				vertical-align: top;
+
+			.m-amount-group {
+				margin-right: $cta-spacing / 2;
+				align-items: center;
 			}
-			.a-fast-select-currency {
-				padding-right: 0.25em;
-			}
-			.a-fast-select-currency, .a-fast-select-intro {
-				padding-top: 0.35em;
-			}
-			.a-fast-select-intro {
-				color: $_color-base-gray;
-				padding-right: 0.5em;
-			}
-			#amount-item #amount {
-				border: 1px solid #ccc;
-				width: 3em;
-				padding: .35em 0;
-			}
+
 			.m-form-radios {
+				flex: auto;
+				justify-content: space-evenly;
+			}
+
+			a.a-button,
+			button,
+			input#amount,
+			input.a-button {
+				text-align: center;
+			}
+
+			.a-fast-select-currency {
+				padding-right: $cta-spacing / 2;
+			}
+
+			.a-fast-select-intro {
+				color: $color-gray-dark;
+				padding-right: $cta-spacing;
+			}
+
+			.m-form-item {
+				margin: 0;
+			}
+
+			#amount-item #amount {
+				border: $border-style;
+				width: 4em;
+				padding: $cta-spacing / 2 0;
+			}
+
+			.m-form-radios {
+
 				input[type="radio"] {
 				    left: 0;
 				    opacity: 0;
 				    position: absolute;
 				    top: 0;
 				}
+
 				label {
-					display: inline-block;
-					margin: 0 .0025em;
-					padding: .75em;
-					font-size: .65em;
+					display: flex;
+					padding: $cta-spacing / 2 .75em;
 					font-weight: 700;
 					cursor: pointer;
-					border: 1px solid $border-color-lighter;
+					border: $border-style;
 				}
 			}
 		}
+
 		.m-form-actions {
 			margin: 0.5em 0 0 0;
 		}
@@ -109,19 +135,8 @@
 }
 
 // media queries
-@media screen and (min-width: 400px) {
+@media screen and (min-width: $size__xs) {
 	.m-support-cta {
-		&.m-support-cta-top {
-			.a-support-button {
-				width: 60%;
-			}
-		}
-	}
-}
-
-@media screen and (min-width: $more-than-logo-screen) {
-	.m-support-cta {
-		padding: 0;
 
 		&.m-support-cta-top {
 			text-align: left;
@@ -135,41 +150,8 @@
 
 			.a-support-button {
 				margin-left: $cta-spacing;
-				margin-bottom: 0;
-				border-radius: $border-radius;
-				width: auto;
-				//width: 112px;
-				/*&.a-support-button-with-heart {
-					width: 130px;
-				}*/
+				margin-right: 0;
 			}
-		}
-	}
-}
-
-@media screen and (min-width: $nav-breaks) {
-	.m-support-cta {
-		&.m-support-cta-bottom {
-			max-width: 50%;
-		}
-	}
-}
-
-@media screen and (min-width: $wrap-header) and (max-width: $nav-wrap-screen) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			justify-content: space-evenly;
-			align-items: flex-end;
-			flex-direction: column;
-		}
-	}
-}
-
-@media screen and (min-width: $wrap-header) {
-	.m-support-cta {
-		&.m-support-cta-top {
-			margin-left: auto;
-			margin-bottom: 0;
 		}
 	}
 }
