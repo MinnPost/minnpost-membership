@@ -30,16 +30,18 @@
 					<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'pre_select_text', '' ) ) : ?>
 						<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'pre_select_text', '' ); ?></span>
 					<?php endif; ?>
-					<span class="a-fast-select-currency">&dollar;</span>
-					<div id="amount-item" class="m-form-item">
-						<?php
-						if ( isset( $url_params['amount'] ) ) {
-							$amount = $url_params['amount'];
-						} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
-							$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
-						}
-						?>
-						<input id="amount" min="1" name="amount" value="<?php echo $amount; ?>" type="number">
+					<div class="m-amount-group">
+						<span class="a-fast-select-currency">&dollar;</span>
+						<div id="amount-item" class="m-form-item">
+							<?php
+							if ( isset( $url_params['amount'] ) ) {
+								$amount = $url_params['amount'];
+							} elseif ( '' !== get_option( $minnpost_membership->option_prefix . 'support_start_value', '' ) ) {
+								$amount = get_option( $minnpost_membership->option_prefix . 'support_start_value', '' );
+							}
+							?>
+							<input id="amount" min="1" name="amount" value="<?php echo $amount; ?>" type="number">
+						</div>
 					</div>
 					<?php
 					$frequency_options = $minnpost_membership->member_levels->get_frequency_options();
