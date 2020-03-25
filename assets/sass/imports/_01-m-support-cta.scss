@@ -1,6 +1,5 @@
 .m-support-cta {
 	display: flex;
-	padding: 0 $cta-spacing;
 
 	&.m-support-cta-top {
 		justify-content: space-evenly;
@@ -19,16 +18,15 @@
 
 		.a-support-button {
 			display: flex;
-			height: auto;
-			width: 80%;
-			border-radius: $border-radius;
+			border-radius: $cta-spacing / 2;
 			background: $border-color-lighter;
 			color: #000;
+			height: 34px;
+			width: 80%;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			font-size: 1.5em;
-			padding: 0.25em 0.5em;
 			margin-left: auto;
 			margin-right: auto;
 			margin-bottom: $cta-spacing;
@@ -36,7 +34,7 @@
 				svg {
 					fill: currentColor;
 					max-height: 100%;
-					width: 1em;
+					width: 20px;
 					display: inline-block;
 					margin-right: $cta-spacing;
 				}
@@ -121,7 +119,6 @@
 
 @media screen and (min-width: $more-than-logo-screen) {
 	.m-support-cta {
-		padding: 0;
 
 		&.m-support-cta-top {
 			text-align: left;
@@ -136,12 +133,12 @@
 			.a-support-button {
 				margin-left: $cta-spacing;
 				margin-bottom: 0;
-				border-radius: $border-radius;
+				border-radius: $cta-spacing;
 				width: auto;
-				//width: 112px;
-				/*&.a-support-button-with-heart {
+				width: 112px;
+				&.a-support-button-with-heart {
 					width: 130px;
-				}*/
+				}
 			}
 		}
 	}
