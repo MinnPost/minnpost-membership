@@ -573,8 +573,10 @@ class MinnPost_Membership_Content_Items {
 		) );
 
 		$member_levels = $this->member_levels->get_member_levels( '', false );
-		foreach ( $member_levels as $member_level ) {
-			$roles[] = $member_level['slug'];
+		if ( is_array( $member_levels ) && ! empty( $member_levels ) ) {
+			foreach ( $member_levels as $member_level ) {
+				$roles[] = $member_level['slug'];
+			}
 		}
 		$roles[] = 'administrator';
 		$roles[] = 'business';
