@@ -169,7 +169,6 @@ $user_id    = get_current_user_id();
 										$id_key           = $freq_id . '-' . ( $key + 1 );
 										$suggested_amount = $option['amount'];
 										$checked          = '';
-										error_log( 'amount is ' . $amount . ' and suggested amount is ' . $suggested_amount );
 										if ( $freq_value === $frequency && (int) $amount === (int) $suggested_amount ) {
 											$other_amount = '';
 											$checked      = ' checked';

@@ -610,6 +610,42 @@ msgstr ""
 msgid "Switch display item"
 msgstr ""
 
+#: classes/class-minnpost-membership-admin.php:2416
+msgid "Send us an email alert when an offer is claimed?"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2429
+msgid "Where to send email alerts"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2442
+msgid "Send email to claiming user"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2455
+msgid "Email sending address"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2468
+msgid "Email sending name"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2481
+msgid "Email subject"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2487
+msgid "The subject of the email sent to claiming users."
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2494
+msgid "Email body"
+msgstr ""
+
+#: classes/class-minnpost-membership-admin.php:2500
+msgid "The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values."
+msgstr ""
+
 #: classes/class-minnpost-membership-admin.php:2306
 msgid "User is not logged in"
 msgstr ""
@@ -648,42 +684,6 @@ msgstr ""
 
 #: classes/class-minnpost-membership-admin.php:2407
 msgid "Claim success message"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2416
-msgid "Send us an email alert when an offer is claimed?"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2429
-msgid "Where to send email alerts"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2442
-msgid "Send email to claiming user"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2455
-msgid "Email sending address"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2468
-msgid "Email sending name"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2481
-msgid "Email subject"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2487
-msgid "The subject of the email sent to claiming users."
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2494
-msgid "Email body"
-msgstr ""
-
-#: classes/class-minnpost-membership-admin.php:2500
-msgid "The body of the email sent to claiming users. $quantity, $type, and $offer will be replaced with the actual values."
 msgstr ""
 
 #: classes/class-minnpost-membership-admin.php:2512
@@ -1128,24 +1128,16 @@ msgstr ""
 msgid "This gift requires you to give at least "
 msgstr ""
 
-#: classes/class-minnpost-membership-member-level.php:121
+#: classes/class-minnpost-membership-member-level.php:122
 msgid "monthly"
 msgstr ""
 
-#: classes/class-minnpost-membership-member-level.php:128
+#: classes/class-minnpost-membership-member-level.php:129
 msgid "yearly"
 msgstr ""
 
-#: classes/class-minnpost-membership-member-level.php:135
+#: classes/class-minnpost-membership-member-level.php:136
 msgid "one time"
-msgstr ""
-
-#: classes/class-minnpost-membership-shortcodes.php:170
-msgid "One-time"
-msgstr ""
-
-#: classes/class-minnpost-membership-shortcodes.php:172
-msgid "Transaction Date"
 msgstr ""
 
 #: classes/class-minnpost-membership-shortcodes.php:177
@@ -1154,6 +1146,14 @@ msgstr ""
 
 #: classes/class-minnpost-membership-shortcodes.php:178
 msgid "Next Transaction Date"
+msgstr ""
+
+#: classes/class-minnpost-membership-shortcodes.php:170
+msgid "One-time"
+msgstr ""
+
+#: classes/class-minnpost-membership-shortcodes.php:172
+msgid "Transaction Date"
 msgstr ""
 
 #: classes/class-minnpost-membership-shortcodes.php:186
@@ -1345,7 +1345,7 @@ msgstr ""
 msgid "- Claiming user edit link: %1$s"
 msgstr ""
 
-#: templates/front-end/support.php:34, templates/front-end/support.php:36
+#: templates/front-end/support.php:36, templates/front-end/support.php:34
 msgid "Payment"
 msgstr ""
 
@@ -1361,26 +1361,26 @@ msgstr ""
 msgid "Choose Amount"
 msgstr ""
 
-#: templates/front-end/support.php:208
+#: templates/front-end/support.php:207
 msgid "Select Thank You Gift"
 msgstr ""
 
-#: templates/front-end/support.php:213
+#: templates/front-end/support.php:212
 msgid "Choose thank you&nbsp;gift"
 msgstr ""
 
-#: templates/front-end/support.php:217
+#: templates/front-end/support.php:216
 msgid "Decline gift and give entire amount to MinnPost"
 msgstr ""
 
-#: templates/front-end/support.php:237
+#: templates/front-end/support.php:236
 msgid "You are eligible for <strong>one</strong> of the following items:"
 msgstr ""
 
-#: templates/front-end/support.php:283
+#: templates/front-end/support.php:282
 msgid "Decline gift"
 msgstr ""
 
-#: templates/front-end/support.php:334
+#: templates/front-end/support.php:333
 msgid "Decline subscription"
 msgstr ""
