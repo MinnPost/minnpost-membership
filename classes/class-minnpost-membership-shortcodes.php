@@ -159,9 +159,12 @@ class MinnPost_Membership_Shortcodes {
 
 			// merged, sorted array of donations
 			$all_donations = array_merge( $active_recurring_donations, $pledged_opportunities );
-			usort( $all_donations, function ( $item1, $item2 ) {
-				return $item1['next_date'] <=> $item2['next_date'];
-			});
+			usort(
+				$all_donations,
+				function ( $item1, $item2 ) {
+					return $item1['next_date'] <=> $item2['next_date'];
+				}
+			);
 
 			if ( ! empty( $all_donations ) ) {
 				foreach ( $all_donations as $donation ) {
@@ -180,13 +183,14 @@ class MinnPost_Membership_Shortcodes {
 						$donation_cancel_url   = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
 					}
 
-					$donation_type_heading   = sprintf( 'Your %1$s Donation',
+					$donation_type_heading   = sprintf(
+						'Your %1$s Donation',
 						ucfirst( $donation_type )
 					);
 					$modify_donation_heading = __( 'Modify Your Donation', 'minnpost-membership' );
 					$update_payment_button   = __( 'Update Payment Method', 'minnpost-membership' );
 					$change_amount_button    = __( 'Change Amount', 'minnpost-membership' );
-					$stop_button             = __( 'Stop', 'minnpost-membership' );
+					$stop_button             = __( 'Stop Donation', 'minnpost-membership' );
 					$caption_review          = __( 'You will be able to review and confirm these actions in the final step.', 'minnpost-membership' );
 
 					$messages[] = '
@@ -303,13 +307,19 @@ class MinnPost_Membership_Shortcodes {
 				$opportunity_type_value
 			);
 
-			usort( $failed_opportunities, function ( $item1, $item2 ) {
-				return $item2['close_date'] <=> $item1['close_date'];
-			});
+			usort(
+				$failed_opportunities,
+				function ( $item1, $item2 ) {
+					return $item2['close_date'] <=> $item1['close_date'];
+				}
+			);
 
-			usort( $successful_opportunities, function ( $item1, $item2 ) {
-				return $item2['close_date'] <=> $item1['close_date'];
-			});
+			usort(
+				$successful_opportunities,
+				function ( $item1, $item2 ) {
+					return $item2['close_date'] <=> $item1['close_date'];
+				}
+			);
 
 			$history = '';
 
