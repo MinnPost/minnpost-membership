@@ -361,14 +361,15 @@ class MinnPost_Membership_Shortcodes {
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $successful_opportunities as $donation ) {
-					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
+					$frequency = isset( $donation['frequency'] ) ? strtolower( $donation['frequency'] ) : '';
+					$history  .= '<tr><td>$' . $donation['amount'] . ' ' . $frequency . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
 				}
 				$history .= '</table></section>';
 			}
 		}
 
 		if ( ! empty( $history ) ) {
-				$message .= '<article class="m-donation-history">' . $history . '</article>';
+				$message = '<article class="m-donation-history">' . $history . '</article>';
 		} else {
 			$message = '<article class="m-no-donation-history">' . wp_kses_post( wpautop( get_option( $this->option_prefix . 'no_donation_message', '' ) ) ) . '</article>';
 		}
