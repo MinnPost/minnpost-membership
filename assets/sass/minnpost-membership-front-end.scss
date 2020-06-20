@@ -1,10 +1,10 @@
 // variables. some of these match variables in minnpost-largo.
-$border-color-lighter: #e5e5e5;
-$border-color-darker: #cdcdd0;
-$color__gray-light: #ababab;
-$color__gray-dark: #404040;
-$color__gray-darkest: #282828;
-$_color-base-gray: #7a7a7a;
+$border-color-lighter: #ebebfb;
+$border-color-darker: #d6d6da;
+$color__gray-light: #d6d6da;
+$color__gray-dark: #5e6e76;
+$color__gray-darkest: #1a1818;
+$_color-base-gray: #869298;
 $_color-base-red: #801018;
 $color__white: #fff;
 $color__black: #1a1818;
@@ -17,11 +17,11 @@ $color-gray-dark: #5e6e76;
 $color-border: #d6d6da;
 $border-style: 1px solid $color-border;
 
-$progress-font-size-large: 2.5rem;
-$progress-font-size-small: 0.875rem;
-$vertical-space: 1em;
+$progress-font-size-large: 3em;
+$progress-font-size-small: 0.75em;
+$vertical-space: 1.5em;
 $large-title-font-size: 215.4%;
-$small-space: 0.8125em; // 13px
+$small-space: 0.75em;
 
 // media query sizes. see minnpost-largo for theme queries.
 $size__xs: 30em;

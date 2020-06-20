@@ -1,6 +1,6 @@
 // this is the support menu
 .m-support-progress {
-	margin: 0.625rem 0 0.625rem * 2 0;
+	margin: 0 0 $vertical-space 0;
 	ol {
 		list-style: none;
 		width: 100%;
@@ -13,6 +13,8 @@
 	li {
 		flex: 1;
 		position: relative;
+		margin: 0;
+		padding: 0;
 	}
 	a, span {
 		display: block;
@@ -29,7 +31,7 @@
 		content: none;
 		counter-increment: li;
 		top: 0;
-		left: 1rem;
+		left: 0.25em;
 		position: absolute;
 		color: $color--gray-light;
 		font-size: $progress-font-size-large;
@@ -41,12 +43,13 @@
 	.m-support-progress {
 		a, span {
 			font-size: $progress-font-size-small;
-			padding: $small-space 0 $small-space 3em;
+			padding: $small-space 0 $small-space $progress-font-size-large;
 		}
 		a:before, span:before {
 			content: counter(li, decimal);
 			top: -0.15em;
 			font-size: $progress-font-size-large;
+			line-height: 1em;
 		}
 	}
 }
