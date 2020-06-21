@@ -1,3 +1,9 @@
+// set some default variables to override in theme
+$gray: #ddd;
+$gray-dark: #333;
+
+
+
 // variables. some of these match variables in minnpost-largo.
 $border-color-lighter: #ebebfb;
 $border-color-darker: #d6d6da;
@@ -24,7 +30,8 @@ $large-title-font-size: 215.4%;
 $small-space: 0.75em;
 
 // media query sizes. see minnpost-largo for theme queries.
-$size__xs: 30em;
+$size__xs: 30em; // 480px
+$size__sm: 40em; // 640px
 $medium-margins-too-small: 700px;
 $nav-breaks: 768px;
 $wrap-header: 830px;
