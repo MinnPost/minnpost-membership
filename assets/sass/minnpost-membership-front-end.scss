@@ -2,8 +2,6 @@
 $gray: #ddd;
 $gray-dark: #333;
 
-
-
 // variables. some of these match variables in minnpost-largo.
 $border-color-lighter: #ebebfb;
 $border-color-darker: #d6d6da;
@@ -136,19 +134,21 @@ $summary-max-width: 45%;
 	}
 	// second in sequence: choose amount
 	&.m-membership-choose-amount {
+
 		.m-form-radios .m-form-item {
 			margin: 0;
 			width: 100%;
 			text-align: left;
 			display: flex;
 		}
+		
 		label {
-			margin: 0 0 0.75em 0;
-			padding: 0.75em 1.5em;
+			margin: 0 0 0.5em 0;
+			padding: 0.5em 1.5em;
 			font-weight: normal;
 			strong {
 				display: block;
-				width: 9em;
+				width: 7em;
 				height: 100%;
 			}
 
@@ -180,12 +180,11 @@ $summary-max-width: 45%;
 		.a-fast-select-intro {
 			cursor: pointer;
 			padding-top: 0.25em;
-			padding-right: 1.5em;
+			padding-right: 0.5em;
 			width: 200px;
 			font-size: 1em;
 			font-family: Helvetica,Arial,sans-serif;
-			line-height: 2.4em;
-			padding-left: 2em;
+			padding-left: 3em;
 		}
 		#amount-item {
 			flex: 1;
@@ -265,8 +264,8 @@ $summary-max-width: 45%;
 						text-align: left;
 						font-weight: normal;
 						font-size: 0.8em;
-						line-height: 1.2em;
-						margin-bottom: 1.2em;
+						line-height: 1.3;
+						margin-bottom: 1.5em;
 					}
 				}
 
@@ -370,10 +369,6 @@ $summary-max-width: 45%;
 				strong {
 					float: left;
 				}
-			}
-			.a-fast-select-intro {
-				padding-left: 6em;
-				line-height: 1.2em;
 			}
 		}
 	}
