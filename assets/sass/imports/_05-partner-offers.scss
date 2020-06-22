@@ -1,7 +1,8 @@
 .m-all-partners {
-	font-size: 1.23em;
-	line-height: 1.5em;
-	margin-bottom: 0.75em;
+	//font-size: 1.23em;
+	//line-height: 1.5;
+	margin-bottom: $standard-heading-margin;
+	
 	.m-partner-list {
 		display: flex;
 		justify-content: space-between;
@@ -9,11 +10,13 @@
 		flex-wrap: wrap;
 		padding: 0;
 		margin-left: 0;
+	
 		li {
 			padding: 20px;
 			width: 44%;
 			list-style: none;
 		}
+	
 		img {
 			display: block;
 			width: 100%;
@@ -22,38 +25,48 @@
 }
 
 .m-entry-content.m-partner-offers {
-	margin: $vertical-space 0;
-	padding: $vertical-space / 2 0;
+	margin: $standard-block-margin 0;
+	padding: $standard-heading-margin 0;
+	
 	.m-partner-offer {
-		border: 1px solid $border-color-darker;
-		margin-bottom: $vertical-space;
-		padding: $vertical-space / 2;
+		border: $border-default-style;
+		margin-bottom: $standard-block-margin;
+		padding: $standard-heading-margin;
+	
 		.m-partner-offer-image {
 			width: 200px;
 			min-width: 200px;
 		}
+	
 		.m-partner-offer-content {
+	
 			.m-partner-offer-header {
 				margin-bottom: 0;
 			}
+	
 			.a-entry-title {
-				font-size: 215.4%;
-				margin-bottom: 0.25em;
-				line-height: 1.15em;
+				//font-size: 215.4%;
+				//margin-bottom: 0.25em;
+				//line-height: 1.15em;
 			}
+
 			p {
 				margin: 0;
 			}
+
 			select {
 				margin: 0.25em 0;
 			}
+
 			.a-button {
 				margin: 0.25em 0;
 				display: block;
 			}
+
 			a.a-button {
 				display: inline-block;
 			}
+
 			.a-partner-offer-learn-more {
 				display: inline-block;
 			}
@@ -62,15 +75,18 @@
 }
 
 .m-membership-action {
-	padding: $vertical-space;
-	margin: $vertical-space 0;
-	border: 1px solid $border-color-lighter;
+	padding: $standard-block-margin;
+	margin: $standard-block-margin 0;
+	border: $border-default-style;
+	
 	h2 {
-		margin-bottom: $vertical-space / 2;
+		margin-bottom: $standard-heading-margin;
 	}
+	
 	p:last-of-type {
 		margin-bottom: 0;
 	}
+	
 	.a-button {
 		display: inline-block;
 		margin-top: 5px;
@@ -81,8 +97,10 @@
 // media queries
 @media screen and (min-width: $medium-margins-too-small) {
 	.m-partner-offers {
+		
 		.m-partner-offer {
 			display: flex;
+		
 			.m-partner-offer-image {
 				margin: 0 1em 0 0;
 			}
@@ -92,7 +110,9 @@
 
 @media screen and (min-width: $level-widths-change) {
 	.m-all-partners {
+		
 		.m-partner-list {
+		
 			li {
 				width: 22%;
 			}
@@ -103,6 +123,7 @@
 // ie old - dependent on modernizr
 .no-borderimage .m-all-partners .m-partner-list {
 	display: block;
+	
 	li {
 	  display: inline-block;
 	}

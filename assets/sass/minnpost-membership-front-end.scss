@@ -1,31 +1,31 @@
-// set some default variables to override in theme
-$gray: #ddd;
-$gray-dark: #333;
+// neutral colors
+$neutral-colors: (
+	black: #1a1818, // logo
+	dark: #5e6e76,
+	medium: #869298,
+	border: #d6d6da,
+	highlight: #ebebfb,
+	light: #efeff0,
+	white: #fff
+);
 
-// variables. some of these match variables in minnpost-largo.
-$border-color-lighter: #ebebfb;
-$border-color-darker: #d6d6da;
-$color__gray-light: #d6d6da;
-$color__gray-dark: #5e6e76;
-$color__gray-darkest: #1a1818;
-$_color-base-gray: #869298;
-$_color-base-red: #801018;
-$color__white: #fff;
-$color__black: #1a1818;
+// margin/padding
+$standard-block-margin: 1.5em; // 36px at desktop
+$standard-heading-margin: 0.75em; // 18px at desktop
+$standard-block-padding: 0.5em; // 12px at body
+
+$border-radius: 4px;
+$border-default-style: 1px solid neutral-color(border);
+
+$home-content-sidebar-padding: 35px;
+$archive-content-sidebar-padding: 15px;
+$form-text-indent: 6px;
 
 // redesign theme variables
 $content-font-size: 1em;
-$cta-spacing: 0.5em;
-$border-radius: 4px;
-$color-gray-dark: #5e6e76;
-$color-border: #d6d6da;
-$border-style: 1px solid $color-border;
-
 $progress-font-size-large: 3em;
 $progress-font-size-small: 0.75em;
-$vertical-space: 1.5em;
 $large-title-font-size: 215.4%;
-$small-space: 0.75em;
 
 // media query sizes. see minnpost-largo for theme queries.
 $size__xs: 30em; // 480px
@@ -44,6 +44,7 @@ $summary-max-width: 45%;
 
 .m-layout-membership {
 	width: 100%;
+	
 	fieldset {
 		border: 0;
 		margin: 0;
@@ -58,335 +59,42 @@ $summary-max-width: 45%;
 	padding: 0;
 }
 
-.m-membership-summary, .m-membership-summary-short {
-	margin-bottom: $vertical-space;
+.m-membership-summary,
+.m-membership-summary-short {
+	margin-bottom: $standard-block-margin;
 }
+
 .m-membership-summary {
 	display: none;
 }
 
-.m-membership-choice-group {
-	&:first-of-type {
-		margin-top: $vertical-space;
-	}
-	h2 {
-		margin-bottom: $cta-spacing;
-	}
-	// radios
-	.m-form-radios {
-		width: 100%;
-	}
-	.m-form-radios, .m-form-checkboxes {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-
-		.m-frequency-group {
-			width: 100%;
-			display: none;
-			&.active {
-				display: block;
-			}
-		}
-		.m-form-item {
-			position: relative;
-			text-align: center;
-		}
-		input[type="radio"], input[type="checkbox"] {
-			left: 0;
-			opacity: 0;
-			position: absolute;
-			top: 0;
-		}
-		label {
-			width: 100%;
-			height: 100%;
-			margin: 0 0.0025em;
-			padding: 0.75em;
-			font-size: 0.975em;
-			font-weight: bold;
-			cursor: pointer;
-			border: $border-style;
-			border-radius: $border-radius;
-			background: $color-gray-dark;
-			color: $color__white;
-		}
-		input:checked + label {
-			background-color: $color-border;
-			color: $color__black;
-		}
-		input:disabled + label::after {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background-color: $color-border;
-			opacity: 0.75;
-		}
-	}
-	// first in sequence: choose frequency
-	&.m-membership-choose-frequency {
-		.m-form-radios .m-form-item {
-			width: 32%;
-		}
-	}
-	// second in sequence: choose amount
-	&.m-membership-choose-amount {
-
-		.m-form-radios .m-form-item {
-			margin: 0;
-			width: 100%;
-			text-align: left;
-			display: flex;
-		}
-		
-		label {
-			margin: 0 0 0.5em 0;
-			padding: 0.5em 1.5em;
-			font-weight: normal;
-			strong {
-				display: block;
-				width: 7em;
-				height: 100%;
-			}
-
-			.yearly-desc {
-				display: none;
-			}
-		}
-		.m-form-item-wrap {
-			width: 100%;
-			display: flex;
-			justify-content: flex-start;
-			flex-wrap: nowrap;
-		}
-		.a-fast-select-currency, .a-fast-select-intro, .a-amount-field {
-			display: inline-block;
-			margin: 0;
-			vertical-align: top;
-			position: relative;
-		}
-		.a-fast-select-currency, .a-fast-select-intro {
-			padding: 0.5em 0;
-		}
-		.a-fast-select-currency {
-			z-index: 1;
-			position: absolute;
-			margin-left: $vertical-space / 2;
-			font-size: 1.5em;
-		}
-		.a-fast-select-intro {
-			cursor: pointer;
-			padding-top: 0.25em;
-			padding-right: 0.5em;
-			width: 200px;
-			font-size: 1em;
-			font-family: Helvetica,Arial,sans-serif;
-			padding-left: 3em;
-		}
-		#amount-item {
-			flex: 1;
-			display: flex;
-			flex-wrap: wrap;
-			#amount {
-				border: 2px solid $color-gray-dark;
-				width: 100%;
-				padding: 0.75em 0 0.75em 1.75em;
-				border-radius: $border-radius;
-				text-align: left;
-				font-size: 1.2em;
-			}
-			.a-frequency-text-label {
-				margin: $vertical-space / 2;
-				width: 100%;
-				text-align: right;
-			}
-		}
-		input#amount, select, button, input.a-button, a.a-button {
-			padding: 0.25em 0;
-			text-align: center;
-			vertical-align: top;
-		}
-	}
-	// third in sequency: choose whether to get a gift
-	&.m-membership-choose-gift {
-		.m-form-radios .m-form-item {
-			width: 49%;
-			label {
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
-				text-align: center;
-			}
-		}
-	}
-	// fourth in sequence: choose gift
-	&.m-membership-gift-selector {
-		border: 1px solid $color__gray-light;
-		padding: $vertical-space / 2;
-
-		.m-select-swag, .m-select-subscription {
-			justify-content: flex-start;
-
-			.m-form-item {
-				width: 32%;
-				margin-left: 0.67%;
-			}
-		}
-
-		.min-amount, .swag-eligibility {
-			display: none;
-			&.active {
-				display: initial;
-			}
-		}
-
-		p.swag-eligibility.active {
-			display: block;
-		}
-
-		.m-form-radios .m-form-item, .m-form-checkboxes .m-form-item {
-			label {
-				position: relative;
-				display: flex;
-				flex-flow: column nowrap;
-				justify-content: space-around;
-				background: inherit;
-				color: inherit;
-				border: 3px solid transparent;
-
-				figure {
-					margin: 0;
-					height: 126px;
-					figcaption {
-						text-align: left;
-						font-weight: normal;
-						font-size: 0.8em;
-						line-height: 1.3;
-						margin-bottom: 1.5em;
-					}
-				}
-
-				.support-tooltip {
-					position: absolute;
-					visibility: hidden;
-					bottom: 0.75em;
-					left: unset;
-					right: 0.75em;
-					z-index: 1;
-
-					.tooltip-text {
-						visibility: hidden;
-						position: absolute;
-						top: 100%;
-						left: 50%;
-						width: 10em;
-						margin-left: -5em;
-						padding: $vertical-space / 2;
-						z-index: 1;
-						background-color: white;
-						border: $border-style;
-						font-weight: normal;
-						text-align: center;
-					}
-					.tooltip-text::after {
-						content: "";
-						position: absolute;
-						bottom: 100%;
-						left: 50%;
-						margin-left: -5px;
-						border-width: 5px;
-						border-style: solid;
-						border-color: transparent transparent $color-border transparent;
-					}
-				}
-			}
-
-			input:disabled + label {
-				.support-tooltip {
-					visibility: visible;
-				}
-				&:hover .tooltip-text {
-					visibility: visible;
-				}
-			}
-
-			input:checked + label {
-				background: transparent;
-				border: 3px solid $color-border;
-			}
-			input:disabled + label::after {
-				border-radius: $border-radius;
-				background-color: $color__gray-light;
-			}
-			input:checked:disabled + label {
-				border: 3px solid transparent;
-			}
-
-		}
-	}
-}
-
 // buttons
 .m-form-membership-support .m-membership-form-actions {
-	margin: $vertical-space 0;
-	button, input.a-button, a.a-button {
-		padding: $vertical-space / 2 $vertical-space;
-	}
-}
-
-// media queries
-@media screen and (min-width: $size__xs) {
-	.m-membership-choice-group {
-		// second in sequence: choose amount
-		&.m-membership-choose-amount {
-			#amount-item {
-				flex-wrap: nowrap;
-				#amount {
-					width: 100%;
-					padding: 0 0 0 1.75em;
-					&:last-child {
-						padding-right: 4em;
-					}
-				}
-				.a-frequency-text-label {
-					margin: 0.75em 0;
-					position: absolute;
-					right: 1em;
-					text-align: left;
-					width: auto;
-				}
-			}
-		}
-	}
-
-	.m-membership-choice-group {
-		&.m-membership-choose-amount {
-			label {
-				height: auto;
-				strong {
-					float: left;
-				}
-			}
-		}
+	margin: $standard-block-margin 0;
+	
+	button,
+	input.a-button,
+	a.a-button {
+		padding: $standard-heading-margin $standard-block-margin;
 	}
 }
 
 @media screen and (min-width: $nav-wrap-screen) {
 	.m-layout-membership .m-membership-support-wrapper {
+
 		.m-form-membership {
 			max-width: $form-max-width;
 			order: -1;
 		}
+
 		.m-membership-summary-short {
 			display: none;
 		}
+
 		.m-membership-summary {
 			display: block;
 			max-width: $summary-max-width;
-			margin: $vertical-space 0;
+			margin: $standard-block-margin 0;
 		}
 	}
 }

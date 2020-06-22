@@ -19,13 +19,13 @@
 			span {
 				display: block;
 				text-decoration: none;
-				background: $gray;
-				color: #000;
+				background: neutral-color(light);
+				color: neutral-color(black);
 
 				&:before {
 					content: none;
 					counter-increment: li;
-					color: #000;
+					color: neutral-color(black);
 					top: 0;
 					left: 0.25em;
 					position: absolute;
@@ -39,11 +39,11 @@
 			a.active,
 			span.active {
 				text-decoration: none;
-				background: $gray-dark;
-				color: #fff;
+				background: neutral-color(dark);
+				color: neutral-color(white);
 
 				&:before {
-					color: #fff;
+					color: neutral-color(white);
 				}
 			}
 

@@ -1,47 +1,48 @@
 .o-membership-member-levels {
-	margin: 3em 0 $vertical-space 0;
+	margin: $standard-block-margin 0;
 	padding: 0;
 	min-width: 0;
+
 	.m-membership-member-level {
-		margin-bottom: $vertical-space * 2;
+
 		.m-member-level-brief {
-			border: 1px solid $border-color-lighter;
-			padding: 0.5em;
-			margin-bottom: $vertical-space * 2;
 			text-align: center;
+
 			h2 {
-				margin: 0 0 0.5em 0;
-				padding: 0.5em 0;
+				font-size: 1em;
 				line-height: normal;
 			}
+
 			h3 {
-				font-size: 3em;
 				min-height: 75px;
 				display: block;
 				line-height: normal;
 				margin: 0;
-				padding: 0 0 0.25em 0;
-				&.smaller {
-					font-size: 2.85em;
-				}
 			}
+
 			.a-button {
 				line-height: normal;
 				margin-right: 0;
 			}
+
 			.amount {
+
 				.a-button-flip {
 					margin: 0;
 				}
 			}
+
 			.enter {
 				text-align: center;
 				backface-visibility: hidden;
 				transform: perspective(800px) rotateY(180deg);
+
 				h3 {
+
 					.m-form-item {
 						display: inline-block;
 						margin: 0;
+
 						input {
 							width: 3em;
 							text-align: center;
@@ -51,61 +52,65 @@
 							padding: 0;
 							border: 1px solid #999;
 						}
+
 					}
 				}
+
 				.a-button {
 					display: block;
-					margin: 0 auto 0.75em auto;
 				}
 			}
-			.flipper, .flipper .amount, .flipper .enter {
+
+			.flipper,
+			.flipper .amount,
+			.flipper .enter {
 				height: 190px;
 				width: 100%;
 			}
+			
 			.flipper {
 				position: relative;
-				.amount, .enter {
+				
+				.amount,
+				.enter {
 					position: absolute;
 					left: 0;
 					top: 0;
 					transition: 0.6s;
 				}
+				
 				.enter {
 					backface-visibility: hidden;
 					transform: perspective(800px) rotateY(180deg);
 				}
+				
 				.amount {
 					backface-visibility: hidden;
 					transform: perspective(800px) rotateY(0deg);
 				}
 			}
+			
 			&.flipped {
+			
 				.enter {
 					transform: perspective(800px) rotateY(0);
 			  	}
-			  	.amount {
+			
+				  .amount {
 			  		transform: perspective(800px) rotateY(-179.9deg);
 				}
 			}
 		}
+		
 		.m-member-level-benefits {
-			ul, ul li {
+			ul,
+			ul li {
 			  list-style: none;
 			  padding-left: 0;
 			}
+			
 			ul {
-			  color: #7A7A7A;
 			  font-size: 0.9em;
-			  li {
-				  padding: 0 0.5em;
-				  line-height: 1.5em;
-				  margin-bottom: 1.5em;
-				}
-			}
-		}
-		&:hover .m-member-level-benefits, &.active .m-member-level-benefits {
-			ul {
-				color: #1a1818;
 			}
 		}
 	}

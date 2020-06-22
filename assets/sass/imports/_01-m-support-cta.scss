@@ -23,12 +23,12 @@
 			justify-content: center;
 			height: auto;
 			width: 80%;
-			padding: $cta-spacing / 2 $cta-spacing;
+			padding: $standard-block-padding / 2 $standard-block-padding;
 			margin-left: auto;
 			margin-right: auto;
 			border-radius: $border-radius;
-			background: $color-border;
-			color: $color__black;
+			background: neutral-color(border);
+			color: neutral-color(black);
 
 			&.a-support-button-with-heart {
 
@@ -37,7 +37,7 @@
 					max-height: 100%;
 					width: $content-font-size;
 					display: inline-block;
-					margin-right: $cta-spacing;
+					margin-right: $standard-block-padding;
 				}
 			}
 		}
@@ -48,7 +48,7 @@
 		flex-wrap: wrap;
 
 		p {
-			margin-bottom: $cta-spacing * 2;
+			margin-bottom: $standard-block-padding * 2;
 		}
 
 		// form
@@ -61,7 +61,7 @@
 				width: 100%;
 				justify-content: flex-start;
 				align-items: center;
-				margin-bottom: $cta-spacing;
+				margin-bottom: $standard-block-padding;
 			}
 
 			.m-amount-group,
@@ -74,7 +74,7 @@
 			}
 
 			.m-amount-group {
-				margin-right: $cta-spacing / 2;
+				margin-right: $standard-block-padding / 2;
 				align-items: center;
 			}
 
@@ -91,12 +91,12 @@
 			}
 
 			.a-fast-select-currency {
-				padding-right: $cta-spacing / 2;
+				padding-right: $standard-block-padding / 2;
 			}
 
 			.a-fast-select-intro {
-				color: $color-gray-dark;
-				padding-right: $cta-spacing;
+				color: neutral-color(dark);
+				padding-right: $standard-block-padding;
 			}
 
 			.m-form-item {
@@ -104,9 +104,9 @@
 			}
 
 			#amount-item #amount {
-				border: $border-style;
+				border: $border-default-style;
 				width: 4em;
-				padding: $cta-spacing / 2 0;
+				padding: $standard-block-padding / 2 0;
 			}
 
 			.m-form-radios {
@@ -120,16 +120,16 @@
 
 				label {
 					display: flex;
-					padding: $cta-spacing / 2 .75em;
+					padding: $standard-block-padding / 2 $standard-heading-margin;
 					font-weight: 700;
 					cursor: pointer;
-					border: $border-style;
+					border: $border-default-style;
 				}
 			}
 		}
 
 		.m-form-actions {
-			margin: 0.5em 0 0 0;
+			margin: $standard-block-padding 0 0 0;
 		}
 	}
 }
@@ -149,7 +149,7 @@
 			}
 
 			.a-support-button {
-				margin-left: $cta-spacing;
+				margin-left: $standard-block-padding;
 				margin-right: 0;
 			}
 		}
