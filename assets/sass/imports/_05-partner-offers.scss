@@ -1,6 +1,4 @@
 .m-all-partners {
-	//font-size: 1.23em;
-	//line-height: 1.5;
 	margin-bottom: $standard-heading-margin;
 	
 	.m-partner-list {
@@ -12,7 +10,7 @@
 		margin-left: 0;
 	
 		li {
-			padding: 20px;
+			padding: $standard-block-padding;
 			width: 44%;
 			list-style: none;
 		}
@@ -76,7 +74,7 @@
 
 .m-membership-action {
 	padding: $standard-block-margin;
-	margin: $standard-block-margin 0;
+	margin: 0 0 $standard-block-margin 0;
 	border: $border-default-style;
 	
 	h2 {
@@ -84,7 +82,7 @@
 	}
 	
 	p:last-of-type {
-		margin-bottom: 0;
+		margin-bottom: $standard-block-padding;
 	}
 	
 	.a-button {

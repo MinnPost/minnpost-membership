@@ -1,9 +1,13 @@
 .o-membership-member-levels {
-	margin: $standard-block-margin 0;
+	margin: $standard-block-margin 0 0 0;
 	padding: 0;
 	min-width: 0;
 
 	.m-membership-member-level {
+
+		select {
+			min-width: 6em;
+		}
 
 		.m-member-level-brief {
 			text-align: center;
@@ -14,7 +18,6 @@
 			}
 
 			h3 {
-				min-height: 75px;
 				display: block;
 				line-height: normal;
 				margin: 0;
@@ -41,7 +44,7 @@
 
 					.m-form-item {
 						display: inline-block;
-						margin: 0;
+						margin: 0 0 0 0.25em;
 
 						input {
 							width: 3em;
@@ -50,7 +53,7 @@
 							line-height: normal;
 							margin: 0;
 							padding: 0;
-							border: 1px solid #999;
+							border: $border-default-style;
 						}
 
 					}
@@ -118,10 +121,14 @@
 
 // media queries
 @media screen and (min-width: $medium-margins-too-small) {
-	.m-membership-member-level {
-		width: 46%;
-		margin-right: 2%;
-		float: left;
+
+	.o-membership-member-levels {
+		display: flex;
+
+		.m-membership-member-level {
+			width: 46%;
+			margin-right: 2%;
+		}
 	}
 }
 
