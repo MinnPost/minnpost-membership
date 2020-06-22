@@ -130,3 +130,25 @@
 		width: 23%;
 	}
 }
+
+// ie 10 and under and no javascript - dependent on modernizr
+.no-borderimage, .no-js {
+
+	.m-member-level-brief {
+
+		.flipper,
+		.amount,
+		.enter {
+			height: auto;
+			width: 100%;
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+		
+		.enter select,
+		.amount .a-button {
+			display: none;
+		}
+	}
+}

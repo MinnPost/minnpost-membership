@@ -42,6 +42,9 @@ $summary-max-width: 45%;
 
 @import "imports/*";
 
+// shared elements
+
+// layout
 .m-layout-membership {
 	width: 100%;
 	
@@ -52,13 +55,14 @@ $summary-max-width: 45%;
 	}
 }
 
-// default fieldset
+// fieldset
 .m-form-membership fieldset {
 	border: 0;
 	margin: 0;
 	padding: 0;
 }
 
+// summary
 .m-membership-summary,
 .m-membership-summary-short {
 	margin-bottom: $standard-block-margin;
@@ -82,11 +86,13 @@ $summary-max-width: 45%;
 @media screen and (min-width: $nav-wrap-screen) {
 	.m-layout-membership .m-membership-support-wrapper {
 
+		// form
 		.m-form-membership {
 			max-width: $form-max-width;
 			order: -1;
 		}
 
+		// summary
 		.m-membership-summary-short {
 			display: none;
 		}
@@ -95,22 +101,6 @@ $summary-max-width: 45%;
 			display: block;
 			max-width: $summary-max-width;
 			margin: $standard-block-margin 0;
-		}
-	}
-}
-
-// ie 10 and under and no javascript - dependent on modernizr
-.no-borderimage, .no-js {
-	.m-member-level-brief {
-		.flipper, .amount, .enter {
-			height: auto;
-			width: 100%;
-			position: relative;
-			top: auto;
-			left: auto;
-		}
-		.enter select, .amount .a-button {
-			display: none;
 		}
 	}
 }
