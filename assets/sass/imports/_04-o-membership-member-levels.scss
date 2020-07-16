@@ -124,6 +124,7 @@
 
 	.o-membership-member-levels {
 		display: flex;
+		flex-wrap: wrap;
 
 		.m-membership-member-level {
 			width: 46%;
