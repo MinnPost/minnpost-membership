@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Membership
 Description: This plugin manages various parts of MinnPost's membership UX.
-Version: 0.0.11
+Version: 0.0.12
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-membership
@@ -100,7 +100,7 @@ class MinnPost_Membership {
 	 */
 	public function __construct() {
 
-		$this->version       = '0.0.11';
+		$this->version       = '0.0.12';
 		$this->slug          = 'minnpost-membership';
 		$this->option_prefix = 'minnpost_membership_';
 
