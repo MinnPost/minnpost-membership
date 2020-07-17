@@ -31,7 +31,7 @@
 						<span class="a-fast-select-intro"><?php echo get_option( $minnpost_membership->option_prefix . 'pre_select_text', '' ); ?></span>
 					<?php endif; ?>
 					<div class="m-amount-group">
-						<span class="a-fast-select-currency">&dollar;</span>
+						<label for="amount" class="a-fast-select-currency">&dollar;</label>
 						<div id="amount-item" class="m-form-item">
 							<?php
 							if ( isset( $url_params['amount'] ) ) {
