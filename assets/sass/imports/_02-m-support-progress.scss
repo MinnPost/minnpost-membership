@@ -1,60 +1,71 @@
 // this is the support menu
 .m-support-progress {
-	margin: 0.625rem 0 0.625rem * 2 0;
+	margin: 0;
 	ol {
 		list-style: none;
 		width: 100%;
 		margin: 0;
 		padding: 0;
-		background: $_color-base-gray;
 		display: flex;
 		counter-reset: li;
-	}
-	li {
-		flex: 1;
-		position: relative;
-	}
-	a, span {
-		display: block;
-		padding: $small-space;
-		text-decoration: none;
-		transition: background-color 0.1s linear;
-	}
-	a:hover, a:focus, a:active, a.active, span.active {
-		background: $color__gray-dark;
-		color: #fff;
-		text-decoration: none;
-	}
-	a:before, span:before {
-		content: none;
-		counter-increment: li;
-		top: 0;
-		left: 1rem;
-		position: absolute;
-		color: $color--gray-light;
-		font-size: $progress-font-size-large;
+	
+		li {
+			flex: 1;
+			position: relative;
+			margin: 0;
+			padding: 0;
+
+			a,
+			span {
+				display: block;
+				text-decoration: none;
+				background: neutral-color(light);
+				color: neutral-color(black);
+
+				&:before {
+					content: none;
+					counter-increment: li;
+					color: neutral-color(black);
+					top: 0;
+					left: 0.25em;
+					position: absolute;
+					line-height: 1;
+				}
+			}
+
+			a:hover,
+			a:focus,
+			a:active,
+			a.active,
+			span.active {
+				text-decoration: none;
+				background: neutral-color(dark);
+				color: neutral-color(white);
+
+				&:before {
+					color: neutral-color(white);
+				}
+			}
+
+		}
 	}
 }
 
 // media queries
-@media screen and (min-width: $more-than-logo-screen) {
+@media screen and (min-width: $size__sm) {
 	.m-support-progress {
-		a, span {
-			font-size: $progress-font-size-small;
-			padding: $small-space 0 $small-space 3em;
-		}
-		a:before, span:before {
-			content: counter(li, decimal);
-			top: -0.15em;
-			font-size: $progress-font-size-large;
-		}
-	}
-}
+		ol {
 
-@media screen and (min-width: $medium-margins-too-small) {
-	.m-support-progress {
-		a, span {
-			font-size: $content-font-size;
+			li {
+
+				a,
+				span {
+
+					&:before {
+						content: counter(li, decimal);
+					}
+				}
+			}
 		}
 	}
 }

@@ -1120,11 +1120,11 @@ msgstr ""
 msgid "Heart"
 msgstr ""
 
-#: classes/class-minnpost-membership-front-end.php:176
+#: classes/class-minnpost-membership-front-end.php:179
 msgid "Donate"
 msgstr ""
 
-#: classes/class-minnpost-membership-front-end.php:1122
+#: classes/class-minnpost-membership-front-end.php:1125
 msgid "This gift requires you to give at least "
 msgstr ""
 
@@ -1140,55 +1140,55 @@ msgstr ""
 msgid "one time"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:177
+#: classes/class-minnpost-membership-shortcodes.php:180
 msgid "recurring"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:178
+#: classes/class-minnpost-membership-shortcodes.php:181
 msgid "Next Transaction Date"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:170
+#: classes/class-minnpost-membership-shortcodes.php:173
 msgid "One-time"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:172
+#: classes/class-minnpost-membership-shortcodes.php:175
 msgid "Transaction Date"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:186
+#: classes/class-minnpost-membership-shortcodes.php:190
 msgid "Modify Your Donation"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:187
+#: classes/class-minnpost-membership-shortcodes.php:191
 msgid "Update Payment Method"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:188
+#: classes/class-minnpost-membership-shortcodes.php:192
 msgid "Change Amount"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:189
-msgid "Stop"
+#: classes/class-minnpost-membership-shortcodes.php:193
+msgid "Stop Donation"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:190
+#: classes/class-minnpost-membership-shortcodes.php:194
 msgid "You will be able to review and confirm these actions in the final step."
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:319, classes/class-minnpost-membership-shortcodes.php:345
+#: classes/class-minnpost-membership-shortcodes.php:329, classes/class-minnpost-membership-shortcodes.php:355
 msgid "Amount"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:320
+#: classes/class-minnpost-membership-shortcodes.php:330
 msgid "Attempted Date"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:321
+#: classes/class-minnpost-membership-shortcodes.php:331
 msgid "Edit and retry"
 msgstr ""
 
-#: classes/class-minnpost-membership-shortcodes.php:346
+#: classes/class-minnpost-membership-shortcodes.php:356
 msgid "Charged Date"
 msgstr ""
 

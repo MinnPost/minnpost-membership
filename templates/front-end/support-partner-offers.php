@@ -15,14 +15,14 @@ $user_state = $minnpost_membership->user_info->get_user_access( '', 'support-par
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support-partner-offers_title', '' ); ?></h1>
 			</header>
 			<section class="m-entry-content">
-				<?php echo get_option( $minnpost_membership->option_prefix . 'support-partner-offers_body', '' ); ?>
+				<?php echo apply_filters( 'the_content', get_option( $minnpost_membership->option_prefix . 'support-partner-offers_body', '' ) ); ?>
 			</section>
 			<section class="m-membership-action m-membership-action-partner-offers">
 				<?php if ( '' !== $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'support-partner-offers_action_title' ) ) : ?>
 					<h2><?php echo $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'support-partner-offers_action_title' ); ?></h2>
 				<?php endif; ?>
 				<?php if ( '' !== $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'support-partner-offers_action_body' ) ) : ?>
-					<?php echo wpautop( $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'support-partner-offers_action_body' ) ); ?>
+					<?php echo apply_filters( 'the_content', $minnpost_membership->front_end->get_option_based_on_user_status( $minnpost_membership->option_prefix . 'support-partner-offers_action_body' ) ); ?>
 				<?php endif; ?>
 				<div class="m-form-actions m-membership-form-actions">
 					<?php $minnpost_membership->front_end->button( 'support-partner-offers', 'body', $user_state ); ?>

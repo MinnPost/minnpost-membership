@@ -1,26 +1,33 @@
 // basically use default WP table styles, here, unless it makes sense to do otherwise
 .m-donation-history {
-	margin-bottom: 1.5em;
+	margin-bottom: $standard-block-margin;
+	
 	table {
-		border: 1px solid $border-color-lighter;
+		border: $border-default-style;
 		box-shadow: 0 1px 1px rgba(0,0,0,.04);
 		border-spacing: 0;
 		width: 100%;
 		clear: both;
 		margin: 0;
-		td, th {
+		
+		td,
+		th {
 			padding: 8px 10px;
 		}
-		td, th, thead td {
+		
+		td,
+		th,
+		thead td {
 			text-align: left;
-			line-height: 1.3em;
-			font-size: 14px;
 		}
-		td, thead th {
-			border-bottom: 1px solid #e1e1e1;
+		
+		td,
+		thead th {
+			border-bottom: $border-default-style;
 		}
+		
 		> tbody > :nth-child( 2n+1 ) {
-	    	background-color: #f9f9f9;
+	    	background-color: neutral-color(highlight);
 		}
 	}
 }
