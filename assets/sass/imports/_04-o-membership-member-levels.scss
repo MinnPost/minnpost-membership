@@ -134,8 +134,12 @@
 }
 
 @media screen and (min-width: $level-widths-change) {
-	.m-membership-member-level {
-		width: 23%;
+
+	.o-membership-member-levels {
+
+		.m-membership-member-level {
+			width: 23%;
+		}
 	}
 }
 
