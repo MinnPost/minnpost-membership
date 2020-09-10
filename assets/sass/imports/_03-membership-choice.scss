@@ -198,11 +198,6 @@
 
 		.m-select-swag, .m-select-subscription {
 			justify-content: flex-start;
-
-			.m-form-item {
-				width: 32%;
-				margin-left: 0.67%;
-			}
 		}
 
 		.min-amount, .swag-eligibility {
@@ -318,6 +313,17 @@
 					right: 1em;
 					text-align: left;
 					width: auto;
+				}
+			}
+		}
+		// fourth in sequence: choose gift
+		&.m-membership-gift-selector {
+
+			.m-select-swag, .m-select-subscription {
+
+				.m-form-item {
+					width: 32%;
+					margin-left: 0.67%;
 				}
 			}
 		}
