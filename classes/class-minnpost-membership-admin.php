@@ -105,10 +105,11 @@ class MinnPost_Membership_Admin {
 				),
 				'use_tabs' => false,
 			),
-			$this->slug . '-site-header'        => array(
-				'title'    => __( 'Site Header', 'minnpost-membership' ),
+			$this->slug . '-header'        => array(
+				'title'    => __( 'Header', 'minnpost-membership' ),
 				'sections' => array(
-					'display' => __( 'Display', 'minnpost-membership' ),
+					'website' => __( 'Website', 'minnpost-membership' ),
+					'email'   => __( 'Email', 'minnpost-membership' ),
 				),
 				'use_tabs' => false,
 			),
@@ -527,8 +528,8 @@ class MinnPost_Membership_Admin {
 				$payment_url = '';
 			}
 
-			$this_section = 'display';
-			$settings     = array(
+			$this_section     = 'website';
+			$website_settings = array(
 				'tagline_text'         => array(
 					'title'    => __( 'Tagline text', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
@@ -593,6 +594,60 @@ class MinnPost_Membership_Admin {
 					),
 				),
 			);
+
+			$this_section   = 'email';
+			$email_settings = array(
+				'email_button_include_heart' => array(
+					'title'    => __( 'Include the heart?', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'checkbox',
+						'desc'     => __( 'If checked, the button will include the heart in front of the text.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'email_button_text'          => array(
+					'title'    => __( 'Button text', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'This value will be used for the button text. If you do not add a value, the value will be Donate.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'email_button_class'         => array(
+					'title'    => __( 'Button CSS class', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => __( 'Add any CSS classes for styling. Separate multiple classes with spaces.', 'minnpost-membership' ),
+						'constant' => '',
+					),
+				),
+				'email_button_url'           => array(
+					'title'    => __( 'Button URL', 'minnpost-membership' ),
+					'callback' => $callbacks['text'],
+					'page'     => $page,
+					'section'  => $this_section,
+					'args'     => array(
+						'type'     => 'text',
+						'desc'     => sprintf(
+							// translators: %1 is the first payment URL
+							__( 'When a user clicks the button, they will go to this URL. Only add a full URL if it is not within this site. If you leave it blank, the button will use the first payment URL: %1$s', 'minnpost-membership' ),
+							$payment_url
+						),
+						'constant' => '',
+					),
+				),
+			);
+
+			$settings = array_merge( $website_settings, $email_settings );
 
 			foreach ( $settings as $key => $attributes ) {
 				$id       = $this->option_prefix . $key;
