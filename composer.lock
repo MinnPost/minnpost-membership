@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fcb24c3b477dda471e86a3bcaf90a4f",
+    "content-hash": "47bf3833ca214c4a8e9ade28194bfc2b",
     "packages": [
         {
             "name": "brain/cortex",
@@ -63,23 +63,25 @@
         },
         {
             "name": "cmb2/cmb2",
-            "version": "v2.5.1",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CMB2/CMB2.git",
-                "reference": "1129acf4b7689010789d830f6fba0b7b68ad51ff"
+                "reference": "438c26dda7ac110d0741448d65614b3ec6379034"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/1129acf4b7689010789d830f6fba0b7b68ad51ff",
-                "reference": "1129acf4b7689010789d830f6fba0b7b68ad51ff",
+                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/438c26dda7ac110d0741448d65614b3ec6379034",
+                "reference": "438c26dda7ac110d0741448d65614b3ec6379034",
                 "shasum": ""
             },
             "require": {
                 "php": ">5.2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "apigen/apigen": "4.1.2",
+                "nette/utils": "2.5.3",
+                "phpunit/phpunit": "6.5.13"
             },
             "suggest": {
                 "composer/installers": "~1.0"
@@ -91,15 +93,15 @@
             ],
             "authors": [
                 {
-                    "name": "WebDevStudios",
-                    "email": "contact@webdevstudios.com",
-                    "homepage": "https://github.com/WebDevStudios",
-                    "role": "Developer"
-                },
-                {
                     "name": "Justin Sternberg",
                     "email": "justin@dsgnwrks.pro",
                     "homepage": "https://dsgnwrks.pro",
+                    "role": "Developer"
+                },
+                {
+                    "name": "WebDevStudios",
+                    "email": "contact@webdevstudios.com",
+                    "homepage": "https://github.com/WebDevStudios",
                     "role": "Developer"
                 }
             ],
@@ -110,7 +112,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2018-12-10T15:11:54+00:00"
+            "time": "2020-01-21T17:49:50+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -161,12 +163,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+                "reference": "efd67d1dc14a7ef4fc4e518e7dee91c271d524e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/efd67d1dc14a7ef4fc4e518e7dee91c271d524e4",
+                "reference": "efd67d1dc14a7ef4fc4e518e7dee91c271d524e4",
                 "shasum": ""
             },
             "require": {
@@ -203,7 +205,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2019-08-29T13:16:46+00:00"
         }
     ],
     "packages-dev": [],
@@ -213,5 +215,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

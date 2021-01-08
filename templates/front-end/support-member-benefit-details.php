@@ -14,7 +14,7 @@ $minnpost_membership = minnpost_membership();
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_title', '' ); ?></h1>
 			</header>
 			<div class="m-entry-content">
-				<?php echo wpautop( get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_body', '' ) ); ?>
+				<?php echo apply_filters( 'the_content', get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_body', '' ) ); ?>
 			</div>
 		</main><!-- #main -->
 

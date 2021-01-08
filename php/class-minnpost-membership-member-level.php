@@ -59,6 +59,7 @@ class MinnPost_Membership_Member_Level {
 	*/
 	public function get_member_levels( $value = '', $show_nonmember = false, $field = 'id', $reset = false ) {
 		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
+		$member_levels = (array) $member_levels;
 		if ( true !== $show_nonmember ) {
 			$key = array_search( '1', array_column( $member_levels, 'is_nonmember' ) );
 			unset( $member_levels[ $key ] );

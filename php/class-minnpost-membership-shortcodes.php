@@ -177,13 +177,14 @@ class MinnPost_Membership_Shortcodes {
 						$donation_cancel_url   = str_replace( '$recurring_donation_id', $donation['id'], $cancel_recurring_url );
 					}
 
-					$donation_type_heading   = sprintf( 'Your %1$s Donation',
+					$donation_type_heading   = sprintf(
+						'Your %1$s Donation',
 						ucfirst( $donation_type )
 					);
 					$modify_donation_heading = __( 'Modify Your Donation', 'minnpost-membership' );
 					$update_payment_button   = __( 'Update Payment Method', 'minnpost-membership' );
 					$change_amount_button    = __( 'Change Amount', 'minnpost-membership' );
-					$stop_button             = __( 'Stop', 'minnpost-membership' );
+					$stop_button             = __( 'Stop Donation', 'minnpost-membership' );
 					$caption_review          = __( 'You will be able to review and confirm these actions in the final step.', 'minnpost-membership' );
 
 					$messages[] = '
@@ -354,14 +355,15 @@ class MinnPost_Membership_Shortcodes {
 				&nbsp;</th></thead>';
 				// this is where the list starts
 				foreach ( $successful_opportunities as $donation ) {
-					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
+					$frequency = isset( $donation['frequency'] ) ? strtolower( $donation['frequency'] ) : '';
+					$history  .= '<tr><td>$' . $donation['amount'] . ' ' . $frequency . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
 				}
 				$history .= '</table></section>';
 			}
 		}
 
 		if ( ! empty( $history ) ) {
-				$message .= '<article class="m-donation-history">' . $history . '</article>';
+				$message = '<article class="m-donation-history">' . $history . '</article>';
 		} else {
 			$message = '<article class="m-no-donation-history">' . wp_kses_post( wpautop( get_option( $this->option_prefix . 'no_donation_message', '' ) ) ) . '</article>';
 		}

@@ -66,8 +66,9 @@ class MinnPost_Membership_Front_End {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
 
-		// these two can be called with do_action in a theme or other template
+		// these actions can be called with do_action in a theme or other template
 		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ), 10, 1 );
+		add_action( $this->option_prefix . 'email_header', array( $this, 'email_header' ), 10, 1 );
 		add_action( $this->option_prefix . 'site_footer', array( $this, 'site_footer' ), 10, 1 );
 
 		add_filter( 'allowed_redirect_hosts', array( $this, 'allowed_redirect_hosts' ), 10 );
@@ -118,20 +119,23 @@ class MinnPost_Membership_Front_End {
 			$button_url = site_url( $button_url );
 		}
 
-		$button_text  = get_option( 'minnpost_membership_button_text', __( 'Donate', 'minnpost-largo' ) );
-		$button_class = get_option( 'minnpost_membership_button_class', '' );
+		$button_text  = get_option( $this->option_prefix . 'button_text', __( 'Donate', 'minnpost-largo' ) );
+		$button_class = get_option( $this->option_prefix . 'button_class', '' );
 		if ( '' !== $button_class ) {
 			$button_class = ' ' . $button_class;
 		}
 
-		$button_include_heart = filter_var( get_option( 'minnpost_membership_button_include_heart', false ), FILTER_VALIDATE_BOOLEAN );
+		$button_include_heart = filter_var( get_option( $this->option_prefix . 'button_include_heart', false ), FILTER_VALIDATE_BOOLEAN );
 		if ( true === $button_include_heart ) {
-			$svg           = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" title="' . __( 'Heart', 'minnpost-membership' ) . '" class="icon icon-heart" viewBox="0 0 32 28" data-reactid="190"><path d="M16 5s-.516-1.531-1.49-2.51c-1.534-1.542-3.663-2.49-6.01-2.49s-4.472.951-6.01 2.49c-1.539 1.538-2.49 3.663-2.49 6.01s.951 4.472 2.49 6.01l13.51 13.49 13.51-13.49c1.539-1.538 2.49-3.663 2.49-6.01s-.951-4.472-2.49-6.01c-1.538-1.538-3.663-2.49-6.01-2.49s-4.476.948-6.01 2.49c-.974.979-1.49 2.51-1.49 2.51z" data-reactid="191"></path></svg>';
+			$svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" title="' . __( 'Heart', 'minnpost-membership' ) . '" class="icon icon-heart" viewBox="0 0 32 28" data-reactid="190"><path d="M16 5s-.516-1.531-1.49-2.51c-1.534-1.542-3.663-2.49-6.01-2.49s-4.472.951-6.01 2.49c-1.539 1.538-2.49 3.663-2.49 6.01s.951 4.472 2.49 6.01l13.51 13.49 13.51-13.49c1.539-1.538 2.49-3.663 2.49-6.01s-.951-4.472-2.49-6.01c-1.538-1.538-3.663-2.49-6.01-2.49s-4.476.948-6.01 2.49c-.974.979-1.49 2.51-1.49 2.51z" data-reactid="191"></path></svg>';
+			if ( class_exists( 'CMBS_SerkanA_Plugin_IConSelectFA' ) ) {
+				$svg = '<i class="fas fa-heart" aria-hidden="true"></i>';
+			}
 			$button_text   = $svg . $button_text;
 			$button_class .= ' a-support-button-with-heart';
 		}
 
-		$tagline_text = get_option( 'minnpost_membership_tagline_text', get_bloginfo( 'description' ) );
+		$tagline_text = get_option( $this->option_prefix . 'tagline_text', get_bloginfo( 'description' ) );
 		$tagline_text = preg_replace( '|([^\s])\s+([^\s]+)\s*$|', '$1&nbsp;$2', $tagline_text );
 
 		$params['button_url']   = $button_url;
@@ -142,6 +146,51 @@ class MinnPost_Membership_Front_End {
 
 		$site_header = $this->get_template_html( 'header-support', 'template-parts', $params );
 		echo $site_header;
+	}
+
+	/**
+	* Setup email header content for membership
+	* @param bool $show_button
+	* do_action does not appear to have optional parameters, so we have to pass the value either way.
+	*
+	*/
+	public function email_header( $show_button ) {
+		$params = array();
+
+		$payment_urls = get_option( $this->option_prefix . 'payment_urls', '' );
+		if ( '' !== $payment_urls ) {
+			$payment_urls = explode( "\r\n", $payment_urls );
+			$default_url  = $payment_urls[0];
+		} else {
+			$default_url = '';
+		}
+		$button_url = get_option( $this->option_prefix . 'email_button_url', $default_url );
+		$parsed     = parse_url( $button_url );
+		if ( empty( $parsed['scheme'] ) ) {
+			$button_url = site_url( $button_url );
+		}
+
+		$button_text  = get_option( $this->option_prefix . 'email_button_text', __( 'Donate', 'minnpost-largo' ) );
+		$button_class = get_option( $this->option_prefix . 'email_button_class', '' );
+		if ( '' !== $button_class ) {
+			$button_class = ' ' . $button_class;
+		}
+
+		$button_include_heart = filter_var( get_option( $this->option_prefix . 'email_button_include_heart', false ), FILTER_VALIDATE_BOOLEAN );
+		if ( true === $button_include_heart ) {
+			// the heart can't be an svg in an email
+			$heart = '❤&nbsp;';
+			$button_text   = $heart . $button_text;
+			$button_class .= ' a-support-button-with-heart';
+		}
+
+		$params['button_url']   = $button_url;
+		$params['button_text']  = $button_text;
+		$params['button_class'] = $button_class;
+		$params['show_button']  = $show_button;
+
+		$email_header = $this->get_template_html( 'header-email', 'template-parts', $params );
+		echo $email_header;
 	}
 
 	/**
