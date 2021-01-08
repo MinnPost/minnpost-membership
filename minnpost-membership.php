@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Membership
 Description: This plugin manages various parts of MinnPost's membership UX.
-Version: 0.0.14
+Version: 0.2.0
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-membership
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * plugin_dir_path(), plugins_url() and plugin_basename()
  * to retrieve information about plugin paths
  *
- * @since 0.0.6
+ * @since 0.2.0
  * @var string
  */
 define( 'MINNPOST_MEMBERSHIP_FILE', __FILE__ );
@@ -30,10 +30,10 @@ define( 'MINNPOST_MEMBERSHIP_FILE', __FILE__ );
 /**
  * The plugin's current version
  *
- * @since 0.0.6
+ * @since 0.2.0
  * @var string
  */
-define( 'MINNPOST_MEMBERSHIP_VERSION', '0.0.14' );
+define( 'MINNPOST_MEMBERSHIP_VERSION', '0.2.0' );
 
 // Load the autoloader.
 require_once( 'lib/autoloader.php' );
@@ -41,7 +41,7 @@ require_once( 'lib/autoloader.php' );
 /**
  * Retrieve the instance of the main plugin class
  *
- * @since 2.6.0
+ * @since 0.2.0
  * @return MinnPost_Membership
  */
 function minnpost_membership() {
