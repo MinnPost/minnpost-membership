@@ -11,9 +11,9 @@
 
 <section class="m-support-cta m-support-cta-bottom">
 	<?php
-	global $minnpost_membership;
-	$url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' );
-	$user_id    = get_current_user_id();
+	$minnpost_membership = minnpost_membership();
+	$url_params          = $minnpost_membership->front_end->process_membership_parameters( 'get' );
+	$user_id             = get_current_user_id();
 	?>
 	<?php if ( '' !== get_option( $minnpost_membership->option_prefix . 'support_title', '' ) ) : ?>
 		<header class="m-membership-intro m-membership-support-intro">

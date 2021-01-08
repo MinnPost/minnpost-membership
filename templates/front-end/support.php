@@ -5,9 +5,9 @@
  */
 get_header( 'support' ); ?>
 <?php
-global $minnpost_membership;
-$url_params = $minnpost_membership->front_end->process_membership_parameters( 'get' );
-$user_id    = get_current_user_id();
+$minnpost_membership = minnpost_membership();
+$url_params          = $minnpost_membership->front_end->process_membership_parameters( 'get' );
+$user_id             = get_current_user_id();
 ?>
 
 	<div id="primary" class="m-layout-membership o-support">

@@ -10,8 +10,8 @@
 get_header(); ?>
 
 <?php
-global $minnpost_membership;
-$user_state = $minnpost_membership->user_info->get_user_access( '' )['state'];
+$minnpost_membership = minnpost_membership();
+$user_state          = $minnpost_membership->user_info->get_user_access( '' )['state'];
 ?>
 
 	<div id="primary" class="m-layout-primary">

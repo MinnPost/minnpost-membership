@@ -14,31 +14,27 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
  */
 class MinnPost_Membership_User_Info {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
-	protected $member_levels;
-	protected $cache;
+	public $option_prefix;
+	public $file;
+	public $version;
+	public $slug;
+	public $member_levels;
+	public $cache;
 
 	public $change_for_members;
 
 	/**
 	* Constructor which sets up user information related to membership
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @param array $member_levels
-	* @param object $cache
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $cache ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
-		$this->member_levels = $member_levels;
-		$this->cache         = $cache;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
+		$this->member_levels = minnpost_membership()->member_levels;
+		$this->cache         = minnpost_membership()->cache;
 
 		$this->change_for_members = get_option( $this->option_prefix . 'support_post_form_change_for_members', false );
 
@@ -58,7 +54,7 @@ class MinnPost_Membership_User_Info {
 		// include the non member level for this purpose
 		$this->all_member_levels = $this->member_levels->get_member_levels( '', true );
 
-		$this->add_actions();
+		//$this->add_actions();
 
 	}
 

@@ -14,32 +14,27 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
  */
 class MinnPost_Membership_Content_Items {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
-	protected $member_levels;
-	protected $user_info;
-	protected $cache;
+	public $option_prefix;
+	public $file;
+	public $version;
+	public $slug;
+	public $member_levels;
+	public $user_info;
+	public $cache;
 
 	/**
 	* Constructor which sets up content items
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @param object $member_levels
-	* @param object $user_info
-	* @param object $cache
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $user_info, $cache ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
-		$this->member_levels = $member_levels;
-		$this->user_info     = $user_info;
-		$this->cache         = $cache;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
+		$this->member_levels = minnpost_membership()->member_levels;
+		$this->user_info     = minnpost_membership()->user_info;
+		$this->cache         = minnpost_membership()->cache;
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
@@ -350,34 +345,40 @@ class MinnPost_Membership_Content_Items {
 		$object_type = 'partner';
 		$prefix      = '_mp_partner_';
 
-		$partner_fields = new_cmb2_box( array(
-			'id'           => $prefix . 'partner_fields',
-			'title'        => __( 'Partner Fields', 'minnpost-membership' ),
-			'object_types' => $object_type,
-		) );
-		$partner_fields->add_field( array(
-			'name' => __( 'Link URL', 'minnpost-membership' ),
-			'id'   => $prefix . 'link_url',
-			'type' => 'text',
-			'desc' => '',
-		) );
-		$partner_fields->add_field( array(
-			'name'         => __( 'Logo Image', 'minnpost-membership' ),
-			'desc'         => __( 'Upload an image or enter an URL.', 'minnpost-membership' ),
-			'id'           => $prefix . 'logo_image',
-			'type'         => 'file',
-			'preview_size' => array( 130, 85 ),
-			'options'      => array(
-				//'url' => false, // Hide the text input for the url
-			),
-			'text'         => array(
-				//'add_upload_file_text' => 'Add Image', // Change upload button text. Default: "Add or Upload File"
-			),
-			// query_args are passed to wp.media's library query.
-			'query_args'   => array(
-				'type' => 'image',
-			),
-		) );
+		$partner_fields = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'partner_fields',
+				'title'        => __( 'Partner Fields', 'minnpost-membership' ),
+				'object_types' => $object_type,
+			)
+		);
+		$partner_fields->add_field(
+			array(
+				'name' => __( 'Link URL', 'minnpost-membership' ),
+				'id'   => $prefix . 'link_url',
+				'type' => 'text',
+				'desc' => '',
+			)
+		);
+		$partner_fields->add_field(
+			array(
+				'name'         => __( 'Logo Image', 'minnpost-membership' ),
+				'desc'         => __( 'Upload an image or enter an URL.', 'minnpost-membership' ),
+				'id'           => $prefix . 'logo_image',
+				'type'         => 'file',
+				'preview_size' => array( 130, 85 ),
+				'options'      => array(
+					//'url' => false, // Hide the text input for the url
+				),
+				'text'         => array(
+					//'add_upload_file_text' => 'Add Image', // Change upload button text. Default: "Add or Upload File"
+				),
+				// query_args are passed to wp.media's library query.
+				'query_args'   => array(
+					'type' => 'image',
+				),
+			)
+		);
 	}
 
 	/**
@@ -399,13 +400,15 @@ class MinnPost_Membership_Content_Items {
 		$prefix      = '_mp_partner_offer_';
 
 		// set partner for the partner offer
-		$partner_box = new_cmb2_box( array(
-			'id'           => $prefix . 'parent',
-			'title'        => 'Partner',
-			'object_types' => $object_type,
-			'context'      => 'side',
-			'priority'     => 'high',
-		) );
+		$partner_box = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'parent',
+				'title'        => 'Partner',
+				'object_types' => $object_type,
+				'context'      => 'side',
+				'priority'     => 'high',
+			)
+		);
 		// get all partner posts
 		$posts = get_posts(
 			array(
@@ -419,51 +422,61 @@ class MinnPost_Membership_Content_Items {
 		foreach ( $posts as $post ) {
 			$items[ $post->ID ] = $post->post_title;
 		}
-		$partner_box->add_field( array(
-			'name'             => '',
-			'desc'             => '',
-			'id'               => 'partner_id',
-			'type'             => 'select',
-			'show_option_none' => __( 'Choose Partner', 'minnpost-membership' ),
-			'default'          => '',
-			'options'          => $items,
-			'attributes'       => array(
-				'required' => 'required',
-			),
-		) );
+		$partner_box->add_field(
+			array(
+				'name'             => '',
+				'desc'             => '',
+				'id'               => 'partner_id',
+				'type'             => 'select',
+				'show_option_none' => __( 'Choose Partner', 'minnpost-membership' ),
+				'default'          => '',
+				'options'          => $items,
+				'attributes'       => array(
+					'required' => 'required',
+				),
+			)
+		);
 
 		// set other partner offer fields
-		$offer_fields = new_cmb2_box( array(
-			'id'           => $prefix . 'offer_fields',
-			'title'        => __( 'Offer fields', 'minnpost-membership' ),
-			'object_types' => $object_type,
-			'context'      => 'normal',
-			//'priority'     => 'high',
-		) );
-		$offer_fields->add_field( array(
-			'name'       => __( 'Quantity', 'minnpost-membership' ),
-			'desc'       => '',
-			'default'    => '',
-			'id'         => $prefix . 'quantity',
-			'type'       => 'text_small',
-			'attributes' => array(),
-		) );
-		$offer_fields->add_field( array(
-			'name'       => __( 'Type', 'minnpost-membership' ),
-			'desc'       => '',
-			'default'    => '',
-			'id'         => $prefix . 'type',
-			'type'       => 'text',
-			'attributes' => array(),
-		) );
-		$offer_fields->add_field( array(
-			'name'       => __( 'Restriction', 'minnpost-membership' ),
-			'desc'       => '',
-			'default'    => '',
-			'id'         => $prefix . 'restriction',
-			'type'       => 'text',
-			'attributes' => array(),
-		) );
+		$offer_fields = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'offer_fields',
+				'title'        => __( 'Offer fields', 'minnpost-membership' ),
+				'object_types' => $object_type,
+				'context'      => 'normal',
+				//'priority'     => 'high',
+			)
+		);
+		$offer_fields->add_field(
+			array(
+				'name'       => __( 'Quantity', 'minnpost-membership' ),
+				'desc'       => '',
+				'default'    => '',
+				'id'         => $prefix . 'quantity',
+				'type'       => 'text_small',
+				'attributes' => array(),
+			)
+		);
+		$offer_fields->add_field(
+			array(
+				'name'       => __( 'Type', 'minnpost-membership' ),
+				'desc'       => '',
+				'default'    => '',
+				'id'         => $prefix . 'type',
+				'type'       => 'text',
+				'attributes' => array(),
+			)
+		);
+		$offer_fields->add_field(
+			array(
+				'name'       => __( 'Restriction', 'minnpost-membership' ),
+				'desc'       => '',
+				'default'    => '',
+				'id'         => $prefix . 'restriction',
+				'type'       => 'text',
+				'attributes' => array(),
+			)
+		);
 		/*$offer_fields->add_field( array(
 			'name'       => __( 'Offer Image', 'minnpost-membership' ),
 			'desc'       => __( 'Upload an image or enter an URL.', 'minnpost-membership' ),
@@ -483,94 +496,119 @@ class MinnPost_Membership_Content_Items {
 		) );*/
 
 		// set more info partner offer fields
-		$more_info_fields = new_cmb2_box( array(
-			'id'           => $prefix . 'more_info_fields',
-			'title'        => __( 'More info fields', 'minnpost-membership' ),
-			'object_types' => $object_type,
-			'context'      => 'normal',
-			//'priority'     => 'high',
-		) );
-		$more_info_fields->add_field( array(
-			'name'       => __( 'Text', 'minnpost-membership' ),
-			'desc'       => '',
-			'default'    => '',
-			'id'         => $prefix . 'more_info_text',
-			'type'       => 'text',
-			'attributes' => array(),
-		) );
-		$more_info_fields->add_field( array(
-			'name'       => __( 'URL', 'minnpost-membership' ),
-			'desc'       => '',
-			'default'    => '',
-			'id'         => $prefix . 'more_info_url',
-			'type'       => 'text',
-			'attributes' => array(),
-		) );
+		$more_info_fields = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'more_info_fields',
+				'title'        => __( 'More info fields', 'minnpost-membership' ),
+				'object_types' => $object_type,
+				'context'      => 'normal',
+				//'priority'     => 'high',
+			)
+		);
+		$more_info_fields->add_field(
+			array(
+				'name'       => __( 'Text', 'minnpost-membership' ),
+				'desc'       => '',
+				'default'    => '',
+				'id'         => $prefix . 'more_info_text',
+				'type'       => 'text',
+				'attributes' => array(),
+			)
+		);
+		$more_info_fields->add_field(
+			array(
+				'name'       => __( 'URL', 'minnpost-membership' ),
+				'desc'       => '',
+				'default'    => '',
+				'id'         => $prefix . 'more_info_url',
+				'type'       => 'text',
+				'attributes' => array(),
+			)
+		);
 
-		$claimable_dates = new_cmb2_box( array(
-			'id'           => $prefix . 'claimable_dates',
-			'title'        => __( 'Claimable dates', 'minnpost-membership' ),
-			'object_types' => $object_type,
-			'context'      => 'normal',
-			//'priority'     => 'high',
-		) );
-		$claimable_dates->add_field( array(
-			'name'       => 'Start',
-			'desc'       => '',
-			'id'         => $prefix . 'claimable_start_date',
-			'type'       => 'text_datetime_timestamp',
-			'attributes' => array(
-				'required' => 'required',
-			),
-		) );
-		$claimable_dates->add_field( array(
-			'name' => 'End',
-			'desc' => '',
-			'id'   => $prefix . 'claimable_end_date',
-			'type' => 'text_datetime_timestamp',
-		) );
+		$claimable_dates = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'claimable_dates',
+				'title'        => __( 'Claimable dates', 'minnpost-membership' ),
+				'object_types' => $object_type,
+				'context'      => 'normal',
+				//'priority'     => 'high',
+			)
+		);
+		$claimable_dates->add_field(
+			array(
+				'name'       => 'Start',
+				'desc'       => '',
+				'id'         => $prefix . 'claimable_start_date',
+				'type'       => 'text_datetime_timestamp',
+				'attributes' => array(
+					'required' => 'required',
+				),
+			)
+		);
+		$claimable_dates->add_field(
+			array(
+				'name' => 'End',
+				'desc' => '',
+				'id'   => $prefix . 'claimable_end_date',
+				'type' => 'text_datetime_timestamp',
+			)
+		);
 
-		$instance_box = new_cmb2_box( array(
-			'id'           => $prefix . 'instances',
-			'title'        => 'Offer instance(s)',
-			'object_types' => $object_type,
-			'context'      => 'normal',
-			//'priority'     => 'high',
-		) );
+		$instance_box = new_cmb2_box(
+			array(
+				'id'           => $prefix . 'instances',
+				'title'        => 'Offer instance(s)',
+				'object_types' => $object_type,
+				'context'      => 'normal',
+				//'priority'     => 'high',
+			)
+		);
 
-		$instance_box->add_field( array(
-			'id'          => $prefix . 'instance',
-			'type'        => 'group',
-			'description' => '',
-			'options'     => array(
-				'group_title'   => esc_html__( 'Instance {#}', 'minnpost-membership' ), // {#} gets replaced by row number
-				'add_button'    => esc_html__( 'Add Another Instance', 'minnpost-membership' ),
-				'remove_button' => esc_html__( 'Remove Instance', 'minnpost-membership' ),
-				'sortable'      => true,
-				// 'closed'     => true, // true to have the groups closed by default
-			),
-		) );
+		$instance_box->add_field(
+			array(
+				'id'          => $prefix . 'instance',
+				'type'        => 'group',
+				'description' => '',
+				'options'     => array(
+					'group_title'   => esc_html__( 'Instance {#}', 'minnpost-membership' ), // {#} gets replaced by row number
+					'add_button'    => esc_html__( 'Add Another Instance', 'minnpost-membership' ),
+					'remove_button' => esc_html__( 'Remove Instance', 'minnpost-membership' ),
+					'sortable'      => true,
+					// 'closed'     => true, // true to have the groups closed by default
+				),
+			)
+		);
 
-		$instance_box->add_group_field( $prefix . 'instance', array(
-			'name' => 'Enabled',
-			'id'   => $prefix . 'instance_enabled',
-			'type' => 'checkbox',
-			'desc' => '',
-		) );
+		$instance_box->add_group_field(
+			$prefix . 'instance',
+			array(
+				'name' => 'Enabled',
+				'id'   => $prefix . 'instance_enabled',
+				'type' => 'checkbox',
+				'desc' => '',
+			)
+		);
 
-		$instance_box->add_group_field( $prefix . 'instance', array(
-			'name' => esc_html__( 'Instance date', 'minnpost-membership' ),
-			'id'   => $prefix . 'instance_date',
-			'type' => 'text_datetime_timestamp',
-			// 'repeatable' => true, // Repeatable fields are supported w/in repeatable groups (for most types)
-		) );
+		$instance_box->add_group_field(
+			$prefix . 'instance',
+			array(
+				'name' => esc_html__( 'Instance date', 'minnpost-membership' ),
+				'id'   => $prefix . 'instance_date',
+				'type' => 'text_datetime_timestamp',
+				// 'repeatable' => true, // Repeatable fields are supported w/in repeatable groups (for most types)
+			)
+		);
 
-		$instance_box->add_group_field( $prefix . 'instance', array(
-			'name' => esc_html__( 'Claimed date', 'minnpost-membership' ),
-			'id'   => $prefix . 'claimed_date',
-			'type' => 'text_datetime_timestamp',
-			// 'repeatable' => true, // Repeatable fields are supported w/in repeatable groups (for most types)
-		) );
+		$instance_box->add_group_field(
+			$prefix . 'instance',
+			array(
+				'name' => esc_html__( 'Claimed date', 'minnpost-membership' ),
+				'id'   => $prefix . 'claimed_date',
+				'type' => 'text_datetime_timestamp',
+				// 'repeatable' => true, // Repeatable fields are supported w/in repeatable groups (for most types)
+			)
+		);
 
 		$member_levels = $this->member_levels->get_member_levels( '', false );
 		if ( is_array( $member_levels ) && ! empty( $member_levels ) ) {
@@ -581,15 +619,18 @@ class MinnPost_Membership_Content_Items {
 		$roles[] = 'administrator';
 		$roles[] = 'business';
 
-		$instance_box->add_group_field( $prefix . 'instance', array(
-			'name'    => 'Claim user',
-			'id'      => $prefix . 'claim_user',
-			'desc'    => 'Type the name of the user to set them as the claiming user',
-			'type'    => 'user_select_text',
-			'options' => array(
-				'user_roles' => $roles, // Specify which roles to query for.
-			),
-		) );
+		$instance_box->add_group_field(
+			$prefix . 'instance',
+			array(
+				'name'    => 'Claim user',
+				'id'      => $prefix . 'claim_user',
+				'desc'    => 'Type the name of the user to set them as the claiming user',
+				'type'    => 'user_select_text',
+				'options' => array(
+					'user_roles' => $roles, // Specify which roles to query for.
+				),
+			)
+		);
 
 	}
 
@@ -771,7 +812,9 @@ class MinnPost_Membership_Content_Items {
 
 			WHERE offer.post_status = 'publish' AND offer.post_type = 'partner_offer'
 
-		", $now );
+		",
+			$now
+		);
 
 		if ( '' !== $partner_offer_id ) {
 			$cond   = $wpdb->prepare( ' AND offer.ID = %s', $partner_offer_id );

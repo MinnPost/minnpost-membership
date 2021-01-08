@@ -14,35 +14,29 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
  */
 class MinnPost_Membership_Shortcodes {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
-	protected $member_levels;
-	protected $user_info;
-	protected $content_items;
-	protected $cache;
+	public $option_prefix;
+	public $file;
+	public $version;
+	public $slug;
+	public $member_levels;
+	public $user_info;
+	public $content_items;
+	public $cache;
 
 	/**
 	* Constructor which sets up shortcodes
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @param object $member_levels
-	* @param object $user_info
-	* @param object $content_items
-	* @param object $cache
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $user_info, $content_items, $cache ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
-		$this->member_levels = $member_levels;
-		$this->user_info     = $user_info;
-		$this->content_items = $content_items;
-		$this->cache         = $cache;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
+		$this->member_levels = minnpost_membership()->member_levels;
+		$this->user_info     = minnpost_membership()->user_info;
+		$this->content_items = minnpost_membership()->content_items;
+		$this->cache         = minnpost_membership()->cache;
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
@@ -161,7 +155,7 @@ class MinnPost_Membership_Shortcodes {
 			$all_donations = array_merge( $active_recurring_donations, $pledged_opportunities );
 			usort(
 				$all_donations,
-				function ( $item1, $item2 ) {
+				function( $item1, $item2 ) {
 					return $item1['next_date'] <=> $item2['next_date'];
 				}
 			);
@@ -309,14 +303,14 @@ class MinnPost_Membership_Shortcodes {
 
 			usort(
 				$failed_opportunities,
-				function ( $item1, $item2 ) {
+				function( $item1, $item2 ) {
 					return $item2['close_date'] <=> $item1['close_date'];
 				}
 			);
 
 			usort(
 				$successful_opportunities,
-				function ( $item1, $item2 ) {
+				function( $item1, $item2 ) {
 					return $item2['close_date'] <=> $item1['close_date'];
 				}
 			);

@@ -82,11 +82,10 @@
 		if ( 0 < $( '.m-form-membership-benefit' ).length ) {
 			benefitForm();
 		}
-	});
-
-	$( '.a-refresh-page' ).click( function( event ) {
-		event.preventDefault();
-		location.reload();
+		$( '.a-refresh-page' ).on( 'click', function ( event ) {
+			event.preventDefault();
+			location.reload();
+		});
 	});
 
 } )( jQuery );

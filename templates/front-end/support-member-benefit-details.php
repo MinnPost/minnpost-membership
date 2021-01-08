@@ -5,7 +5,7 @@
  */
 get_header(); ?>
 <?php
-global $minnpost_membership;
+$minnpost_membership = minnpost_membership();
 ?>
 
 	<div id="primary" class="m-layout-membership m-page">

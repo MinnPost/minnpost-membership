@@ -14,35 +14,29 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
  */
 class MinnPost_Membership_Admin {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
-	protected $member_levels;
-	protected $user_info;
-	protected $content_items;
-	protected $cache;
+	public $option_prefix;
+	public $file;
+	public $version;
+	public $slug;
+	public $member_levels;
+	public $user_info;
+	public $content_items;
+	public $cache;
 
 	/**
 	* Constructor which sets up admin pages
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @param object $member_levels
-	* @param object $user_info
-	* @param object $content_items
-	* @param object $cache
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $user_info, $content_items, $cache ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
-		$this->member_levels = $member_levels;
-		$this->user_info     = $user_info;
-		$this->content_items = $content_items;
-		$this->cache         = $cache;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
+		$this->member_levels = minnpost_membership()->member_levels;
+		$this->user_info     = minnpost_membership()->user_info;
+		$this->content_items = minnpost_membership()->content_items;
+		$this->cache         = minnpost_membership()->cache;
 
 		$this->pages = $this->get_admin_pages();
 
@@ -58,6 +52,7 @@ class MinnPost_Membership_Admin {
 	*/
 	public function add_actions() {
 		if ( is_admin() ) {
+			add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2 );
 			add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
 			add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts_and_styles' ) );
@@ -72,6 +67,22 @@ class MinnPost_Membership_Admin {
 
 		}
 
+	}
+
+	/**
+	* Display a Settings link on the main Plugins page
+	*
+	* @param array $links
+	* @param string $file
+	* @return array $links
+	* These are the links that go with this plugin's entry
+	*/
+	public function plugin_action_links( $links, $file ) {
+		if ( plugin_basename( $this->file ) === $file ) {
+			$settings = '<a href="' . get_admin_url() . 'admin.php?page=' . $this->slug . '">' . __( 'Settings', 'minnpost-membership' ) . '</a>';
+			array_unshift( $links, $settings );
+		}
+		return $links;
 	}
 
 	/**
@@ -265,10 +276,10 @@ class MinnPost_Membership_Admin {
 							unset( $offers[ $key ] );
 						}
 					}
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/benefit-results-' . $tab . '.php' );
+					require_once( plugin_dir_path( $this->file ) . '/templates/admin/benefit-results-' . $tab . '.php' );
 					break;
 				default:
-					require_once( plugin_dir_path( __FILE__ ) . '/../templates/admin/settings.php' );
+					require_once( plugin_dir_path( $this->file ) . '/templates/admin/settings.php' );
 					break;
 			} // End switch().*/
 			?>
@@ -355,9 +366,9 @@ class MinnPost_Membership_Admin {
 	* @return void
 	*/
 	public function admin_scripts_and_styles() {
-		wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.min.js' ), true );
-		wp_enqueue_script( $this->slug . '-admin', plugins_url( 'assets/js/' . $this->slug . '-admin.min.js', dirname( __FILE__ ) ), array( 'jquery', $this->slug . '-front-end' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-admin.min.js' ), true );
-		wp_enqueue_style( $this->slug . '-admin', plugins_url( 'assets/css/' . $this->slug . '-admin.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( __FILE__ ) . '../assets/css/' . $this->slug . '-admin.min.css' ) );
+		wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-front-end.min.js' ), true );
+		wp_enqueue_script( $this->slug . '-admin', plugins_url( 'assets/js/' . $this->slug . '-admin.min.js', dirname( __FILE__ ) ), array( 'jquery', $this->slug . '-front-end' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-admin.min.js' ), true );
+		wp_enqueue_style( $this->slug . '-admin', plugins_url( 'assets/css/' . $this->slug . '-admin.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( $this->file ) . '/assets/css/' . $this->slug . '-admin.min.css' ) );
 	}
 
 	/**

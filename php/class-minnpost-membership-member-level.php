@@ -14,32 +14,29 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
  */
 class MinnPost_Membership_Member_Level {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
-	protected $cache;
+	public $option_prefix;
+	public $file;
+	public $version;
+	public $slug;
+	public $cache;
 
 	public $member_level_prefix;
 
 	/**
 	* Constructor which sets up member levels
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @param object $cache
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $cache ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
-		$this->cache         = $cache;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
+		$this->cache         = minnpost_membership()->cache;
 
 		$this->member_level_prefix = 'member_';
 
-		$this->add_actions();
+		//$this->add_actions();
 
 	}
 
@@ -330,11 +327,14 @@ class MinnPost_Membership_Member_Level {
 		$member_levels   = get_option( $this->option_prefix . 'member_levels', array() );
 		$data            = $this->setup_member_level_data( $post_data );
 		$member_levels[] = $data;
-		usort( $member_levels, function( $a, $b ) {
-			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+		usort(
+			$member_levels,
+			function( $a, $b ) {
+				if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+					return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+				}
 			}
-		});
+		);
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
 			return true;
@@ -355,11 +355,14 @@ class MinnPost_Membership_Member_Level {
 		$member_levels        = get_option( $this->option_prefix . 'member_levels', array() );
 		$data                 = $this->setup_member_level_data( $post_data );
 		$member_levels[ $id ] = $data;
-		usort( $member_levels, function( $a, $b ) {
-			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+		usort(
+			$member_levels,
+			function( $a, $b ) {
+				if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+					return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+				}
 			}
-		});
+		);
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
 			return true;
@@ -378,11 +381,14 @@ class MinnPost_Membership_Member_Level {
 	public function delete_member_level( $id ) {
 		$member_levels = get_option( $this->option_prefix . 'member_levels', array() );
 		unset( $member_levels[ $id ] );
-		usort( $member_levels, function( $a, $b ) {
-			if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
-				return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+		usort(
+			$member_levels,
+			function( $a, $b ) {
+				if ( ! isset( $b['is_nonmember'] ) || 1 !== intval( $b['is_nonmember'] ) ) {
+					return intval( $b['minimum_monthly_amount'] ) < intval( $a['minimum_monthly_amount'] );
+				}
 			}
-		});
+		);
 		$result = update_option( $this->option_prefix . 'member_levels', $member_levels );
 		if ( true === $result ) {
 			return true;

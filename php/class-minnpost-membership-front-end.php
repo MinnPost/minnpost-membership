@@ -17,35 +17,29 @@ use Brain\Cortex\Route\QueryRoute;
  */
 class MinnPost_Membership_Front_End {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
-	protected $member_levels;
-	protected $user_info;
-	protected $content_items;
-	protected $cache;
+	public $option_prefix;
+	public $file;
+	public $version;
+	public $slug;
+	public $member_levels;
+	public $user_info;
+	public $content_items;
+	public $cache;
 
 	/**
 	* Constructor which sets up front end
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @param object $member_levels
-	* @param object $user_info
-	* @param object $content_items
-	* @param object $cache
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug, $member_levels, $user_info, $content_items, $cache ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
-		$this->member_levels = $member_levels;
-		$this->user_info     = $user_info;
-		$this->content_items = $content_items;
-		$this->cache         = $cache;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
+		$this->member_levels = minnpost_membership()->member_levels;
+		$this->user_info     = minnpost_membership()->user_info;
+		$this->content_items = minnpost_membership()->content_items;
+		$this->cache         = minnpost_membership()->cache;
 
 		$this->mp_mem_transients = $this->cache->mp_mem_transients;
 
@@ -269,7 +263,7 @@ class MinnPost_Membership_Front_End {
 	*/
 	public function cortex_routes() {
 		if ( ! class_exists( 'Brain\Cortex' ) ) {
-			require_once( plugin_dir_path( __FILE__ ) . '../vendor/autoload.php' );
+			require_once( plugin_dir_path( $this->file ) . '/vendor/autoload.php' );
 		}
 		Brain\Cortex::boot();
 		add_action(
@@ -282,8 +276,7 @@ class MinnPost_Membership_Front_End {
 								$url,
 								function ( array $matches, $this_url ) {
 									// send this object to the template so it can be called
-									global $minnpost_membership;
-									$minnpost_membership = MinnPost_Membership::get_instance();
+									$minnpost_membership = minnpost_membership();
 									// set a query var so we can filter it
 									$query = array(
 										'is_membership'  => true,
@@ -838,14 +831,14 @@ class MinnPost_Membership_Front_End {
 			foreach ( $templates as $default_template ) {
 				$blocked_templates[] = substr_replace( $default_template, $type . $this->blocked_template_suffix, 0, strlen( $type ) );
 			}
-			$minnpost_membership = MinnPost_Membership::get_instance();
+			$minnpost_membership = minnpost_membership();
 			set_query_var( 'minnpost_membership', $minnpost_membership );
 			$user_state = $user_access_data['state'];
 			set_query_var( 'user_state', $user_state );
 			if ( locate_template( $blocked_templates ) ) {
 				$template = locate_template( $blocked_templates );
 			} else {
-				$template = dirname( __FILE__ ) . '/../templates/blocked/single.php';
+				$template = dirname( $this->file ) . '/templates/blocked/single.php';
 			}
 			return $template;
 		}
@@ -1189,10 +1182,10 @@ class MinnPost_Membership_Front_End {
 			if ( $frequency['value'] === $selected_frequency ) {
 				$classes .= ' active';
 			}
-			$full_text        .= '<span class="' . $classes . '" data-frequency="' . $frequency['value'] . '">';
-			$frequency_values  = $this->member_levels->get_frequency_values( $frequency['value'] );
-			$min_yearly_amount = $min_level['minimum_monthly_amount'] * 12;
-			$full_text        .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
+			$full_text           .= '<span class="' . $classes . '" data-frequency="' . $frequency['value'] . '">';
+			$frequency_values     = $this->member_levels->get_frequency_values( $frequency['value'] );
+			$min_yearly_amount    = $min_level['minimum_monthly_amount'] * 12;
+			$full_text           .= '$' . $min_yearly_amount / intval( $frequency_values['times_per_year'] );
 			$frequency_text_label = $this->member_levels->get_frequency_text_label( $frequency['id'] );
 			if ( '' === $frequency_text_label && 'one-time' !== $frequency['id'] ) {
 				$full_text .= ' ' . $frequency['text'];
@@ -1217,7 +1210,7 @@ class MinnPost_Membership_Front_End {
 		$template_name = preg_replace( '/[\W\s\/]+/', '-', ltrim( $url, '/' ) );
 
 		$theme_path  = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name;
-		$plugin_path = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name;
+		$plugin_path = plugin_dir_path( $this->file ) . '/templates/' . $location . $template_name;
 
 		if ( file_exists( $theme_path . '.php' ) ) {
 			return $theme_path;
@@ -1287,7 +1280,7 @@ class MinnPost_Membership_Front_End {
 		$disable_javascript = get_option( $this->option_prefix . 'disable_javascript', false );
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( true !== filter_var( $disable_javascript, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/' . $this->slug . '-front-end.min.js' ), true );
+			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-front-end.min.js' ) );
 			$minnpost_membership_data = $this->get_user_membership_info();
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
 			wp_localize_script(
@@ -1310,7 +1303,7 @@ class MinnPost_Membership_Front_End {
 			);
 		}
 		if ( true !== filter_var( $disable_css, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( __FILE__ ) . '../assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );
+			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( $this->file ) . '/assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );
 		}
 	}
 
@@ -1422,7 +1415,7 @@ class MinnPost_Membership_Front_End {
 		if ( file_exists( get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php' ) ) {
 			$file = get_theme_file_path() . '/' . $this->slug . '-templates/' . $location . $template_name . '.php';
 		} else {
-			$file = plugin_dir_path( __FILE__ ) . '../templates/' . $location . $template_name . '.php';
+			$file = plugin_dir_path( $this->file ) . '/templates/' . $location . $template_name . '.php';
 		}
 
 		require( $file );

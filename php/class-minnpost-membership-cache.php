@@ -14,23 +14,20 @@ if ( ! class_exists( 'MinnPost_Membership' ) ) {
  */
 class MinnPost_Membership_Cache {
 
-	protected $option_prefix;
-	protected $version;
-	protected $slug;
+	public $option_prefix;
+	public $version;
+	public $slug;
 
 	/**
 	* Constructor which sets up cache methods
 	*
-	* @param string $option_prefix
-	* @param string $version
-	* @param string $slug
-	* @throws \Exception
 	*/
-	public function __construct( $option_prefix, $version, $slug ) {
+	public function __construct() {
 
-		$this->option_prefix = $option_prefix;
-		$this->version       = $version;
-		$this->slug          = $slug;
+		$this->option_prefix = minnpost_membership()->option_prefix;
+		$this->file          = minnpost_membership()->file;
+		$this->version       = minnpost_membership()->version;
+		$this->slug          = minnpost_membership()->slug;
 
 		$this->cache = true;
 

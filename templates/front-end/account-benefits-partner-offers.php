@@ -5,11 +5,11 @@
  */
 get_header(); ?>
 <?php
-global $minnpost_membership;
-$user_state    = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
-$benefit_nonce = wp_create_nonce( 'mem-form-nonce' );
-$offers        = $minnpost_membership->content_items->get_partner_offers();
-$user_claim    = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
+$minnpost_membership = minnpost_membership();
+$user_state          = $minnpost_membership->user_info->get_user_access( '', 'support-partner-offers' )['state'];
+$benefit_nonce       = wp_create_nonce( 'mem-form-nonce' );
+$offers              = $minnpost_membership->content_items->get_partner_offers();
+$user_claim          = isset( $minnpost_membership->content_items->get_user_offer_claims()[0] ) ? $minnpost_membership->content_items->get_user_offer_claims()[0] : array();
 
 $check_value = true;
 $open_offers = array_filter(
