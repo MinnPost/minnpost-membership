@@ -57,6 +57,7 @@ class MinnPost_Membership_Content_Items {
 		add_action( 'admin_menu', array( $this, 'remove_partner_offer_fields' ) );
 		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
 		add_filter( 'pre_get_posts', array( $this, 'membership_content_default_order' ), 10, 1 );
+		add_filter( 'parent_file', array( $this, 'set_parent_menu' ), 10, 1 );
 	}
 
 	/**
@@ -181,6 +182,14 @@ class MinnPost_Membership_Content_Items {
 			}
 		}
 		return $query;
+	}
+
+	public function set_parent_menu( $parent_file ) {
+		global $current_screen;
+		if ( in_array( $current_screen->base, array( 'post', 'edit' ), true ) && in_array( $current_screen->post_type, array( 'thank_you_gift', 'partner', 'partner_offer' ), true ) ) {
+			$parent_file = $this->slug;
+		}
+		return $parent_file;
 	}
 
 	/**
