@@ -136,7 +136,7 @@ class MinnPost_Membership_Member_Level {
 			),
 		);
 		if ( '' !== $key ) {
-			$search_result = array_search( $key, array_column( $frequencies, $field ) );
+			$search_result = array_search( $key, array_column( $frequencies, $field ), true );
 			if ( false !== $search_result ) {
 				return $frequencies[ $search_result ];
 			} else {
@@ -180,6 +180,23 @@ class MinnPost_Membership_Member_Level {
 		$frequency_id = $this->get_frequency_options( $value, $field )['id'];
 		$text_label   = get_option( $this->option_prefix . $frequency_id . '_text_label', '' );
 		return $text_label;
+	}
+
+	/**
+	* Get button label for a given frequency value
+	*
+	* @param string $frequency_id
+	* @param string $default
+	* @return string $button_label
+	*
+	*/
+	public function get_frequency_button_label( $frequency_id, $default = '' ) {
+		$default      = ucwords( $default );
+		$button_label = get_option( $this->option_prefix . $frequency_id . '_button_text_label', $default );
+		if ( '' === $button_label ) {
+			return $default;
+		}
+		return $button_label;
 	}
 
 	/**

@@ -458,7 +458,29 @@ class MinnPost_Membership_Admin {
 						'section'  => 'member_levels',
 						'args'     => array(
 							'type'     => 'text',
-							'desc'     => __( 'This label is used when displaying what label a user has selected. It is not used in buttons, but rather in things like headings and text boxes.', 'minnpost-membership' ),
+							'desc'     => __( 'This label is used to show the donation frequency alongside an amount. It is not used in buttons, but rather in things like headings and text boxes.', 'minnpost-membership' ),
+							'constant' => '',
+						),
+					);
+
+					// button only label field for how to display the frequency
+					$settings[ $options[ $key ]['id'] . '_button_text_label' ] = array(
+						'title'    => sprintf(
+							// translators: %1 is the id of the frequency
+							__( 'Button label for %1$s frequency', 'minnpost-membership' ),
+							$options[ $key ]['id']
+						),
+						'callback' => $callbacks['text'],
+						'page'     => $page,
+						'section'  => 'member_levels',
+						'args'     => array(
+							'type'     => 'text',
+							//'desc'     => __( 'This label is used to display the donation frequency on buttons. If this field is left blank, the value will be %1$s.', 'minnpost-membership' ),
+							'desc'     => sprintf(
+								// translators: %1 is the default value
+								__( 'This label is used to display the donation frequency on buttons. If this field is left blank, the value will be %1$s.', 'minnpost-membership' ),
+								ucwords( $this->member_levels->get_frequency_options( $key )['text'] ),
+							),
 							'constant' => '',
 						),
 					);
