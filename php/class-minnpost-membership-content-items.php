@@ -323,24 +323,32 @@ class MinnPost_Membership_Content_Items {
 		);
 		$thank_you_gift_fields->add_field(
 			array(
-				'id'               => $prefix . 'type',
-				'type'             => 'radio_inline',
-				'name'             => __( 'Type', 'minnpost-membership' ),
-				'desc'             => __( 'Users can choose only one piece of swag; subscriptions are multi-select.', 'minnpost-membership' ),
-				'options'          => array(
+				'id'      => $prefix . 'type',
+				'type'    => 'radio_inline',
+				'name'    => __( 'Type', 'minnpost-membership' ),
+				'desc'    => __( 'Users can choose only one piece of swag; subscriptions are multi-select.', 'minnpost-membership' ),
+				'options' => array(
 					'swag'         => __( 'Swag', 'minnpost-membership' ),
 					'subscription' => __( 'Subscription', 'minnpost-membership' )
 				),
-				'default'          => 'swag'
+				'default' => 'swag',
 			)
 		);
 		$thank_you_gift_fields->add_field(
 			array(
 				'id'      => $prefix . 'minimum_member_level_id',
 				'type'    => 'select',
-				'name'    => __( 'Minimum member level', 'minnpost-membership' ),
+				'name'    => __( 'Minimum Member Level', 'minnpost-membership' ),
 				'desc'    => '',
 				'options' => $member_level_options,
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   => $prefix . 'fair_market_value',
+				'type' => 'text',
+				'name' => __( 'Fair Market Value', 'minnpost-membership' ),
+				'desc' => __( 'Enter a number for the fair market value. You do not need to add the dollar sign.', 'minnpost-membership' ),
 			)
 		);
 	}
