@@ -374,17 +374,18 @@ class MinnPost_Membership_Front_End {
 			$all_benefits[] = 'nyt_subscription';
 		}
 
-		$args = array(
-			'post_type'      => 'thank_you_gift',
-			'posts_per_page' => count( $all_benefits ),
-			'post_name__in'  => $all_benefits,
-			'fields'         => 'ids',
-		);
-		$ids  = get_posts( $args );
-
 		$fair_market_value = 0;
-		foreach ( $ids as $key => $value ) {
-			$fair_market_value += $this->get_benefit_fair_market_value( $value );
+		if ( ! empty( $all_benefits ) ) {
+			$args = array(
+				'post_type'      => 'thank_you_gift',
+				'posts_per_page' => count( $all_benefits ),
+				'post_name__in'  => $all_benefits,
+				'fields'         => 'ids',
+			);
+			$ids  = get_posts( $args );
+			foreach ( $ids as $key => $value ) {
+				$fair_market_value += $this->get_benefit_fair_market_value( $value );
+			}
 		}
 
 		return $fair_market_value;
