@@ -294,7 +294,8 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Handle GET and POST parameters for membership
+	* Handle GET and POST parameters for membership.
+	* This changes whenever there is a new level of item that has to be processed.
 	*
 	* @param string $direction
 	* @return array $params
@@ -346,11 +347,67 @@ class MinnPost_Membership_Front_End {
 			$params['show_ach'] = filter_var( $data['show_ach'], FILTER_SANITIZE_STRING );
 		}
 
+		$params['fair_market_value'] = $this->get_total_fair_market_value( $params );
+
 		return $params;
 	}
 
 	/**
-	* Handle GET and POST parameters for benefits
+	* Based on all the selected thank you gifts, set the total fair market value.
+	* This changes whenever there is a new level of item that has to be processed.
+	*
+	* @param array $params
+	* @return int $fair_market_value
+	*
+	*/
+	public function get_total_fair_market_value( $params ) {
+		$all_benefits = array();
+
+		// enter each level of item that can be chosen.
+		if ( isset( $params['swag'] ) ) {
+			$all_benefits[] = $params['swag'];
+		}
+		if ( isset( $params['atlantic_subscription'] ) ) {
+			$all_benefits[] = 'atlantic_subscription';
+		}
+		if ( isset( $params['nyt_subscription'] ) ) {
+			$all_benefits[] = 'nyt_subscription';
+		}
+
+		$args = array(
+			'post_type'      => 'thank_you_gift',
+			'posts_per_page' => count( $all_benefits ),
+			'post_name__in'  => $all_benefits,
+			'fields'         => 'ids',
+		);
+		$ids  = get_posts( $args );
+
+		$fair_market_value = 0;
+		foreach ( $ids as $key => $value ) {
+			$fair_market_value += $this->get_benefit_fair_market_value( $value );
+		}
+
+		return $fair_market_value;
+	}
+
+	/**
+	* Based on the selected single thank you gift ID, get that item's fair market value.
+	*
+	* @param string $post_id
+	* @return int $fair_market_value
+	*
+	*/
+	public function get_benefit_fair_market_value( $post_id ) {
+		$fair_market_value = 0;
+		$fair_market_value_meta = get_post_meta( $post_id, '_mp_thank_you_gift_fair_market_value', true );
+		if ( '' !== $fair_market_value_meta && false !== $fair_market_value_meta ) {
+			$fair_market_value = filter_var( $fair_market_value_meta, FILTER_VALIDATE_FLOAT );
+		}
+		return $fair_market_value;
+	}
+
+	/**
+	* Handle GET and POST parameters for benefits. This is only used when claiming a benefit.
 	*
 	* @param string $direction
 	* @return array $params
@@ -497,7 +554,7 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Process benefit form submission
+	* Process benefit form submission. This is only used when claiming a benefit.
 	*
 	*/
 	public function benefit_form_submit() {
