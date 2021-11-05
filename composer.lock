@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47bf3833ca214c4a8e9ade28194bfc2b",
+    "content-hash": "972d8120c8fa911557d2e7cacbeb8beb",
     "packages": [
         {
             "name": "brain/cortex",
@@ -59,20 +59,24 @@
                 "routing",
                 "wordpress"
             ],
+            "support": {
+                "issues": "https://github.com/Brain-WP/Cortex/issues",
+                "source": "https://github.com/Brain-WP/Cortex"
+            },
             "time": "2016-07-14T19:53:27+00:00"
         },
         {
             "name": "cmb2/cmb2",
-            "version": "v2.7.0",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CMB2/CMB2.git",
-                "reference": "438c26dda7ac110d0741448d65614b3ec6379034"
+                "reference": "cacbc8cedbfdf8ffe0e840858e6860f9333c33f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/438c26dda7ac110d0741448d65614b3ec6379034",
-                "reference": "438c26dda7ac110d0741448d65614b3ec6379034",
+                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/cacbc8cedbfdf8ffe0e840858e6860f9333c33f2",
+                "reference": "cacbc8cedbfdf8ffe0e840858e6860f9333c33f2",
                 "shasum": ""
             },
             "require": {
@@ -80,6 +84,7 @@
             },
             "require-dev": {
                 "apigen/apigen": "4.1.2",
+                "awesomemotive/am-cli-tools": ">=1.3.1",
                 "nette/utils": "2.5.3",
                 "phpunit/phpunit": "6.5.13"
             },
@@ -112,7 +117,11 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2020-01-21T17:49:50+00:00"
+            "support": {
+                "issues": "https://github.com/CMB2/CMB2/issues",
+                "source": "http://wordpress.org/support/plugin/cmb2"
+            },
+            "time": "2021-03-04T02:18:53+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -155,6 +164,10 @@
                 "router",
                 "routing"
             ],
+            "support": {
+                "issues": "https://github.com/nikic/FastRoute/issues",
+                "source": "https://github.com/nikic/FastRoute/tree/master"
+            },
             "time": "2015-12-20T19:50:12+00:00"
         },
         {
@@ -174,6 +187,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -205,6 +219,9 @@
                 "request",
                 "response"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/master"
+            },
             "time": "2019-08-29T13:16:46+00:00"
         }
     ],
@@ -216,5 +233,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
