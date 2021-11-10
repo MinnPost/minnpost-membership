@@ -261,12 +261,22 @@ $user_id             = get_current_user_id();
 										$level             = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
 										$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
 										$disabled          = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
+
+										// image specifics
+										$image_url = $meta['_mp_thank_you_gift_image'][0];
+										$image_id  = $meta['_mp_thank_you_gift_image_id'][0];
+										$size      = 'full';
+										$alt_text  = '';
+										if ( '' !== wp_get_attachment_image( $image_id, $size ) ) {
+											$alt_text  = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+											$image_url = wp_get_attachment_url( $image_id );
+										}
 										?>
 										<div class="m-form-item">
 											<input type="radio" name="swag" id="swag-<?php echo $slug; ?>" value="<?php echo $slug; ?>" data-min-monthly-amount="<?php echo $level['minimum_monthly_amount']; ?>" data-min-yearly-amount="<?php echo $min_yearly_amount; ?>" <?php echo $disabled; ?>>
 											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
 												<figure class="m-thank-you-gift-image">
-													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
+													<img src="<?php echo $image_url; ?>?w=150" alt="<?php echo $alt_text; ?>" loading="lazy">
 												</figure>
 												<div class="support-tooltip">
 													<span class="dashicons dashicons-editor-help"></span>
