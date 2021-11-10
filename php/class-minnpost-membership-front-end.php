@@ -328,6 +328,9 @@ class MinnPost_Membership_Front_End {
 		if ( isset( $data['nyt_subscription'] ) && filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['nyt_subscription'] = 'true';
 		}
+		if ( isset( $data['nyt_games_subscription'] ) && filter_var( $data['nyt_games_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
+			$params['nyt_games_subscription'] = 'true';
+		}
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
 		}
@@ -372,6 +375,9 @@ class MinnPost_Membership_Front_End {
 		}
 		if ( isset( $params['nyt_subscription'] ) ) {
 			$all_benefits[] = 'nyt_subscription';
+		}
+		if ( isset( $params['nyt_games_subscription'] ) ) {
+			$all_benefits[] = 'nyt_games_subscription';
 		}
 
 		$fair_market_value = 0;
