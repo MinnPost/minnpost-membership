@@ -1,4 +1,4 @@
-# Copyright (C) 2021 minnpost-membership
+# Copyright (C) 2022 minnpost-membership
 # This file is distributed under the same license as the minnpost-membership package.
 msgid ""
 msgstr ""
@@ -1141,7 +1141,7 @@ msgstr ""
 msgid "Donate"
 msgstr ""
 
-#: php/class-minnpost-membership-front-end.php:1222
+#: php/class-minnpost-membership-front-end.php:1228
 msgid "This gift requires you to give at least "
 msgstr ""
 
@@ -1394,10 +1394,10 @@ msgstr ""
 msgid "You are eligible for <strong>one</strong> of the following items:"
 msgstr ""
 
-#: templates/front-end/support.php:283
+#: templates/front-end/support.php:293
 msgid "Decline gift"
 msgstr ""
 
-#: templates/front-end/support.php:334
+#: templates/front-end/support.php:344
 msgid "Decline subscription"
 msgstr ""
