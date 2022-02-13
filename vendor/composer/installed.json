@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "brain/cortex",
-            "version": "1.0.0-alpha.7",
-            "version_normalized": "1.0.0.0-alpha7",
+            "version": "1.0.0-alpha.8",
+            "version_normalized": "1.0.0.0-alpha8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Brain-WP/Cortex.git",
-                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a"
+                "reference": "4c9cf21d3f25775cbd6faf6a75638b1c11ac0368"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/0f33ad8578fa051ab5e46e14c9478df4d728e49a",
-                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a",
+                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/4c9cf21d3f25775cbd6faf6a75638b1c11ac0368",
+                "reference": "4c9cf21d3f25775cbd6faf6a75638b1c11ac0368",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
                 "mockery/mockery": "0.9.3",
                 "phpunit/phpunit": "4.8.*"
             },
-            "time": "2016-07-14T19:53:27+00:00",
+            "time": "2017-12-24T15:46:39+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -56,6 +56,10 @@
                 "routing",
                 "wordpress"
             ],
+            "support": {
+                "issues": "https://github.com/Brain-WP/Cortex/issues",
+                "source": "https://github.com/Brain-WP/Cortex"
+            },
             "install-path": "../brain/cortex"
         },
         {
