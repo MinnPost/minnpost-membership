@@ -52,10 +52,10 @@ class MinnPost_Membership_Content_Items {
 		add_action( 'init', array( $this, 'create_partner_offer' ), 0 );
 		add_action( 'admin_menu', array( $this, 'create_sub_menus' ), 20 );
 		add_filter( 'enter_title_here', array( $this, 'title_placeholders' ), 10, 1 );
-		add_action( 'cmb2_init', array( $this, 'create_thank_you_gift_fields' ) );
-		add_action( 'cmb2_init', array( $this, 'create_partner_fields' ) );
+		add_action( 'cmb2_admin_init', array( $this, 'create_thank_you_gift_fields' ) );
+		add_action( 'cmb2_admin_init', array( $this, 'create_partner_fields' ) );
 		add_action( 'admin_menu', array( $this, 'remove_partner_offer_fields' ) );
-		add_action( 'cmb2_init', array( $this, 'create_partner_offer_fields' ) );
+		add_action( 'cmb2_admin_init', array( $this, 'create_partner_offer_fields' ) );
 		add_filter( 'pre_get_posts', array( $this, 'membership_content_default_order' ), 10, 1 );
 		add_filter( 'parent_file', array( $this, 'set_parent_menu' ), 10, 1 );
 	}
