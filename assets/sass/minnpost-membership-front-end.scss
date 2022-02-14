@@ -47,7 +47,7 @@ $summary-max-width: 45%;
 // layout
 .m-layout-membership {
 	width: 100%;
-	
+
 	fieldset {
 		border: 0;
 		margin: 0;
@@ -75,7 +75,7 @@ $summary-max-width: 45%;
 // buttons
 .m-form-membership-support .m-membership-form-actions {
 	margin: $standard-block-margin 0;
-	
+
 	button,
 	input.a-button,
 	a.a-button {
@@ -84,6 +84,7 @@ $summary-max-width: 45%;
 }
 
 @media screen and (min-width: $nav-wrap-screen) {
+
 	.m-layout-membership .m-membership-support-wrapper {
 
 		// form

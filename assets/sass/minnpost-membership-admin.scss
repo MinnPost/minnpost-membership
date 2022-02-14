@@ -14,14 +14,17 @@ $vertical-space: 15px;
 	border: 0;
 	min-width: 0;
 	font-size: 1.23em;
-	line-height: 1.5em;
+	line-height: 1.5;
+
 	.minnpost-membership-member-level {
 		margin-bottom: 2em;
+
 		header {
 			border: 1px solid $border-color-lighter;
 			padding: 0.5em;
 			margin-bottom: 2em;
 			text-align: center;
+
 			h4 {
 				margin: 0 0 0.5em 0;
 				padding: 0.5em 0;
@@ -29,7 +32,9 @@ $vertical-space: 15px;
 				line-height: normal;
 				background: $border-color-darker;
 			}
+
 			.amount {
+
 				h5 {
 					font-size: 3em;
 					min-height: 75px;
@@ -39,6 +44,7 @@ $vertical-space: 15px;
 					padding: 0 0 0.25em 0;
 					box-sizing: border-box;
 				}
+
 				p {
 					display: block;
 					margin: 0 auto 0.75em auto;
@@ -47,6 +53,7 @@ $vertical-space: 15px;
 				}
 			}
 		}
+
 		&.minnpost-membership-member-level-non-member {
 			clear: both;
 			width: 100%;
@@ -64,25 +71,33 @@ $vertical-space: 15px;
 }
 
 .minnpost-membership-title-field {
+
 	td {
+
 		input[type="text"] {
 			width: 100%;
 		}
 	}
 }
 
-.minnpost-member-field-user-state-toggle, .minnpost-member-field-display-item-toggle {
+.minnpost-member-field-user-state-toggle,
+.minnpost-member-field-display-item-toggle {
+
 	th {
 		display: none;
 	}
+
 	td {
 		padding: 0;
+
 		.checkbox-tab-wrap {
 			display: flex;
 			align-content: flex-start;
 			border-bottom: 1px solid #ccc;
 		}
+
 		.checkbox {
+
 			input[type="radio"] {
 				left: 0;
 				opacity: 0;
@@ -90,6 +105,7 @@ $vertical-space: 15px;
 				top: 0;
 				visibility: hidden;
 			}
+
 			label {
 				display: inline-block;
 				padding: 1em;
@@ -101,8 +117,9 @@ $vertical-space: 15px;
 				font-weight: 600;
 				vertical-align: middle;
 				background: #e5e5e5;
-				border: 1px solid #ccc
+				border: 1px solid #ccc;
 			}
+
 			input:checked + label {
 				border-bottom: 1px solid #f1f1f1;
 				background: #f1f1f1;
@@ -114,6 +131,7 @@ $vertical-space: 15px;
 }
 
 @media screen and (min-width: 700px) {
+
 	.minnpost-membership-member-level {
 		width: 46%;
 		margin-right: 2%;
@@ -122,6 +140,7 @@ $vertical-space: 15px;
 }
 
 @media screen and (min-width: 890px) {
+
 	.minnpost-membership-member-level {
 		width: 23%;
 	}
