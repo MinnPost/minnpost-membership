@@ -195,7 +195,7 @@ class MinnPost_Membership_Shortcodes {
 						</section>
 						<section class="m-next-donation">
 							<h4 class="a-donation-heading a-next-transaction">' . $donation_date_heading . '</h4>
-							<div class="a-next-transaction-date">' . date_i18n( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</div>
+							<div class="a-next-transaction-date">' . wp_date( 'F j, Y', strtotime( $donation['next_date'] ) ) . '</div>
 						</section>
 						<section class="m-donation-actions">
 							<h4 class="a-donation-heading a-modify-donation">' . $modify_donation_heading . '</h4>
@@ -338,7 +338,7 @@ class MinnPost_Membership_Shortcodes {
 						// this is a recurring donation
 						$donation_update_url = str_replace( '$recurring_donation_id', $donation['id'], $edit_recurring_url );
 					}
-					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="' . $donation_update_url . '" class="a-button">' . $retry_button . '</a></td></tr>';
+					$history .= '<tr><td>$' . $donation['amount'] . ' ' . strtolower( $donation['frequency'] ) . '</td><td>' . wp_date( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td><td><a href="' . $donation_update_url . '" class="a-button">' . $retry_button . '</a></td></tr>';
 				}
 				$history .= '</table></section>';
 			}
@@ -356,7 +356,7 @@ class MinnPost_Membership_Shortcodes {
 				// this is where the list starts
 				foreach ( $successful_opportunities as $donation ) {
 					$frequency = isset( $donation['frequency'] ) ? strtolower( $donation['frequency'] ) : '';
-					$history  .= '<tr><td>$' . $donation['amount'] . ' ' . $frequency . '</td><td colspan="2">' . date_i18n( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
+					$history  .= '<tr><td>$' . $donation['amount'] . ' ' . $frequency . '</td><td colspan="2">' . wp_date( 'F j, Y', strtotime( $donation['close_date'] ) ) . '</td></tr>';
 				}
 				$history .= '</table></section>';
 			}

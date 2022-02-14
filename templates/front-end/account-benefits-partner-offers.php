@@ -24,7 +24,7 @@ $open_offers = array_filter(
 			<header class="m-entry-header m-entry-header-singular">
 				<h1 class="a-entry-title"><?php echo get_option( $minnpost_membership->option_prefix . 'account-benefits-partner-offers_title', '' ); ?></h1>
 				<?php if ( 0 === count( $open_offers ) ) : ?>
-					<p class="a-intro">Our next round of partner offers becomes available at <strong><?php echo date_i18n( get_option( 'time_format' ), $offers[0]->claimable_start_date ); ?> on <?php echo date_i18n( get_option( 'date_format' ), $offers[0]->claimable_start_date ); ?></strong>. Right now the minnpost.com time is <strong><?php echo date_i18n( get_option( 'time_format' ), current_time( 'timestamp' ) ); ?> on <?php echo date_i18n( get_option( 'date_format' ), current_time( 'timestamp' ) ); ?></strong>. You can <a href="#" class="a-refresh-page">refresh this page</a> anytime.</p>
+					<p class="a-intro">Our next round of partner offers becomes available at <strong><?php echo wp_date( get_option( 'time_format' ), $offers[0]->claimable_start_date ); ?> on <?php echo wp_date( get_option( 'date_format' ), $offers[0]->claimable_start_date ); ?></strong>. Right now the minnpost.com time is <strong><?php echo wp_date( get_option( 'time_format' ), time() ); ?> on <?php echo wp_date( get_option( 'date_format' ), time() ); ?></strong>. You can <a href="#" class="a-refresh-page">refresh this page</a> anytime.</p>
 				<?php endif; ?>
 			</header>
 			<section class="m-entry-content m-partner-offers">
@@ -98,7 +98,7 @@ $open_offers = array_filter(
 														<option value="">Select an option</option>
 														<?php foreach ( $post->instances as $key => $instance ) : ?>
 															<?php if ( ! isset( $instance['_mp_partner_offer_claimed_date'] ) || '' === $instance['_mp_partner_offer_claimed_date'] ) : ?>
-																<option value="<?php echo $key; ?>"><?php echo date_i18n( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo date_i18n( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ); ?></option>
+																<option value="<?php echo $key; ?>"><?php echo wp_date( get_option( 'date_format' ), $instance['_mp_partner_offer_instance_date'] ); ?> @ <?php echo wp_date( get_option( 'time_format' ), $instance['_mp_partner_offer_instance_date'] ); ?></option>
 															<?php endif; ?>
 														<?php endforeach; ?>
 													</select>

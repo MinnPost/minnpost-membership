@@ -33,7 +33,7 @@ $msg .= sprintf(
 $msg .= sprintf(
 	// translators: param 1 is the date/time when the instance was claimed
 	__( 'Date/Time Claimed: %1$s', 'minnpost-membership' ),
-	date_i18n( get_option( 'date_format' ), $attributes['partner_offer']->instances[ $attributes['instance_id'] ]['_mp_partner_offer_claimed_date'] ) . ' @ ' . date_i18n( get_option( 'time_format' ), $attributes['partner_offer']->instances[ $attributes['instance_id'] ]['_mp_partner_offer_claimed_date'] ),
+	wp_date( get_option( 'date_format' ), $attributes['partner_offer']->instances[ $attributes['instance_id'] ]['_mp_partner_offer_claimed_date'] ) . ' @ ' . wp_date( get_option( 'time_format' ), $attributes['partner_offer']->instances[ $attributes['instance_id'] ]['_mp_partner_offer_claimed_date'] ),
 	"\r\n\r\n"
 );
 

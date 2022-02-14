@@ -788,13 +788,13 @@ class MinnPost_Membership_Content_Items {
 
 		global $wpdb;
 
-		$now = current_time( 'timestamp' );
+		$now = time();
 		//$now = date( 'Y-m-d', strtotime( '-1 month' ) );
 		//$now = date( 'Y-m-d', strtotime( '+1 month' ) );
 
 		$query = $wpdb->prepare(
 			"SELECT
-			offer.ID, offer.post_title,
+			offer.ID, offer.post_author, offer.post_content, offer.post_title,
 			partner.meta_value as post_parent,
 			offer.post_type as post_type,
 			partner_image_id.meta_value as partner_logo_image_id, partner_image.meta_value as partner_logo_image,
@@ -916,7 +916,7 @@ class MinnPost_Membership_Content_Items {
 		foreach ( $partner_offers as $partner_offer ) {
 			foreach ( $partner_offer->instances as $instance ) {
 				$how_often            = get_option( $this->option_prefix . 'account-benefits-partner-offers_claim_frequency', '' );
-				$oldest_eligible_date = strtotime( '-' . $how_often, current_time( 'timestamp' ) );
+				$oldest_eligible_date = strtotime( '-' . $how_often, time() );
 				if ( isset( $instance['_mp_partner_offer_claimed_date'] ) && $instance['_mp_partner_offer_claimed_date'] < $oldest_eligible_date ) {
 					continue;
 				} elseif ( ! isset( $instance['_mp_partner_offer_claim_user'] ) ) {

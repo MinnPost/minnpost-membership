@@ -837,7 +837,7 @@ class MinnPost_Membership_Front_End {
 
 		$current_user = wp_get_current_user();
 
-		$claimed = current_time( 'timestamp' );
+		$claimed = time();
 
 		$this_instance['_mp_partner_offer_claimed_date'] = $claimed;
 		$this_instance['_mp_partner_offer_claim_user']   = array(
@@ -1605,11 +1605,11 @@ class MinnPost_Membership_Front_End {
 		// here we check to see if the user is eligible to claim this offer based on date of most recent previous claim
 		$how_often            = get_option( $this->option_prefix . $benefit_prefix . $benefit_name . '_claim_frequency', '' );
 		$next_claim           = strtotime( '+' . $how_often, $user_claim->user_claimed );
-		$next_claim_formatted = date_i18n( get_option( 'date_format' ), $next_claim );
+		$next_claim_formatted = wp_date( get_option( 'date_format' ), $next_claim );
 
 		// it wasn't this one
 		if ( ( $post_id !== $claim_id ) && ( 0 !== $claim_id ) ) {
-			$now = current_time( 'timestamp' );
+			$now = time();
 			if ( $next_claim > $now ) {
 				$user_claim_status['status']                      = 'user_claimed_recently';
 				$user_claim_status['next_claim_eligibility_date'] = $next_claim_formatted;
@@ -1778,7 +1778,7 @@ class MinnPost_Membership_Front_End {
 				$message['message']       = str_replace( '$type', $data->offer_type, $message['message'] );
 				$message['message']       = str_replace( '$offer', $data->post_title, $message['message'] );
 				$message['message']       = str_replace( '$next_claim_eligibility_date', $params['next_claim_eligibility_date'], $message['message'] );
-				$message['message']       = str_replace( '$claimed_date', date_i18n( get_option( 'date_format' ), $params['claimed_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$claimed_date', wp_date( get_option( 'date_format' ), $params['claimed_date'] ), $message['message'] );
 				return $message;
 			case 'user_previously_claimed':
 				$message['message_class'] = 'm-benefit-message-success';
@@ -1786,16 +1786,16 @@ class MinnPost_Membership_Front_End {
 				$message['message']       = str_replace( '$type', $data->offer_type, $message['message'] );
 				$message['message']       = str_replace( '$offer', $data->post_title, $message['message'] );
 				$message['message']       = str_replace( '$next_claim_eligibility_date', $params['next_claim_eligibility_date'], $message['message'] );
-				$message['message']       = str_replace( '$claimed_date', date_i18n( get_option( 'date_format' ), $params['claimed_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$claimed_date', wp_date( get_option( 'date_format' ), $params['claimed_date'] ), $message['message'] );
 				return $message;
 			case 'user_just_claimed':
 				$message['message_class'] = 'm-benefit-message-success';
 				return $message;
 			case 'not_claimable_yet':
-				$message['message']       = str_replace( '$start_date', date_i18n( get_option( 'date_format' ), $data['claimable_start_date'] ), $message['message'] );
-				$message['message']       = str_replace( '$start_time', date_i18n( get_option( 'time_format' ), $data['claimable_start_date'] ), $message['message'] );
-				$message['message']       = str_replace( '$end_date', date_i18n( get_option( 'date_format' ), $data['claimable_end_date'] ), $message['message'] );
-				$message['message']       = str_replace( '$end_time', date_i18n( get_option( 'time_format' ), $data['claimable_end_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$start_date', wp_date( get_option( 'date_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$start_time', wp_date( get_option( 'time_format' ), $data['claimable_start_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$end_date', wp_date( get_option( 'date_format' ), $data['claimable_end_date'] ), $message['message'] );
+				$message['message']       = str_replace( '$end_time', wp_date( get_option( 'time_format' ), $data['claimable_end_date'] ), $message['message'] );
 				$message['message_class'] = 'm-benefit-message-future';
 				return $message;
 			case 'user_tried_but_all_claimed':
@@ -1803,7 +1803,7 @@ class MinnPost_Membership_Front_End {
 				return $message;
 			case 'user_tried_but_this_instance_claimed':
 				$message['message_class'] = 'm-benefit-message-error';
-				$instance_date            = date_i18n( get_option( 'date_format' ), $data['not-claimed-instance']['_mp_partner_offer_instance_date'] ) . ' @ ' . date_i18n( get_option( 'time_format' ), $data['not-claimed-instance']['_mp_partner_offer_instance_date'] );
+				$instance_date            = wp_date( get_option( 'date_format' ), $data['not-claimed-instance']['_mp_partner_offer_instance_date'] ) . ' @ ' . wp_date( get_option( 'time_format' ), $data['not-claimed-instance']['_mp_partner_offer_instance_date'] );
 				$message['message']       = str_replace( '$date', $instance_date, $message['message'] );
 				return $message;
 			default:

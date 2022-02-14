@@ -17,9 +17,9 @@
 		<?php foreach ( $offers as $key => $offer ) : ?>
 			<?php foreach ( $offer->instances as $i_key => $instance ) : ?>
 				<tr>
-					<th><a href="<?php echo get_edit_post_link( $offer->ID ); ?>"><?php echo date_i18n( 'Y-m', strtotime( $offer->claimable_start_date ) ); ?> <?php echo $offer->post_title; ?></a></th>
+					<th><a href="<?php echo get_edit_post_link( $offer->ID ); ?>"><?php echo wp_date( 'Y-m', strtotime( $offer->claimable_start_date ) ); ?> <?php echo $offer->post_title; ?></a></th>
 					<td><?php echo $i_key + 1; ?></td>
-					<td><?php echo date_i18n( 'Y-m-d @ g:i:sa', $instance['_mp_partner_offer_claimed_date'] ); ?></td>
+					<td><?php echo wp_date( 'Y-m-d @ g:i:sa', $instance['_mp_partner_offer_claimed_date'] ); ?></td>
 					<td><a href="<?php echo get_edit_user_link( $instance['_mp_partner_offer_claim_user']['id'] ); ?>"><?php echo $instance['user']->display_name; ?></a></td>
 					<td><?php echo $instance['user']->user_email; ?></td>
 					<td>
