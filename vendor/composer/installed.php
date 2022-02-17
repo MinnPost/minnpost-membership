@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '01d91632087fe64047c0493bbd53f843cb4967df',
+        'reference' => '973879a32ef3ae81f875da37f7aace7d59838d56',
         'name' => 'minnpost/minnpost-membership',
         'dev' => true,
     ),
@@ -20,12 +20,12 @@
             'dev_requirement' => false,
         ),
         'cmb2/cmb2' => array(
-            'pretty_version' => 'v2.9.0',
-            'version' => '2.9.0.0',
+            'pretty_version' => 'v2.10.0',
+            'version' => '2.10.0.0',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../cmb2/cmb2',
             'aliases' => array(),
-            'reference' => 'cacbc8cedbfdf8ffe0e840858e6860f9333c33f2',
+            'reference' => '4ff77d6181d3b5b8313091c50b7cffdbbfff3b32',
             'dev_requirement' => false,
         ),
         'minnpost/minnpost-membership' => array(
@@ -34,7 +34,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '01d91632087fe64047c0493bbd53f843cb4967df',
+            'reference' => '973879a32ef3ae81f875da37f7aace7d59838d56',
             'dev_requirement' => false,
         ),
         'nikic/fast-route' => array(
