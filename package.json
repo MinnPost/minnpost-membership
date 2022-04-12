@@ -1,6 +1,6 @@
 {
   "name": "minnpost-membership",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Handle membership UX for MinnPost",
   "repository": {
     "type": "git",
