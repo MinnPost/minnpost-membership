@@ -87,12 +87,12 @@
 		}, // end init
 
 		 /*
-		  * add to analytics cart
+		  * run an analytics product action
 		 */
-		 analyticsCart: function( level, amount, frequency_label ) {
+		 analyticsProductAction: function( level, amount, frequency_label, step ) {
 			var product = this.analyticsProduct(level, amount, frequency_label );
-			wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', 'add_to_cart', product );
-		}, // end analyticsCart
+			wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', step, product );
+		}, // end analyticsProductAction
 
 		analyticsProduct: function( level, amount, frequency_label ) {
 			let product = {
@@ -238,7 +238,7 @@
 			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
 			this.showNewLevel( this.element, this.options, level );
 			this.setEnabledGifts( level );
-			this.analyticsCart( level['name'], amount, frequency_label );
+			this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content' );
 		}, // end checkAndSetLevel
 
 		showNewLevel: function( element, options, level ) {
