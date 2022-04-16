@@ -58,7 +58,7 @@
 			// Set up the UI for the current field state on (re-)load
 			this.setAmountLabels( $frequency.filter(':checked').val() );
 			this.setMinAmounts( $frequency.filter(':checked').val() );
-			this.checkAndSetLevel();
+			this.checkAndSetLevel( false );
 
 			$frequency.on( 'change', this.onFrequencyChange.bind(this) );
 			$suggestedAmount.on( 'change', this.onSuggestedAmountChange.bind(this) );
@@ -89,11 +89,14 @@
 		 /*
 		  * run an analytics product action
 		 */
-		 analyticsProductAction: function( level, amount, frequency_label, step ) {
+		 analyticsProductAction: function( level, amount, frequency_label, action, step ) {
 			var product = this.analyticsProduct(level, amount, frequency_label );
-			wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', step, product );
+			wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', action, product, step );
 		}, // end analyticsProductAction
 
+		/*
+		  * create an analytics product variable
+		 */
 		analyticsProduct: function( level, amount, frequency_label ) {
 			let product = {
 				'id': 'minnpost_' + level.toLowerCase() + '_membership',
@@ -110,12 +113,12 @@
 		onFrequencyChange: function( event ) {
 			this.setAmountLabels( $( event.target ).val() );
 			this.setMinAmounts( $( event.target ).val() );
-			this.checkAndSetLevel();
+			this.checkAndSetLevel( true );
 		}, // end onFrequencyChange
 
 		onSuggestedAmountChange: function( event ) {
 			$( this.element ).find( this.options.amountField ).val( null );
-			this.checkAndSetLevel();
+			this.checkAndSetLevel( true);
 		}, // end onSuggestedAmountChange
 
 		onAmountChange: function( event ) {
@@ -124,7 +127,7 @@
 			var $target = $( event.target );
 			if ( $target.data( 'last-value' ) != $target.val() ) {
 				$target.data( 'last-value', $target.val() );
-				this.checkAndSetLevel();
+				this.checkAndSetLevel( true );
 			}
 		}, // end onAmountChange
 
@@ -183,6 +186,7 @@
 			// if this is the main checkout form, send it to the ec plugin as a checkout
 			if ( hasClass ) {
 				var product = this.analyticsProduct( level['name'], amount, frequency_label );
+				wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', 'add_to_cart', product );
 				wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', 'begin_checkout', product );
 			}
 		}, // end onFormSubmit
@@ -223,7 +227,7 @@
 				.addClass( 'active' );
 		}, // end setMinAmounts
 
-		checkAndSetLevel: function() {
+		checkAndSetLevel: function( updated ) {
 			var amount = $( this.options.amountSelector ).filter( ':checked' ).val();
 			if ( typeof amount === 'undefined' ) {
 				amount = $( this.options.amountField ).val();
@@ -238,7 +242,12 @@
 			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
 			this.showNewLevel( this.element, this.options, level );
 			this.setEnabledGifts( level );
-			this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content' );
+			/*if ( true === updated ) {
+				this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content', 1 );
+			} else {
+				this.analyticsProductAction( level['name'], amount, frequency_label, 'view_item_list', 1 );
+			}*/
+			this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content', 1 );
 		}, // end checkAndSetLevel
 
 		showNewLevel: function( element, options, level ) {
