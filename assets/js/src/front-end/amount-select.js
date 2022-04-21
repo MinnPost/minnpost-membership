@@ -242,11 +242,6 @@
 			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
 			this.showNewLevel( this.element, this.options, level );
 			this.setEnabledGifts( level );
-			/*if ( true === updated ) {
-				this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content', 1 );
-			} else {
-				this.analyticsProductAction( level['name'], amount, frequency_label, 'view_item_list', 1 );
-			}*/
 			this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content', 1 );
 		}, // end checkAndSetLevel
 
