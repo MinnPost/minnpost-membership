@@ -44,6 +44,7 @@
 	Plugin.prototype = {
 		init: function() {
 			var $frequency = $( this.element ).find( this.options.frequencySelector );
+			var $form = $( this.element );
 			var $suggestedAmount = $( this.options.amountSelector );
 			var $amount = $( this.element ).find( this.options.amountField );
 			var $declineBenefits = $( this.element ).find( this.options.declineBenefits );
@@ -54,15 +55,10 @@
 				return;
 			}
 
-			// setup Analytics Enhanced Ecommerce plugin
-			if ( typeof ga !== 'undefined' ) {
-				ga( 'require', 'ec' );
-			}
-
 			// Set up the UI for the current field state on (re-)load
 			this.setAmountLabels( $frequency.filter(':checked').val() );
 			this.setMinAmounts( $frequency.filter(':checked').val() );
-			this.checkAndSetLevel();
+			this.checkAndSetLevel( false );
 
 			$frequency.on( 'change', this.onFrequencyChange.bind(this) );
 			$suggestedAmount.on( 'change', this.onSuggestedAmountChange.bind(this) );
@@ -80,40 +76,49 @@
 
 			$declineBenefits.on( 'change', this.onDeclineBenefitsChange.bind( this ) );
 			$subscriptions.on( 'click', this.onSubscriptionsClick.bind( this ) );
+
+			// when the form is submitted
+			document.querySelectorAll( ".m-form-membership" ).forEach(
+				membershipForm => membershipForm.addEventListener( "submit", ( event ) => {
+					this.onFormSubmit( event );
+				} )
+			);
+
 		}, // end init
 
-		 // step is the integer for the step in the ecommerce process.
-		 // for this purpose, it's probably always 1.
-		 // things we need to know: the level name, the amount, and the frequency
-		 // example:
 		 /*
-		 Running command: ga("ec:addProduct", {id: "minnpost_silver_membership", name: "MinnPost Silver Membership", category: "Donation", brand: "MinnPost", variant: "Monthly", price: "5", quantity: 1})
+		  * run an analytics product action
 		 */
-		analyticsTracker: function( level, amount, frequency_label ) {
-			if ( typeof ga !== 'undefined' ) {
-				ga( 'ec:addProduct', {
-					'id': 'minnpost_' + level.toLowerCase() + '_membership',
-					'name': 'MinnPost ' + level.charAt(0).toUpperCase() + level.slice(1) + ' Membership',
-					'category': 'Donation',
-					'brand': 'MinnPost',
-					'variant':  frequency_label,
-					'price': amount,
-					'quantity': 1
-				});
-			} else {
-				return;
+		 analyticsProductAction: function( level, amount, frequency_label, action, step ) {
+			var product = this.analyticsProduct(level, amount, frequency_label );
+			wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', action, product, step );
+		}, // end analyticsProductAction
+
+		/*
+		  * create an analytics product variable
+		 */
+		analyticsProduct: function( level, amount, frequency_label ) {
+			let product = {
+				'id': 'minnpost_' + level.toLowerCase() + '_membership',
+				'name': 'MinnPost ' + level.charAt(0).toUpperCase() + level.slice(1) + ' Membership',
+				'category': 'Donation',
+				'brand': 'MinnPost',
+				'variant':  frequency_label,
+				'price': amount,
+				'quantity': 1
 			}
-		}, // end analyticsTracker
+			return product;
+		}, // end analyticsProduct
 
 		onFrequencyChange: function( event ) {
 			this.setAmountLabels( $( event.target ).val() );
 			this.setMinAmounts( $( event.target ).val() );
-			this.checkAndSetLevel();
+			this.checkAndSetLevel( true );
 		}, // end onFrequencyChange
 
 		onSuggestedAmountChange: function( event ) {
 			$( this.element ).find( this.options.amountField ).val( null );
-			this.checkAndSetLevel();
+			this.checkAndSetLevel( true);
 		}, // end onSuggestedAmountChange
 
 		onAmountChange: function( event ) {
@@ -122,7 +127,7 @@
 			var $target = $( event.target );
 			if ( $target.data( 'last-value' ) != $target.val() ) {
 				$target.data( 'last-value', $target.val() );
-				this.checkAndSetLevel();
+				this.checkAndSetLevel( true );
 			}
 		}, // end onAmountChange
 
@@ -149,6 +154,42 @@
 
 			$decline.prop( 'checked', false );
 		}, // end onSubscriptionsChange
+
+		onFormSubmit: function( event ) {
+			var amount = $( this.options.amountSelector ).filter( ':checked' ).val();
+			if ( typeof amount === 'undefined' ) {
+				amount = $( this.options.amountField ).val();
+			}
+			var frequency_string = $( this.options.frequencySelector + ':checked' ).val();
+			var frequency = frequency_string.split(' - ')[1];
+			var frequency_name = frequency_string.split(' - ')[0];
+			var frequency_id = $( this.options.frequencySelector + ':checked' ).prop( 'id' );
+			var frequency_label = $( 'label[for="' + frequency_id + '"]' ).text();
+			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
+
+			var options = {
+				type: 'event',
+				category: 'Support Us',
+				action: 'Become A Member',
+				label: location.pathname
+			};
+			// this tracks an event submission based on the plugin options
+			// it also bubbles the event up to submit the form
+			wp.hooks.doAction(
+				'minnpostMembershipAnalyticsEvent',
+				options.type,
+				options.category,
+				options.action,
+				options.label
+			);
+			var hasClass = event.target.classList.contains( "m-form-membership-support" );
+			// if this is the main checkout form, send it to the ec plugin as a checkout
+			if ( hasClass ) {
+				var product = this.analyticsProduct( level['name'], amount, frequency_label );
+				wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', 'add_to_cart', product );
+				wp.hooks.doAction( 'minnpostMembershipAnalyticsEcommerceAction', 'event', 'begin_checkout', product );
+			}
+		}, // end onFormSubmit
 
 		clearAmountSelector: function( event ) {
 			var $suggestedAmount = $( this.options.amountSelector );
@@ -186,7 +227,7 @@
 				.addClass( 'active' );
 		}, // end setMinAmounts
 
-		checkAndSetLevel: function() {
+		checkAndSetLevel: function( updated ) {
 			var amount = $( this.options.amountSelector ).filter( ':checked' ).val();
 			if ( typeof amount === 'undefined' ) {
 				amount = $( this.options.amountField ).val();
@@ -201,7 +242,7 @@
 			var level = MinnPostMembership.checkLevel( amount, frequency, frequency_name );
 			this.showNewLevel( this.element, this.options, level );
 			this.setEnabledGifts( level );
-			this.analyticsTracker( level['name'], amount, frequency_label );
+			this.analyticsProductAction( level['name'], amount, frequency_label, 'select_content', 1 );
 		}, // end checkAndSetLevel
 
 		showNewLevel: function( element, options, level ) {
