@@ -331,7 +331,7 @@ class MinnPost_Membership_User_Info {
 	* @return int $new_amount_this_year
 	*
 	*/
-	public function get_user_new_amount( $user_id = 0, $on_page_amount, $on_page_frequency ) {
+	public function get_user_new_amount( $user_id, $on_page_amount, $on_page_frequency ) {
 
 		// deal with on-page info
 		$frequency_values     = $this->member_levels->get_frequency_values( $on_page_frequency['value'] );
