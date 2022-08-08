@@ -122,7 +122,7 @@ class MinnPost_Membership_Admin {
 					'website' => __( 'Website', 'minnpost-membership' ),
 					'email'   => __( 'Email', 'minnpost-membership' ),
 				),
-				'use_tabs' => false,
+				'use_tabs' => true,
 			),
 			$this->slug . '-site-footer'        => array(
 				'title'    => __( 'Site Footer', 'minnpost-membership' ),
@@ -565,7 +565,7 @@ class MinnPost_Membership_Admin {
 				'tagline_text'         => array(
 					'title'    => __( 'Tagline text', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
@@ -580,7 +580,7 @@ class MinnPost_Membership_Admin {
 				'button_include_heart' => array(
 					'title'    => __( 'Include the heart?', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'checkbox',
@@ -591,7 +591,7 @@ class MinnPost_Membership_Admin {
 				'button_text'          => array(
 					'title'    => __( 'Button text', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
@@ -602,7 +602,7 @@ class MinnPost_Membership_Admin {
 				'button_class'         => array(
 					'title'    => __( 'Button CSS class', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
@@ -613,7 +613,7 @@ class MinnPost_Membership_Admin {
 				'button_url'           => array(
 					'title'    => __( 'Button URL', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
@@ -632,7 +632,7 @@ class MinnPost_Membership_Admin {
 				'email_button_include_heart' => array(
 					'title'    => __( 'Include the heart?', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'checkbox',
@@ -643,7 +643,7 @@ class MinnPost_Membership_Admin {
 				'email_button_text'          => array(
 					'title'    => __( 'Button text', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
@@ -654,7 +654,7 @@ class MinnPost_Membership_Admin {
 				'email_button_class'         => array(
 					'title'    => __( 'Button CSS class', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
@@ -665,7 +665,7 @@ class MinnPost_Membership_Admin {
 				'email_button_url'           => array(
 					'title'    => __( 'Button URL', 'minnpost-membership' ),
 					'callback' => $callbacks['text'],
-					'page'     => $page,
+					'page'     => $this_section,
 					'section'  => $this_section,
 					'args'     => array(
 						'type'     => 'text',
