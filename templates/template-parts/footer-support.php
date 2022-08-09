@@ -20,7 +20,16 @@
 			<h1 class="a-standalone-title"><?php echo get_option( $minnpost_membership->option_prefix . 'support_title', '' ); ?></h1>
 		</header>
 	<?php endif; ?>
-	<form action="<?php echo $attributes['donate_url']; ?>" method="get" class="m-form m-form-membership m-form-membership-support">
+	<form action="<?php echo admin_url( 'admin-ajax.php' ); ?>" method="post" class="m-form m-form-membership m-form-membership-support">
+		<input type="hidden" name="action" value="donate_footer_form_submit">
+		<input type="hidden" name="minnpost_membership_form_nonce" value="<?php echo wp_create_nonce( 'mem-form-nonce' ); ?>">
+		<?php if ( ! empty( $url_params ) ) : ?>
+			<?php foreach ( $url_params as $key => $value ) : ?>
+				<?php if ( 'amount' !== $key && 'frequency' !== $key ) : ?>
+					<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
+				<?php endif; ?>
+			<?php endforeach; ?>
+		<?php endif; ?>
 		<?php if ( '' !== $attributes['footer_intro_text'] ) : ?>
 			<?php echo wpautop( $attributes['footer_intro_text'] ); ?>
 		<?php endif; ?>

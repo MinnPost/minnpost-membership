@@ -80,6 +80,10 @@ class MinnPost_Membership_Front_End {
 		add_action( 'wp_ajax_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
 
+		// footer donate form submit actions
+		add_action( 'wp_ajax_donate_footer_form_submit', array( $this, 'donate_footer_form_submit' ) );
+		add_action( 'wp_ajax_nopriv_donate_footer_form_submit', array( $this, 'donate_footer_form_submit' ) );
+
 		// benefit level chooser form submit actions
 		add_action( 'wp_ajax_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
@@ -464,12 +468,26 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
+	* Process footer donate form submission
+	*
+	*/
+	public function donate_footer_form_submit() {
+		$redirect_url = get_option( $this->option_prefix . 'donate_url', '' );
+		if ( '' === $redirect_url ) {
+			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		}
+		$this->donate_choose_form_submit( $redirect_url );
+	}
+
+	/**
 	* Process donate form submission
 	*
 	*/
-	public function donate_choose_form_submit() {
+	public function donate_choose_form_submit( $redirect_url = '' ) {
 
-		$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		if ( '' === $redirect_url ) {
+			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
+		}
 		$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 		if ( '' !== $redirect_url ) {
 
