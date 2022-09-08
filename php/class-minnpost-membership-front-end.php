@@ -28,7 +28,6 @@ class MinnPost_Membership_Front_End {
 
 	/**
 	* Constructor which sets up front end
-	*
 	*/
 	public function __construct() {
 
@@ -59,14 +58,13 @@ class MinnPost_Membership_Front_End {
 
 	/**
 	* Create the action hooks to create front end things
-	*
 	*/
 	public function add_actions() {
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
 
-		// these actions can be called with do_action in a theme or other template
+		// these actions can be called with do_action in a theme or other template,
 		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ), 10, 1 );
 		add_action( $this->option_prefix . 'email_header', array( $this, 'email_header' ), 10, 1 );
 		add_action( $this->option_prefix . 'site_footer', array( $this, 'site_footer' ), 10, 1 );
@@ -76,19 +74,19 @@ class MinnPost_Membership_Front_End {
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 
-		// main donate form submit actions
+		// main donate form submit actions.
 		add_action( 'wp_ajax_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
 
-		// footer donate form submit actions
+		// footer donate form submit actions.
 		add_action( 'wp_ajax_donate_footer_form_submit', array( $this, 'donate_footer_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_donate_footer_form_submit', array( $this, 'donate_footer_form_submit' ) );
 
-		// benefit level chooser form submit actions
+		// benefit level chooser form submit actions.
 		add_action( 'wp_ajax_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
 
-		// benefit redeem form submits
+		// benefit redeem form submits.
 		add_action( 'wp_ajax_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
 
@@ -96,7 +94,7 @@ class MinnPost_Membership_Front_End {
 		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
 		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
 
-		// handle the emails sent from this class
+		// handle the emails sent from this class.
 		add_filter( 'wp_mail_from', array( $this, 'mail_from' ) );
 		add_filter( 'wp_mail_from_name', array( $this, 'mail_from_name' ) );
 	}
@@ -299,11 +297,11 @@ class MinnPost_Membership_Front_End {
 
 	/**
 	* Handle GET and POST parameters for membership.
-	* This changes whenever there is a new level of item that has to be processed.
+	 * This might need to change whenever there is a new level of item that has to be processed.
+	 * test the loop of levels to see if it still works.
 	*
-	* @param string $direction
+	 * @param string $direction whether this was a GET or POST request.
 	* @return array $params
-	*
 	*/
 	public function process_membership_parameters( $direction = 'get' ) {
 		$params = array();
