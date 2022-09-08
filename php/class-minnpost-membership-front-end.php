@@ -1192,7 +1192,7 @@ class MinnPost_Membership_Front_End {
 	* @param integer $post_id Thank-You Gift post metadata
 	*
 	*/
-	public function thank_you_gift_description( $post_id, $selected_frequency ) {
+	public function thank_you_gift_description( $post_id, $selected_frequency = '' ) {
 		$text = $this->get_thank_you_gift_description( $post_id, $selected_frequency );
 		if ( '' !== $text ) {
 			echo $text;
@@ -1206,7 +1206,7 @@ class MinnPost_Membership_Front_End {
 	* @return string $full_text
 	*
 	*/
-	private function get_thank_you_gift_description( $post_id, $selected_frequency ) {
+	public function get_thank_you_gift_description( $post_id, $selected_frequency = '' ) {
 		$full_text   = '';
 		$meta        = get_post_meta( $post_id );
 		$description = $meta['_mp_thank_you_gift_description'][0];
@@ -1216,8 +1216,8 @@ class MinnPost_Membership_Front_End {
 
 		$level     = $this->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
 		$full_text = str_replace( '$min_amount', $this->get_min_amount( $level, $selected_frequency ), $description );
-
-		return wpautop( $full_text );
+		$full_text = apply_filters( 'the_content', $full_text );
+		return $full_text;
 	}
 
 	/**

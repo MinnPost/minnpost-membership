@@ -302,10 +302,11 @@ class MinnPost_Membership_Content_Items {
 		);
 		$thank_you_gift_fields->add_field(
 			array(
-				'id'   => $prefix . 'description',
-				'name' => __( 'Description', 'minnpost-membership' ),
-				'type' => 'text',
-				'desc' => __( 'Enter a short description of the gift. $min_amount will show as e.g. "$15 monthly".', 'minnpost-membership' ),
+				'id'              => $prefix . 'description',
+				'name'            => __( 'Description', 'minnpost-membership' ),
+				'type'            => 'text',
+				'desc'            => __( 'Enter a short description of the gift. $min_amount will show as e.g. "$15 monthly".', 'minnpost-membership' ),
+				'sanitization_cb' => array( $this, 'sanitize_text_allow_html' ),
 			)
 		);
 		$thank_you_gift_fields->add_field(
@@ -326,10 +327,11 @@ class MinnPost_Membership_Content_Items {
 				'id'      => $prefix . 'type',
 				'type'    => 'radio_inline',
 				'name'    => __( 'Type', 'minnpost-membership' ),
-				'desc'    => __( 'Users can choose only one piece of swag; subscriptions are multi-select.', 'minnpost-membership' ),
+				'desc'    => __( 'Users can choose only one piece of swag; subscriptions can be multi-select.', 'minnpost-membership' ),
 				'options' => array(
-					'swag'         => __( 'Swag', 'minnpost-membership' ),
-					'subscription' => __( 'Subscription', 'minnpost-membership' )
+					'swag'                        => __( 'Swag', 'minnpost-membership' ),
+					'subscription'                => __( 'Subscription', 'minnpost-membership' ),
+					'swag_alongside_subscription' => __( 'Swag Alongside Subscription' ),
 				),
 				'default' => 'swag',
 			)
@@ -351,6 +353,14 @@ class MinnPost_Membership_Content_Items {
 				'desc' => __( 'Enter a number for the fair market value. You do not need to add the dollar sign.', 'minnpost-membership' ),
 			)
 		);
+	}
+
+	/**
+	 * Sanitize a text field while allowing html.
+	 */
+	public function sanitize_text_allow_html( $value, $field_args, $field ) {
+		$value = wp_kses_post( $value );
+		return $value;
 	}
 
 	/**
