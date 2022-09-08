@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b7f99a3a9550c1c033622c2edc29bb8",
+    "content-hash": "684a34acc28f5dc48e10f38962507c08",
     "packages": [
         {
             "name": "brain/cortex",
-            "version": "1.0.0-alpha.8",
+            "version": "1.0.0-alpha.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Brain-WP/Cortex.git",
-                "reference": "4c9cf21d3f25775cbd6faf6a75638b1c11ac0368"
+                "reference": "136c5fd37248b6a833678aa14201519185f23be2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/4c9cf21d3f25775cbd6faf6a75638b1c11ac0368",
-                "reference": "4c9cf21d3f25775cbd6faf6a75638b1c11ac0368",
+                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/136c5fd37248b6a833678aa14201519185f23be2",
+                "reference": "136c5fd37248b6a833678aa14201519185f23be2",
                 "shasum": ""
             },
             "require": {
@@ -63,20 +63,20 @@
                 "issues": "https://github.com/Brain-WP/Cortex/issues",
                 "source": "https://github.com/Brain-WP/Cortex"
             },
-            "time": "2017-12-24T15:46:39+00:00"
+            "time": "2022-05-25T22:02:18+00:00"
         },
         {
             "name": "cmb2/cmb2",
-            "version": "v2.10.0",
+            "version": "v2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CMB2/CMB2.git",
-                "reference": "4ff77d6181d3b5b8313091c50b7cffdbbfff3b32"
+                "reference": "4afc4bb7b92ab6d93aac2247c9a84af773e42532"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/4ff77d6181d3b5b8313091c50b7cffdbbfff3b32",
-                "reference": "4ff77d6181d3b5b8313091c50b7cffdbbfff3b32",
+                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/4afc4bb7b92ab6d93aac2247c9a84af773e42532",
+                "reference": "4afc4bb7b92ab6d93aac2247c9a84af773e42532",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "issues": "https://github.com/CMB2/CMB2/issues",
                 "source": "http://wordpress.org/support/plugin/cmb2"
             },
-            "time": "2022-02-15T17:14:24+00:00"
+            "time": "2022-02-22T14:15:16+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -234,5 +234,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
