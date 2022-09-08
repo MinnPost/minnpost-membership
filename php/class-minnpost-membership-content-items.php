@@ -23,9 +23,8 @@ class MinnPost_Membership_Content_Items {
 	public $cache;
 
 	/**
-	* Constructor which sets up content items
-	*
-	*/
+	 * Constructor which sets up content items
+	 */
 	public function __construct() {
 
 		$this->option_prefix = minnpost_membership()->option_prefix;
@@ -43,9 +42,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the action hooks to create content items
-	*
-	*/
+	 * Create the action hooks to create content items
+	 */
 	public function add_actions() {
 		add_action( 'init', array( $this, 'create_thank_you_gift' ), 0 );
 		add_action( 'init', array( $this, 'create_partner' ), 0 );
@@ -61,9 +59,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the thank-you gift content type
-	*
-	*/
+	 * Create the thank-you gift content type
+	 */
 	public function create_thank_you_gift() {
 		$labels = array(
 			'name'                  => _x( 'Thank-you Gifts', 'Post Type General Name', 'minnpost-membership' ),
@@ -113,9 +110,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the partner content type
-	*
-	*/
+	 * Create the partner content type
+	 */
 	public function create_partner() {
 
 		$labels = array(
@@ -168,12 +164,11 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Set the admin sort order for custom post types created by this plugin
-	*
-	* @param object $query
-	* @return object $query
-	*
-	*/
+	 * Set the admin sort order for custom post types created by this plugin
+	 *
+	 * @param object $query
+	 * @return object $query
+	 */
 	public function membership_content_default_order( $query ) {
 		if ( $query->is_admin ) {
 			if ( 'partner_offer' === $query->get( 'post_type' ) || 'partner' === $query->get( 'post_type' ) ) {
@@ -193,9 +188,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the partner offer content type
-	*
-	*/
+	 * Create the partner offer content type
+	 */
 	public function create_partner_offer() {
 
 		$labels = array(
@@ -248,9 +242,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create submenus for these content items
-	*
-	*/
+	 * Create submenus for these content items
+	 */
 	public function create_sub_menus() {
 		$capability     = 'manage_minnpost_membership_options';
 		$thank_you_gift = 'edit.php?post_type=thank_you_gift';
@@ -262,12 +255,11 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the partner offer content type
-	*
-	* @param string $title
-	* @return string $title
-	*
-	*/
+	 * Create the partner offer content type
+	 *
+	 * @param string $title
+	 * @return string $title
+	 */
 	public function title_placeholders( $title ) {
 		$screen = get_current_screen();
 		if ( 'partner' === $screen->post_type ) {
@@ -280,9 +272,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the thank-you gift fields with CMB2
-	*
-	*/
+	 * Create the thank-you gift fields with CMB2
+	 */
 	public function create_thank_you_gift_fields() {
 		$object_type = 'thank_you_gift';
 		$prefix      = '_mp_thank_you_gift_';
@@ -364,9 +355,8 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Create the partner fields with CMB2
-	*
-	*/
+	 * Create the partner fields with CMB2
+	 */
 	public function create_partner_fields() {
 
 		$object_type = 'partner';
@@ -409,24 +399,22 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Remove unneeded default partner offer fields
-	*
-	*/
+	 * Remove unneeded default partner offer fields
+	 */
 	public function remove_partner_offer_fields() {
 		$object_type = 'partner_offer';
-		// cmb2 replaces this
+		// cmb2 replaces this.
 		remove_meta_box( 'pageparentdiv', $object_type, 'normal' );
 	}
 
 	/**
-	* Create the partner offer fields with CMB2
-	*
-	*/
+	 * Create the partner offer fields with CMB2
+	 */
 	public function create_partner_offer_fields() {
 		$object_type = 'partner_offer';
 		$prefix      = '_mp_partner_offer_';
 
-		// set partner for the partner offer
+		// set partner for the partner offer.
 		$partner_box = new_cmb2_box(
 			array(
 				'id'           => $prefix . 'parent',
@@ -436,7 +424,7 @@ class MinnPost_Membership_Content_Items {
 				'priority'     => 'high',
 			)
 		);
-		// get all partner posts
+		// get all partner posts.
 		$posts = get_posts(
 			array(
 				'post_type'      => 'partner',
@@ -464,7 +452,7 @@ class MinnPost_Membership_Content_Items {
 			)
 		);
 
-		// set other partner offer fields
+		// set other partner offer fields.
 		$offer_fields = new_cmb2_box(
 			array(
 				'id'           => $prefix . 'offer_fields',
@@ -522,7 +510,7 @@ class MinnPost_Membership_Content_Items {
 			),
 		) );*/
 
-		// set more info partner offer fields
+		// set more info partner offer fields.
 		$more_info_fields = new_cmb2_box(
 			array(
 				'id'           => $prefix . 'more_info_fields',
@@ -662,11 +650,10 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Get all partners
-	* @param int $partner_id
-	* @return object $partners
-	*
-	*/
+	 * Get all partners
+	 * @param int $partner_id
+	 * @return object $partners
+	 */
 	public function get_partners( $partner_id = '' ) {
 		$args = array(
 			'posts_per_page' => -1,
@@ -685,28 +672,26 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Display the partner <figure>
-	* @param int $partner_id
-	* @param string $size
-	* @param bool $include_link
-	* @param bool $include_name
-	* @param bool $lazy_load
-	*
-	*/
+	 * Display the partner <figure>
+	 * @param int $partner_id
+	 * @param string $size
+	 * @param bool $include_link
+	 * @param bool $include_name
+	 * @param bool $lazy_load
+	 */
 	public function partner_figure( $partner_id = '', $size = 'partner-logo', $include_link = true, $include_name = false, $lazy_load = false ) {
 		$output = $this->get_partner_figure( $partner_id, $size, $include_link, $include_name, $lazy_load );
 		echo $output;
 	}
 
 	/**
-	* Get the partner <figure> html
-	* @param int $partner_id
-	* @param string $size
-	* @param bool $include_link
-	* @param bool $include_name
-	* @param bool $lazy_load
-	*
-	*/
+	 * Get the partner <figure> html
+	 * @param int $partner_id
+	 * @param string $size
+	 * @param bool $include_link
+	 * @param bool $include_name
+	 * @param bool $lazy_load
+	 */
 	public function get_partner_figure( $partner_id = '', $size = 'partner-logo', $include_link = true, $include_name = false, $lazy_load = false ) {
 
 		if ( '' === $partner_id ) {
@@ -751,12 +736,11 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Get the image for the partner
-	* @param int $partner_id
-	* @param string $size
-	* @param bool $lazy_load
-	*
-	*/
+	 * Get the image for the partner
+	 * @param int $partner_id
+	 * @param string $size
+	 * @param bool $lazy_load
+	 */
 	public function get_partner_image( $partner_id, $size = 'partner-logo', $lazy_load = false ) {
 		$image_url = get_post_meta( $partner_id, '_mp_partner_logo_image', true );
 		if ( 'partner-logo' !== $size ) {
@@ -789,11 +773,10 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Get all partner offers
-	* @param int $partner_offer_id
-	* @return object $partner_offers
-	*
-	*/
+	 * Get all partner offers
+	 * @param int $partner_offer_id
+	 * @return object $partner_offers
+	 */
 	public function get_partner_offers( $partner_offer_id = '' ) {
 
 		global $wpdb;
@@ -867,12 +850,11 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Save partner offer instances to the partner offer object
-	*
-	* @param object $partner_offer
-	* @return object $partner_offer
-	*
-	*/
+	 * Save partner offer instances to the partner offer object
+	 *
+	 * @param object $partner_offer
+	 * @return object $partner_offer
+	 */
 	private function store_partner_offer_instances( $partner_offer ) {
 		$unclaimed_instance_count = 0;
 		$dated_instance_count     = 0;
@@ -904,22 +886,20 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Sort partner offer instances by instance count
-	*
-	* @param object $a
-	* @param object $b
-	* @param array
-	*
-	*/
+	 * Sort partner offer instances by instance count
+	 *
+	 * @param object $a
+	 * @param object $b
+	 * @param array
+	 */
 	private function sort_partner_offer_instances( $a, $b ) {
 		return strcmp( $b->unclaimed_instance_count, $a->unclaimed_instance_count );
 	}
 
 	/**
-	* Get user's claims in descending order. Returns timestamp as key, partner offer post object as value
-	* @return array $user_claims
-	*
-	*/
+	 * Get user's claims in descending order. Returns timestamp as key, partner offer post object as value
+	 * @return array $user_claims
+	 */
 	public function get_user_offer_claims() {
 		$user_claims    = array();
 		$partner_offers = $this->get_partner_offers();
@@ -945,13 +925,12 @@ class MinnPost_Membership_Content_Items {
 	}
 
 	/**
-	* Output partner offer image
-	*
-	* @param int $id
-	* @param array $attributes
-	* @param bool $lazy_load
-	*
-	*/
+	 * Output partner offer image
+	 *
+	 * @param int $id
+	 * @param array $attributes
+	 * @param bool $lazy_load
+	 */
 	public function partner_offer_image( $id, $attributes = array(), $lazy_load = true ) {
 		$image_data = $this->get_partner_offer_image( $id, $attributes, $lazy_load );
 		if ( '' !== $image_data ) {
@@ -990,22 +969,21 @@ class MinnPost_Membership_Content_Items {
 
 
 	/**
-	* Get the partner offer image based on where it should go
-	*
-	* @param int $id
-	* @param array $attributes
-	* @param bool $lazy_load
-	*
-	* @return array $image_data
-	*
-	*/
+	 * Get the partner offer image based on where it should go
+	 *
+	 * @param int $id
+	 * @param array $attributes
+	 * @param bool $lazy_load
+	 *
+	 * @return array $image_data
+	 */
 	public function get_partner_offer_image( $id, $attributes = array(), $lazy_load = true ) {
 
 		$image_url = get_post_meta( $id, '_mp_partner_logo_image', true );
 		$image_id  = get_post_meta( $id, '_mp_partner_logo_image_id', true );
 
 		if ( '' !== wp_get_attachment_image( $image_id, 'full' ) ) {
-			// this requires that the custom image sizes in custom-fields.php work correctly
+			// this requires that the custom image sizes in custom-fields.php work correctly.
 			$image = wp_get_attachment_image( $image_id, 'full' );
 		} else {
 			if ( '' !== $image_id ) {
