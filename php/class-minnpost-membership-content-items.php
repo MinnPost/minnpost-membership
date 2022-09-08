@@ -315,6 +315,14 @@ class MinnPost_Membership_Content_Items {
 		);
 		$thank_you_gift_fields->add_field(
 			array(
+				'id'   => $prefix . 'text_after_image',
+				'type' => 'text',
+				'name' => __( 'Text After Image', 'minnpost-membership' ),
+				'desc' => __( 'If entered, text here will display after the image in a smaller size.', 'minnpost-membership' ),
+			)
+		);
+		$thank_you_gift_fields->add_field(
+			array(
 				'id'      => $prefix . 'type',
 				'type'    => 'radio_inline',
 				'name'    => __( 'Type', 'minnpost-membership' ),
@@ -344,10 +352,43 @@ class MinnPost_Membership_Content_Items {
 				'desc' => __( 'Enter a number for the fair market value. You do not need to add the dollar sign.', 'minnpost-membership' ),
 			)
 		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   => $prefix . 'option_name',
+				'type' => 'text',
+				'name' => __( 'Option Name', 'minnpost-membership' ),
+				'desc' => __( 'If a donor needs to pick from a set of options, for example T-Shirt size, give it a name.', 'minnpost-membership' ),
+			),
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'   => $prefix . 'option_values',
+				'type' => 'textarea',
+				'name' => __( 'Option Value', 'minnpost-membership' ),
+				'desc' => __( 'If a donor needs to pick from a set of options, for example T-Shirt size, list the values. Put each value on a line by itself.', 'minnpost-membership' ),
+			),
+		);
+		$thank_you_gift_fields->add_field(
+			array(
+				'id'      => $prefix . 'option_multiselect',
+				'type'    => 'radio_inline',
+				'name'    => __( 'Is this option multiple choice?', 'minnpost-membership' ),
+				'desc'    => __( 'If a donor needs to pick from a set of options, can they pick more than one?', 'minnpost-membership' ),
+				'options' => array(
+					'false' => __( 'No', 'minnpost-membership' ),
+					'true'  => __( 'Yes', 'minnpost-membership' ),
+				),
+				'default' => 'false',
+			),
+		);
 	}
 
 	/**
 	 * Sanitize a text field while allowing html.
+	 *
+	 * @param mixed  $value      The unsanitized value from the form.
+	 * @param array  $field_args Array of field arguments.
+	 * @param object $field      The field object.
 	 */
 	public function sanitize_text_allow_html( $value, $field_args, $field ) {
 		$value = wp_kses_post( $value );
