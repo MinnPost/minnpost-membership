@@ -402,9 +402,8 @@ class MinnPost_Membership_Front_End {
 	/**
 	* Based on the selected single thank you gift ID, get that item's fair market value.
 	*
-	* @param string $post_id
+	 * @param string $post_id the post id of the gift object.
 	* @return int $fair_market_value
-	*
 	*/
 	public function get_benefit_fair_market_value( $post_id ) {
 		$fair_market_value = 0;
@@ -418,9 +417,8 @@ class MinnPost_Membership_Front_End {
 	/**
 	* Handle GET and POST parameters for benefits. This is only used when claiming a benefit.
 	*
-	* @param string $direction
+	 * @param string $direction get or post.
 	* @return array $params
-	*
 	*/
 	public function process_benefit_parameters( $direction = 'get' ) {
 		$params = array();
@@ -480,6 +478,7 @@ class MinnPost_Membership_Front_End {
 	/**
 	* Process donate form submission
 	*
+	 * @param string $redirect_url is an optional redirect url coming from other methods.
 	*/
 	public function donate_choose_form_submit( $redirect_url = '' ) {
 
@@ -492,30 +491,30 @@ class MinnPost_Membership_Front_End {
 			$params = array();
 			$params = $this->set_user_params( $_POST, $params );
 
-			// sanitize form data we accept
+			// sanitize form data we accept.
 			$post_params = $this->process_membership_parameters( 'post' );
 			$params      = array_merge( $params, $post_params );
 
-			// this page does not have a picker for each level, so the frequency is one field
+			// this page does not have a picker for each level, so the frequency is one field.
 			if ( isset( $_POST['frequencies'] ) ) {
 				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
 			}
 
-			// amount is the only thing our processor requires in order to function
+			// amount is the only thing our processor requires in order to function.
 			if ( ! isset( $params['amount'] ) ) {
 				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
 				wp_safe_redirect( site_url( $error_url ) );
 				exit;
 			}
 
-			// send the valid form data to the submit url as url parameters
+			// send the valid form data to the submit url as url parameters.
 			foreach ( $params as $key => $value ) {
 				if ( false !== $value ) {
 					$redirect_url = add_query_arg( $key, $value, $redirect_url );
 				}
 			}
 
-			// this requires us to hook into the allowed url thing
+			// this requires us to hook into the allowed url thing.
 			wp_safe_redirect( $redirect_url );
 			exit;
 		}
