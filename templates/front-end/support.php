@@ -284,7 +284,7 @@ $user_id             = get_current_user_id();
 									echo '<p>' . wp_kses_post( $amount_level['label'] ) . '</p>';
 									?>
 									<?php if ( $gifts->have_posts() ) : ?>
-										<div class="m-form-radios m-select-<?php echo esc_attr( $amount_level['level'] ); ?> m-select-<?php echo esc_attr( implode( '-', $amount_level['types'] ) ); ?>">
+										<div class="m-form-radios m-gift-level m-select-<?php echo esc_attr( $amount_level['level'] ); ?> m-select-<?php echo esc_attr( implode( '-', $amount_level['types'] ) ); ?>">
 											<?php while ( $gifts->have_posts() ) : ?>
 												<?php
 												$gifts->the_post();
@@ -338,8 +338,7 @@ $user_id             = get_current_user_id();
 														<?php endif; ?>
 														<?php if ( '' !== $gift_option_name && ! empty( $gift_option_values ) ) : ?>
 															<?php if ( 'select' === $gift_option_type ) : ?>
-																<select name="<?php echo esc_attr( $radio_name ); ?>-gift-option" required>
-																	<!-- figure out how the required thing works -->
+																<select name="<?php echo esc_attr( $radio_name ); ?>-gift-option" data-required="true">
 																	<?php foreach ( $gift_option_values as $option_value ) : ?>
 																		<?php
 																		$option_value = explode( '|', $option_value );
@@ -361,7 +360,7 @@ $user_id             = get_current_user_id();
 												</div>
 											<?php endwhile; ?>
 
-											<div class="m-form-item">
+											<div class="m-form-item m-decline-level">
 												<input type="radio" name="<?php echo esc_attr( $radio_name ); ?>" id="<?php echo esc_attr( $radio_name ); ?>-decline" value="">
 												<label for="<?php echo esc_attr( $radio_name ); ?>-decline" class="a-<?php echo esc_attr( $radio_name ); ?>-option"><?php echo __( 'Decline gift', 'minnpost-membership' ); ?></label>
 											</div>

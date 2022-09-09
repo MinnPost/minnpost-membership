@@ -336,7 +336,7 @@ class MinnPost_Membership_Front_End {
 				if ( isset( $data[ $gift_key . '-gift-option' ] ) ) {
 					$gift_option_key_and_value  = explode( '_', filter_var( $data[ $gift_key . '-gift-option' ], FILTER_SANITIZE_STRING ) );
 					$gift_option_key            = $gift_option_key_and_value[0];
-					$gift_option_value          = $gift_option_key_and_value[1];
+					$gift_option_value          = isset( $gift_option_key_and_value[1] ) ? $gift_option_key_and_value[1] : $gift_option_key_and_value[0];
 					$params['gift_option_name'] = $gift_option_key;
 					$params[ $gift_option_key ] = $gift_option_value;
 				}
