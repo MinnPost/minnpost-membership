@@ -21,6 +21,8 @@
 		swagLabels: '.m-select-swag input[type="radio"] + label',
 		subscriptionsSelector: '.m-select-subscription input[type="radio"]',
 		subscriptionsLabels: '.m-select-subscription input[type="radio"] + label',
+		swagOrSubscriptionsSelector: '.m-select-subscription-swag_alongside_subscription input[type="radio"]',
+		swagOrSubscriptionsLabels: '.m-select-subscription-swag_alongside_subscription input[type="radio"] + label',
 		minAmounts: '.m-membership-gift-selector .min-amount',
 		declineSubscriptions: '#subscription-decline'
 	};
@@ -49,6 +51,7 @@
 			var $amount = $( this.element ).find( this.options.amountField );
 			var $declineBenefits = $( this.element ).find( this.options.declineBenefits );
 			var $subscriptions = $( this.element ).find( this.options.subscriptionsSelector );
+			var $swagOrSubscriptions = $( this.element ).find( this.options.swagOrSubscriptionsSelector );
 			if ( !( $amount.length > 0 &&
 			        $frequency.length > 0 &&
 			        $suggestedAmount.length > 0 ) ) {
@@ -70,6 +73,9 @@
 
 			// Set up the UI for the current field state on (re-)load
 			if ( $subscriptions.not( this.options.declineSubscriptions ).is( ':checked' ) ) {
+				$( this.element ).find( this.options.declineSubscriptions ).prop( 'checked', false );
+			}
+			if ( $swagOrSubscriptions.not( this.options.declineSubscriptions ).is( ':checked' ) ) {
 				$( this.element ).find( this.options.declineSubscriptions ).prop( 'checked', false );
 			}
 			this.onDeclineBenefitsChange();
@@ -288,6 +294,7 @@
 
 			$( this.options.swagSelector ).each( setEnabled );
 			$( this.options.subscriptionsSelector ).each( setEnabled );
+			$( this.options.swagOrSubscriptionsSelector ).each( setEnabled );
 
 			if ( $( this.options.swagSelector ).not( '#swag-decline' ).is( ':enabled' ) ) {
 				$( '.swag-disabled' ).removeClass( 'active' );
