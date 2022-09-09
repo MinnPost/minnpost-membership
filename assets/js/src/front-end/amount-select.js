@@ -75,9 +75,10 @@
 			}
 
 			this.onDeclineBenefitsChange();
+			this.setRequiredFields( $gifts );
 
 			$declineBenefits.on( 'change', this.onDeclineBenefitsChange.bind( this ) );
-			$gifts.on( 'click', this.onGiftLevelClick.bind( this ) );
+			$gifts.on( 'click', this.onGiftsClick.bind( this ) );
 
 			// when the form is submitted
 			document.querySelectorAll( ".m-form-membership" ).forEach(
@@ -145,16 +146,30 @@
 			$giftSelectionGroup.show();
 		}, // end onDeclineBenefitsChange
 
-		onGiftLevelClick: function( event ) {
+		onGiftsClick: function( event ) {
 			var $gifts = $( this.element ).find( this.options.giftSelector ).not( this.options.declineGiftLevel );
 			var $decline = $( this.element ).find( this.options.declineGiftLevel );
 			if ( $( event.target ).is( this.options.declineGiftLevel ) ) {
 				$gifts.prop( 'checked', false );
 				return;
 			}
-
+			this.setRequiredFields( $gifts );
 			$decline.prop( 'checked', false );
-		}, // end onGiftLevelClick
+		}, // end onGiftsClick
+
+		setRequiredFields: function( $gifts ) {
+			var $checkedGifts = $gifts.filter( ':checked' );
+			if ( $checkedGifts ) {
+				var that = this;
+				$("[data-required='true']").prop('required', false);
+				$checkedGifts.each(function () {
+					var setRequired = function() {
+						$( this ).prop( 'required', true );
+					};
+					$("[data-required='true']", $(this).parent()).each( setRequired );
+				});
+			}
+		}, // end setRequiredFields
 
 		onFormSubmit: function( event ) {
 			var amount = $( this.options.amountSelector ).filter( ':checked' ).val();
