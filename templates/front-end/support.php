@@ -338,9 +338,15 @@ $user_id             = get_current_user_id();
 														<?php endif; ?>
 														<?php if ( '' !== $gift_option_name && ! empty( $gift_option_values ) ) : ?>
 															<?php if ( 'select' === $gift_option_type ) : ?>
-																<select name="<?php echo esc_attr( $radio_name ); ?>-gift-option">
+																<select name="<?php echo esc_attr( $radio_name ); ?>-gift-option" required>
+																	<!-- figure out how the required thing works -->
 																	<?php foreach ( $gift_option_values as $option_value ) : ?>
-																		<option value="<?php echo esc_attr( sanitize_title( $gift_option_name ) ) . '_' . esc_attr( $option_value ); ?>"><?php echo esc_attr( $option_value ); ?></option>
+																		<?php
+																		$option_value = explode( '|', $option_value );
+																		$value        = ( '' !== $option_value[0] ) ? esc_attr( sanitize_title( $gift_option_name ) ) . '_' . $option_value[0] : '';
+																		$label        = isset( $option_value[1] ) ? $option_value[1] : $value;
+																		?>
+																		<option value="<?php echo esc_attr( $value ); ?>"><?php echo esc_attr( $label ); ?></option>
 																	<?php endforeach; ?>
 																</select>
 															<?php endif; ?>

@@ -365,7 +365,7 @@ class MinnPost_Membership_Content_Items {
 				'id'   => $prefix . 'option_values',
 				'type' => 'textarea',
 				'name' => __( 'Option Value', 'minnpost-membership' ),
-				'desc' => __( 'If a donor needs to pick from a set of options, for example T-Shirt size, list the values. Put each value on a line by itself.', 'minnpost-membership' ),
+				'desc' => __( 'If a donor needs to pick from a set of options, for example T-Shirt size, list the values. Put each value on a line by itself, and separate the value from the label with a | character. For example, extra_small|Extra Small.', 'minnpost-membership' ),
 			),
 		);
 		$thank_you_gift_fields->add_field(
