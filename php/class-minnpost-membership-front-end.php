@@ -1210,8 +1210,8 @@ class MinnPost_Membership_Front_End {
 	public function get_thank_you_gift_description( $post_id, $selected_frequency = '' ) {
 		$full_text   = '';
 		$meta        = get_post_meta( $post_id );
-		$description = $meta['_mp_thank_you_gift_description'][0];
-		if ( ! isset( $description ) ) {
+		$description = isset( $meta['_mp_thank_you_gift_description'][0] ) ? $meta['_mp_thank_you_gift_description'][0] : '';
+		if ( '' === $description ) {
 			return '';
 		}
 
