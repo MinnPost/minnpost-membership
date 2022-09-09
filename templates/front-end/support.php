@@ -228,133 +228,157 @@ $user_id             = get_current_user_id();
 							$frequency_values = $minnpost_membership->member_levels->get_frequency_values( $frequency );
 							$yearly_amount    = $amount * $frequency_values['times_per_year'];
 
-							$min_swag_level         = $minnpost_membership->member_levels->get_member_levels( 'member_silver', false, 'slug' ); // swag is silver. probably wise to put this as a setting somewhere.
+							// minimum level for swag is silver.
+							// todo: probably wise to put this as a setting somewhere.
+							$min_swag_level         = $minnpost_membership->member_levels->get_member_levels( 'member_silver', false, 'slug' );
 							$swag_min_yearly_amount = $min_swag_level['minimum_monthly_amount'] * 12;
 							$swag_disabled          = $yearly_amount < $swag_min_yearly_amount ? true : false;
-							?>
 
-							<p class="swag-eligibility swag-disabled<?php if ( true === $swag_disabled ) { echo ' active'; } ?>"><?php $minnpost_membership->front_end->support_tooltip_text( $min_swag_level, $frequency ); ?>.</p>
-							<p class="swag-eligibility swag-enabled<?php if ( true !== $swag_disabled ) { echo ' active'; } ?>"><?php echo __( 'You are eligible for <strong>one</strong> of the following items:', 'minnpost-membership' ); ?></p>
-
-							<?php
-							$swag = new WP_Query(
-								[
-									'post_type'  => 'thank_you_gift',
-									'meta_key'   => '_mp_thank_you_gift_type',
-									'meta_value' => 'swag',
-									'orderby'    => [
-										'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id',
-									],
-									'order'      => 'ASC',
-								]
+							$all_gift_levels = new WP_Query(
+								array(
+									'post_type' => 'thank_you_gift',
+									'meta_key'  => '_mp_thank_you_gift_minimum_member_level_id',
+									'orderby'   => 'meta_value_num',
+									'order'     => 'ASC',
+								)
 							);
+							$amount_levels   = array();
 							?>
 
-							<?php if ( $swag->have_posts() ) : ?>
-								<div class="m-form-radios m-select-swag">
-									<?php while ( $swag->have_posts() ) : ?>
-										<?php
-										$swag->the_post();
-										$slug = get_post()->post_name;
-										$meta = get_post_meta( get_the_ID() );
+							<?php if ( $all_gift_levels->have_posts() ) : ?>
 
-										$level             = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
-										$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
-										$disabled          = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
-
-										// image specifics
-										$image_url = $meta['_mp_thank_you_gift_image'][0];
-										$image_id  = $meta['_mp_thank_you_gift_image_id'][0];
-										$size      = 'full';
-										$alt_text  = '';
-										if ( '' !== wp_get_attachment_image( $image_id, $size ) ) {
-											$alt_text  = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
-											$image_url = wp_get_attachment_url( $image_id );
-										}
-										?>
-										<div class="m-form-item">
-											<input type="radio" name="swag" id="swag-<?php echo $slug; ?>" value="<?php echo $slug; ?>" data-min-monthly-amount="<?php echo $level['minimum_monthly_amount']; ?>" data-min-yearly-amount="<?php echo $min_yearly_amount; ?>" <?php echo $disabled; ?>>
-											<label for="swag-<?php echo $slug; ?>" class="a-swag-option">
-												<figure class="m-thank-you-gift-image">
-													<img src="<?php echo $image_url; ?>?w=150" alt="<?php echo $alt_text; ?>" loading="lazy">
-												</figure>
-												<div class="support-tooltip">
-													<span class="dashicons dashicons-editor-help"></span>
-													<div class="tooltip-text">
-														<?php $minnpost_membership->front_end->support_tooltip_text( $level, $frequency ); ?>
-													</div>
-												</div>
-											</label>
-										</div>
-									<?php endwhile; ?>
-
-									<div class="m-form-item">
-										<input type="radio" name="swag" id="swag-decline" value="">
-										<label for="swag-decline" class="a-swag-option"><?php echo __( 'Decline gift', 'minnpost-membership' ); ?></label>
-									</div>
-								</div>
-							<?php endif; ?>
-
-							<?php
-							$subscriptions = new WP_Query(
-								[
-									'post_type'  => 'thank_you_gift',
-									'meta_key'   => '_mp_thank_you_gift_type',
-									'meta_value' => 'subscription',
-									'orderby'    => [
-										'meta_value_num' => '_mp_thank_you_gift_minimum_member_level_id',
-									],
-									'order'      => 'ASC',
-								]
-							);
-							?>
-
-							<?php if ( $subscriptions->have_posts() ) : ?>
-								<?php while ( $subscriptions->have_posts() ) : ?>
+								<?php while ( $all_gift_levels->have_posts() ) : ?>
 									<?php
-									$subscriptions->the_post();
-									$slug    = get_post()->post_name;
-									$post_id = get_the_ID();
-									$meta    = get_post_meta( $post_id );
-
-									$level             = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
-									$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
-									$disabled          = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
+									$all_gift_levels->the_post();
+									$gift_level_meta = get_post_meta( get_the_ID() );
+									$gift_level      = $gift_level_meta['_mp_thank_you_gift_minimum_member_level_id'][0];
+									$gift_type       = $gift_level_meta['_mp_thank_you_gift_type'][0];
+									$gift_label      = $minnpost_membership->front_end->get_thank_you_gift_description( get_the_ID() );
+									if ( ! array_key_exists( $gift_level, $amount_levels ) ) {
+										$amount_levels[ $gift_level ] = array(
+											'level' => $gift_level,
+											'types' => array(),
+											'label' => $gift_label,
+										);
+									}
+									if ( ! in_array( $gift_type, $amount_levels[ $gift_level ]['types'], true ) ) {
+										$amount_levels[ $gift_level ]['types'][] = $gift_type;
+									}
+									if ( $gift_label !== $amount_levels[ $gift_level ]['label'] ) {
+										$amount_levels[ $gift_level ]['label'] = $gift_label;
+									}
 									?>
-
-									<?php $minnpost_membership->front_end->thank_you_gift_description( $post_id, $frequency ); ?>
-									<div class="m-form-radios m-select-subscription">
-										<div class="m-form-item">
-											<input type="radio" name="<?php echo $slug; ?>" id="subscription-<?php echo $slug; ?>" value="true" data-min-yearly-amount="<?php echo $min_yearly_amount; ?>" <?php echo $disabled; ?>>
-											<label for="subscription-<?php echo $slug; ?>" class="a-subscription-option">
-												<figure class="m-thank-you-gift-image">
-													<img src="<?php echo $meta['_mp_thank_you_gift_image'][0]; ?>">
-												</figure>
-												<div class="support-tooltip">
-													<span class="dashicons dashicons-editor-help"></span>
-													<div class="tooltip-text">
-														<?php $minnpost_membership->front_end->support_tooltip_text( $level, $frequency ); ?>
-													</div>
-												</div>
-											</label>
-										</div>
-
-										<div class="m-form-item">
-											<input type="radio" name="<?php echo $slug; ?>" id="subscription-<?php echo $slug; ?>-decline" value="">
-											<label for="subscription-<?php echo $slug; ?>-decline" class="a-subscription-option"><?php echo __( 'Decline subscription', 'minnpost-membership' ); ?></label>
-										</div>
-									</div>
 								<?php endwhile; ?>
+
+								<?php foreach ( $amount_levels as $key => $amount_level ) : ?>
+									<?php
+									$gifts = new WP_Query(
+										array(
+											'post_type'  => 'thank_you_gift',
+											'meta_key'   => '_mp_thank_you_gift_minimum_member_level_id',
+											'meta_value' => $amount_level['level'],
+											'orderby'    => 'meta_value_num',
+											'order'      => 'ASC',
+										)
+									);
+									echo '<p>' . wp_kses_post( $amount_level['label'] ) . '</p>';
+									?>
+									<?php if ( $gifts->have_posts() ) : ?>
+										<div class="m-form-radios m-gift-level m-select-<?php echo esc_attr( $amount_level['level'] ); ?> m-select-<?php echo esc_attr( implode( '-', $amount_level['types'] ) ); ?>">
+											<?php while ( $gifts->have_posts() ) : ?>
+												<?php
+												$gifts->the_post();
+												$slug = get_post()->post_name;
+												$meta = get_post_meta( get_the_ID() );
+
+												// what do we know about this gift?
+												$gift_type  = $meta['_mp_thank_you_gift_type'][0];
+												$gift_value = $slug;
+												$radio_name = $gift_type;
+												$radio_name = 'level-' . $amount_level['level'] . '-gift';
+
+												// does the gift have options for user to pick from?
+												$gift_option_name        = isset( $meta['_mp_thank_you_gift_option_name'][0] ) ? $meta['_mp_thank_you_gift_option_name'][0] : '';
+												$gift_option_values      = isset( $meta['_mp_thank_you_gift_option_values'][0] ) ? preg_split( '~\R~', $meta['_mp_thank_you_gift_option_values'][0] ) : array();
+												$gift_option_multiselect = isset( $meta['_mp_thank_you_gift_option_multiselect'][0] ) ? filter_var( $meta['_mp_thank_you_gift_option_multiselect'][0], FILTER_VALIDATE_BOOLEAN ) : '';
+												$gift_option_type        = 'select';
+												if ( true === $gift_option_multiselect ) {
+													$gift_option_type = 'checkboxes';
+												}
+
+												// eligibility stuff.
+												$level             = $minnpost_membership->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
+												$min_yearly_amount = $level['minimum_monthly_amount'] * 12;
+												$disabled          = $yearly_amount < $min_yearly_amount ? ' disabled' : '';
+
+												// image for the gift.
+												$image_url        = isset( $meta['_mp_thank_you_gift_image'][0] ) ? $meta['_mp_thank_you_gift_image'][0] : '';
+												$image_id         = isset( $meta['_mp_thank_you_gift_image_id'][0] ) ? $meta['_mp_thank_you_gift_image_id'][0] : '';
+												$size             = 'full';
+												$alt_text         = '';
+												$text_after_image = isset( $meta['_mp_thank_you_gift_text_after_image'][0] ) ? $meta['_mp_thank_you_gift_text_after_image'][0] : '';
+												if ( '' === $image_url && '' !== wp_get_attachment_image( $image_id, $size ) ) {
+													$alt_text  = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+													$image_url = wp_get_attachment_url( $image_id );
+												}
+												?>
+
+												<div class="m-form-item">
+													<input type="radio" name="<?php echo esc_attr( $radio_name ); ?>" id="<?php echo esc_attr( $gift_type ) . '-' . esc_attr( $slug ); ?>" value="<?php echo esc_attr( $gift_value ); ?>" data-min-monthly-amount="<?php echo esc_attr( $level['minimum_monthly_amount'] ); ?>" data-min-yearly-amount="<?php echo esc_attr( $min_yearly_amount ); ?>" <?php echo esc_attr( $disabled ); ?>>
+													<label for="<?php echo esc_attr( $gift_type ) . '-' . esc_attr( $slug ); ?>" class="a-<?php echo esc_attr( $gift_type ); ?>-option">
+														<?php if ( '' !== $image_url ) : ?>
+															<figure class="m-thank-you-gift-image">
+																<img src="<?php echo esc_url_raw( $image_url ); ?>?w=150" alt="<?php echo esc_html( $alt_text ); ?>" loading="lazy">
+																<?php if ( '' !== $text_after_image ) : ?>
+																	<figcaption><?php echo wp_kses_post( $text_after_image ); ?></figcaption>
+																<?php endif; ?>
+															</figure>
+														<?php else : ?>
+															<?php echo esc_html( get_the_title() ); ?>
+														<?php endif; ?>
+														<?php if ( '' !== $gift_option_name && ! empty( $gift_option_values ) ) : ?>
+															<?php if ( 'select' === $gift_option_type ) : ?>
+																<select name="<?php echo esc_attr( $radio_name ); ?>-gift-option" data-required="true">
+																	<?php foreach ( $gift_option_values as $option_value ) : ?>
+																		<?php
+																		$option_value = explode( '|', $option_value );
+																		$value        = ( '' !== $option_value[0] ) ? esc_attr( sanitize_title( $gift_option_name ) ) . '_' . $option_value[0] : '';
+																		$label        = isset( $option_value[1] ) ? $option_value[1] : $value;
+																		?>
+																		<option value="<?php echo esc_attr( $value ); ?>"><?php echo esc_attr( $label ); ?></option>
+																	<?php endforeach; ?>
+																</select>
+															<?php endif; ?>
+														<?php endif; ?>
+														<div class="support-tooltip">
+															<span class="dashicons dashicons-editor-help"></span>
+															<div class="tooltip-text">
+																<?php $minnpost_membership->front_end->support_tooltip_text( $level, $frequency ); ?>
+															</div>
+														</div>
+													</label>
+												</div>
+											<?php endwhile; ?>
+
+											<div class="m-form-item m-decline-level">
+												<input type="radio" name="<?php echo esc_attr( $radio_name ); ?>" id="<?php echo esc_attr( $radio_name ); ?>-decline" value="">
+												<label for="<?php echo esc_attr( $radio_name ); ?>-decline" class="a-<?php echo esc_attr( $radio_name ); ?>-option"><?php echo __( 'Decline gift', 'minnpost-membership' ); ?></label>
+											</div>
+
+										</div>
+
+									<?php endif; ?>
+								<?php endforeach; ?>
 							<?php endif; ?>
 						</div>
 					</section>
 
 					<div class="m-form-actions m-membership-form-actions">
-						<button type="submit" name="give" class="a-button"><?php echo get_option( $minnpost_membership->option_prefix . 'support_button_text', '' ); ?></button>
+						<button type="submit" name="give" class="a-button"><?php echo esc_html( get_option( $minnpost_membership->option_prefix . 'support_button_text', '' ) ); ?></button>
 					</div>
 				</form>
 
-				<?php echo get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ); ?>
+				<?php echo wp_kses_post( get_option( $minnpost_membership->option_prefix . 'support_post_body', '' ) ); ?>
 
 				<?php $minnpost_membership->front_end->post_body_text_link( 'support' ); ?>
 
@@ -363,7 +387,7 @@ $user_id             = get_current_user_id();
 					<?php
 					echo sprintf(
 						'<p class="member-benefit-details-link">%1$s</p>',
-						get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' )
+						wp_kses_post( get_option( $minnpost_membership->option_prefix . 'support-member-benefit-details_link_from_other_pages' ) )
 					);
 					?>
 				</aside>

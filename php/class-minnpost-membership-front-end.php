@@ -27,9 +27,8 @@ class MinnPost_Membership_Front_End {
 	public $cache;
 
 	/**
-	* Constructor which sets up front end
-	*
-	*/
+	 * Constructor which sets up front end
+	 */
 	public function __construct() {
 
 		$this->option_prefix = minnpost_membership()->option_prefix;
@@ -58,15 +57,14 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Create the action hooks to create front end things
-	*
-	*/
+	 * Create the action hooks to create front end things
+	 */
 	public function add_actions() {
 		if ( ! is_admin() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'front_end_scripts_and_styles' ) );
 		}
 
-		// these actions can be called with do_action in a theme or other template
+		// these actions can be called with do_action in a theme or other template,
 		add_action( $this->option_prefix . 'site_header', array( $this, 'site_header' ), 10, 1 );
 		add_action( $this->option_prefix . 'email_header', array( $this, 'email_header' ), 10, 1 );
 		add_action( $this->option_prefix . 'site_footer', array( $this, 'site_footer' ), 10, 1 );
@@ -76,19 +74,19 @@ class MinnPost_Membership_Front_End {
 		add_filter( 'init', array( $this, 'cortex_routes' ) );
 		add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 
-		// main donate form submit actions
+		// main donate form submit actions.
 		add_action( 'wp_ajax_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_donate_choose_form_submit', array( $this, 'donate_choose_form_submit' ) );
 
-		// footer donate form submit actions
+		// footer donate form submit actions.
 		add_action( 'wp_ajax_donate_footer_form_submit', array( $this, 'donate_footer_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_donate_footer_form_submit', array( $this, 'donate_footer_form_submit' ) );
 
-		// benefit level chooser form submit actions
+		// benefit level chooser form submit actions.
 		add_action( 'wp_ajax_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_benefit_choose_form_submit', array( $this, 'benefit_choose_form_submit' ) );
 
-		// benefit redeem form submits
+		// benefit redeem form submits.
 		add_action( 'wp_ajax_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
 		add_action( 'wp_ajax_nopriv_benefit_form_submit', array( $this, 'benefit_form_submit' ) );
 
@@ -96,7 +94,7 @@ class MinnPost_Membership_Front_End {
 		add_filter( 'single_template', array( $this, 'template_show_or_block' ), 10, 3 );
 		add_filter( 'appnexus_acm_provider_prevent_ads', array( $this, 'prevent_ads' ), 10, 2 );
 
-		// handle the emails sent from this class
+		// handle the emails sent from this class.
 		add_filter( 'wp_mail_from', array( $this, 'mail_from' ) );
 		add_filter( 'wp_mail_from_name', array( $this, 'mail_from_name' ) );
 	}
@@ -298,13 +296,13 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Handle GET and POST parameters for membership.
-	* This changes whenever there is a new level of item that has to be processed.
-	*
-	* @param string $direction
-	* @return array $params
-	*
-	*/
+	 * Handle GET and POST parameters for membership.
+	 * This might need to change whenever there is a new level of item that has to be processed.
+	 * test the loop of levels to see if it still works.
+	 *
+	 * @param string $direction whether this was a GET or POST request.
+	 * @return array $params
+	 */
 	public function process_membership_parameters( $direction = 'get' ) {
 		$params = array();
 		if ( 'get' === $direction ) {
@@ -323,18 +321,39 @@ class MinnPost_Membership_Front_End {
 		if ( isset( $data['decline_benefits'] ) && filter_var( $data['decline_benefits'], FILTER_SANITIZE_STRING ) === 'true' ) {
 			$params['decline_benefits'] = 'true';
 		}
-		if ( isset( $data['swag'] ) && '' !== $data['swag'] ) {
-			$params['swag'] = filter_var( $data['swag'], FILTER_SANITIZE_STRING );
+
+		// set up the benefit data for the python app. it's kind of a mess.
+		// we group the benefits based on the level number.
+		$member_levels = $this->member_levels->get_member_levels();
+		$all_benefits  = array();
+		foreach ( $member_levels as $key => $value ) {
+			$level_number = $key + 1;
+			$gift_key     = 'level-' . $level_number . '-gift';
+			if ( isset( $data[ $gift_key ] ) && '' !== $data[ $gift_key ] ) {
+				$params[ $gift_key ] = filter_var( $data[ $gift_key ], FILTER_SANITIZE_STRING );
+
+				// does the gift have an option value? if it does, load it.
+				if ( isset( $data[ $gift_key . '-gift-option' ] ) ) {
+					$gift_option_key_and_value  = explode( '_', filter_var( $data[ $gift_key . '-gift-option' ], FILTER_SANITIZE_STRING ) );
+					$gift_option_key            = $gift_option_key_and_value[0];
+					$gift_option_value          = isset( $gift_option_key_and_value[1] ) ? $gift_option_key_and_value[1] : $gift_option_key_and_value[0];
+					$params['gift_option_name'] = $gift_option_key;
+					$params[ $gift_option_key ] = $gift_option_value;
+				}
+
+				// level 1 is the swag level, unless we change that later.
+				if ( 1 === $level_number ) {
+					$params['swag'] = $params[ $gift_key ];
+				} else {
+					// other stuff gets added as its own array key with a true value.
+					$params[ $params[ $gift_key ] ] = 'true';
+				}
+				$all_benefits[] = $params[ $gift_key ];
+				unset( $params[ $gift_key ] );
+			}
 		}
-		if ( isset( $data['atlantic_subscription'] ) && filter_var( $data['atlantic_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
-			$params['atlantic_subscription'] = 'true';
-		}
-		if ( isset( $data['nyt_subscription'] ) && filter_var( $data['nyt_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
-			$params['nyt_subscription'] = 'true';
-		}
-		if ( isset( $data['nyt_games_subscription'] ) && filter_var( $data['nyt_games_subscription'], FILTER_SANITIZE_STRING ) === 'true' ) {
-			$params['nyt_games_subscription'] = 'true';
-		}
+
+		// non benefit stuff continues here.
 		if ( isset( $data['customer_id'] ) ) {
 			$params['customer_id'] = filter_var( $data['customer_id'], FILTER_SANITIZE_STRING );
 		}
@@ -354,36 +373,19 @@ class MinnPost_Membership_Front_End {
 			$params['show_ach'] = filter_var( $data['show_ach'], FILTER_SANITIZE_STRING );
 		}
 
-		$params['fair_market_value'] = $this->get_total_fair_market_value( $params );
+		$params['fair_market_value'] = $this->get_total_fair_market_value( $all_benefits );
 
 		return $params;
 	}
 
 	/**
-	* Based on all the selected thank you gifts, set the total fair market value.
-	* This changes whenever there is a new level of item that has to be processed.
-	*
-	* @param array $params
-	* @return int $fair_market_value
-	*
-	*/
-	public function get_total_fair_market_value( $params ) {
-		$all_benefits = array();
-
-		// enter each level of item that can be chosen.
-		if ( isset( $params['swag'] ) ) {
-			$all_benefits[] = $params['swag'];
-		}
-		if ( isset( $params['atlantic_subscription'] ) ) {
-			$all_benefits[] = 'atlantic_subscription';
-		}
-		if ( isset( $params['nyt_subscription'] ) ) {
-			$all_benefits[] = 'nyt_subscription';
-		}
-		if ( isset( $params['nyt_games_subscription'] ) ) {
-			$all_benefits[] = 'nyt_games_subscription';
-		}
-
+	 * Based on all the selected thank you gifts, set the total fair market value.
+	 * This changes whenever there is a new level of item that has to be processed.
+	 *
+	 * @param array $all_benefits the array of claimed benefits.
+	 * @return int $fair_market_value
+	 */
+	public function get_total_fair_market_value( $all_benefits ) {
 		$fair_market_value = 0;
 		if ( ! empty( $all_benefits ) ) {
 			$args = array(
@@ -402,12 +404,11 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Based on the selected single thank you gift ID, get that item's fair market value.
-	*
-	* @param string $post_id
-	* @return int $fair_market_value
-	*
-	*/
+	 * Based on the selected single thank you gift ID, get that item's fair market value.
+	 *
+	 * @param string $post_id the post id of the gift object.
+	 * @return int $fair_market_value
+	 */
 	public function get_benefit_fair_market_value( $post_id ) {
 		$fair_market_value = 0;
 		$fair_market_value_meta = get_post_meta( $post_id, '_mp_thank_you_gift_fair_market_value', true );
@@ -418,12 +419,11 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Handle GET and POST parameters for benefits. This is only used when claiming a benefit.
-	*
-	* @param string $direction
-	* @return array $params
-	*
-	*/
+	 * Handle GET and POST parameters for benefits. This is only used when claiming a benefit.
+	 *
+	 * @param string $direction get or post.
+	 * @return array $params
+	 */
 	public function process_benefit_parameters( $direction = 'get' ) {
 		$params = array();
 		if ( 'get' === $direction ) {
@@ -480,44 +480,45 @@ class MinnPost_Membership_Front_End {
 	}
 
 	/**
-	* Process donate form submission
-	*
-	*/
+	 * Process donate form submission
+	 *
+	 * @param string $redirect_url is an optional redirect url coming from other methods.
+	 */
 	public function donate_choose_form_submit( $redirect_url = '' ) {
 
 		if ( '' === $redirect_url ) {
 			$redirect_url = defined( 'PAYMENT_PROCESSOR_URL' ) ? PAYMENT_PROCESSOR_URL : get_option( $this->option_prefix . 'payment_processor_url', '' );
 		}
-		$error_url    = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
+		$error_url = isset( $_POST['current_url'] ) ? filter_var( $_POST['current_url'], FILTER_SANITIZE_URL ) : '';
 		if ( '' !== $redirect_url ) {
 
 			$params = array();
 			$params = $this->set_user_params( $_POST, $params );
 
-			// sanitize form data we accept
+			// sanitize form data we accept.
 			$post_params = $this->process_membership_parameters( 'post' );
 			$params      = array_merge( $params, $post_params );
 
-			// this page does not have a picker for each level, so the frequency is one field
+			// this page does not have a picker for each level, so the frequency is one field.
 			if ( isset( $_POST['frequencies'] ) ) {
 				$params['frequency'] = $this->process_frequency_value( $_POST['frequencies'] );
 			}
 
-			// amount is the only thing our processor requires in order to function
+			// amount is the only thing our processor requires in order to function.
 			if ( ! isset( $params['amount'] ) ) {
 				$error_url = add_query_arg( 'errors', 'empty_amount', $error_url );
 				wp_safe_redirect( site_url( $error_url ) );
 				exit;
 			}
 
-			// send the valid form data to the submit url as url parameters
+			// send the valid form data to the submit url as url parameters.
 			foreach ( $params as $key => $value ) {
 				if ( false !== $value ) {
 					$redirect_url = add_query_arg( $key, $value, $redirect_url );
 				}
 			}
 
-			// this requires us to hook into the allowed url thing
+			// this requires us to hook into the allowed url thing.
 			wp_safe_redirect( $redirect_url );
 			exit;
 		}
@@ -1192,7 +1193,7 @@ class MinnPost_Membership_Front_End {
 	* @param integer $post_id Thank-You Gift post metadata
 	*
 	*/
-	public function thank_you_gift_description( $post_id, $selected_frequency ) {
+	public function thank_you_gift_description( $post_id, $selected_frequency = '' ) {
 		$text = $this->get_thank_you_gift_description( $post_id, $selected_frequency );
 		if ( '' !== $text ) {
 			echo $text;
@@ -1206,7 +1207,7 @@ class MinnPost_Membership_Front_End {
 	* @return string $full_text
 	*
 	*/
-	private function get_thank_you_gift_description( $post_id, $selected_frequency ) {
+	public function get_thank_you_gift_description( $post_id, $selected_frequency = '' ) {
 		$full_text   = '';
 		$meta        = get_post_meta( $post_id );
 		$description = $meta['_mp_thank_you_gift_description'][0];
@@ -1216,8 +1217,8 @@ class MinnPost_Membership_Front_End {
 
 		$level     = $this->member_levels->get_member_levels( $meta['_mp_thank_you_gift_minimum_member_level_id'][0] );
 		$full_text = str_replace( '$min_amount', $this->get_min_amount( $level, $selected_frequency ), $description );
-
-		return wpautop( $full_text );
+		$full_text = apply_filters( 'the_content', $full_text );
+		return $full_text;
 	}
 
 	/**
