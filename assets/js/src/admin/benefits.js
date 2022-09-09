@@ -1,21 +1,21 @@
-( function( $ ) {
-
+(function ($) {
 	function clearDateTimeFields() {
-		if ( $( '.cmb-type-text-datetime-timestamp' ).length > 0 ) {
-			$( '.cmb2-timepicker' ).after( '<button type="button" class="button button-secondary clear-datetime">Clear Date &amp; Time</button>' );
+		if ($('.cmb-type-text-datetime-timestamp').length > 0) {
+			$('.cmb2-timepicker').after(
+				'<button type="button" class="button button-secondary clear-datetime">Clear Date &amp; Time</button>'
+			);
 		}
 
-		$( '.clear-datetime' ).click( function() {
-			var parent = $( this ).parent();
-			$( 'input', parent ).val( '' );
+		$('.clear-datetime').click(function () {
+			const parent = $(this).parent();
+			$('input', parent).val('');
 		});
 	}
 
-	$( document ).ready( function() {
+	$(document).ready(function () {
 		clearDateTimeFields();
 		if ($('.minnpost-member-field-display-item-toggle').length > 0) {
 			toggleActionFields('.minnpost-member-field-display-item-toggle');
 		}
 	});
-
 })(jQuery);

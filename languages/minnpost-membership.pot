@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-08-09 21:25+0000\n"
+"POT-Creation-Date: 2022-09-09 22:10+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -738,314 +738,322 @@ msgstr ""
 msgid "Select one"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:69
+#: php/class-minnpost-membership-content-items.php:66
 msgctxt "Post Type General Name"
 msgid "Thank-you Gifts"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:67
+msgctxt "Post Type Singular Name"
+msgid "Thank-you Gift"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:68
+msgid "Thank-you Gifts"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:69
+msgid "Thank-you Gift"
 msgstr ""
 
 #: php/class-minnpost-membership-content-items.php:70
-msgctxt "Post Type Singular Name"
-msgid "Thank-you Gift"
-msgstr ""
-
-#: php/class-minnpost-membership-content-items.php:71
-msgid "Thank-you Gifts"
-msgstr ""
-
-#: php/class-minnpost-membership-content-items.php:72
-msgid "Thank-you Gift"
-msgstr ""
-
-#: php/class-minnpost-membership-content-items.php:73
 msgid "Thank-you Gift Attributes"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:74
+#: php/class-minnpost-membership-content-items.php:71
 msgid "All Thank-you Gifts"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:75
+#: php/class-minnpost-membership-content-items.php:72
 msgid "Add New Thank-you Gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:76, php/class-minnpost-membership-content-items.php:131, php/class-minnpost-membership-content-items.php:211, templates/admin/general-settings.php:16
+#: php/class-minnpost-membership-content-items.php:73, php/class-minnpost-membership-content-items.php:127, php/class-minnpost-membership-content-items.php:205, templates/admin/general-settings.php:16
 msgid "Add New"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:77
+#: php/class-minnpost-membership-content-items.php:74
 msgid "New Thank-you Gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:78
+#: php/class-minnpost-membership-content-items.php:75
 msgid "Edit Thank-you Gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:79
+#: php/class-minnpost-membership-content-items.php:76
 msgid "Update Thank-you Gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:80
+#: php/class-minnpost-membership-content-items.php:77
 msgid "View Thank-you Gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:81
+#: php/class-minnpost-membership-content-items.php:78
 msgid "View Thank-you Gifts"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:82
+#: php/class-minnpost-membership-content-items.php:79
 msgid "Search Thank-you Gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:83, php/class-minnpost-membership-content-items.php:138, php/class-minnpost-membership-content-items.php:218
+#: php/class-minnpost-membership-content-items.php:80, php/class-minnpost-membership-content-items.php:134, php/class-minnpost-membership-content-items.php:212
 msgid "Not found"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:84, php/class-minnpost-membership-content-items.php:139, php/class-minnpost-membership-content-items.php:219
+#: php/class-minnpost-membership-content-items.php:81, php/class-minnpost-membership-content-items.php:135, php/class-minnpost-membership-content-items.php:213
 msgid "Not found in Trash"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:85, php/class-minnpost-membership-content-items.php:140, php/class-minnpost-membership-content-items.php:220
+#: php/class-minnpost-membership-content-items.php:82, php/class-minnpost-membership-content-items.php:136, php/class-minnpost-membership-content-items.php:214
 msgid "Featured Image"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:86, php/class-minnpost-membership-content-items.php:141, php/class-minnpost-membership-content-items.php:221
+#: php/class-minnpost-membership-content-items.php:83, php/class-minnpost-membership-content-items.php:137, php/class-minnpost-membership-content-items.php:215
 msgid "Set featured image"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:87, php/class-minnpost-membership-content-items.php:142, php/class-minnpost-membership-content-items.php:222
+#: php/class-minnpost-membership-content-items.php:84, php/class-minnpost-membership-content-items.php:138, php/class-minnpost-membership-content-items.php:216
 msgid "Remove featured image"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:88, php/class-minnpost-membership-content-items.php:143, php/class-minnpost-membership-content-items.php:223
+#: php/class-minnpost-membership-content-items.php:85, php/class-minnpost-membership-content-items.php:139, php/class-minnpost-membership-content-items.php:217
 msgid "Use as featured image"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:89
+#: php/class-minnpost-membership-content-items.php:86
 msgid "Insert into thank-you gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:90
+#: php/class-minnpost-membership-content-items.php:87
 msgid "Uploaded to this thank-you gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:91
+#: php/class-minnpost-membership-content-items.php:88
 msgid "Thank-you gifts list"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:92
+#: php/class-minnpost-membership-content-items.php:89
 msgid "Thank-you gifts list navigation"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:93
+#: php/class-minnpost-membership-content-items.php:90
 msgid "Filter thank-you gifts list"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:96
+#: php/class-minnpost-membership-content-items.php:93
 msgid "Thank-you gift"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:97
+#: php/class-minnpost-membership-content-items.php:94
 msgid "Thank-you gifts for members"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:122
+#: php/class-minnpost-membership-content-items.php:118
 msgctxt "Post Type General Name"
 msgid "Partners"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:123
+#: php/class-minnpost-membership-content-items.php:119
 msgctxt "Post Type Singular Name"
 msgid "Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:124, templates/admin/benefit-content-partner-offers.php:3
+#: php/class-minnpost-membership-content-items.php:120, templates/admin/benefit-content-partner-offers.php:3
 msgid "Partners"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:125, php/class-minnpost-membership-content-items.php:151
+#: php/class-minnpost-membership-content-items.php:121, php/class-minnpost-membership-content-items.php:147
 msgid "Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:126
+#: php/class-minnpost-membership-content-items.php:122
 msgid "Partner Archives"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:127
+#: php/class-minnpost-membership-content-items.php:123
 msgid "Partner Attributes"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:128
+#: php/class-minnpost-membership-content-items.php:124
 msgid "Parent Partner:"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:129
+#: php/class-minnpost-membership-content-items.php:125
 msgid "All Partners"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:130, templates/admin/benefit-content-partner-offers.php:3
+#: php/class-minnpost-membership-content-items.php:126, templates/admin/benefit-content-partner-offers.php:3
 msgid "Add New Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:132
+#: php/class-minnpost-membership-content-items.php:128
 msgid "New Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:133
+#: php/class-minnpost-membership-content-items.php:129
 msgid "Edit Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:134
+#: php/class-minnpost-membership-content-items.php:130
 msgid "Update Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:135
+#: php/class-minnpost-membership-content-items.php:131
 msgid "View Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:136
+#: php/class-minnpost-membership-content-items.php:132
 msgid "View Partners"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:137
+#: php/class-minnpost-membership-content-items.php:133
 msgid "Search Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:144
+#: php/class-minnpost-membership-content-items.php:140
 msgid "Insert into partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:145
+#: php/class-minnpost-membership-content-items.php:141
 msgid "Uploaded to this partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:146
+#: php/class-minnpost-membership-content-items.php:142
 msgid "Partners list"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:147
+#: php/class-minnpost-membership-content-items.php:143
 msgid "Partners list navigation"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:148
+#: php/class-minnpost-membership-content-items.php:144
 msgid "Filter partners list"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:152
+#: php/class-minnpost-membership-content-items.php:148
 msgid "Partner organizations that can provide offers"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:202
+#: php/class-minnpost-membership-content-items.php:196
 msgctxt "Post Type General Name"
 msgid "Partner Offers"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:203
+#: php/class-minnpost-membership-content-items.php:197
 msgctxt "Post Type Singular Name"
 msgid "Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:204
+#: php/class-minnpost-membership-content-items.php:198
 msgid "Partner Offers"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:205
+#: php/class-minnpost-membership-content-items.php:199
 msgid "Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:206
+#: php/class-minnpost-membership-content-items.php:200
 msgid "Partner Offer Archives"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:207
+#: php/class-minnpost-membership-content-items.php:201
 msgid "Partner Offer Attributes"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:208
+#: php/class-minnpost-membership-content-items.php:202
 msgid "Parent Partner Offer:"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:209
+#: php/class-minnpost-membership-content-items.php:203
 msgid "All Partner Offers"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:210
+#: php/class-minnpost-membership-content-items.php:204
 msgid "Add New Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:212
+#: php/class-minnpost-membership-content-items.php:206
 msgid "New Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:213
+#: php/class-minnpost-membership-content-items.php:207
 msgid "Edit Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:214
+#: php/class-minnpost-membership-content-items.php:208
 msgid "Update Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:215
+#: php/class-minnpost-membership-content-items.php:209
 msgid "View Partner Offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:216
+#: php/class-minnpost-membership-content-items.php:210
 msgid "View Partner Offers"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:217
+#: php/class-minnpost-membership-content-items.php:211
 msgid "Search Partner Offers"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:224
+#: php/class-minnpost-membership-content-items.php:218
 msgid "Insert into partner offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:225
+#: php/class-minnpost-membership-content-items.php:219
 msgid "Uploaded to this partner offer"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:226
+#: php/class-minnpost-membership-content-items.php:220
 msgid "Partner Offers list"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:227
+#: php/class-minnpost-membership-content-items.php:221
 msgid "Partner Offers list navigation"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:228
+#: php/class-minnpost-membership-content-items.php:222
 msgid "Filter partner offers list"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:274
+#: php/class-minnpost-membership-content-items.php:266
 msgid "Enter partner name here"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:277
+#: php/class-minnpost-membership-content-items.php:269
 msgid "Enter offer/event name here"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:306
+#: php/class-minnpost-membership-content-items.php:297
 msgid "Description"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:308
+#: php/class-minnpost-membership-content-items.php:299
 msgid "Enter a short description of the gift. $min_amount will show as e.g. \"$15 monthly\"."
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:314
+#: php/class-minnpost-membership-content-items.php:306
 msgid "Image"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:315, php/class-minnpost-membership-content-items.php:383
+#: php/class-minnpost-membership-content-items.php:307, php/class-minnpost-membership-content-items.php:424
 msgid "Upload an image or enter an URL."
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:328, php/class-minnpost-membership-content-items.php:479
+#: php/class-minnpost-membership-content-items.php:320
+msgid "Text After Image"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:321
+msgid "If entered, text here will display after the image in a smaller size."
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:328, php/class-minnpost-membership-content-items.php:518
 msgid "Type"
 msgstr ""
 
 #: php/class-minnpost-membership-content-items.php:329
-msgid "Users can choose only one piece of swag; subscriptions are multi-select."
+msgid "Users can choose only one piece of swag; subscriptions can be multi-select."
 msgstr ""
 
 #: php/class-minnpost-membership-content-items.php:331
@@ -1056,91 +1064,123 @@ msgstr ""
 msgid "Subscription"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:341
+#: php/class-minnpost-membership-content-items.php:342
 msgid "Minimum Member Level"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:350
+#: php/class-minnpost-membership-content-items.php:351
 msgid "Fair Market Value"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:351
+#: php/class-minnpost-membership-content-items.php:352
 msgid "Enter a number for the fair market value. You do not need to add the dollar sign."
 msgstr ""
 
+#: php/class-minnpost-membership-content-items.php:359
+msgid "Option Name"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:360
+msgid "If a donor needs to pick from a set of options, for example T-Shirt size, give it a name."
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:367
+msgid "Option Value"
+msgstr ""
+
 #: php/class-minnpost-membership-content-items.php:368
+msgid "If a donor needs to pick from a set of options, for example T-Shirt size, list the values. Put each value on a line by itself, and separate the value from the label with a | character. For example, extra_small|Extra Small."
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:375
+msgid "Is this option multiple choice?"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:376
+msgid "If a donor needs to pick from a set of options, can they pick more than one?"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:378
+msgid "No"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:379
+msgid "Yes"
+msgstr ""
+
+#: php/class-minnpost-membership-content-items.php:409
 msgid "Partner Fields"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:374, templates/admin/partner-add-edit.php:24
+#: php/class-minnpost-membership-content-items.php:415, templates/admin/partner-add-edit.php:24
 msgid "Link URL"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:382
+#: php/class-minnpost-membership-content-items.php:423
 msgid "Logo Image"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:448
+#: php/class-minnpost-membership-content-items.php:487
 msgid "Choose Partner"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:461
+#: php/class-minnpost-membership-content-items.php:500
 msgid "Offer fields"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:469
+#: php/class-minnpost-membership-content-items.php:508
 msgid "Quantity"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:489
+#: php/class-minnpost-membership-content-items.php:528
 msgid "Restriction"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:519
+#: php/class-minnpost-membership-content-items.php:558
 msgid "More info fields"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:527
+#: php/class-minnpost-membership-content-items.php:566
 msgid "Text"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:537
+#: php/class-minnpost-membership-content-items.php:576
 msgid "URL"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:549
+#: php/class-minnpost-membership-content-items.php:588
 msgid "Claimable dates"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:591
+#: php/class-minnpost-membership-content-items.php:630
 msgid "Instance {#}"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:592
+#: php/class-minnpost-membership-content-items.php:631
 msgid "Add Another Instance"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:593
+#: php/class-minnpost-membership-content-items.php:632
 msgid "Remove Instance"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:613
+#: php/class-minnpost-membership-content-items.php:652
 msgid "Instance date"
 msgstr ""
 
-#: php/class-minnpost-membership-content-items.php:623
+#: php/class-minnpost-membership-content-items.php:662
 msgid "Claimed date"
 msgstr ""
 
-#: php/class-minnpost-membership-front-end.php:134
+#: php/class-minnpost-membership-front-end.php:132
 msgid "Heart"
 msgstr ""
 
-#: php/class-minnpost-membership-front-end.php:223
+#: php/class-minnpost-membership-front-end.php:221
 msgid "Donate"
 msgstr ""
 
-#: php/class-minnpost-membership-front-end.php:1246
+#: php/class-minnpost-membership-front-end.php:1247
 msgid "This gift requires you to give at least "
 msgstr ""
 
@@ -1388,14 +1428,6 @@ msgstr ""
 msgid "Decline gift and give entire amount to MinnPost"
 msgstr ""
 
-#: templates/front-end/support.php:237
-msgid "You are eligible for <strong>one</strong> of the following items:"
-msgstr ""
-
-#: templates/front-end/support.php:293
+#: templates/front-end/support.php:365
 msgid "Decline gift"
-msgstr ""
-
-#: templates/front-end/support.php:344
-msgid "Decline subscription"
 msgstr ""
