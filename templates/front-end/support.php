@@ -28,6 +28,7 @@ $user_id             = get_current_user_id();
 						$character = '?';
 					}
 					$pay_url .= $character . http_build_query( $url_params );
+					// this url needs to update with the javascript.
 				}
 				?>
 				<?php if ( isset( $pay_url ) ) : ?>
@@ -338,7 +339,7 @@ $user_id             = get_current_user_id();
 														<?php endif; ?>
 														<?php if ( '' !== $gift_option_name && ! empty( $gift_option_values ) ) : ?>
 															<?php if ( 'select' === $gift_option_type ) : ?>
-																<select name="<?php echo esc_attr( $radio_name ); ?>-gift-option" data-required="true">
+																<select class="a-gift-option-select" name="<?php echo esc_attr( $radio_name ); ?>-gift-option" data-required="true">
 																	<?php foreach ( $gift_option_values as $option_value ) : ?>
 																		<?php
 																		$option_value = explode( '|', $option_value );

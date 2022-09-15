@@ -18,6 +18,7 @@
 			giftSelectionGroup: '.m-membership-gift-selector',
 			giftLevel: '.m-gift-level',
 			giftSelector: '.m-gift-level .m-form-item input[type="radio"]',
+			giftOptionSelector: '.a-gift-option-select',
 			giftLabel: '.m-gift-level .m-form-item input[type="radio"] + label',
 			swagEligibilityText:
 				'.m-membership-gift-selector .swag-eligibility',
@@ -89,6 +90,7 @@
 			}
 
 			this.onDeclineBenefitsChange();
+			this.giftOptionSelect();
 			this.setRequiredFields($gifts);
 
 			$declineBenefits.on(
@@ -183,6 +185,21 @@
 			$giftSelectionGroup.show();
 		}, // end onDeclineBenefitsChange
 
+		giftOptionSelect() {
+			const parent = $(this.options.giftOptionSelector)
+				.parent()
+				.parent()
+				.find('input[type="radio"]');
+			$(this.options.giftOptionSelector).change(function () {
+				const selectedOption = $(this)
+					.children('option:selected')
+					.val();
+				if ('' !== selectedOption) {
+					parent.prop('checked', true);
+				}
+			});
+		}, // end giftOptionSelect
+
 		onGiftsClick(event) {
 			const $gifts = $(this.element)
 				.find(this.options.giftSelector)
@@ -201,7 +218,6 @@
 		setRequiredFields($gifts) {
 			const $checkedGifts = $gifts.filter(':checked');
 			if ($checkedGifts) {
-				const that = this;
 				$("[data-required='true']").prop('required', false);
 				$checkedGifts.each(function () {
 					const setRequired = function () {
