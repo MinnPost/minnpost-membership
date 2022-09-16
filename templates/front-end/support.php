@@ -32,7 +32,7 @@ $user_id             = get_current_user_id();
 				}
 				?>
 				<?php if ( isset( $pay_url ) ) : ?>
-					<li><a href="<?php echo $pay_url; ?>"><?php echo __( 'Payment', 'minnpost-membership' ); ?></a></li>
+					<li class="a-pay-url"><a href="<?php echo $pay_url; ?>"><?php echo __( 'Payment', 'minnpost-membership' ); ?></a></li>
 				<?php else : ?>
 					<li><span><?php echo __( 'Payment', 'minnpost-membership' ); ?></span></li>
 				<?php endif; ?>
