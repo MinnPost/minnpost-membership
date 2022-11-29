@@ -1913,6 +1913,18 @@ class MinnPost_Membership_Admin {
 				),
 			);
 
+			$settings[ $this_section . '_show_claim_box' ] = array(
+				'title'    => __( 'Show Claim Offer button & box?', 'minnpost-membership' ),
+				'callback' => $callbacks['text'],
+				'page'     => $this_section,
+				'section'  => $this_section,
+				'args'     => array(
+					'desc'     => '',
+					'constant' => '',
+					'type'     => 'checkbox',
+				),
+			);
+
 			$eligibility_states = $this->get_user_eligibility_states();
 
 			$settings[ $this_section . '-user_state' ] = array(
