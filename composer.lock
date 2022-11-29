@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "brain/cortex",
-            "version": "1.0.0-alpha.9",
+            "version": "1.0.0-alpha.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Brain-WP/Cortex.git",
-                "reference": "136c5fd37248b6a833678aa14201519185f23be2"
+                "reference": "bf8a53c37901a8d00c46ed71cf0e3913d73dacc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/136c5fd37248b6a833678aa14201519185f23be2",
-                "reference": "136c5fd37248b6a833678aa14201519185f23be2",
+                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/bf8a53c37901a8d00c46ed71cf0e3913d73dacc8",
+                "reference": "bf8a53c37901a8d00c46ed71cf0e3913d73dacc8",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
                 "issues": "https://github.com/Brain-WP/Cortex/issues",
                 "source": "https://github.com/Brain-WP/Cortex"
             },
-            "time": "2022-05-25T22:02:18+00:00"
+            "time": "2022-10-05T13:02:58+00:00"
         },
         {
             "name": "cmb2/cmb2",

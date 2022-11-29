@@ -3,7 +3,7 @@
         'name' => 'minnpost/minnpost-membership',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '9cf3371aac7d496efaa937149938143d2b9113fa',
+        'reference' => '7d12fb0e38716fce9b8ace1269e053ad00d9afd1',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'brain/cortex' => array(
-            'pretty_version' => '1.0.0-alpha.9',
-            'version' => '1.0.0.0-alpha9',
-            'reference' => '136c5fd37248b6a833678aa14201519185f23be2',
+            'pretty_version' => '1.0.0-alpha.10',
+            'version' => '1.0.0.0-alpha10',
+            'reference' => 'bf8a53c37901a8d00c46ed71cf0e3913d73dacc8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../brain/cortex',
             'aliases' => array(),
@@ -31,7 +31,7 @@
         'minnpost/minnpost-membership' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '9cf3371aac7d496efaa937149938143d2b9113fa',
+            'reference' => '7d12fb0e38716fce9b8ace1269e053ad00d9afd1',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
