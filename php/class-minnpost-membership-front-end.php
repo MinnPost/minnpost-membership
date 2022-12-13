@@ -17,6 +17,7 @@ use Brain\Cortex\Route\QueryRoute;
  */
 class MinnPost_Membership_Front_End {
 
+	public $debug;
 	public $option_prefix;
 	public $file;
 	public $version;
@@ -31,6 +32,7 @@ class MinnPost_Membership_Front_End {
 	 */
 	public function __construct() {
 
+		$this->debug         = minnpost_membership()->debug;
 		$this->option_prefix = minnpost_membership()->option_prefix;
 		$this->file          = minnpost_membership()->file;
 		$this->version       = minnpost_membership()->version;
@@ -1359,11 +1361,21 @@ class MinnPost_Membership_Front_End {
 	* @return void
 	*/
 	public function front_end_scripts_and_styles() {
-		// we need to make this themeable, i think
+		$javascript_dependencies = array( 'jquery', 'wp-hooks' );
+		$css_dependencies        = array();
+		$javascript_version      = $this->version;
+		$css_version             = $this->version;
+		$minified_string         = '.min';
+		if ( true === $this->debug ) {
+			$javascript_version = filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-front-end.min.js' );
+			$css_version        = filemtime( plugin_dir_path( $this->file ) . '/assets/css/' . $this->slug . '-front-end.min.css' );
+			$minified_string    = '';
+		}
+		// we need to make this themeable, i think.
 		$disable_javascript = get_option( $this->option_prefix . 'disable_javascript', false );
 		$disable_css        = get_option( $this->option_prefix . 'disable_css', false );
 		if ( true !== filter_var( $disable_javascript, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end.min.js', dirname( __FILE__ ) ), array( 'jquery', 'wp-hooks' ), filemtime( plugin_dir_path( $this->file ) . '/assets/js/' . $this->slug . '-front-end.min.js' ), true );
+			wp_enqueue_script( $this->slug . '-front-end', plugins_url( 'assets/js/' . $this->slug . '-front-end' . $minified_string . '.js', dirname( __FILE__ ) ), $javascript_dependencies, $javascript_version, true );
 			$minnpost_membership_data = $this->get_user_membership_info();
 			wp_localize_script( $this->slug . '-front-end', 'minnpost_membership_data', $minnpost_membership_data );
 			wp_localize_script(
@@ -1385,7 +1397,7 @@ class MinnPost_Membership_Front_End {
 			);
 		}
 		if ( true !== filter_var( $disable_css, FILTER_VALIDATE_BOOLEAN ) ) {
-			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), filemtime( plugin_dir_path( $this->file ) . '/assets/css/' . $this->slug . '-front-end.min.css' ), 'all' );
+			wp_enqueue_style( $this->slug . '-front-end', plugins_url( 'assets/css/' . $this->slug . '-front-end.min.css', dirname( __FILE__ ) ), array(), $css_version, 'all' );
 		}
 	}
 

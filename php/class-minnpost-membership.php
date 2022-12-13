@@ -27,6 +27,12 @@ class MinnPost_Membership {
 	public $slug;
 
 	/**
+	 * Whether we are currently in debug mode
+	 * @var boolean
+	 */
+	public $debug;
+
+	/**
 	* @var string
 	* The plugin's prefix for saving options
 	*/
@@ -81,8 +87,12 @@ class MinnPost_Membership {
 	 */
 	public function __construct( $version, $file ) {
 
-		$this->version       = $version;
-		$this->file          = $file;
+		$this->version = $version;
+		$this->file    = $file;
+		$this->debug   = false;
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$this->debug = true;
+		}
 		$this->slug          = 'minnpost-membership';
 		$this->option_prefix = 'minnpost_membership_';
 
