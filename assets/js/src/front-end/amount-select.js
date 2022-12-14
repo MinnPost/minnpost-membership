@@ -136,6 +136,82 @@
 			);
 		}, // end analyticsProductAction
 
+		/**
+		 * Run a dataLayer product action
+		 *
+		 * @param  level
+		 * @param  amount
+		 * @param  frequency_label
+		 * @param  action
+		 */
+		dataLayerProductAction(level, amount, frequency_label, action) {
+			if (typeof wp !== 'undefined') {
+				const product = this.analyticsProduct(
+					level,
+					amount,
+					frequency_label
+				);
+				const dataLayerContent = {
+					action,
+					product,
+				};
+				wp.hooks.doAction(
+					'minnpostMembershipDataLayerEcommerceAction',
+					dataLayerContent
+				);
+			}
+		}, // end dataLayerProductAction
+
+		/*
+		 * run an analytics cart action
+		 */
+		analyticsCartAction(level, amount, frequency_label) {
+			const product = this.analyticsProduct(
+				level.name,
+				amount,
+				frequency_label
+			);
+			wp.hooks.doAction(
+				'minnpostMembershipAnalyticsEcommerceAction',
+				'event',
+				'add_to_cart',
+				product
+			);
+			wp.hooks.doAction(
+				'minnpostMembershipAnalyticsEcommerceAction',
+				'event',
+				'begin_checkout',
+				product
+			);
+		}, // end analyticsCartAction
+
+		/*
+		 * run an dataLayer cart action
+		 */
+		dataLayerCartAction(level, amount, frequency_label) {
+			const product = this.analyticsProduct(
+				level.name,
+				amount,
+				frequency_label
+			);
+			const dataLayerAddToCart = {
+				action: 'add_to_cart',
+				product,
+			};
+			wp.hooks.doAction(
+				'minnpostMembershipDataLayerEcommerceAction',
+				dataLayerAddToCart
+			);
+			const dataLayerBeginCheckout = {
+				action: 'begin_checkout',
+				product,
+			};
+			wp.hooks.doAction(
+				'minnpostMembershipDataLayerEcommerceAction',
+				dataLayerBeginCheckout
+			);
+		}, // end dataLayerCartAction
+
 		/*
 		 * create an analytics product variable
 		 */
@@ -271,6 +347,7 @@
 			};
 			// this tracks an event submission based on the plugin options
 			// it also bubbles the event up to submit the form
+			// gtm can detect the form submission itself.
 			wp.hooks.doAction(
 				'minnpostMembershipAnalyticsEvent',
 				options.type,
@@ -281,25 +358,10 @@
 			const hasClass = event.target.classList.contains(
 				'm-form-membership-support'
 			);
-			// if this is the main checkout form, send it to the ec plugin as a checkout
+			// if this is the main checkout form, send it to the ec plugin or gtm as a checkout
 			if (hasClass) {
-				const product = this.analyticsProduct(
-					level.name,
-					amount,
-					frequency_label
-				);
-				wp.hooks.doAction(
-					'minnpostMembershipAnalyticsEcommerceAction',
-					'event',
-					'add_to_cart',
-					product
-				);
-				wp.hooks.doAction(
-					'minnpostMembershipAnalyticsEcommerceAction',
-					'event',
-					'begin_checkout',
-					product
-				);
+				this.analyticsCartAction(level, amount, frequency_label);
+				this.dataLayerCartAction(level, amount, frequency_label);
 			}
 		}, // end onFormSubmit
 
@@ -380,6 +442,12 @@
 				frequency_label,
 				'select_content',
 				1
+			);
+			this.dataLayerProductAction(
+				level.name,
+				amount,
+				frequency_label,
+				'select_item'
 			);
 		}, // end checkAndSetLevel
 
