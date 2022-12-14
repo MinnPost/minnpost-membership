@@ -447,7 +447,7 @@
 				level.name,
 				amount,
 				frequency_label,
-				'select_content'
+				'select_item'
 			);
 		}, // end checkAndSetLevel
 
