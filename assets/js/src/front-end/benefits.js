@@ -1,6 +1,9 @@
 (function ($) {
 	function benefitForm() {
-		if (2 === performance.navigation.type) {
+		if (
+			'back_forward' ===
+			performance.getEntriesByType('navigation')[0].type
+		) {
 			location.reload(true);
 		}
 		$('.a-benefit-button.a-button-disabled').removeAttr('disabled');
