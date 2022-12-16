@@ -217,15 +217,15 @@
 		 */
 		analyticsProduct(level, amount, frequency_label) {
 			const product = {
-				id: 'minnpost_' + level.toLowerCase() + '_membership',
-				name:
+				item_id: 'minnpost_' + level.toLowerCase() + '_membership',
+				item_name:
 					'MinnPost ' +
 					level.charAt(0).toUpperCase() +
 					level.slice(1) +
 					' Membership',
-				category: 'Donation',
-				brand: 'MinnPost',
-				variant: frequency_label,
+				item_category: 'Donation',
+				item_brand: 'MinnPost',
+				item_variant: frequency_label,
 				price: amount,
 				quantity: 1,
 			};
